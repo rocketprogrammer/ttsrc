@@ -1,0 +1,69 @@
+forcetype PandaSystem
+forcetype DSearchPath
+forcetype DSearchPath::Results
+forcetype ExecutionEnvironment
+forcetype Filename
+forcetype GlobPattern
+forcetype Notify
+forcetype NotifyCategory
+forcetype NotifySeverity
+forcetype TypedObject
+forcetype TypeHandle
+forcetype TypeRegistry
+forcetype StreamReader
+forcetype StreamWriter
+forcetype NeverFreeMemory
+forcetype IFileStream
+forcetype OFileStream
+forcetype FileStream
+renametype IFileStream IFileStream
+renametype OFileStream OFileStream
+renametype FileStream FileStream
+forcetype IDecryptStream
+forcetype OEncryptStream
+
+forcetype ofstream
+forcetype ifstream
+forcetype fstream
+
+forcetype DConfig
+forcetype ConfigFlags
+forcetype ConfigPage
+forcetype ConfigPageManager
+forcetype ConfigVariable
+forcetype ConfigVariableBase
+forcetype ConfigVariableBool
+forcetype ConfigVariableDouble
+forcetype ConfigVariableFilename
+forcetype ConfigVariableInt
+forcetype ConfigVariableInt64
+forcetype ConfigVariableList
+forcetype ConfigVariableManager
+forcetype ConfigVariableSearchPath
+forcetype ConfigVariableString
+
+forcetype ios_base
+forcetype ios
+forcetype istream
+forcetype ostream
+forcetype iostream
+
+forcetype StreamWrapperBase
+forcetype IStreamWrapper
+forcetype OStreamWrapper
+forcetype StreamWrapper
+
+forcetype PointerToArray<unsigned char>
+forcetype ConstPointerToArray<unsigned char>
+renametype PointerToArray<unsigned char> PTAUchar
+renametype ConstPointerToArray<unsigned char> CPTAUchar
+
+forcetype PointerToArray<float>
+forcetype ConstPointerToArray<float>
+renametype PointerToArray<float> PTAFloat
+renametype ConstPointerToArray<float> CPTAFloat
+
+forcetype PointerToArray<int>
+forcetype ConstPointerToArray<int>
+renametype PointerToArray<int> PTAInt
+renametype ConstPointerToArray<int> CPTAInt

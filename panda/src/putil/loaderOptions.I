@@ -1,0 +1,88 @@
+// Filename: loaderOptions.I
+// Created by:  drose (05Oct05)
+//
+////////////////////////////////////////////////////////////////////
+//
+// PANDA 3D SOFTWARE
+// Copyright (c) Carnegie Mellon University.  All rights reserved.
+//
+// All use of this software is subject to the terms of the revised BSD
+// license.  You should have received a copy of this license along
+// with this source code in a file named "LICENSE."
+//
+////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::Constructor
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE LoaderOptions::
+LoaderOptions(int flags, int texture_flags) : 
+  _flags(flags), _texture_flags(texture_flags)
+{
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::Copy Constructor
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE LoaderOptions::
+LoaderOptions(const LoaderOptions &copy) :
+  _flags(copy._flags),
+  _texture_flags(copy._texture_flags)
+{
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::Copy Assignment Operator
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE void LoaderOptions::
+operator = (const LoaderOptions &copy) {
+  _flags = copy._flags;
+  _texture_flags = copy._texture_flags;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::set_flags
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE void LoaderOptions::
+set_flags(int flags) {
+  _flags = flags;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::get_flags
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE int LoaderOptions::
+get_flags() const {
+  return _flags;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::set_texture_flags
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE void LoaderOptions::
+set_texture_flags(int texture_flags) {
+  _texture_flags = texture_flags;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: LoaderOptions::get_texture_flags
+//       Access: Published
+//  Description:
+////////////////////////////////////////////////////////////////////
+INLINE int LoaderOptions::
+get_texture_flags() const {
+  return _texture_flags;
+}

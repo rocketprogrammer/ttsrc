@@ -1,0 +1,93 @@
+
+renametype LPoint2f LPoint2f
+renametype LPoint3f LPoint3f
+renametype LPoint4f LPoint4f
+renametype LPoint2d LPoint2d
+renametype LPoint3d LPoint3d
+renametype LPoint4d LPoint4d
+
+renametype LVecBase2f LVecBase2f
+renametype LVecBase3f LVecBase3f
+renametype LVecBase4f LVecBase4f
+renametype LVecBase2d LVecBase2d
+renametype LVecBase3d LVecBase3d
+renametype LVecBase4d LVecBase4d
+
+renametype LVector2f LVector2f
+renametype LVector3f LVector3f
+renametype LVector4f LVector4f
+renametype LVector2d LVector2d
+renametype LVector3d LVector3d
+renametype LVector4d LVector4d
+
+renametype LMatrix3f LMatrix3f
+renametype LMatrix4f LMatrix4f
+renametype LMatrix3d LMatrix3d
+renametype LMatrix4d LMatrix4d
+
+renametype LQuaternionf LQuaternionf
+renametype LRotationf LRotationf
+renametype LOrientationf LOrientationf
+
+renametype LQuaterniond LQuaterniond
+renametype LRotationd LRotationd
+renametype LOrientationd LOrientationd
+
+defconstruct LPoint2f new LPoint2f(0.0f)
+defconstruct LPoint3f new LPoint3f(0.0f)
+defconstruct LPoint4f new LPoint4f(0.0f)
+defconstruct LPoint2d new LPoint2d(0.0f)
+defconstruct LPoint3d new LPoint3d(0.0f)
+defconstruct LPoint4d new LPoint4d(0.0f)
+
+defconstruct LVecBase2f new LVecBase2f(0.0f)
+defconstruct LVecBase3f new LVecBase3f(0.0f)
+defconstruct LVecBase4f new LVecBase4f(0.0f)
+defconstruct LVecBase2d new LVecBase2d(0.0f)
+defconstruct LVecBase3d new LVecBase3d(0.0f)
+defconstruct LVecBase4d new LVecBase4d(0.0f)
+
+defconstruct LVector2f new LVector2f(0.0f)
+defconstruct LVector3f new LVector3f(0.0f)
+defconstruct LVector4f new LVector4f(0.0f)
+defconstruct LVector2d new LVector2d(0.0f)
+defconstruct LVector3d new LVector3d(0.0f)
+defconstruct LVector4d new LVector4d(0.0f)
+
+defconstruct LMatrix3f new LMatrix3f(LMatrix3f::ident_mat())
+defconstruct LMatrix4f new LMatrix4f(LMatrix4f::ident_mat())
+defconstruct LMatrix3d new LMatrix3d(LMatrix3d::ident_mat())
+defconstruct LMatrix4d new LMatrix4d(LMatrix4d::ident_mat())
+
+defconstruct LQuaternionf new LQuaternionf(LQuaternionf::ident_quat())
+defconstruct LRotationf new LRotationf(LQuaternionf::ident_quat())
+defconstruct LOrientationf new LOrientationf(LQuaternionf::ident_quat())
+
+defconstruct LQuaterniond new LQuaterniond(LQuaterniond::ident_quat())
+defconstruct LRotationd new LRotationd(LQuaterniond::ident_quat())
+defconstruct LOrientationd new LOrientationd(LQuaterniond::ident_quat())
+
+# We don't want to accidentally include any of the _src files in the
+# generated output, since these files aren't intended to be included by
+# anything but their associated .h file.
+noinclude compose_matrix_src.h
+noinclude lcast_to.h
+noinclude lcast_to_src.h
+noinclude lmat_ops_src.h
+noinclude lmatrix3_src.h
+noinclude lmatrix4_src.h
+noinclude lorientation_src.h
+noinclude lpoint2_src.h
+noinclude lpoint3_src.h
+noinclude lpoint4_src.h
+noinclude lquaternion_src.h
+noinclude lrotation_src.h
+noinclude lvec2_ops_src.h
+noinclude lvec3_ops_src.h
+noinclude lvec4_ops_src.h
+noinclude lvecBase2_src.h
+noinclude lvecBase3_src.h
+noinclude lvecBase4_src.h
+noinclude lvector2_src.h
+noinclude lvector3_src.h
+noinclude lvector4_src.h

@@ -1,0 +1,73 @@
+// Filename: linearControlForce.I
+// Created by: Dave Schuyler (2006)
+//
+////////////////////////////////////////////////////////////////////
+//
+// PANDA 3D SOFTWARE
+// Copyright (c) Carnegie Mellon University.  All rights reserved.
+//
+// All use of this software is subject to the terms of the revised BSD
+// license.  You should have received a copy of this license along
+// with this source code in a file named "LICENSE."
+//
+////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////
+//    Function : clear_physics_object
+//      Access : Public
+// Description : encapsulating wrapper
+////////////////////////////////////////////////////////////////////
+INLINE void LinearControlForce::
+clear_physics_object() {
+  _physics_object = (const PhysicsObject*)NULL;
+}
+
+////////////////////////////////////////////////////////////////////
+//    Function : set_physics_object
+//      Access : Public
+// Description : encapsulating wrapper
+////////////////////////////////////////////////////////////////////
+INLINE void LinearControlForce::
+set_physics_object(const PhysicsObject *po) {
+  _physics_object = po;
+}
+
+////////////////////////////////////////////////////////////////////
+//    Function : get_physics_object
+//      Access : Public
+// Description : piecewise encapsulating wrapper
+////////////////////////////////////////////////////////////////////
+INLINE CPT(PhysicsObject) LinearControlForce::
+get_physics_object() const {
+  return _physics_object;
+}
+
+////////////////////////////////////////////////////////////////////
+//    Function : set_vector
+//      Access : Public
+// Description : encapsulating wrapper
+////////////////////////////////////////////////////////////////////
+INLINE void LinearControlForce::
+set_vector(const LVector3f& v) {
+  _fvec = v;
+}
+
+////////////////////////////////////////////////////////////////////
+//    Function : set_vector
+//      Access : Public
+// Description : piecewise encapsulating wrapper
+////////////////////////////////////////////////////////////////////
+INLINE void LinearControlForce::
+set_vector(float x, float y, float z) {
+  _fvec.set(x, y, z);
+}
+
+////////////////////////////////////////////////////////////////////
+//    Function : get_local_vector
+//      Access : Public
+// Description :
+////////////////////////////////////////////////////////////////////
+INLINE LVector3f LinearControlForce::
+get_local_vector() const {
+  return _fvec;
+}

@@ -143,7 +143,7 @@ if not os.path.exists(cache_imports_file) or "-x" in sys.argv:
     #walker.load_imports("libtoontown")
     
     # we need encodings
-    for file in os.listdir(r"D:\Panda\Panda3D-1.7.2\python\Lib\encodings"):
+    for file in os.listdir(r"built\python\Lib\encodings"):
         if file.endswith(".py"):
             walker.load_imports("encodings." + file[:-3])
     
@@ -341,7 +341,7 @@ for mtype, module, filename, imported_by in results:
         
     data[module] = (mtype, code)
     
-    if (".ai" in module or "AI" in module or ".uberdog" in module or "UB" in module) and not ("-ai" in sys.argv or "-ud" in sys.argv):
+    if (".ai" in module or "AI" in module or ".uberdog" in module or "UD" in module) and not ("-ai" in sys.argv or "-ud" in sys.argv):
         print("WARNING: " + str(module) + " (imported_by: " + str(imported_by) + ")")
 
 if "-ai" in sys.argv:

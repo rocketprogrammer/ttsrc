@@ -38,7 +38,7 @@ extern "C" {
 #else
   static int       pandavfs_write(URLContext *h, const unsigned char *buf, int size);
 #endif
-  static int64_t   pandavfs_seek(URLContext *h, int64_t pos, int whence);
+  static __int64   pandavfs_seek(URLContext *h, __int64 pos, int whence);
   static int       pandavfs_close(URLContext *h);
 }
 
@@ -107,8 +107,8 @@ pandavfs_write(URLContext *h, const unsigned char *buf, int size) {
 //       Access: Static Function
 //  Description: A hook to seek a panda VFS file.
 ////////////////////////////////////////////////////////////////////
-static int64_t
-pandavfs_seek(URLContext *h, int64_t pos, int whence) {
+static __int64
+pandavfs_seek(URLContext *h, __int64 pos, int whence) {
   istream *s = (istream*)(h->priv_data);
   switch(whence) {
   case SEEK_SET: s->seekg(pos, ios::beg); break;

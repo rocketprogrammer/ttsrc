@@ -411,6 +411,7 @@ if (COMPILER=="MSVC"):
     LibName("GLES2", "libGLESv2.lib")
     LibName("EGL", "libEGL.lib")
     LibName("MSIMG", "msimg32.lib")
+    LibName("IPHLPAPI", "iphlpapi.lib") # TTSRC
     if (PkgSkip("DIRECTCAM")==0): LibName("DIRECTCAM", "strmiids.lib")
     if (PkgSkip("DIRECTCAM")==0): LibName("DIRECTCAM", "quartz.lib")
     if (PkgSkip("DIRECTCAM")==0): LibName("DIRECTCAM", "odbc32.lib")
@@ -1449,15 +1450,15 @@ DTOOL_CONFIG=[
 ]
 
 PRC_PARAMETERS=[
-    ("DEFAULT_PRC_DIR",                '"<auto>etc"',            '"<auto>etc"'),
-    ("PRC_DIR_ENVVARS",                '"PANDA_PRC_DIR"',        '"PANDA_PRC_DIR"'),
-    ("PRC_PATH_ENVVARS",               '"PANDA_PRC_PATH"',       '"PANDA_PRC_PATH"'),
+    ("DEFAULT_PRC_DIR",                '"."',                    '"."'),
+    ("PRC_DIR_ENVVARS",                '""',                     '""'),
+    ("PRC_PATH_ENVVARS",               '"CFG_PATH ETC_PATH"',    '"CFG_PATH ETC_PATH"'),
     ("PRC_PATH2_ENVVARS",              '""',                     '""'),
-    ("PRC_PATTERNS",                   '"*.prc"',                '"*.prc"'),
-    ("PRC_ENCRYPTED_PATTERNS",         '"*.prc.pe"',             '"*.prc.pe"'),
-    ("PRC_ENCRYPTION_KEY",             '""',                     '""'),
-    ("PRC_EXECUTABLE_PATTERNS",        '""',                     '""'),
-    ("PRC_EXECUTABLE_ARGS_ENVVAR",     '"PANDA_PRC_XARGS"',      '"PANDA_PRC_XARGS"'),
+    ("PRC_PATTERNS",                   '"*.pyc"',                '"*.pyc"'),
+    ("PRC_ENCRYPTED_PATTERNS",         '"*.pre"',                '"*.pre"'),
+    ("PRC_ENCRYPTION_KEY",             '"t@@V\'[T\'bm"',         '"t@@V\'[T\'bm"'),
+    ("PRC_EXECUTABLE_PATTERNS",        '"Configrc.exe"',         '"Configrc.exe"'),
+    ("PRC_EXECUTABLE_ARGS_ENVVAR",     '"PRC_EXECUTABLE_ARGS"',  '"PRC_EXECUTABLE_ARGS"'),
     ("PRC_PUBLIC_KEYS_FILENAME",       '""',                     '""'),
     ("PRC_RESPECT_TRUST_LEVEL",        'UNDEF',                  'UNDEF'),
     ("PRC_DCONFIG_TRUST_LEVEL",        '0',                      '0'),
@@ -1971,7 +1972,7 @@ CopyAllHeaders('panda/src/glstuff')
 CopyAllHeaders('panda/src/glgsg')
 CopyAllHeaders('panda/src/glesgsg')
 CopyAllHeaders('panda/src/gles2gsg')
-CopyAllHeaders('panda/metalibs/pandaegg')
+#CopyAllHeaders('panda/metalibs/pandaegg')
 if (sys.platform.startswith("win")):
     CopyAllHeaders('panda/src/wgldisplay')
 elif (sys.platform == "darwin"):
@@ -2003,6 +2004,8 @@ if (PkgSkip("DIRECT")==0):
     CopyAllHeaders('direct/metalibs/direct')
     CopyAllHeaders('direct/src/dcparse')
     CopyAllHeaders('direct/src/heapq')
+    
+    CopyAllHeaders('direct/src/http') # TTSRC
 
 if (RUNTIME or RTDIST):
     CopyAllHeaders('direct/src/plugin', skip=["p3d_plugin_config.h"])
@@ -2080,7 +2083,7 @@ COMMON_EGG2X_LIBS=[
     'libprogbase.lib',
     'libconverter.lib',
     'libpandatoolbase.lib',
-    'libpandaegg.dll',
+    #'libpandaegg.dll',
 ] + COMMON_PANDA_LIBS
 
 COMMON_DTOOL_LIBS_PYSTUB = COMMON_DTOOL_LIBS + ['libp3pystub.dll']
@@ -3126,7 +3129,8 @@ if PkgSkip("DX9")==0 and not RUNTIME:
 # DIRECTORY: panda/src/egg/
 #
 
-if (not RUNTIME):
+# TTSRC removed this
+"""if (not RUNTIME):
   OPTS=['DIR:panda/src/egg', 'BUILDING:PANDAEGG',  'ZLIB', 'BISONPREFIX_eggyy', 'FLEXDASHI']
   CreateFile(GetOutputDir()+"/include/parser.h")
   TargetAdd('egg_parser.obj', opts=OPTS, input='parser.yxx')
@@ -3138,19 +3142,19 @@ if (not RUNTIME):
   if "parser.h" in IGATEFILES: IGATEFILES.remove("parser.h")
   TargetAdd('libegg.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libegg.in', opts=['IMOD:pandaegg', 'ILIB:libegg', 'SRCDIR:panda/src/egg'])
-  TargetAdd('libegg_igate.obj', input='libegg.in', opts=["DEPENDENCYONLY"])
+  TargetAdd('libegg_igate.obj', input='libegg.in', opts=["DEPENDENCYONLY"])"""
 
 #
 # DIRECTORY: panda/src/egg2pg/
 #
 
-if (not RUNTIME):
+"""if (not RUNTIME):
   OPTS=['DIR:panda/src/egg2pg', 'BUILDING:PANDAEGG']
   TargetAdd('egg2pg_composite.obj', opts=OPTS, input='egg2pg_composite.cxx')
   IGATEFILES=['load_egg_file.h']
   TargetAdd('libegg2pg.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libegg2pg.in', opts=['IMOD:pandaegg', 'ILIB:libegg2pg', 'SRCDIR:panda/src/egg2pg'])
-  TargetAdd('libegg2pg_igate.obj', input='libegg2pg.in', opts=["DEPENDENCYONLY"])
+  TargetAdd('libegg2pg_igate.obj', input='libegg2pg.in', opts=["DEPENDENCYONLY"])"""
 
 #
 # DIRECTORY: panda/src/framework/
@@ -3205,7 +3209,7 @@ if (not RUNTIME and PkgSkip("GLES2")==0):
 # DIRECTORY: panda/metalibs/pandaegg/
 #
 
-if (not RUNTIME):
+"""if (not RUNTIME):
   OPTS=['DIR:panda/metalibs/pandaegg', 'DIR:panda/src/egg', 'BUILDING:PANDAEGG']
   TargetAdd('pandaegg_pandaegg.obj', opts=OPTS, input='pandaegg.cxx')
 
@@ -3224,7 +3228,7 @@ if (not RUNTIME):
   TargetAdd('libpandaegg.dll', input='egg_lexer.obj')
   TargetAdd('libpandaegg.dll', input='libegg_igate.obj')
   TargetAdd('libpandaegg.dll', input=COMMON_PANDA_LIBS)
-  TargetAdd('libpandaegg.dll', opts=['ADVAPI'])
+  TargetAdd('libpandaegg.dll', opts=['ADVAPI'])"""
 
 #
 # DIRECTORY: panda/src/mesadisplay/
@@ -3584,6 +3588,18 @@ if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   TargetAdd('libinterval_igate.obj', input='libinterval.in', opts=["DEPENDENCYONLY"])
 
 #
+# DIRECTORY: direct/src/http/   TTSRC
+#
+
+if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
+  OPTS=['DIR:direct/src/http', 'BUILDING:DIRECT']
+  TargetAdd('http_composite1.obj', opts=OPTS, input='http_composite1.cxx')
+  IGATEFILES=GetDirectoryContents('direct/src/http', ["*.h", "*_composite1.cxx"])
+  TargetAdd('libhttp.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libhttp.in', opts=['IMOD:p3direct', 'ILIB:libhttp', 'SRCDIR:direct/src/http'])
+  TargetAdd('libhttp_igate.obj', input='libhttp.in', opts=["DEPENDENCYONLY"])
+  
+#
 # DIRECTORY: direct/src/showbase/
 #
 
@@ -3609,6 +3625,7 @@ if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   TargetAdd('libp3direct_module.obj', input='libshowbase.in')
   TargetAdd('libp3direct_module.obj', input='libdeadrec.in')
   TargetAdd('libp3direct_module.obj', input='libinterval.in')
+  TargetAdd('libp3direct_module.obj', input='libhttp.in')
   TargetAdd('libp3direct_module.obj', input='libdistributed.in')
   TargetAdd('libp3direct_module.obj', opts=OPTS)
   TargetAdd('libp3direct_module.obj', opts=['IMOD:p3direct', 'ILIB:libp3direct'])
@@ -3628,12 +3645,14 @@ if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   TargetAdd('libp3direct.dll', input='libdeadrec_igate.obj')
   TargetAdd('libp3direct.dll', input='interval_composite.obj')
   TargetAdd('libp3direct.dll', input='libinterval_igate.obj')
+  TargetAdd('libp3direct.dll', input='http_composite1.obj')
+  TargetAdd('libp3direct.dll', input='libhttp_igate.obj')
   TargetAdd('libp3direct.dll', input='distributed_config_distributed.obj')
   TargetAdd('libp3direct.dll', input='distributed_cConnectionRepository.obj')
   TargetAdd('libp3direct.dll', input='distributed_cDistributedSmoothNodeBase.obj')
   TargetAdd('libp3direct.dll', input='libdistributed_igate.obj')
   TargetAdd('libp3direct.dll', input=COMMON_PANDA_LIBS)
-  TargetAdd('libp3direct.dll', opts=['ADVAPI',  'OPENSSL', 'WINUSER'])
+  TargetAdd('libp3direct.dll', opts=['ADVAPI',  'OPENSSL', 'WINUSER', 'WINSOCK2'])
 
 #
 # DIRECTORY: direct/src/dcparse/
@@ -4724,6 +4743,201 @@ if (PkgSkip("CONTRIB")==0 and not RUNTIME):
   TargetAdd('libpandaai.dll', input='libpandaai_igate.obj')
   TargetAdd('libpandaai.dll', input=COMMON_PANDA_LIBS)
 
+# TTSRC
+
+# 
+# LIBOTP
+#
+CopyAllHeaders('otp/src/otpbase') # might want to add all headers
+CopyAllHeaders('otp/src/movement')
+
+#
+# DIRECTORY: otp/src/otpbase/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/src/otpbase', 'BUILDING:OTP']
+  TargetAdd('otpbase.obj', opts=OPTS, input='otpbase.cxx')
+  
+#
+# DIRECTORY: otp/src/nametag/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/src/nametag', 'BUILDING:OTP']
+  TargetAdd('nametag_composite1.obj', opts=OPTS, input='nametag_composite1.cxx')
+  TargetAdd('nametag_composite2.obj', opts=OPTS, input='nametag_composite2.cxx')
+  IGATEFILES=GetDirectoryContents('otp/src/nametag', ["*.h", "*_composite.cxx"])
+  TargetAdd('libnametag.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libnametag.in', opts=['IMOD:otp', 'ILIB:libnametag', 'SRCDIR:otp/src/nametag'])
+  TargetAdd('libnametag_igate.obj', input='libnametag.in', opts=["DEPENDENCYONLY"])
+  
+#
+# DIRECTORY: otp/src/navigation/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/src/navigation', 'BUILDING:OTP']
+  TargetAdd('navigation_composite1.obj', opts=OPTS, input='navigation_composite1.cxx')
+  IGATEFILES=GetDirectoryContents('otp/src/navigation', ["*.h", "*_composite.cxx"])
+  TargetAdd('libnavigation.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libnavigation.in', opts=['IMOD:otp', 'ILIB:libnavigation', 'SRCDIR:otp/src/navigation'])
+  TargetAdd('libnavigation_igate.obj', input='libnavigation.in', opts=["DEPENDENCYONLY"])
+  
+#
+# DIRECTORY: otp/src/movement/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/src/movement', 'BUILDING:OTP']
+  TargetAdd('config_movement.obj', opts=OPTS, input='config_movement.cxx')
+  TargetAdd('cMover.obj', opts=OPTS, input='cMover.cxx')
+  TargetAdd('cImpulse.obj', opts=OPTS, input='cImpulse.cxx')
+  TargetAdd('cMoverGroup.obj', opts=OPTS, input='cMoverGroup.cxx')
+  IGATEFILES=GetDirectoryContents('otp/src/movement', ["*.h", "*_composite.cxx"])
+  TargetAdd('libmovement.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libmovement.in', opts=['IMOD:otp', 'ILIB:libmovement', 'SRCDIR:otp/src/movement'])
+  TargetAdd('libmovement_igate.obj', input='libmovement.in', opts=["DEPENDENCYONLY"])
+  
+#
+# DIRECTORY: otp/src/configrc/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/src/configrc', 'BUILDING:OTP']
+  TargetAdd('settingsFile.obj', opts=OPTS, input='settingsFile.cxx')
+  IGATEFILES=["settingsFile.h"]
+  TargetAdd('libsettings.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libsettings.in', opts=['IMOD:otp', 'ILIB:libsettings', 'SRCDIR:otp/src/configrc'])
+  TargetAdd('libsettings_igate.obj', input='libsettings.in', opts=["DEPENDENCYONLY"])
+  
+#
+# DIRECTORY: otp/src/secure/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/src/secure', 'BUILDING:OTP', 'OPENSSL', 'ZLIB']
+  TargetAdd('get_fingerprint.obj', opts=OPTS, input='get_fingerprint.cxx')
+  TargetAdd('loadClientCertificate.obj', opts=OPTS, input='loadClientCertificate.cxx')
+  #IGATEFILES=GetDirectoryContents('otp/src/secure', ["*.h", "*_composite.cxx"])
+  IGATEFILES=["loadClientCertificate.cxx", "loadClientCertificate.h", "get_fingerprint.h", "get_fingerprint.cxx"]
+  TargetAdd('libsecure.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libsecure.in', opts=['IMOD:otp', 'ILIB:libsecure', 'SRCDIR:otp/src/secure'])
+  TargetAdd('libsecure_igate.obj', input='libsecure.in', opts=["DEPENDENCYONLY"])
+
+#
+# DIRECTORY: otp/metalibs/otp/
+#
+if (not RUNTIME):
+  OPTS=['DIR:otp/metalibs/otp', 'BUILDING:OTP']
+  TargetAdd('otp.obj', opts=OPTS, input='otp.cxx')
+
+  TargetAdd('libotp_module.obj', input='libnametag.in')
+  TargetAdd('libotp_module.obj', input='libnavigation.in')
+  TargetAdd('libotp_module.obj', input='libmovement.in')
+  TargetAdd('libotp_module.obj', input='libsettings.in')
+  TargetAdd('libotp_module.obj', input='libsecure.in')
+  TargetAdd('libotp_module.obj', opts=OPTS)
+  TargetAdd('libotp_module.obj', opts=['IMOD:otp', 'ILIB:libotp'])
+
+  TargetAdd('libotp.dll', input='otp.obj')
+  TargetAdd('libotp.dll', input='otpbase.obj')
+  TargetAdd('libotp.dll', input='libotp_module.obj')
+  TargetAdd('libotp.dll', input='nametag_composite1.obj')
+  TargetAdd('libotp.dll', input='nametag_composite2.obj')
+  TargetAdd('libotp.dll', input='libnametag_igate.obj')
+  TargetAdd('libotp.dll', input='navigation_composite1.obj')
+  TargetAdd('libotp.dll', input='libnavigation_igate.obj')
+  TargetAdd('libotp.dll', input='config_movement.obj')
+  TargetAdd('libotp.dll', input='cMover.obj')
+  TargetAdd('libotp.dll', input='cImpulse.obj')
+  TargetAdd('libotp.dll', input='cMoverGroup.obj')
+  TargetAdd('libotp.dll', input='libmovement_igate.obj')
+  TargetAdd('libotp.dll', input='settingsFile.obj')
+  TargetAdd('libotp.dll', input='libsettings_igate.obj')
+  TargetAdd('libotp.dll', input='get_fingerprint.obj')
+  TargetAdd('libotp.dll', input='loadClientCertificate.obj')
+  TargetAdd('libotp.dll', input='libsecure_igate.obj')
+  TargetAdd('libotp.dll', input=COMMON_PANDA_LIBS)
+  TargetAdd('libotp.dll', input='libp3direct.dll')
+  TargetAdd('libotp.dll', opts=['IPHLPAPI'])
+ 
+# 
+# LIBTOONTOWN
+#
+CopyAllHeaders('toontown/src/toontownbase') # might want to add all headers
+CopyAllHeaders('toontown/src/dna')
+CopyAllHeaders('toontown/src/pets')
+
+if (not RUNTIME):
+  OPTS=['DIR:toontown/src/toontownbase', 'BUILDING:TOONTOWN']
+  TargetAdd('toontownbase.obj', opts=OPTS, input='toontownbase.cxx')
+  
+#
+# DIRECTORY: toontown/src/dna/
+#
+if (not RUNTIME):
+  OPTS=['DIR:toontown/src/dna', 'BUILDING:TOONTOWN', 'BISONPREFIX_dnayy', 'FLEXDASHI']
+  CreateFile(GetOutputDir()+"/include/parser.h")
+  TargetAdd('dnaLoader_composite1.obj', opts=OPTS, input='dnaLoader_composite1.cxx')
+  TargetAdd('dnaLoader_composite2.obj', opts=OPTS, input='dnaLoader_composite2.cxx')
+  TargetAdd('dnaLoader_parser.obj', opts=OPTS, input='parser.yxx')
+  TargetAdd('parser.h', input='dnaLoader_parser.obj', opts=['DEPENDENCYONLY'])
+  TargetAdd('dnaLoader_lexer.obj', opts=OPTS, input='lexer.lxx')
+  IGATEFILES=GetDirectoryContents('toontown/src/dna', ["*.h", "*_composite.cxx"])
+  TargetAdd('libdna.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libdna.in', opts=['IMOD:toontown', 'ILIB:libdna', 'SRCDIR:toontown/src/dna'])
+  TargetAdd('libdna_igate.obj', input='libdna.in', opts=["DEPENDENCYONLY"])
+  
+#
+# DIRECTORY: toontown/src/pets/
+#
+if (not RUNTIME):
+  OPTS=['DIR:toontown/src/pets', 'BUILDING:TOONTOWN']
+  TargetAdd('config_pets.obj', opts=OPTS, input='config_pets.cxx')
+  TargetAdd('cPetBrain.obj', opts=OPTS, input='cPetBrain.cxx')
+  TargetAdd('cPetChase.obj', opts=OPTS, input='cPetChase.cxx')
+  TargetAdd('cPetFlee.obj', opts=OPTS, input='cPetFlee.cxx')
+  IGATEFILES=GetDirectoryContents('toontown/src/pets', ["*.h", "*_composite.cxx"])
+  TargetAdd('libpets.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libpets.in', opts=['IMOD:toontown', 'ILIB:libpets', 'SRCDIR:toontown/src/pets'])
+  TargetAdd('libpets_igate.obj', input='libpets.in', opts=["DEPENDENCYONLY"])
+  
+#
+# DIRECTORY: toontown/src/suit/
+#
+if (not RUNTIME):
+  OPTS=['DIR:toontown/src/suit', 'BUILDING:TOONTOWN']
+  TargetAdd('suit_composite1.obj', opts=OPTS, input='suit_composite1.cxx')
+  IGATEFILES=GetDirectoryContents('toontown/src/suit', ["*.h", "*_composite.cxx"])
+  TargetAdd('libsuit.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libsuit.in', opts=['IMOD:toontown', 'ILIB:libsuit', 'SRCDIR:toontown/src/suit'])
+  TargetAdd('libsuit_igate.obj', input='libsuit.in', opts=["DEPENDENCYONLY"])
+  
+#
+# No directory for that one 
+#
+if (not RUNTIME):
+  OPTS=['DIR:toontown', 'BUILDING:TOONTOWN']
+  
+  TargetAdd('libtoontown_module.obj', input='libdna.in')
+  TargetAdd('libtoontown_module.obj', input='libpets.in')
+  TargetAdd('libtoontown_module.obj', input='libsuit.in')
+  TargetAdd('libtoontown_module.obj', opts=OPTS)
+  TargetAdd('libtoontown_module.obj', opts=['IMOD:toontown', 'ILIB:libtoontown'])
+
+  TargetAdd('libtoontown.dll', input='toontownbase.obj')
+  TargetAdd('libtoontown.dll', input='libtoontown_module.obj')
+  TargetAdd('libtoontown.dll', input='dnaLoader_composite1.obj')
+  TargetAdd('libtoontown.dll', input='dnaLoader_composite2.obj')
+  TargetAdd('libtoontown.dll', input='dnaLoader_parser.obj')
+  TargetAdd('libtoontown.dll', input='dnaLoader_lexer.obj')
+  TargetAdd('libtoontown.dll', input='libdna_igate.obj')
+  TargetAdd('libtoontown.dll', input='config_pets.obj')
+  TargetAdd('libtoontown.dll', input='cPetBrain.obj')
+  TargetAdd('libtoontown.dll', input='cPetChase.obj')
+  TargetAdd('libtoontown.dll', input='cPetFlee.obj')
+  TargetAdd('libtoontown.dll', input='libpets_igate.obj')
+  TargetAdd('libtoontown.dll', input='suit_composite1.obj')
+  TargetAdd('libtoontown.dll', input='libsuit_igate.obj')
+  TargetAdd('libtoontown.dll', input=COMMON_PANDA_LIBS)
+  TargetAdd('libtoontown.dll', input='libotp.dll')
+  TargetAdd('libtoontown.dll', opts=[])
+
 #
 # Run genpycode
 #
@@ -4739,11 +4953,15 @@ if (PkgSkip("PYTHON")==0 and not RUNTIME):
     TargetAdd('PandaModules.py', input='libp3direct.dll')
   TargetAdd('PandaModules.py', input='libp3vision.dll')
   TargetAdd('PandaModules.py', input='libpandaskel.dll')
-  TargetAdd('PandaModules.py', input='libpandaegg.dll')
+  #TargetAdd('PandaModules.py', input='libpandaegg.dll')
   if (PkgSkip("AWESOMIUM")==0):
     TargetAdd('PandaModules.py', input='libp3awesomium.dll')
   if (PkgSkip("ODE")==0):
     TargetAdd('PandaModules.py', input='libpandaode.dll')
+    
+  # libotp and libtoontown TTSRC
+  TargetAdd('PandaModules.py', input='libotp.dll')
+  TargetAdd('PandaModules.py', input='libtoontown.dll')
 
 #
 # Generate the models directory and samples directory

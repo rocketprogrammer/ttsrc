@@ -454,7 +454,7 @@ static void write_const(ostream& os) {
   // os << "want-new-toonhall 1" << endl;
 
   // need to specify audio library to use, such as Miles or FMOD etc
-  os << "audio-library-name miles_audio" << endl;
+  os << "audio-library-name p3miles_audio" << endl;
 }
 
 static void write_audio(ostream& os, bool sfx_active, bool music_active, float sfx_vol,
@@ -471,7 +471,7 @@ static void write_audio(ostream& os, bool sfx_active, bool music_active, float s
   // much CPU, and hardware support of midi seems to be spotty.
 
   // but some HW midi sounds better than the SW midi, so allow it to be configured
-  os << "audio-software-midi #" << (true ? "t" : "f") << endl; // TODO Settings
+  os << "audio-software-midi #" << (false ? "t" : "f") << endl; // TODO Settings
 
   os << endl;
   if (sfx_active)

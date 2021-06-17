@@ -157,6 +157,7 @@ add(PANDA_BIN, "libpandaskel.dll")
 add(PANDA_BIN, "libtinydisplay.dll")
 add(PANDA_BIN, "libotp.dll")
 add(PANDA_BIN, "libtoontown.dll")
+add(PANDA_BIN, "libp3miles_audio.dll")
 add(PANDA_BIN, "cg.dll")
 add(PANDA_BIN, "cgGL.dll")
 

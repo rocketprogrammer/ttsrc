@@ -59,7 +59,7 @@ if "MACOSX_DEPLOYMENT_TARGET" in os.environ:
 PkgListSet(["PYTHON", "DIRECT",                        # Python support
   "GL", "GLES", "GLES2"] + DXVERSIONS + ["TINYDISPLAY", "NVIDIACG", # 3D graphics
   "EGL",                                               # OpenGL (ES) integration
-  "OPENAL", "FMODEX", "FFMPEG",                        # Multimedia
+  "OPENAL", "FMODEX", "FFMPEG", "MILES",               # Multimedia
   "ODE", "PHYSX",                                      # Physics
   "ZLIB", "PNG", "JPEG", "TIFF", "SQUISH", "FREETYPE", # 2D Formats support
   ] + MAYAVERSIONS + MAXVERSIONS + [ "FCOLLADA",       # 3D Formats support
@@ -423,6 +423,7 @@ if (COMPILER=="MSVC"):
     if (PkgSkip("VRPN")==0):     LibName("VRPN",     GetThirdpartyDir() + "vrpn/lib/vrpn.lib")
     if (PkgSkip("VRPN")==0):     LibName("VRPN",     GetThirdpartyDir() + "vrpn/lib/quat.lib")
     if (PkgSkip("FMODEX")==0):   LibName("FMODEX",   GetThirdpartyDir() + "fmodex/lib/fmodex_vc.lib")
+    if (PkgSkip("MILES")==0):    LibName("MILES",    GetThirdpartyDir() + "miles/lib/mss32.lib")
     if (PkgSkip("NVIDIACG")==0): LibName("CGGL",     GetThirdpartyDir() + "nvidiacg/lib/cgGL.lib")
     if (PkgSkip("NVIDIACG")==0): LibName("CGDX9",    GetThirdpartyDir() + "nvidiacg/lib/cgD3D9.lib")
     if (PkgSkip("NVIDIACG")==0): LibName("NVIDIACG", GetThirdpartyDir() + "nvidiacg/lib/cg.lib")
@@ -1495,6 +1496,9 @@ def WriteConfigSettings():
         dtool_config["HAVE_CGGL"] = '1'
         dtool_config["HAVE_CGDX9"] = '1'
 
+    if (PkgSkip("MILES")==0):
+        dtool_config["HAVE_RAD_MSS"] = '1'
+
     if (not sys.platform.startswith("linux")):
         dtool_config["HAVE_PROC_SELF_EXE"] = 'UNDEF'
         dtool_config["HAVE_PROC_SELF_MAPS"] = 'UNDEF'
@@ -1863,8 +1867,6 @@ if (sys.platform.startswith("win")):
 ##
 ########################################################################
 
-CopyFile(GetOutputDir()+"/", "doc/LICENSE")
-CopyFile(GetOutputDir()+"/", "doc/ReleaseNotes")
 if (PkgSkip("PANDATOOL")==0):
     CopyAllFiles(GetOutputDir()+"/plugins/",  "pandatool/src/scripts/", ".mel")
     CopyAllFiles(GetOutputDir()+"/plugins/",  "pandatool/src/scripts/", ".ms")
@@ -3007,6 +3009,13 @@ if PkgSkip("OPENAL") == 0 and not RUNTIME:
   TargetAdd('libp3openal_audio.dll', input='openal_audio_openal_audio_composite.obj')
   TargetAdd('libp3openal_audio.dll', input=COMMON_PANDA_LIBS)
   TargetAdd('libp3openal_audio.dll', opts=['MODULE', 'ADVAPI', 'WINUSER', 'WINMM', 'OPENAL'])
+  
+if PkgSkip("MILES") == 0:
+  OPTS=['DIR:panda/src/audiotraits', 'BUILDING:MILES_AUDIO',  'MILES']
+  TargetAdd('miles_audio_miles_audio_composite1.obj', opts=OPTS, input='miles_audio_composite1.cxx')
+  TargetAdd('libp3miles_audio.dll', input='miles_audio_miles_audio_composite1.obj')
+  TargetAdd('libp3miles_audio.dll', input=COMMON_PANDA_LIBS)
+  TargetAdd('libp3miles_audio.dll', opts=['MODULE', 'ADVAPI', 'WINUSER', 'WINMM', 'WINSHELL', 'WINOLE', 'MILES'])
 
 #
 # DIRECTORY: panda/src/downloadertools/
@@ -4765,7 +4774,7 @@ if (not RUNTIME):
   OPTS=['DIR:otp/src/nametag', 'BUILDING:OTP']
   TargetAdd('nametag_composite1.obj', opts=OPTS, input='nametag_composite1.cxx')
   TargetAdd('nametag_composite2.obj', opts=OPTS, input='nametag_composite2.cxx')
-  IGATEFILES=GetDirectoryContents('otp/src/nametag', ["*.h", "*_composite.cxx"])
+  IGATEFILES=GetDirectoryContents('otp/src/nametag', ["*.h", "*_composite1.cxx", "*_composite2.cxx"])
   TargetAdd('libnametag.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libnametag.in', opts=['IMOD:otp', 'ILIB:libnametag', 'SRCDIR:otp/src/nametag'])
   TargetAdd('libnametag_igate.obj', input='libnametag.in', opts=["DEPENDENCYONLY"])
@@ -4776,7 +4785,7 @@ if (not RUNTIME):
 if (not RUNTIME):
   OPTS=['DIR:otp/src/navigation', 'BUILDING:OTP']
   TargetAdd('navigation_composite1.obj', opts=OPTS, input='navigation_composite1.cxx')
-  IGATEFILES=GetDirectoryContents('otp/src/navigation', ["*.h", "*_composite.cxx"])
+  IGATEFILES=GetDirectoryContents('otp/src/navigation', ["*.h", "*_composite1.cxx"])
   TargetAdd('libnavigation.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libnavigation.in', opts=['IMOD:otp', 'ILIB:libnavigation', 'SRCDIR:otp/src/navigation'])
   TargetAdd('libnavigation_igate.obj', input='libnavigation.in', opts=["DEPENDENCYONLY"])
@@ -4790,7 +4799,7 @@ if (not RUNTIME):
   TargetAdd('cMover.obj', opts=OPTS, input='cMover.cxx')
   TargetAdd('cImpulse.obj', opts=OPTS, input='cImpulse.cxx')
   TargetAdd('cMoverGroup.obj', opts=OPTS, input='cMoverGroup.cxx')
-  IGATEFILES=GetDirectoryContents('otp/src/movement', ["*.h", "*_composite.cxx"])
+  IGATEFILES=GetDirectoryContents('otp/src/movement', ["*.h", "*.cxx"])
   TargetAdd('libmovement.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libmovement.in', opts=['IMOD:otp', 'ILIB:libmovement', 'SRCDIR:otp/src/movement'])
   TargetAdd('libmovement_igate.obj', input='libmovement.in', opts=["DEPENDENCYONLY"])
@@ -4878,7 +4887,7 @@ if (not RUNTIME):
   TargetAdd('dnaLoader_parser.obj', opts=OPTS, input='parser.yxx')
   TargetAdd('parser.h', input='dnaLoader_parser.obj', opts=['DEPENDENCYONLY'])
   TargetAdd('dnaLoader_lexer.obj', opts=OPTS, input='lexer.lxx')
-  IGATEFILES=GetDirectoryContents('toontown/src/dna', ["*.h", "*_composite.cxx"])
+  IGATEFILES=GetDirectoryContents('toontown/src/dna', ["*.h", "*_composite1.cxx", "*_composite2.cxx"])
   TargetAdd('libdna.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libdna.in', opts=['IMOD:toontown', 'ILIB:libdna', 'SRCDIR:toontown/src/dna'])
   TargetAdd('libdna_igate.obj', input='libdna.in', opts=["DEPENDENCYONLY"])
@@ -4892,7 +4901,7 @@ if (not RUNTIME):
   TargetAdd('cPetBrain.obj', opts=OPTS, input='cPetBrain.cxx')
   TargetAdd('cPetChase.obj', opts=OPTS, input='cPetChase.cxx')
   TargetAdd('cPetFlee.obj', opts=OPTS, input='cPetFlee.cxx')
-  IGATEFILES=GetDirectoryContents('toontown/src/pets', ["*.h", "*_composite.cxx"])
+  IGATEFILES=GetDirectoryContents('toontown/src/pets', ["*.h", "*.cxx"])
   TargetAdd('libpets.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libpets.in', opts=['IMOD:toontown', 'ILIB:libpets', 'SRCDIR:toontown/src/pets'])
   TargetAdd('libpets_igate.obj', input='libpets.in', opts=["DEPENDENCYONLY"])
@@ -4903,7 +4912,7 @@ if (not RUNTIME):
 if (not RUNTIME):
   OPTS=['DIR:toontown/src/suit', 'BUILDING:TOONTOWN']
   TargetAdd('suit_composite1.obj', opts=OPTS, input='suit_composite1.cxx')
-  IGATEFILES=GetDirectoryContents('toontown/src/suit', ["*.h", "*_composite.cxx"])
+  IGATEFILES=GetDirectoryContents('toontown/src/suit', ["*.h", "*_composite1.cxx"])
   TargetAdd('libsuit.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libsuit.in', opts=['IMOD:toontown', 'ILIB:libsuit', 'SRCDIR:toontown/src/suit'])
   TargetAdd('libsuit_igate.obj', input='libsuit.in', opts=["DEPENDENCYONLY"])
@@ -5425,8 +5434,6 @@ def MakeInstallerOSX():
     oscmd("cp %s/etc/Config.prc           dstroot/base/Developer/Panda3D/etc/Config.prc" % GetOutputDir())
     oscmd("cp %s/etc/Confauto.prc         dstroot/base/Developer/Panda3D/etc/Confauto.prc" % GetOutputDir())
     oscmd("cp -R %s/models                dstroot/base/Developer/Panda3D/models" % GetOutputDir())
-    oscmd("cp -R doc/LICENSE              dstroot/base/Developer/Panda3D/LICENSE")
-    oscmd("cp -R doc/ReleaseNotes         dstroot/base/Developer/Panda3D/ReleaseNotes")
     if os.path.isdir(GetOutputDir()+"/plugins"):
         oscmd("cp -R %s/plugins           dstroot/base/Developer/Panda3D/plugins" % GetOutputDir())
     for base in os.listdir(GetOutputDir()+"/lib"):

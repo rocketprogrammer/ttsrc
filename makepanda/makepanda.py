@@ -653,6 +653,8 @@ IncDirectory("ALWAYS", GetOutputDir()+"/include")
 if GetLinkAllStatic():
     DefSymbol("ALWAYS", "LINK_ALL_STATIC", "")
 
+DefSymbol('ALWAYS', 'WANT_NATIVE_NET', '1')
+
 ########################################################################
 ##
 ## Give a Status Report on Command-Line Options
@@ -1455,7 +1457,7 @@ PRC_PARAMETERS=[
     ("PRC_DIR_ENVVARS",                '""',                     '""'),
     ("PRC_PATH_ENVVARS",               '"CFG_PATH ETC_PATH"',    '"CFG_PATH ETC_PATH"'),
     ("PRC_PATH2_ENVVARS",              '""',                     '""'),
-    ("PRC_PATTERNS",                   '"*.pyc"',                '"*.pyc"'),
+    ("PRC_PATTERNS",                   '"*.prc"',                '"*.prc"'),
     ("PRC_ENCRYPTED_PATTERNS",         '"*.pre"',                '"*.pre"'),
     ("PRC_ENCRYPTION_KEY",             '"t@@V\'[T\'bm"',         '"t@@V\'[T\'bm"'),
     ("PRC_EXECUTABLE_PATTERNS",        '"Configrc.exe"',         '"Configrc.exe"'),
@@ -3524,7 +3526,7 @@ if (not RUNTIME and (sys.platform == "win32" or sys.platform == "darwin" or PkgS
 #
 # DIRECTORY: direct/src/directbase/
 #
-
+  
 if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   OPTS=['DIR:direct/src/directbase', 'PYTHON']
   TargetAdd('directbase_directbase.obj', opts=OPTS+['BUILDING:DIRECT'], input='directbase.cxx')

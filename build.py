@@ -111,7 +111,7 @@ class ImportWalker:
                 if os.path.isfile(path):
                     return (1, fullname, path)
                     
-        else:
+        elif not "-y" in sys.argv:
             for parent in sys.path:
                 path = os.path.join(parent, *module[:-1] + [module[-1] + ".py"])
                 if os.path.isfile(path):
@@ -175,7 +175,7 @@ if not os.path.exists(cache_imports_file) or "-x" in sys.argv:
         nameOv = nameOv[1:]
         
         walker.load_imports(pkg)
-        if pkgAi and "-ai" in sys.argv:
+        if pkgAi and ("-ai" in sys.argv or "-ud" in sys.argv):
             walker.load_imports(pkg + pkgAi)
         if pkgUd and "-ud" in sys.argv:
             walker.load_imports(pkg + pkgUd)
@@ -183,7 +183,7 @@ if not os.path.exists(cache_imports_file) or "-x" in sys.argv:
             walker.load_imports(pkg + pkgOv)
             
         walker.load_imports(pkg + "." + name)
-        if nameAi and "-ai" in sys.argv:
+        if nameAi and ("-ai" in sys.argv or "-ud" in sys.argv):
             walker.load_imports(pkg + "." + name + nameAi)
         if nameUd and "-ud" in sys.argv:
             walker.load_imports(pkg + "." + name + nameUd)

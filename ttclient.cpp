@@ -12,7 +12,6 @@
     #define DEBUG_STR(str)
 #endif
 
-PyObject* orig_import;
 
 struct Module {
     char* name;
@@ -83,7 +82,7 @@ void add_code(char* name, PyCodeObject* code, int type) {
     }
 }
 
-bool has_code(char* name) {
+bool has_code(const char* name) {
     struct Element* current = code_tree;
     while (1) {
         int diff;
@@ -102,7 +101,7 @@ bool has_code(char* name) {
     return false;
 }
 
-struct Module* find_code(char* name) {
+struct Module* find_code(const char* name) {
     struct Element* current = code_tree;
     while (1) {
         int diff;
@@ -121,7 +120,7 @@ struct Module* find_code(char* name) {
     return NULL;
 }
 #else
-bool has_code(char* name) {
+bool has_code(const char* name) {
     for (int i = 0; i < sizeof(FROZEN_MODULES) / sizeof(FROZEN_MODULES[0]); i++) {
         struct FrozenModule* frozen = &FROZEN_MODULES[i];
         if (strcmp(name, frozen->name) == 0) {
@@ -131,7 +130,7 @@ bool has_code(char* name) {
     return false;
 }
 
-struct Module* find_code(char* name) {
+struct Module* find_code(const char* name) {
     for (int i = 0; i < sizeof(FROZEN_MODULES) / sizeof(FROZEN_MODULES[0]); i++) {
         struct FrozenModule* frozen = &FROZEN_MODULES[i];
         if (strcmp(name, frozen->name) == 0) {
@@ -146,62 +145,84 @@ struct Module* find_code(char* name) {
 }
 #endif
 
-void print(PyObject* obj) {
-    printf("%s\n", PyString_AsString(PyObject_Repr(obj)));
+/* importer */
+
+
+typedef struct {
+    PyObject_HEAD
+    /* Type-specific fields go here. */
+} TTImportObject;
+
+PyObject* TTImportFindModule(PyObject* self, PyObject* args) {
+    DEBUG_PY(self);
+    DEBUG_PY(args);
+    
+    const char* name;
+    PyObject* path;
+    
+    if (!PyArg_ParseTuple(args, "s|O:find_module", &name, &path))
+        return NULL;
+    
+    if (has_code(name))
+        return self;
+    else
+        return Py_None;
 }
 
-PyObject* create(char* name, int force) {
+PyObject* TTImportLoadModule(PyObject* self, PyObject* args) {
+    DEBUG_PY(self);
+    DEBUG_PY(args);
+    
+    const char* name;
+    
+    if (!PyArg_ParseTuple(args, "s:load_module", &name))
+        return NULL;
+    
+    // check sys modules
     PyObject* modules = PyImport_GetModuleDict();
     PyObject* module = PyDict_GetItemString(modules, name);
-    PyObject* dict;
-    struct Module* code;
     
     if (module) {
         Py_IncRef(module);
         return module;
     }
     
-    code = find_code(name);
-    if (code == NULL) {
-        if (force)
-            return PyImport_AddModule(name);
-        else
-            return NULL;
-    }
-    
+    struct Module* code = find_code(name);
     module = PyImport_AddModule(name);
     Py_IncRef(module);
     
-    // Get parent
-    char* index = strrchr(name, '.');
-    char* parent = NULL;
-    PyObject* parentModule = NULL;
-    if (index) {
-        size_t parentLen = index - name;
-        parent = (char*)malloc(parentLen + 1);
-        memcpy(parent, name, parentLen);
-        parent[parentLen] = 0;
-        parentModule = create(parent, 1);
-    }
+    // module dict
+    PyObject* dict = PyModule_GetDict(module);
+    // add to sys modules
+    PyDict_SetItemString(modules, name, module);
     
-    DEBUG_STR(parent);
-    DEBUG_PY(parentModule);
-    
-    dict = PyModule_GetDict(module);
-    
+    // set values
     PyDict_SetItemString(dict, "__builtins__", PyEval_GetBuiltins());
-    PyDict_SetItemString(dict, "__file__", PyString_FromString(name));
+    PyDict_SetItemString(dict, "__file__", PyString_FromString("<lambda>"));
+    PyDict_SetItemString(dict, "__name__", PyString_FromString(name));
+    PyDict_SetItemString(dict, "__path__", PyList_New(0));
+    PyDict_SetItemString(dict, "__loader__", self);
     
+    // Get package
     if (code->type == 1) {
         PyDict_SetItemString(dict, "__package__", PyString_FromString(name));
-    } else if (parent) {
-        PyDict_SetItemString(dict, "__package__", PyString_FromString(parent));
     } else {
-        PyDict_SetItemString(dict, "__package__", PyString_FromString(""));
+        const char* index = strrchr(name, '.');
+        char* parent = NULL;
+        if (index) {
+            size_t parentLen = index - name;
+            parent = (char*)malloc(parentLen + 1);
+            memcpy(parent, name, parentLen);
+            parent[parentLen] = 0;
+        }
+        if (parent) {
+            PyDict_SetItemString(dict, "__package__", PyString_FromString(parent));
+            free(parent);
+        } else {
+            PyDict_SetItemString(dict, "__package__", PyString_FromString(""));
+        }
     }
     
-    if (parentModule)
-        PyDict_SetItemString(PyModule_GetDict(parentModule), index + 1, module);
     
     if (PyEval_EvalCode(code->code, dict, dict) == NULL) {
 #ifdef TTDEBUG
@@ -214,132 +235,65 @@ PyObject* create(char* name, int force) {
         PyErr_Restore(ptype, pvalue, ptraceback);
         printf("\n");
 #endif
-        if (PyDict_DelItemString(modules, name))
+        // remove from sys modules in case of failure
+        if (PyDict_GetItemString(modules, name))
             PyDict_DelItemString(modules, name);
+        
         return NULL;
     }
     
-    if (parent)
-        free(parent);
-    
-    //Py_DecRef(module);
     
     return module;
 }
 
-PyObject* importer(PyObject* self, PyObject* args, PyObject* kwds) {
-    char* name;
-    PyObject* globals = NULL;
-    PyObject* locals = NULL;
-    PyObject* fromlist = NULL;
-    int level = -1;
-    
-    static char* kwlist[] = {"name", "globals", "locals", "fromlist", "level", 0};
-    
-    if (!PyArg_ParseTupleAndKeywords(args, kwds, "s|OOOi:__import__", kwlist, &name, &globals, &locals, &fromlist, &level))
-        return NULL;
-        
-    PyObject* package = NULL;
-    PyObject* module = NULL;
-    char* fullname = NULL;
-    
-    DEBUG();
-    // Is the module relative?
-    if (globals && PyDict_Check(globals)) {
-        package = PyDict_GetItemString(globals, "__package__");
-        if (package && PyString_Check(package)) {
-            fullname = (char*)malloc(PyString_Size(package) + strlen(name) + 2);
-            fullname[0] = 0;
-            
-            strcat(fullname, PyString_AsString(package));
-            strcat(fullname, ".");
-            strcat(fullname, name);
-            
-            // Do we have its code?
-            if (!has_code(fullname)) {
-                free(fullname);
-                fullname = NULL;
-                package = NULL;
-            }
-        } else {
-            package = NULL;
-        }
-    }
-    
-    DEBUG();
-    // Is the module absolute?
-    if (!fullname) {
-        if (!has_code(name)) {
-            DEBUG_STR(name);
-            return PyObject_Call(orig_import, args, kwds);
-        }
-        
-        fullname = name;
-    }
+static PyMethodDef TTImportMethods[] = {
+    {"find_module", (PyCFunction)TTImportFindModule, METH_CLASS | METH_VARARGS, 0, },
+    {"load_module", (PyCFunction)TTImportLoadModule, METH_CLASS | METH_VARARGS, 0, },
+    {NULL}  /* Sentinel */
+};
 
-    module = create(fullname, 0);
+static PyTypeObject TTImportType = {
+    PyVarObject_HEAD_INIT(NULL, 0)
+    "TTImport",                /* tp_name */
+    sizeof(TTImportObject),    /* tp_basicsize */
+    0,                         /* tp_itemsize */
+    0,                         /* tp_dealloc */
+    0,                         /* tp_print */
+    0,                         /* tp_getattr */
+    0,                         /* tp_setattr */
+    0,                         /* tp_compare */
+    0,                         /* tp_repr */
+    0,                         /* tp_as_number */
+    0,                         /* tp_as_sequence */
+    0,                         /* tp_as_mapping */
+    0,                         /* tp_hash */
+    0,                         /* tp_call */
+    0,                         /* tp_str */
+    0,                         /* tp_getattro */
+    0,                         /* tp_setattro */
+    0,                         /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT,        /* tp_flags */
+    0,                         /* tp_doc */
+    0,                         /* tp_traverse */
+    0,                         /* tp_clear */
+    0,                         /* tp_richcompare */
+    0,                         /* tp_weaklistoffset */
+    0,                         /* tp_iter */
+    0,                         /* tp_iternext */
+    TTImportMethods,           /* tp_methods */
+    0,                         /* tp_members */
+    0,                         /* tp_getset */
+    0,                         /* tp_base */
+    0,                         /* tp_dict */
+    0,                         /* tp_descr_get */
+    0,                         /* tp_descr_set */
+    0,                         /* tp_dictoffset */
+    0,                         /* tp_init */
+    0,                         /* tp_alloc */
+    0,                         /* tp_new */
+};
 
-    DEBUG_PY(module);
-    if (fromlist && PyObject_IsTrue(fromlist)) {
-        DEBUG();
-        PyObject* iterator = PyObject_GetIter(fromlist);
-        PyObject* item;
-        while (item = PyIter_Next(iterator)) {
-            if (PyString_Check(item)) {
-                // Attempt to import every element in fromlist
-                // (from toontown.toonbase import ToontownStart
-                //  will look for toontown.toonbase.ToontownStart)
-                
-                char* tempname = (char*)malloc(strlen(fullname) + PyString_Size(item) + 2);
-                tempname[0] = 0;
-                DEBUG();
-                strcat(tempname, fullname);
-                strcat(tempname, ".");
-                strcat(tempname, PyString_AsString(item));
-                DEBUG_STR(tempname);
-                DEBUG_STR(has_code(tempname) ? "^ has code" : "^ not");
-                if (has_code(tempname))
-                    create(tempname, 0);
-                
-                free(tempname);
-            }
-        }
-        
-    } else {
-        DEBUG();
-        // We must return the first part of the name.
-        char* modulename;
-        char* index = strchr(name, '.');
-        if (index) {
-            DEBUG();
-            if (package) {
-                // We have a package. This means we returns a submodule
-                modulename = (char*)malloc(PyString_Size(package) + index - name + 2);
-                modulename[0] = 0;
-                
-                // {package}.{name}
-                strcat(modulename, PyString_AsString(package));
-                strcat(modulename, ".");
-                strncat(modulename, name, index - name);
-                
-            } else {
-                // We are package free
-                DEBUG();
-                modulename = (char*)malloc(index - name + 1);
-                memcpy(modulename, name, index - name);
-                modulename[index - name] = 0;
-            }
-            
-            DEBUG_STR(modulename);
-            module = create(modulename, 0);
-            free(modulename);
-            DEBUG_PY(module);
-        }
-    }
-    
-    DEBUG();
-    return module;
-}
+/* init */
 
 int main(int argc, char** argv) {
     Py_NoSiteFlag = 1;
@@ -347,6 +301,9 @@ int main(int argc, char** argv) {
     Py_Initialize();
     PySys_SetArgv(argc, argv);
     PySys_SetPath("");
+    
+    if (PyType_Ready(&TTImportType) < 0)
+        return 55;
     
 #ifndef FROZEN_ENABLED
     FILE* fp = fopen("Toontown.bin", "rb");
@@ -385,12 +342,8 @@ int main(int argc, char** argv) {
     
     fclose(fp);
 #endif
-    
-    PyMethodDef import = {"__tt_import__", (PyCFunction)importer, METH_VARARGS | METH_KEYWORDS, NULL};
-    
-    PyObject* builtins = PyEval_GetBuiltins();
-    orig_import = PyDict_GetItemString(builtins, "__import__");
-    PyDict_SetItemString(builtins, "__import__", PyCFunction_New(&import, NULL));
+    PyObject* metaPath = PySys_GetObject("meta_path");
+    PyList_Append(metaPath, (PyObject*)&TTImportType);
     
     reveal(ENTRYPOINT, ENTRYPOINT_SIZE);
     PyRun_SimpleString((const char*)ENTRYPOINT);

@@ -305,6 +305,10 @@ class Transformer(ast.NodeTransformer):
         return node
 
 data = {}
+
+data["toontown"] = (1, marshal.dumps(compile("", "toontown", "exec")))
+data["otp"] = (1, marshal.dumps(compile("", "otp", "exec")))
+
 for mtype, module, filename, imported_by in results:
     if isinstance(module, unicode):
         module = module.encode("ascii")

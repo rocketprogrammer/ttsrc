@@ -4,5 +4,4 @@ builtTT
 toontownD-dev.log
 readlog.txt
 *.buildings
-news/*.jpg
-news/cache_index.txt
+news/*

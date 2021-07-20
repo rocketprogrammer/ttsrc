@@ -74,8 +74,8 @@ with open(os.path.join(TTSRC_TMP, "ttmodules.h"), "w") as file:
     file.write("static const unsigned int ENTRYPOINT_SIZE = " + str(len(launcher)-1) + ";\n\n")
     
     if "-embed" in sys.argv:
-        with open(os.path.join(TTSRC, "Toontown.bin"), "rb") as file:
-            data = file.read()
+        with open(os.path.join(TTSRC, "Toontown.bin"), "rb") as f:
+            data = f.read()
             
         modules = {}
 
@@ -113,7 +113,7 @@ with open(os.path.join(TTSRC_TMP, "ttmodules.h"), "w") as file:
         file.write("#undef FROZEN_ENABLED")
 
 # build client
-if os.system("cl ttclient.cpp /EHsc /I" + str(TTSRC_TMP) + " /I" + str(PYTHON_INC) + " /Fo" + os.path.join(TTSRC_TMP, "ttclient.obj") + " /link /OUT:" + os.path.join(TTSRC_TMP, "Toontown.exe") + " /LIBPATH:" + str(PYTHON_LIBS) + (" /SUBSYSTEM:windows /ENTRY:mainCRTStartup" if "-gui" in sys.argv else "")):
+if os.system("cl ttclient.cpp /EHsc /I" + str(TTSRC_TMP) + " /I" + str(PYTHON_INC) + " /Fo" + os.path.join(TTSRC_TMP, "ttclient.obj") + " /link /OUT:" + os.path.join(TTSRC_TMP, "Toontown.exe") + " /LIBPATH:" + str(PYTHON_LIBS) + (" /subsystem:windows /entry:mainCRTStartup" if "-gui" in sys.argv else "")):
     sys.exit()
 
 if os.system("cl ttconfigrc.cpp /EHsc /DUSE_ENGLISH /I" + str(TTSRC_TMP) + " /I" + str(PYTHON_INC) + " /I" + str(PANDA_INC) + " /Fo" + os.path.join(TTSRC_TMP, "ttconfigrc.obj") + " /link /OUT:" + os.path.join(TTSRC_TMP, "Configrc.exe") + " /LIBPATH:" + str(PYTHON_LIBS) + " /LIBPATH:" + str(PANDA_LIBS) + " Gdi32.lib user32.lib advapi32.lib"):

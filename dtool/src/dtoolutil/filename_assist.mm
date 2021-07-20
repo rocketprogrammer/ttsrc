@@ -16,7 +16,6 @@
 
 #ifdef IS_OSX
 
-#include <strings.h>
 #include <Foundation/Foundation.h>
 
 #ifndef BUILD_IPHONE

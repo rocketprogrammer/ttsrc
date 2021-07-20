@@ -137,9 +137,6 @@
 // interface)?
 #define PHAVE_SYS_SOUNDCARD_H
 
-// Do we have <stdint.h>?
-#define PHAVE_STDINT_H
-
 // Do we have RTTI (and <typeinfo>)?
 #define HAVE_RTTI 1
 

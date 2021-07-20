@@ -63,7 +63,6 @@
     texturePoolFilter.I texturePoolFilter.h \
     textureReloadRequest.I textureReloadRequest.h \
     textureStage.I textureStage.h \
-    textureStagePool.I textureStagePool.h \
     transformBlend.I transformBlend.h \
     transformBlendTable.I transformBlendTable.h \
     transformTable.I transformTable.h \
@@ -132,7 +131,6 @@
     texturePoolFilter.cxx \
     textureReloadRequest.cxx \
     textureStage.cxx \
-    textureStagePool.cxx \
     transformBlend.cxx \
     transformBlendTable.cxx \
     transformTable.cxx \
@@ -203,7 +201,6 @@
     texturePoolFilter.I texturePoolFilter.h \
     textureReloadRequest.I textureReloadRequest.h \
     textureStage.I textureStage.h \
-    textureStagePool.I textureStagePool.h \
     transformBlend.I transformBlend.h \
     transformBlendTable.I transformBlendTable.h \
     transformTable.I transformTable.h \

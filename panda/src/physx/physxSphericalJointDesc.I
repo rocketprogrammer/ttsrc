@@ -22,7 +22,7 @@
 INLINE PhysxSphericalJointDesc::
 PhysxSphericalJointDesc() : PhysxJointDesc() {
 
-  set_to_default();
+  _desc.name = "";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ INLINE void PhysxSphericalJointDesc::
 set_to_default() {
 
   _desc.setToDefault();
-  set_name("");
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -59,7 +59,7 @@
 //               this, subclass BamReaderAuxData and add whatever
 //               additional data you require.
 ////////////////////////////////////////////////////////////////////
-class EXPCL_PANDA_PGRAPH BamReaderAuxData : public TypedReferenceCount {
+class BamReaderAuxData : public TypedReferenceCount {
 public:
   INLINE BamReaderAuxData();
 

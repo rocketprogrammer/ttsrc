@@ -62,9 +62,6 @@ public:
 protected:
   INLINE PhysxForceFieldShape();
 
-private:
-  string _name;
-
 ////////////////////////////////////////////////////////////////////
 public:
   static TypeHandle get_class_type() {

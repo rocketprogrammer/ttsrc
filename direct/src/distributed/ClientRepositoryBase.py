@@ -358,6 +358,7 @@ class ClientRepositoryBase(ConnectionRepository):
 
     def disableDoId(self, doId, ownerView=False):
         table, cache = self.getTables(ownerView)
+        print("disableDoId", doId, table.get(doId, None))
         # Make sure the object exists
         if table.has_key(doId):
             # Look up the object

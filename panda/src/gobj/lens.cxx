@@ -388,13 +388,13 @@ set_fov(const LVecBase2f &fov) {
 
   if (_focal_length_seq == 0) {
     // Throw out focal length if it's oldest.
-    adjust_user_flags(UF_focal_length | UF_film_height | UF_min_fov | UF_aspect_ratio,
-                      UF_hfov | UF_vfov);
+    adjust_user_flags(UF_focal_length | UF_film_height | UF_aspect_ratio,
+                      UF_hfov | UF_vfov | UF_min_fov);
   } else {
     // Otherwise, throw out film size.
     nassertv(_film_size_seq == 0);
-    adjust_user_flags(UF_film_width | UF_film_height | UF_min_fov | UF_aspect_ratio,
-                      UF_hfov | UF_vfov);
+    adjust_user_flags(UF_film_width | UF_film_height | UF_aspect_ratio,
+                      UF_hfov | UF_vfov | UF_min_fov);
   }
   adjust_comp_flags(CF_mat | CF_focal_length | CF_film_size | CF_aspect_ratio,
                     CF_fov);
@@ -1360,7 +1360,7 @@ extrude_impl(const LPoint3f &point2d, LPoint3f &near_point, LPoint3f &far_point)
     LVecBase4f full(point2d[0], point2d[1], -1.0f, 1.0f);
     full = projection_mat_inv.xform(full);
 
-    float recip_full3 = 1.0 / max((double)full[3], (double)lens_far_limit);
+    float recip_full3 = 1.0f / max(full[3], 0.00001f);
     near_point.set(full[0] * recip_full3, 
                    full[1] * recip_full3, 
                    full[2] * recip_full3);
@@ -1374,7 +1374,7 @@ extrude_impl(const LPoint3f &point2d, LPoint3f &near_point, LPoint3f &far_point)
     // past infinity and comes back in behind the lens, which is just
     // crazy.  Truncating it to zero keeps the far plane from moving
     // too far out.
-    float recip_full3 = 1.0 / max((double)full[3], (double)lens_far_limit);
+    float recip_full3 = 1.0f / max(full[3], 0.00001f);
     far_point.set(full[0] * recip_full3, 
                   full[1] * recip_full3, 
                   full[2] * recip_full3);
@@ -1806,7 +1806,7 @@ resequence_fov_triad(char &newest, char &older_a, char &older_b) {
     older_a--;
     older_b--;
     nassertv(older_a + older_b == 1);
-    break;
+    return;
 
   case 1:
     newest = 2;
@@ -1817,16 +1817,16 @@ resequence_fov_triad(char &newest, char &older_a, char &older_b) {
       nassertv(older_a == 0 && older_b == 2);
       older_b = 1;
     }
-    break;
+    return;
 
   case 2:
     nassertv(older_a + older_b == 1);
-    break;
+    return;
 
   default:
     gobj_cat.error()
-      << "Invalid fov sequence numbers in lens: "
-      << (int)newest << ", " << (int)older_a << ", " << (int)older_b << "\n";
+      << "Invalid fov sequence numbers in lens: " << newest << ", " << older_a
+      << ", " << older_b << "\n";
     nassertv(false);
     return;
   }

@@ -225,7 +225,7 @@ private:
 
   void clear_install_plans();
   void build_install_plans(TiXmlDocument *doc);
-  void follow_install_plans(bool download_finished, bool plan_failed);
+  void follow_install_plans(bool download_finished);
   static void st_callback(void *self);
   void request_callback();
 
@@ -245,11 +245,9 @@ public:
   public:
     inline RequiredPackage(const string &package_name,
                            const string &package_version,
-                           const string &package_seq,
                            P3DHost *host);
     string _package_name;
     string _package_version;
-    string _package_seq;
     P3DHost *_host;
   };
   typedef vector<RequiredPackage> Requires;
@@ -257,7 +255,7 @@ public:
 
 private:
   P3DHost *_host;
-  int _host_contents_iseq;
+  int _host_contents_seq;
 
   string _package_name;
   string _package_version;
@@ -278,6 +276,7 @@ private:
   string _desc_file_pathname;
 
   bool _info_ready;
+  size_t _download_size;
   bool _allow_data_download;
   bool _ready;
   bool _failed;

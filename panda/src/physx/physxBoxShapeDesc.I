@@ -22,7 +22,7 @@
 INLINE PhysxBoxShapeDesc::
 PhysxBoxShapeDesc() : PhysxShapeDesc() {
 
-  set_to_default();
+  _desc.name = "";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ INLINE void PhysxBoxShapeDesc::
 set_to_default() {
 
   _desc.setToDefault();
-  set_name("");
 }
 
 ////////////////////////////////////////////////////////////////////

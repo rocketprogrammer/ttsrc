@@ -59,13 +59,14 @@ P3DPackage(P3DHost *host, const string &package_name,
   // file, instead of an xml file and a multifile to unpack.
   _package_solo = false;
 
-  _host_contents_iseq = 0;
+  _host_contents_seq = 0;
 
   _xconfig = NULL;
   _temp_contents_file = NULL;
 
   _computed_plan_size = false;
   _info_ready = false;
+  _download_size = 0;
   _allow_data_download = false;
   _ready = false;
   _failed = false;
@@ -137,7 +138,7 @@ activate_download() {
     // Otherwise, if we've already got the desc file, then start the
     // download.
     if (_info_ready) {
-      follow_install_plans(true, false);
+      follow_install_plans(true);
     }
   }
 }
@@ -180,17 +181,6 @@ void P3DPackage::
 add_instance(P3DInstance *inst) {
   _instances.push_back(inst);
 
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (!_host->has_current_contents_file(inst_mgr)) {
-    // If the host needs to update its contents file, we're no longer
-    // sure that we're current.
-    _info_ready = false;
-    _ready = false;
-    _failed = false;
-    _allow_data_download = false;
-    nout << "No longer current: " << get_package_name() << "\n";
-  }
-  
   begin_info_download();
 }
 
@@ -229,12 +219,6 @@ remove_instance(P3DInstance *inst) {
 ////////////////////////////////////////////////////////////////////
 void P3DPackage::
 mark_used() {
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (inst_mgr->get_verify_contents() == P3D_VC_never) {
-    // We're not allowed to create any files in the package directory.
-    return;
-  }
-
   // Unlike the Python variant of this function, we don't mess around
   // with updating the disk space or anything.
   string filename = get_package_dir() + "/usage.xml";
@@ -254,19 +238,19 @@ mark_used() {
   int count = 0;
   xusage->Attribute("count_runtime", &count);
   if (count == 0) {
-    xusage->SetAttribute("first_use", (int)now);
+    xusage->SetAttribute("first_use", now);
   }
 
   ++count;
   xusage->SetAttribute("count_runtime", count);
-  xusage->SetAttribute("last_use", (int)now);
+  xusage->SetAttribute("last_use", now);
 
   if (_updated) {
     // If we've updated the package, we're no longer sure what its
     // disk space is.  Remove that from the XML file, so that the
     // Python code can recompute it later.
     xusage->RemoveAttribute("disk_space");
-    xusage->SetAttribute("last_update", (int)now);
+    xusage->SetAttribute("last_update", now);
   }
 
   // Write the file to a temporary filename, then atomically move it
@@ -397,22 +381,16 @@ begin_info_download() {
 void P3DPackage::
 download_contents_file() {
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (!_host->has_contents_file() && inst_mgr->get_verify_contents() != P3D_VC_force) {
-    // First, read whatever contents file is already on disk.  Maybe
-    // it's current enough.
+  if (!_host->has_contents_file() && !inst_mgr->get_verify_contents()) {
+    // If we're allowed to read a contents file without checking the
+    // server first, try it now.
     _host->read_contents_file();
   }
 
-  if (_host->has_current_contents_file(inst_mgr)) {
+  if (_host->has_contents_file()) {
     // We've already got a contents.xml file; go straight to the
     // package desc file.
     host_got_contents_file();
-    return;
-  }
-
-  // Don't download it if we're not allowed to.
-  if (inst_mgr->get_verify_contents() == P3D_VC_never) {
-    contents_file_download_finished(false);
     return;
   }
 
@@ -436,35 +414,18 @@ download_contents_file() {
 ////////////////////////////////////////////////////////////////////
 void P3DPackage::
 contents_file_download_finished(bool success) {
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (!_host->has_current_contents_file(inst_mgr)) {
-    if (!success || _temp_contents_file == NULL ||
-      !_host->read_contents_file(_temp_contents_file->get_filename(), true)) {
-      
-      if (_temp_contents_file) {
-        nout << "Couldn't read " << *_temp_contents_file << "\n";
-      }
+  if (!_host->has_contents_file()) {
+    if (!success || !_host->read_contents_file(_temp_contents_file->get_filename())) {
+      nout << "Couldn't read " << *_temp_contents_file << "\n";
 
       // Maybe we can read an already-downloaded contents.xml file.
-      bool success = false;
-      if (_host->has_host_dir()) {
-        string standard_filename = _host->get_host_dir() + "/contents.xml";
-        if (_host->read_contents_file(standard_filename, false)) {
-          success = true;
-        } else {
-          nout << "Couldn't read " << standard_filename << "\n";
-        }
-      } else {
-        nout << "No host_dir available for " << _host->get_host_url()
-             << "\n";
-      }
-      if (!success) {
-        // Couldn't read an already-downloaded file either.  Fail.
+      string standard_filename = _host->get_host_dir() + "/contents.xml";
+      if (_host->get_host_dir().empty() || 
+          !_host->read_contents_file(standard_filename)) {
+        // Couldn't even read that.  Fail.
         report_done(false);
-        if (_temp_contents_file) {
-          delete _temp_contents_file;
-          _temp_contents_file = NULL;
-        }
+        delete _temp_contents_file;
+        _temp_contents_file = NULL;
         return;
       }
     }
@@ -472,10 +433,8 @@ contents_file_download_finished(bool success) {
     
   // The file is correctly installed by now; we can remove the
   // temporary file.
-  if (_temp_contents_file) {
-    delete _temp_contents_file;
-    _temp_contents_file = NULL;
-  }
+  delete _temp_contents_file;
+  _temp_contents_file = NULL;
 
   host_got_contents_file();
 }
@@ -503,16 +462,10 @@ redownload_contents_file(P3DPackage::Download *download) {
   assert(_active_download == NULL);
   assert(_saved_download == NULL);
   
-  if (_host->get_contents_iseq() != _host_contents_iseq) {
-    // If the contents_iseq number has changed, we don't even need to
+  if (_host->get_contents_seq() != _host_contents_seq) {
+    // If the contents_seq number has changed, we don't even need to
     // download anything--just go restart the download.
     host_got_contents_file();
-    return;
-  }
-  
-  // Don't download it if we're not allowed to.
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (inst_mgr->get_verify_contents() == P3D_VC_never) {
     return;
   }
   
@@ -539,8 +492,8 @@ void P3DPackage::
 contents_file_redownload_finished(bool success) {
   bool contents_changed = false;
   
-  if (_host->get_contents_iseq() != _host_contents_iseq) {
-    // If the contents_iseq number has changed, we don't even need to
+  if (_host->get_contents_seq() != _host_contents_seq) {
+    // If the contents_seq number has changed, we don't even need to
     // bother reading what we just downloaded.
     contents_changed = true;
   }
@@ -550,7 +503,7 @@ contents_file_redownload_finished(bool success) {
     // from what we had before.
     if (!_host->check_contents_hash(_temp_contents_file->get_filename())) {
       // It changed!  Now see if we can read the new contents.
-      if (!_host->read_contents_file(_temp_contents_file->get_filename(), true)) {
+      if (!_host->read_contents_file(_temp_contents_file->get_filename())) {
         // Huh, appears to have changed to something bad.  Never mind.
         nout << "Couldn't read " << *_temp_contents_file << "\n";
 
@@ -562,10 +515,8 @@ contents_file_redownload_finished(bool success) {
   }
     
   // We no longer need the temporary file.
-  if (_temp_contents_file) {
-    delete _temp_contents_file;
-    _temp_contents_file = NULL;
-  }
+  delete _temp_contents_file;
+  _temp_contents_file = NULL;
 
   if (contents_changed) {
     // OK, the contents.xml has changed; this means we have to restart
@@ -618,8 +569,7 @@ host_got_contents_file() {
     // host.
     _alt_host.clear();
 
-    P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-    if (!_host->has_current_contents_file(inst_mgr)) {
+    if (!_host->has_contents_file()) {
       // Now go back and get the contents.xml file for the new host.
       download_contents_file();
       return;
@@ -629,7 +579,7 @@ host_got_contents_file() {
   // Record this now, so we'll know later whether the host has been
   // reloaded (e.g. due to some other package, from some other
   // instance, reloading it).
-  _host_contents_iseq = _host->get_contents_iseq();
+  _host_contents_seq = _host->get_contents_seq();
 
   // Now that we have a valid host, we can define the _package_dir.
   _package_dir = _host->get_host_dir() + string("/") + _package_name;
@@ -638,10 +588,7 @@ host_got_contents_file() {
   }
 
   // Ensure the package directory exists; create it if it does not.
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (inst_mgr->get_verify_contents() != P3D_VC_never) {
-    mkdir_complete(_package_dir, nout);
-  }
+  mkdir_complete(_package_dir, nout);
   download_desc_file();
 }
 
@@ -659,9 +606,8 @@ download_desc_file() {
   // Attempt to check the desc file for freshness.  If it already
   // exists, and is consistent with the server contents file, we don't
   // need to re-download it.
-  string package_seq;
   if (!_host->get_package_desc_file(_desc_file, _package_platform, 
-                                    package_seq, _package_solo,
+                                    _package_solo,
                                     _package_name, _package_version)) {
     nout << "Couldn't find package " << _package_fullname
          << " in contents file.\n";
@@ -686,8 +632,7 @@ download_desc_file() {
   local_desc_file.set_filename(_desc_file_basename);
   _desc_file_pathname = local_desc_file.get_pathname(_package_dir);
 
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (!local_desc_file.full_verify(_package_dir) && inst_mgr->get_verify_contents() != P3D_VC_never) {
+  if (!local_desc_file.full_verify(_package_dir)) {
     nout << _desc_file_pathname << " is stale.\n";
 
   } else {
@@ -703,13 +648,6 @@ download_desc_file() {
         return;
       }
     }
-  }
-
-  // Don't download it if we're not allowed to.
-  if (inst_mgr->get_verify_contents() == P3D_VC_never) {
-    nout << "Couldn't read " << _desc_file_pathname << "\n";
-    report_done(false);
-    return;
   }
 
   // The desc file is not current.  Go download it.
@@ -729,11 +667,8 @@ desc_file_download_finished(bool success) {
     return;
   }
 
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (inst_mgr->get_verify_contents() != P3D_VC_never) {
-    // Now that we've downloaded the desc file, make it read-only.
-    chmod(_desc_file_pathname.c_str(), 0444);
-  }
+  // Now that we've downloaded the desc file, make it read-only.
+  chmod(_desc_file_pathname.c_str(), 0444);
 
   if (_package_solo) {
     // No need to load it: the desc file *is* the package.
@@ -820,28 +755,17 @@ got_desc_file(TiXmlDocument *doc, bool freshly_downloaded) {
   TiXmlElement *xrequires = xpackage->FirstChildElement("requires");
   while (xrequires != NULL) {
     const char *package_name = xrequires->Attribute("name");
+    const char *version = xrequires->Attribute("version");
     const char *host_url = xrequires->Attribute("host");
     if (package_name != NULL && host_url != NULL) {
-      const char *version = xrequires->Attribute("version");
+      P3DHost *host = inst_mgr->get_host(host_url);
       if (version == NULL) {
         version = "";
       }
-      const char *seq = xrequires->Attribute("seq");
-      if (seq == NULL) {
-        seq = "";
-      }
-      P3DHost *host = inst_mgr->get_host(host_url);
-      _requires.push_back(RequiredPackage(package_name, version, seq, host));
+      _requires.push_back(RequiredPackage(package_name, version, host));
     }
 
     xrequires = xrequires->NextSiblingElement("requires");
-  }
-
-  if (inst_mgr->get_verify_contents() == P3D_VC_never) {
-    // This means we'll just leave it at this
-    // and assume that we're finished.
-    report_done(true);
-    return;
   }
 
   // Get a list of all of the files in the directory, so we can remove
@@ -911,7 +835,7 @@ got_desc_file(TiXmlDocument *doc, bool freshly_downloaded) {
       report_info_ready();
     } else {
       // We've already been authorized to start downloading, so do it.
-      follow_install_plans(true, false);
+      follow_install_plans(true);
     }
   }
 }
@@ -1055,17 +979,12 @@ build_install_plans(TiXmlDocument *doc) {
 //     Function: P3DPackage::follow_install_plans
 //       Access: Private
 //  Description: Performs the next step in the current install plan.
-//
 //               If download_finished is false, there is a pending
 //               download that has not fully completed yet; otherwise,
 //               download_finished should be set true.
-//
-//               If plan_failed is false, it means that the
-//               top-of-stack plan is still good; if true, the
-//               top-of-stack plan has failed and should be removed.
 ////////////////////////////////////////////////////////////////////
 void P3DPackage::
-follow_install_plans(bool download_finished, bool plan_failed) {
+follow_install_plans(bool download_finished) {
   if (!_allow_data_download || _failed) {
     // Not authorized yet, or something went wrong.
     return;
@@ -1075,6 +994,7 @@ follow_install_plans(bool download_finished, bool plan_failed) {
     // Pull the next step off the current plan.
 
     InstallPlan &plan = _install_plans.front();
+    bool plan_failed = false;
 
     if (!_computed_plan_size) {
       _total_plan_size = 0.0;
@@ -1142,9 +1062,6 @@ follow_install_plans(bool download_finished, bool plan_failed) {
     nout << "Plan failed.\n";
     _install_plans.pop_front();
     _computed_plan_size = false;
-
-    // The next plan is (so far as we know) still good.
-    plan_failed = false;
   }
 
   // All plans failed.  Too bad for us.
@@ -1160,7 +1077,7 @@ follow_install_plans(bool download_finished, bool plan_failed) {
 ////////////////////////////////////////////////////////////////////
 void P3DPackage::
 st_callback(void *self) {
-  ((P3DPackage *)self)->follow_install_plans(false, false);
+  ((P3DPackage *)self)->follow_install_plans(false);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1207,6 +1124,7 @@ report_progress(P3DPackage::InstallStep *step) {
 void P3DPackage::
 report_info_ready() {
   _info_ready = true;
+  _download_size = _compressed_archive.get_size();
 
   Instances::iterator ii;
   for (ii = _instances.begin(); ii != _instances.end(); ++ii) {
@@ -1241,7 +1159,9 @@ report_done(bool success) {
 
   if (!_allow_data_download && success) {
     // If we haven't been authorized to start downloading yet, just
-    // report that we're ready to start.
+    // report that we're ready to start, but that we don't have to
+    // download anything.
+    _download_size = 0;
     Instances::iterator ii;
     for (ii = _instances.begin(); ii != _instances.end(); ++ii) {
       (*ii)->report_package_info_ready(this);
@@ -1267,10 +1187,6 @@ start_download(P3DPackage::DownloadType dtype, const string &urlbase,
                const string &pathname, const FileSpec &file_spec) {
   // Only one download should be active at a time
   assert(_active_download == NULL);
-  // This can't happen! If verify_contents is set to P3D_VC_never, we're
-  // not allowed to download anything, so we shouldn't get here
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  assert(inst_mgr->get_verify_contents() != P3D_VC_never);
 
   // We can't explicitly support partial downloads here, because
   // Mozilla provides no interface to ask for one.  We have to trust
@@ -1318,6 +1234,8 @@ start_download(P3DPackage::DownloadType dtype, const string &urlbase,
       download->_try_urls.push_back(url);
     }
   }
+
+  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
 
   if (dtype == DT_redownload_contents_file) {
     // When we're redownloading the contents file after a download
@@ -1479,7 +1397,7 @@ download_progress() {
     break;
 
   case DT_install_step:
-    _package->follow_install_plans(false, false);
+    _package->follow_install_plans(false);
     break;
   }
 }
@@ -1509,15 +1427,6 @@ download_finished(bool success) {
     if (!_file_spec.full_verify(_package->_package_dir)) {
       nout << "After downloading " << get_url()
            << ", failed hash check\n";
-      nout << "expected: ";
-      _file_spec.output_hash(nout);
-      nout << "\n";
-      if (_file_spec.get_actual_file() != (FileSpec *)NULL) {
-        nout << "     got: ";
-        _file_spec.get_actual_file()->output_hash(nout);
-        nout << "\n";
-      }
-      
       success = false;
     }
   }
@@ -1584,7 +1493,7 @@ resume_download_finished(bool success) {
     break;
 
   case DT_install_step:
-    _package->follow_install_plans(true, !success);
+    _package->follow_install_plans(true);
     break;
   }
 }

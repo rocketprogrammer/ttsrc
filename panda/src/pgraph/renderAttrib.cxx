@@ -80,7 +80,7 @@ RenderAttrib::
 //
 //               This should return false if a RenderAttrib on a
 //               higher node will compose into a RenderAttrib on a
-//               lower node that has a higher override value, or true
+//               lower node that has a higher override value, or false
 //               if the lower RenderAttrib will completely replace the
 //               state.
 //

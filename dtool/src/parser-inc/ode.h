@@ -87,8 +87,6 @@ typedef struct dSurfaceParameters dSurfaceParameters;
 typedef struct dMass dMass;
 typedef struct dContact dContact;
 typedef struct dContactGeom dContactGeom;
-
-struct dxTriMeshData;
-typedef struct dxTriMeshData* dTriMeshDataID;
+typedef struct dTriMeshDataID dTriMeshDataID;
 
 #endif /* _ODE_COMMON_H_ */

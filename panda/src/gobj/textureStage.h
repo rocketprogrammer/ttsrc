@@ -109,6 +109,8 @@ PUBLISHED:
   INLINE void set_priority(int priority);
   INLINE int get_priority() const;
 
+  INLINE bool operator < (const TextureStage &other) const;
+
   INLINE void set_texcoord_name(InternalName *name);
   INLINE void set_texcoord_name(const string &texcoord_name);
   INLINE InternalName *get_texcoord_name() const;
@@ -170,12 +172,6 @@ PUBLISHED:
   INLINE bool uses_color() const;
   INLINE bool uses_primary_color() const;
   INLINE bool uses_last_saved_result() const;
-
-  INLINE bool operator == (const TextureStage &other) const;
-  INLINE bool operator != (const TextureStage &other) const;
-  INLINE bool operator < (const TextureStage &other) const;
-
-  int compare_to(const TextureStage &other) const;
 
   void write(ostream &out) const;
   void output(ostream &out) const;

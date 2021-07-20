@@ -1064,14 +1064,6 @@ make_canonical() {
     // The root directory is a special case.
     return true;
   }
-  
-#ifndef WIN32
-  // Use realpath in order to resolve symlinks properly
-  char newpath [PATH_MAX + 1];
-  if (realpath(c_str(), newpath) != NULL) {
-    (*this) = newpath;
-  }
-#endif
 
   Filename cwd = ExecutionEnvironment::get_cwd();
   if (!r_make_canonical(cwd)) {
@@ -1206,7 +1198,7 @@ to_os_specific() const {
     return convert_pathname(standard.get_fullpath());
   }
 #else // WIN32
-  return standard.c_str();
+  return standard;
 #endif // WIN32
 }
 
@@ -2440,7 +2432,7 @@ touch() const {
 ////////////////////////////////////////////////////////////////////
 bool Filename::
 chdir() const {
-  string os_specific = to_os_specific();
+  Filename os_specific = to_os_specific();
   return (::chdir(os_specific.c_str()) >= 0);
 }
 

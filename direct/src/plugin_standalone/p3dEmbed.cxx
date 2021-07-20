@@ -25,13 +25,9 @@
 ////////////////////////////////////////////////////////////////////
 P3DEmbed::
 P3DEmbed(bool console_environment) : Panda3DBase(console_environment) {
-  // Since the Panda3DBase constructor no longer assigns _root_dir, we
+  // Since the Pand3DBase constructor no longer assigns _root_dir, we
   // have to do it here.
   _root_dir = find_root_dir();
-  
-  // We should leave the arguments intact, just pass them
-  // 1:1 as we've received them.
-  _prepend_filename_to_args = false;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -85,7 +81,6 @@ run_embedded(streampos read_offset, int argc, char *argv[]) {
   string keyword;
   string value;
   string root_dir;
-  string host_dir;
   while (true) {
     if (curchr == EOF) {
       cerr << "Truncated stream\n";
@@ -114,24 +109,8 @@ run_embedded(streampos read_offset, int argc, char *argv[]) {
           _win_width = atoi(value.c_str());
         } else if (keyword == "height") {
           _win_height = atoi(value.c_str());
-        } else if (keyword == "log_basename") {
-          _log_basename = value;
         } else if (keyword == "root_dir") {
           root_dir = value;
-        } else if (keyword == "host_dir") {
-          host_dir = value;
-        } else if (keyword == "verify_contents") {
-          if (value == "never") {
-            _verify_contents = P3D_VC_never;
-          } else if (value == "force") {
-            _verify_contents = P3D_VC_force;
-          } else if (value == "normal") {
-            _verify_contents = P3D_VC_normal;
-          } else if (value == "none") {
-            _verify_contents = P3D_VC_none;
-          } else {
-            _verify_contents = (P3D_verify_contents)atoi(value.c_str());
-          }
         }
       }
       curstr = "";
@@ -153,18 +132,8 @@ run_embedded(streampos read_offset, int argc, char *argv[]) {
   read.close();
 
   // Make the root directory absolute
-  if (!root_dir.empty()) {
-    Filename root_dir_f(root_dir);
-    root_dir_f.make_absolute(f.get_dirname());
-    _root_dir = root_dir_f.to_os_specific();
-  }
-  
-  // Make the host directory absolute
-  if (!host_dir.empty()) {
-    Filename host_dir_f(host_dir);
-    host_dir_f.make_absolute(f.get_dirname());
-    _host_dir = host_dir_f.to_os_specific();
-  }
+  Filename root_dir_f(root_dir);
+  root_dir_f.make_absolute(f.get_dirname());
 
   // Initialize the core API by directly assigning all of the function
   // pointers.
@@ -211,7 +180,6 @@ run_embedded(streampos read_offset, int argc, char *argv[]) {
   // Calling the executable with --prep just prepares the directory
   // structure, this is usually invoked in the installer.
   if (argc == 2 && strcmp(argv[1], "--prep") == 0) {
-    cerr << "Invoking the prepare step is deprecated, please rebuild the application using a more recent version of pdeploy\n";
     _window_type = P3D_WT_hidden;
     _log_basename = "prep";
     P3D_token token;
@@ -227,7 +195,7 @@ run_embedded(streampos read_offset, int argc, char *argv[]) {
   // function pointers.  This will also call P3D_initialize().
   if (!init_plugin("", _host_url, _verify_contents, _this_platform, 
                    _log_dirname, _log_basename, true, _console_environment,
-                   _root_dir, _host_dir, cerr)) {
+                   root_dir_f.to_os_specific(), cerr)) {
     cerr << "Unable to launch core API\n";
     return 1;
   }

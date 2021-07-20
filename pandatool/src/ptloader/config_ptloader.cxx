@@ -13,12 +13,6 @@
 ////////////////////////////////////////////////////////////////////
 
 #include "config_ptloader.h"
-
-// This needs to be included first to work around a bug in OSX 10.4.
-#if defined(HAVE_FCOLLADA) && defined(IS_OSX)
-#include "daeToEggConverter.h" 
-#endif
-
 #include "loaderFileTypePandatool.h"
 
 #include "config_flt.h"
@@ -30,9 +24,8 @@
 #include "config_xfile.h"
 #include "xFileToEggConverter.h"
 
-// Windows freaks out if this input is placed earlier.
-#if defined(HAVE_FCOLLADA) && !defined(IS_OSX)
-#include "daeToEggConverter.h" 
+#ifdef HAVE_FCOLLADA
+#include "daeToEggConverter.h"
 #endif
 
 #include "dconfig.h"

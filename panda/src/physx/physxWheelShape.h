@@ -21,7 +21,6 @@
 #include "physx_includes.h"
 
 class PhysxWheelShapeDesc;
-class PhysxSpringDesc;
 
 ////////////////////////////////////////////////////////////////////
 //       Class : PhysxWheelShape

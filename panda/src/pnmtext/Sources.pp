@@ -9,7 +9,7 @@
 
   #define TARGET pnmtext
   #define LOCAL_LIBS \
-    pnmimage putil linmath pipeline
+    pnmimage putil linmath
     
   #define SOURCES \
     config_pnmtext.cxx config_pnmtext.h \

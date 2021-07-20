@@ -135,7 +135,6 @@ class Transitions:
         if gsg:
             # If we're about to fade in from black, go ahead and
             # preload all the textures etc.
-            base.graphicsEngine.renderFrame()
             render.prepareScene(gsg)
             render2d.prepareScene(gsg)
         

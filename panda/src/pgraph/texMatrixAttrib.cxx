@@ -19,7 +19,6 @@
 #include "bamWriter.h"
 #include "datagram.h"
 #include "datagramIterator.h"
-#include "textureStagePool.h"
 
 CPT(RenderAttrib) TexMatrixAttrib::_empty_attrib;
 TypeHandle TexMatrixAttrib::_type_handle;
@@ -77,7 +76,12 @@ make(const LMatrix4f &mat) {
 ////////////////////////////////////////////////////////////////////
 CPT(RenderAttrib) TexMatrixAttrib::
 make(TextureStage *stage, const TransformState *transform) {
-  return DCAST(TexMatrixAttrib, make())->add_stage(stage, transform);
+  if (transform->is_identity()) {
+    return make();
+  }
+  TexMatrixAttrib *attrib = new TexMatrixAttrib;
+  attrib->_stages.insert(Stages::value_type(stage, transform));
+  return return_new(attrib);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -100,13 +104,12 @@ make_default() {
 //               this stage already exists, its transform is replaced.
 ////////////////////////////////////////////////////////////////////
 CPT(RenderAttrib) TexMatrixAttrib::
-add_stage(TextureStage *stage, const TransformState *transform,
-          int override) const {
+add_stage(TextureStage *stage, const TransformState *transform) const {
+  if (transform->is_identity()) {
+    return remove_stage(stage);
+  }
   TexMatrixAttrib *attrib = new TexMatrixAttrib(*this);
-  Stages::iterator si = attrib->_stages.insert(StageNode(stage)).first;
-  (*si)._transform = transform;
-  (*si)._override = override;
-
+  attrib->_stages[stage] = transform;
   return return_new(attrib);
 }
 
@@ -119,7 +122,7 @@ add_stage(TextureStage *stage, const TransformState *transform,
 CPT(RenderAttrib) TexMatrixAttrib::
 remove_stage(TextureStage *stage) const {
   TexMatrixAttrib *attrib = new TexMatrixAttrib(*this);
-  attrib->_stages.erase(StageNode(stage));
+  attrib->_stages.erase(stage);
   return return_new(attrib);
 }
 
@@ -155,7 +158,7 @@ is_empty() const {
 ////////////////////////////////////////////////////////////////////
 bool TexMatrixAttrib::
 has_stage(TextureStage *stage) const {
-  Stages::const_iterator mi = _stages.find(StageNode(stage));
+  Stages::const_iterator mi = _stages.find(stage);
   return (mi != _stages.end());
 }
 
@@ -180,33 +183,38 @@ get_num_stages() const {
 TextureStage *TexMatrixAttrib::
 get_stage(int n) const {
   nassertr(n >= 0 && n < (int)_stages.size(), NULL);
-  return _stages[n]._stage;
+  check_stage_list();
+  return _stage_list[n];
 }
 
 ////////////////////////////////////////////////////////////////////
 //     Function: TexMatrixAttrib::get_mat
 //       Access: Published
 //  Description: Returns the transformation matrix associated with
-//               the indicated texture stage, or identity matrix if
+//               the named texture stage, or identity matrix if
 //               nothing is associated with the indicated stage.
 ////////////////////////////////////////////////////////////////////
 const LMatrix4f &TexMatrixAttrib::
 get_mat(TextureStage *stage) const {
-  return get_transform(stage)->get_mat();
+  Stages::const_iterator mi = _stages.find(stage);
+  if (mi != _stages.end()) {
+    return (*mi).second->get_mat();
+  }
+  return LMatrix4f::ident_mat();
 }
 
 ////////////////////////////////////////////////////////////////////
 //     Function: TexMatrixAttrib::get_transform
 //       Access: Published
 //  Description: Returns the transformation associated with
-//               the indicated texture stage, or identity matrix if
+//               the named texture stage, or identity matrix if
 //               nothing is associated with the indicated stage.
 ////////////////////////////////////////////////////////////////////
 CPT(TransformState) TexMatrixAttrib::
 get_transform(TextureStage *stage) const {
-  Stages::const_iterator mi = _stages.find(StageNode(stage));
+  Stages::const_iterator mi = _stages.find(stage);
   if (mi != _stages.end()) {
-    return (*mi)._transform;
+    return (*mi).second;
   }
   return TransformState::make_identity();
 }
@@ -222,11 +230,9 @@ output(ostream &out) const {
 
   Stages::const_iterator mi;
   for (mi = _stages.begin(); mi != _stages.end(); ++mi) {
-    const StageNode &sn = (*mi);
-    out << " " << sn._stage->get_name() << "(" << *sn._transform << ")";
-    if (sn._override != 0) {
-      out << "^" << sn._override;
-    }
+    TextureStage *stage = (*mi).first;
+    const TransformState *transform = (*mi).second;
+    out << " " << stage->get_name() << "(" << *transform << ")";
   }
 }
 
@@ -254,16 +260,19 @@ compare_to_impl(const RenderAttrib *other) const {
   ai = _stages.begin();
   bi = ta->_stages.begin();
   while (ai != _stages.end() && bi != ta->_stages.end()) {
-    if ((*ai) < (*bi)) {
+    if ((*ai).first < (*bi).first) {
       // This stage is in a but not in b.
       return -1;
 
-    } else if ((*bi) < (*ai)) {
+    } else if ((*bi).first < (*ai).first) {
       // This stage is in b but not in a.
       return 1;
 
     } else {
-      // This stage is in both.
+      // This stage is in both; compare the stages.
+      if ((*ai).second != (*bi).second) {
+        return (*ai).second < (*bi).second ? -1 : 1;
+      }
       ++ai;
       ++bi;
     }
@@ -313,33 +322,20 @@ compose_impl(const RenderAttrib *other) const {
   ai = _stages.begin();
   bi = ta->_stages.begin();
   while (ai != _stages.end() && bi != ta->_stages.end()) {
-    if ((*ai)._stage < (*bi)._stage) {
+    if ((*ai).first < (*bi).first) {
       // This stage is in a but not in b.
       attrib->_stages.insert(attrib->_stages.end(), *ai);
       ++ai;
 
-    } else if ((*bi)._stage < (*ai)._stage) {
+    } else if ((*bi).first < (*ai).first) {
       // This stage is in b but not in a.
       attrib->_stages.insert(attrib->_stages.end(), *bi);
       ++bi;
 
     } else {
-      // This stage is in both.
-      if ((*ai)._override == (*bi)._override) {
-        // Same override; compose them.
-        CPT(TransformState) new_transform = (*ai)._transform->compose((*bi)._transform);
-        StageNode sn((*ai)._stage);
-        sn._transform = new_transform;
-        sn._override = (*ai)._override;
-        attrib->_stages.insert(attrib->_stages.end(), sn);
-      } else if ((*ai)._override < (*bi)._override) {
-        // Override b wins.
-        attrib->_stages.insert(attrib->_stages.end(), *bi);
-      } else {
-        // Override a wins.
-        attrib->_stages.insert(attrib->_stages.end(), *ai);
-      }
-
+      // This stage is in both; compose the stages.
+      CPT(TransformState) new_transform = (*ai).second->compose((*bi).second);
+      attrib->_stages.insert(attrib->_stages.end(), Stages::value_type((*ai).first, new_transform));
       ++ai;
       ++bi;
     }
@@ -383,45 +379,23 @@ invert_compose_impl(const RenderAttrib *other) const {
   ai = _stages.begin();
   bi = ta->_stages.begin();
   while (ai != _stages.end() && bi != ta->_stages.end()) {
-    if ((*ai)._stage < (*bi)._stage) {
+    if ((*ai).first < (*bi).first) {
       // This stage is in a but not in b.
       CPT(TransformState) inv_a = 
-        (*ai)._transform->invert_compose(TransformState::make_identity());
-      StageNode sn((*ai)._stage);
-      sn._transform = inv_a;
-      sn._override = (*ai)._override;
-      attrib->_stages.insert(attrib->_stages.end(), sn);
+        (*ai).second->invert_compose(TransformState::make_identity());
+      attrib->_stages.insert(attrib->_stages.end(), Stages::value_type((*ai).first, inv_a));
       ++ai;
 
-    } else if ((*bi)._stage < (*ai)._stage) {
+    } else if ((*bi).first < (*ai).first) {
       // This stage is in b but not in a.
       attrib->_stages.insert(attrib->_stages.end(), *bi);
       ++bi;
 
     } else {
-      // This stage is in both.
-      if ((*ai)._override == (*bi)._override) {
-        // Same override; compose them.
-        CPT(TransformState) new_transform = (*ai)._transform->invert_compose((*bi)._transform);
-        StageNode sn((*ai)._stage);
-        sn._transform = new_transform;
-        sn._override = (*ai)._override;
-        attrib->_stages.insert(attrib->_stages.end(), sn);
-
-      } else if ((*ai)._override < (*bi)._override) {
-        // Override b wins.
-        attrib->_stages.insert(attrib->_stages.end(), *bi);
-
-      } else {
-        // Override a wins.
-        CPT(TransformState) inv_a = 
-          (*ai)._transform->invert_compose(TransformState::make_identity());
-        StageNode sn((*ai)._stage);
-        sn._transform = inv_a;
-        sn._override = (*ai)._override;
-        attrib->_stages.insert(attrib->_stages.end(), sn);
-      }
-
+      // This stage is in both; compose the stages.
+      CPT(TransformState) new_transform = 
+        (*ai).second->invert_compose((*bi).second);
+      attrib->_stages.insert(attrib->_stages.end(), Stages::value_type((*ai).first, new_transform));
       ++ai;
       ++bi;
     }
@@ -430,11 +404,8 @@ invert_compose_impl(const RenderAttrib *other) const {
   while (ai != _stages.end()) {
     // This stage is in a but not in b.
     CPT(TransformState) inv_a = 
-      (*ai)._transform->invert_compose(TransformState::make_identity());
-    StageNode sn((*ai)._stage);
-    sn._transform = inv_a;
-    sn._override = (*ai)._override;
-    attrib->_stages.insert(attrib->_stages.end(), sn);
+      (*ai).second->invert_compose(TransformState::make_identity());
+    attrib->_stages.insert(attrib->_stages.end(), Stages::value_type((*ai).first, inv_a));
     ++ai;
   }
 
@@ -445,6 +416,25 @@ invert_compose_impl(const RenderAttrib *other) const {
   }
 
   return return_new(attrib);
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: TexMatrixAttrib::rebuild_stage_list
+//       Access: Private
+//  Description: Builds the linear list of TextureStages, the first
+//               time someone asks for it.
+////////////////////////////////////////////////////////////////////
+void TexMatrixAttrib::
+rebuild_stage_list() {
+  _stage_list.clear();
+  _stage_list.reserve(_stages.size());
+
+  Stages::const_iterator si;
+  for (si = _stages.begin(); si != _stages.end(); ++si) {
+    _stage_list.push_back((*si).first);
+  }
+
+  _stage_list_stale = false;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -472,11 +462,11 @@ write_datagram(BamWriter *manager, Datagram &dg) {
 
   Stages::const_iterator si;
   for (si = _stages.begin(); si != _stages.end(); ++si) {
-    const StageNode &sn = (*si);
+    TextureStage *stage = (*si).first;
+    const TransformState *transform = (*si).second;
 
-    manager->write_pointer(dg, sn._stage);
-    manager->write_pointer(dg, sn._transform);
-    dg.add_int32(sn._override);
+    manager->write_pointer(dg, stage);
+    manager->write_pointer(dg, transform);
   }
 }
 
@@ -491,18 +481,11 @@ int TexMatrixAttrib::
 complete_pointers(TypedWritable **p_list, BamReader *manager) {
   int pi = RenderAttrib::complete_pointers(p_list, manager);
 
-  for (size_t sni = 0; sni < _stages.size(); ++sni) {
-    // Filter the TextureStage through the TextureStagePool.
-    PT(TextureStage) ts = DCAST(TextureStage, p_list[pi++]);
-    ts = TextureStagePool::get_stage(ts);
-
+  for (size_t i = 0; i < _num_stages; i++) {
+    TextureStage *stage = DCAST(TextureStage, p_list[pi++]);
     const TransformState *transform = DCAST(TransformState, p_list[pi++]);
-    
-    StageNode &sn = _stages[sni];
-    sn._stage = ts;
-    sn._transform = transform;
+    _stages[stage] = transform;
   }
-  _stages.sort();
 
   return pi;
 }
@@ -538,17 +521,9 @@ void TexMatrixAttrib::
 fillin(DatagramIterator &scan, BamReader *manager) {
   RenderAttrib::fillin(scan, manager);
 
-  size_t num_stages = scan.get_uint16();
-  for (size_t i = 0; i < num_stages; i++) {
+  _num_stages = scan.get_uint16();
+  for (size_t i = 0; i < _num_stages; i++) {
     manager->read_pointer(scan);
     manager->read_pointer(scan);
-    int override = 0;
-    if (manager->get_file_minor_ver() >= 24) {
-      override = scan.get_int32();
-    }
-
-    StageNode sn(NULL);
-    sn._override = override;
-    _stages.push_back(sn);
   }
 }

@@ -165,7 +165,7 @@ class ProfileSession:
                 self._duration = 0.
         else:
             # put the function in the global namespace so that profile can find it
-            assert hasattr(self._func, '__call__')
+            assert callable(self._func)
             __builtin__.globalProfileSessionFunc = self._func
             __builtin__.globalProfileSessionResult = [None]
 

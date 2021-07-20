@@ -79,20 +79,12 @@ extern "C" {
    (below). This number will be incremented whenever there are changes
    to any of the interface specifications defined in this header
    file. */
-#define P3D_API_VERSION 16
+#define P3D_API_VERSION 12
 
 /************************ GLOBAL FUNCTIONS **************************/
 
 /* The following interfaces are global to the core API space, as
    opposed to being specific to a particular instance. */
-
-/* This is passed for verify_contents, below. */
-typedef enum {
-  P3D_VC_none,
-  P3D_VC_normal,
-  P3D_VC_force,
-  P3D_VC_never,
-} P3D_verify_contents;
 
 /* This function should be called immediately after the core API is
    loaded.  You should pass P3D_API_VERSION as the first parameter, so
@@ -106,16 +98,13 @@ typedef enum {
    If host_url is not NULL or empty, it specifies the root URL of
    the download server that provided the contents_filename.
 
-   If verify_contents is P3D_VC_none, then the server will not be
-   contacted unless the current contents.xml cannot be read at all.
-   If it is P3D_VC_normal, the server will be contacted whenever the
-   contents.xml has expired.  If it is P3D_VC_force, each server will
-   be contacted initially in all cases, and subseqeuntly only whenever
-   contents.xml has expired for that server.  The opposite of
-   P3D_VC_force is P3D_VC_never, which forces the plugin never to
-   contact the server and not to verify the contents at all.  This
-   option should only be used if the host directory is prepopulated.
-   Normally, a web plugin should set this to P3D_VC_normal.
+   If verify_contents is true, it means that the download server will
+   be contacted to verify that contents.xml is current, before
+   continuing, for any contents.xml file that is loaded.  If it is
+   false, it means that the contents.xml will be loaded without
+   checking the download server, if possible.  This can be used to
+   minimize unnecessary network operations for standalone
+   applications.  For a web plugin, it should be set true.
 
    If platform is not NULL or empty, it specifies the current platform
    string; otherwise, the compiled-in default is used.  This should
@@ -141,15 +130,12 @@ typedef enum {
    p3d file will be run without checking its signature.  Normally, a
    browser plugin should set this false.
 
-   Furthermore, console_environment should be set true to indicate that
-   we are running within a text-based console, and expect to preserve
-   the current working directory, and also see standard output, or false
+   Finally, console_environment should be set true to indicate that we
+   are running within a text-based console, and expect to preserve the
+   current working directory, and also see standard output, or false
    to indicate that we are running within a GUI environment, and
    expect none of these.  Normally, a browser plugin should set this
    false.
-
-   Finally, root_dir and host_dir can be set to override the default
-   root and package directories.  Normally, you don't need to set them.
 
    This function returns true if the core API is valid and uses a
    compatible API, false otherwise.  If it returns false, the host
@@ -157,11 +143,11 @@ typedef enum {
    immediately unload the DLL and (if possible) download a new one. */
 typedef bool 
 P3D_initialize_func(int api_version, const char *contents_filename,
-                    const char *host_url, P3D_verify_contents verify_contents,
+                    const char *host_url, bool verify_contents,
                     const char *platform,
                     const char *log_directory, const char *log_basename,
                     bool trusted_environment, bool console_environment,
-                    const char *root_dir, const char *host_dir);
+                    const char *root_dir);
 
 /* This function should be called to unload the core API.  It will
    release all internally-allocated memory and return the core API to
@@ -175,8 +161,7 @@ typedef void
 P3D_set_plugin_version_func(int major, int minor, int sequence,
                             bool official, const char *distributor,
                             const char *coreapi_host_url,
-                            const char *coreapi_timestamp,
-                            const char *coreapi_set_ver);
+                            time_t coreapi_timestamp);
 
 /* This function defines a "super mirror" URL: a special URL that is
    consulted first whenever downloading any package referenced by a
@@ -1110,12 +1095,6 @@ EXPCL_P3D_PLUGIN P3D_instance_feed_url_stream_func P3D_instance_feed_url_stream;
 EXPCL_P3D_PLUGIN P3D_instance_handle_event_func P3D_instance_handle_event;
 
 #endif  /* P3D_FUNCTION_PROTOTYPES */
-
-// The default max_age, if none is specified in a particular
-// contents.xml, is 5 seconds.  This gives us enough time to start a
-// few packages downloading, without re-querying the host for a new
-// contents.xml at each operation.
-#define P3D_CONTENTS_DEFAULT_MAX_AGE 5
 
 #ifdef __cplusplus
 };  /* end of extern "C" */

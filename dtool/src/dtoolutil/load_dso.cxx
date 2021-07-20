@@ -13,7 +13,6 @@
 ////////////////////////////////////////////////////////////////////
 
 #include "load_dso.h"
-#include "executionEnvironment.h"
 
 static Filename resolve_dso(const DSearchPath &path, const Filename &filename) {
   if (filename.is_local()) {

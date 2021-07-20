@@ -22,7 +22,7 @@
 INLINE PhysxPrismaticJointDesc::
 PhysxPrismaticJointDesc() : PhysxJointDesc() {
 
-  set_to_default();
+  _desc.name = "";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ INLINE void PhysxPrismaticJointDesc::
 set_to_default() {
 
   _desc.setToDefault();
-  set_name("");
 }
 
 ////////////////////////////////////////////////////////////////////

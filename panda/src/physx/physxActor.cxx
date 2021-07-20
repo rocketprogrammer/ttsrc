@@ -33,8 +33,6 @@ link(NxActor *actorPtr) {
   _ptr->userData = this;
   _error_type = ET_ok;
 
-  set_name(actorPtr->getName());
-
   PhysxScene *scene = (PhysxScene *)_ptr->getScene().userData;
   scene->_actors.add(this);
 
@@ -43,6 +41,8 @@ link(NxActor *actorPtr) {
   NxU32 nShapes = _ptr->getNbShapes();
 
   for (NxU32 i=0; i < nShapes; i++) {
+    if (shapes[i]->getName() == NULL) shapes[i]->setName("");
+
     PhysxShape *shape = PhysxShape::factory(shapes[i]->getType());
     shape->link(shapes[i]);
   }
@@ -137,9 +137,7 @@ void PhysxActor::
 set_name(const char *name) {
 
   nassertv(_error_type == ET_ok);
-
-  _name = name ? name : "";
-  _ptr->setName(_name.c_str());
+  _ptr->setName(name);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -257,7 +255,7 @@ set_global_pos(const LPoint3f &pos) {
 //               and would like to have it correctly interact with
 //               dynamic bodies and joints, you should create a
 //               dynamic body with the BF_kinematic flag, and then
-//               use the move_global_*() commands to move it along
+//               use the move_lobal_*() commands to move it along
 //               a path!
 //
 //               When briefly moving dynamic actors, one should not:
@@ -295,80 +293,6 @@ set_global_hpr(float h, float p, float r) {
   LQuaternionf q;
   q.set_hpr(LVector3f(h, p, r));
   _ptr->setGlobalOrientationQuat(PhysxManager::quat_to_nxQuat(q));
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxActor::move_global_pos
-//       Access: Published
-//  Description: The move_global_* calls serve to move kinematically
-//               controlled dynamic actors through the game world. 
-//
-//               See move_global_mat() for more information.
-//
-//               This call wakes the actor if it is sleeping.
-////////////////////////////////////////////////////////////////////
-void PhysxActor::
-move_global_pos(const LPoint3f &pos) {
-
-  nassertv(_error_type == ET_ok);
-  nassertv_always(!pos.is_nan());
-
-  _ptr->moveGlobalPosition(PhysxManager::point3_to_nxVec3(pos));
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxActor::move_global_mat
-//       Access: Published
-//  Description: The move_global_* calls serve to move
-//               kinematically controlled dynamic actors through
-//               the game world. 
-//
-//               You set a dynamic actor to be kinematic using the
-//               BF_KINEMATIC body flag, used either in the
-//               PhysBodyDesc or with set_body_flag().
-//
-//               The move command will result in a velocity that,
-//               when successfully carried out (i.e. the motion is
-//               not blocked due to joints or collisions) inside
-//               run*(), will move the body into the desired pose.
-//               After the move is carried out during a single time
-//               step, the velocity is returned to zero. Thus, you
-//               must continuously call this in every time step for
-//               kinematic actors so that they move along a path.
-//
-//               These functions simply store the move destination
-//               until run*() is called, so consecutive calls will
-//               simply overwrite the stored target variable.
-//
-//               This call wakes the actor if it is sleeping.
-////////////////////////////////////////////////////////////////////
-void PhysxActor::
-move_global_mat(const LMatrix4f &mat) {
-
-  nassertv(_error_type == ET_ok);
-  nassertv_always(!mat.is_nan());
-
-  _ptr->moveGlobalPose(PhysxManager::mat4_to_nxMat34(mat));
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxActor::move_global_hpr
-//       Access: Published
-//  Description: The move_global_* calls serve to move kinematically
-//               controlled dynamic actors through the game world. 
-//
-//               See move_global_mat() for more information.
-//
-//               This call wakes the actor if it is sleeping.
-////////////////////////////////////////////////////////////////////
-void PhysxActor::
-move_global_hpr(float h, float p, float r) {
-
-  nassertv(_error_type == ET_ok);
-
-  LQuaternionf q;
-  q.set_hpr(LVector3f(h, p, r));
-  _ptr->moveGlobalOrientationQuat(PhysxManager::quat_to_nxQuat(q));
 }
 
 ////////////////////////////////////////////////////////////////////

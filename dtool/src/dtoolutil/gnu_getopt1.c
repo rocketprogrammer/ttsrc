@@ -44,8 +44,7 @@
    program understand `configure --with-gnu-libc' and omit the object files,
    it is simpler to just do this in the source for each such file.  */
 
-/* Actually, we may need to compile this anyway, even on a gnu platform. */
-#if 1 /* defined (_LIBC) || !defined (__GNU_LIBRARY__) */
+#if defined (_LIBC) || !defined (__GNU_LIBRARY__)
 
 
 /* This needs to come after some library #include

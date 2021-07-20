@@ -32,7 +32,6 @@ CullTraverserData(const NodePath &start,
   _draw_mask(DrawMask::all_on())
 {
   _node_reader.check_bounds();
-  _portal_depth = 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -48,8 +47,7 @@ CullTraverserData(const CullTraverserData &copy) :
   _state(copy._state),
   _view_frustum(copy._view_frustum),
   _cull_planes(copy._cull_planes),
-  _draw_mask(copy._draw_mask),
-  _portal_depth(copy._portal_depth)
+  _draw_mask(copy._draw_mask)
 {
 }
 
@@ -67,7 +65,6 @@ operator = (const CullTraverserData &copy) {
   _view_frustum = copy._view_frustum;
   _cull_planes = copy._cull_planes;
   _draw_mask = copy._draw_mask;
-  _portal_depth = copy._portal_depth;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -87,7 +84,6 @@ CullTraverserData(const CullTraverserData &parent, PandaNode *child) :
   _draw_mask(parent._draw_mask)
 {
   _node_reader.check_bounds();
-  _portal_depth = parent._portal_depth;
 }
 
 ////////////////////////////////////////////////////////////////////

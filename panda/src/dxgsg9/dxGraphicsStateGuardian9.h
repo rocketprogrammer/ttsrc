@@ -1,6 +1,5 @@
 // Filename: dxGraphicsStateGuardian9.h
 // Created by:  mike (02Feb99)
-// Updated by: fperazzi, PandaSE (05May10) (added get_supports_cg_profile)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -166,8 +165,6 @@ public:
   static void atexit_function(void);
 
   static void set_cg_device(LPDIRECT3DDEVICE9 cg_device);
-  virtual bool get_supports_cg_profile(const string &name) const;
-
 
 protected:
   void do_issue_transform();

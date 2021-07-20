@@ -1,4 +1,4 @@
-from pandac.PandaModules import getModelPath, Filename, ConfigVariableFilename, DSearchPath, ExecutionEnvironment, PandaSystem
+from pandac.PandaModules import getModelPath, Filename, ConfigVariableFilename, DSearchPath, ExecutionEnvironment
 
 # This file defines a number of standard "packages" that correspond to
 # a Panda3D distribution.  These packages are built by passing this
@@ -22,7 +22,6 @@ from pandac.PandaModules import getModelPath, Filename, ConfigVariableFilename, 
 class coreapi(solo):
     # The special "coreapi" package.  As a "solo", this is just a
     # single .dll (or dylib, or whatever).
-    setVer(PandaSystem.getP3dCoreapiVersionString())
     file('p3d_plugin.dll')
 
 class images(package):
@@ -110,7 +109,7 @@ class p3dcert(package):
 
     else:
         # Anywhere else, we just ship the executable file p3dcert.exe.
-        file('p3dcert.exe', required = True)
+        file('p3dcert.exe')
 
 
 class p3dembed(package):
@@ -118,7 +117,4 @@ class p3dembed(package):
     # pdeploy to generate a self-extracting .p3d executable.
 
     config(platform_specific = True)
-    file('p3dembed.exe', required = True)
-
-    if platform.startswith('win'):
-        file('p3dembedw.exe', required = True)
+    file('p3dembed.exe')

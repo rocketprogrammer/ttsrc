@@ -18,20 +18,15 @@ class wx(package):
     #config(gui_app = True)
     require('panda3d')
 
-    module('direct.showbase.WxGlobal')
-    module('direct.wxwidgets')
-    module('direct.wxwidgets.WxAppShell')
-    module('direct.wxwidgets.WxSlider')
-    module('wx', required = True)
-    module('wx.*')
+    module('direct.showbase.WxGlobal', 'wx', 'wx.*')
 
 class tk(package):
     config(display_name = "Tk GUI Toolkit")
     #config(gui_app = True)
     require('panda3d')
 
-    module('Tkinter', required = True)
-    module('direct.showbase.TkGlobal',
+    module('Tkinter',
+           'direct.showbase.TkGlobal',
            'direct.tkpanels',
            'direct.tkwidgets')
 
@@ -45,36 +40,25 @@ class numpy(package):
     config(display_name = "NumPy")
     require('panda3d')
 
-    module('numpy', required = True)
+    module('numpy')
 
 class pygame(package):
     config(display_name = "PyGame")
     require('panda3d', 'numpy')
 
-    module('pygame', required = True)
+    module('pygame')
 
 class twisted(package):
     config(display_name = "Twisted")
     require('panda3d')
 
-    module('twisted', 'twisted._version', required = True)
-    module('twisted.application', 'twisted.conch', 'twisted.cred',
-           'twisted.enterprise', 'twisted.internet', 'twisted.lore',
-           'twisted.mail', 'twisted.manhole', 'twisted.names',
-           'twisted.news', 'twisted.pair', 'twisted.persisted',
-           'twisted.plugin', 'twisted.plugins', 'twisted.python',
-           'twisted.runner', 'twisted.scripts', 'twisted.spread',
-           'twisted.tap', 'twisted.trial', 'twisted.vfs',
-           'twisted.web', 'twisted.web2', 'twisted.words')
-           
-    module('twisted.*', 'twisted.*.*')
+    module('twisted', 'twisted.*', 'twisted.*.*')
 
 class pil(package):
     config(display_name = "Python Imaging Library")
     require('panda3d')
 
-    module('PIL', required = True)
-    module('ArgImagePlugin', 'BdfFontFile',
+    module('PIL', 'PIL.*', 'ArgImagePlugin', 'BdfFontFile',
            'BmpImagePlugin', 'BufrStubImagePlugin', 'ContainerIO',
            'CurImagePlugin', 'DcxImagePlugin', 'EpsImagePlugin',
            'ExifTags', 'FitsStubImagePlugin', 'FliImagePlugin',
@@ -98,24 +82,22 @@ class pil(package):
            'TarIO', 'TgaImagePlugin', 'TiffImagePlugin', 'TiffTags',
            'WalImageFile', 'WmfImagePlugin', 'XVThumbImagePlugin',
            'XbmImagePlugin', 'XpmImagePlugin', '_imaging',
-           '_imagingmath', '_imagingtk')
+           '_imagingmath', '_imagingtk', )
 
 class pyopengl(package):
     config(display_name = "PyOpenGL")
     require('panda3d', 'numpy')
 
-    module('OpenGL', 'OpenGL.GL', required = True)
-    module('OpenGL.GLU', 'OpenGL.GLUT', 'OpenGL.GLE', 'OpenGL.GLX')
+    module('OpenGL', 'OpenGL.*')
 
 class httplib2(package):
     config(display_name = "httplib2")
     require('panda3d')
 
-    module('httplib2', required = True)
+    module('httplib2')
 
-class box2d(package):
-    config(display_name = "Box2D")
+class pycurl(package):
+    config(display_name = "PyCURL")
     require('panda3d')
 
-    module('Box2D', required = True)
-
+    module('pycurl')

@@ -166,16 +166,11 @@ ns_add_font(const string &str, TextFont *font) {
 //  Description: The nonstatic implementation of release_font().
 ////////////////////////////////////////////////////////////////////
 void FontPool::
-ns_release_font(const string &str) {
+ns_release_font(const string &filename) {
   LightMutexHolder holder(_lock);
 
-  string index_str;
-  Filename filename;
-  int face_index;
-  lookup_filename(str, index_str, filename, face_index);
-
   Fonts::iterator ti;
-  ti = _fonts.find(index_str);
+  ti = _fonts.find(filename);
   if (ti != _fonts.end()) {
     _fonts.erase(ti);
   }

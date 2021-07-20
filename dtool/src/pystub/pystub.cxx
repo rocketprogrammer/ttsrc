@@ -61,7 +61,6 @@ extern "C" {
   EXPCL_DTOOLCONFIG int PyList_GetItem(...);
   EXPCL_DTOOLCONFIG int PyList_New(...);
   EXPCL_DTOOLCONFIG int PyList_SetItem(...);
-  EXPCL_DTOOLCONFIG int PyList_Type(...);
   EXPCL_DTOOLCONFIG int PyLong_AsLong(...);
   EXPCL_DTOOLCONFIG int PyLong_AsLongLong(...);
   EXPCL_DTOOLCONFIG int PyLong_AsUnsignedLong(...);
@@ -74,8 +73,6 @@ extern "C" {
   EXPCL_DTOOLCONFIG int PyMapping_GetItemString(...);
   EXPCL_DTOOLCONFIG int PyModule_AddIntConstant(...);
   EXPCL_DTOOLCONFIG int PyModule_AddObject(...);
-  EXPCL_DTOOLCONFIG int PyModule_AddStringConstant(...);
-  EXPCL_DTOOLCONFIG int PyNumber_Float(...);
   EXPCL_DTOOLCONFIG int PyNumber_Long(...);
   EXPCL_DTOOLCONFIG int PyObject_Call(...);
   EXPCL_DTOOLCONFIG int PyObject_CallFunction(...);
@@ -83,7 +80,6 @@ extern "C" {
   EXPCL_DTOOLCONFIG int PyObject_CallMethodObjArgs(...);
   EXPCL_DTOOLCONFIG int PyObject_CallObject(...);
   EXPCL_DTOOLCONFIG int PyObject_Cmp(...);
-  EXPCL_DTOOLCONFIG int PyObject_Compare(...);
   EXPCL_DTOOLCONFIG int PyObject_Free(...);
   EXPCL_DTOOLCONFIG int PyObject_GenericGetAttr(...);
   EXPCL_DTOOLCONFIG int PyObject_GenericSetAttr(...);
@@ -96,7 +92,6 @@ extern "C" {
   EXPCL_DTOOLCONFIG int PyObject_Str(...);
   EXPCL_DTOOLCONFIG int PyObject_Type(...);
   EXPCL_DTOOLCONFIG int PySequence_Check(...);
-  EXPCL_DTOOLCONFIG int PySequence_Fast(...);
   EXPCL_DTOOLCONFIG int PySequence_GetItem(...);
   EXPCL_DTOOLCONFIG int PySequence_Size(...);
   EXPCL_DTOOLCONFIG int PySequence_Tuple(...);
@@ -199,7 +194,6 @@ int PyList_AsTuple(...) { return 0; }
 int PyList_GetItem(...) { return 0; }
 int PyList_New(...) { return 0; }
 int PyList_SetItem(...) { return 0; }
-int PyList_Type(...) { return 0; }
 int PyLong_AsLong(...) { return 0; }
 int PyLong_AsLongLong(...) { return 0; }
 int PyLong_AsUnsignedLong(...) { return 0; }
@@ -212,8 +206,6 @@ int PyLong_Type(...) { return 0; }
 int PyMapping_GetItemString(...) { return 0; }
 int PyModule_AddIntConstant(...) { return 0; };
 int PyModule_AddObject(...) { return 0; };
-int PyModule_AddStringConstant(...) { return 0; };
-int PyNumber_Float(...) { return 0; }
 int PyNumber_Long(...) { return 0; }
 int PyObject_Call(...) { return 0; }
 int PyObject_CallFunction(...) { return 0; }
@@ -221,7 +213,6 @@ int PyObject_CallMethod(...) { return 0; }
 int PyObject_CallMethodObjArgs(...) { return 0; }
 int PyObject_CallObject(...) { return 0; }
 int PyObject_Cmp(...) { return 0; }
-int PyObject_Compare(...) { return 0; }
 int PyObject_Free(...) { return 0; }
 int PyObject_GenericGetAttr(...) { return 0; };
 int PyObject_GenericSetAttr(...) { return 0; };
@@ -234,7 +225,6 @@ int PyObject_SetAttrString(...) { return 0; }
 int PyObject_Str(...) { return 0; }
 int PyObject_Type(...) { return 0; }
 int PySequence_Check(...) { return 0; }
-int PySequence_Fast(...) { return 0; }
 int PySequence_GetItem(...) { return 0; }
 int PySequence_Size(...) { return 0; }
 int PySequence_Tuple(...) { return 0; }
@@ -297,4 +287,3 @@ void *_Py_NotImplementedStruct = (void *)NULL;
 void
 pystub() {
 }
-

@@ -22,7 +22,7 @@
 INLINE PhysxPointOnLineJointDesc::
 PhysxPointOnLineJointDesc() : PhysxJointDesc() {
 
-  set_to_default();
+  _desc.name = "";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ INLINE void PhysxPointOnLineJointDesc::
 set_to_default() {
 
   _desc.setToDefault();
-  set_name("");
 }
 
 ////////////////////////////////////////////////////////////////////

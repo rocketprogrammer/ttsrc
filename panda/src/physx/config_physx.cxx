@@ -22,9 +22,6 @@
 #include "physxCapsuleController.h"
 #include "physxCapsuleForceFieldShape.h"
 #include "physxCapsuleShape.h"
-#include "physxCloth.h"
-#include "physxClothMesh.h"
-#include "physxClothNode.h"
 #include "physxContactPair.h"
 #include "physxContactPoint.h"
 #include "physxController.h"
@@ -52,16 +49,15 @@
 #include "physxRevoluteJoint.h"
 #include "physxScene.h"
 #include "physxShape.h"
-#include "physxSoftBody.h"
-#include "physxSoftBodyMesh.h"
-#include "physxSoftBodyNode.h"
 #include "physxSphereForceFieldShape.h"
 #include "physxSphereShape.h"
 #include "physxSphericalJoint.h"
 #include "physxTriangleMesh.h"
 #include "physxTriangleMeshShape.h"
-#include "physxVehicle.h"
-#include "physxWheel.h"
+//#include "physxVehicle.h"
+//#include "physxVehicleGears.h"
+//#include "physxVehicleMotor.h"
+//#include "physxWheel.h"
 #include "physxWheelShape.h"
 
 ConfigureDef(config_physx);
@@ -79,26 +75,19 @@ PRC_DESC("Specified wether the manager should try to connect to the NVIDIA "
 
 ConfigVariableString physx_vrd_host
 ("physx-vrd-host", "localhost",
-PRC_DESC("Specified the host where the NVIDIA PhysX visual debugger is running "
+PRC_DESC("Specified the host where the NVIDIA PhysX visual debugger is running"
          "on. Only used if the config-varibale 'physx-want-visual-debugger' "
          "is set to 'true'."));
 
 ConfigVariableInt physx_vrd_port
 ("physx-visual-debugger-port", 5425,
-PRC_DESC("Specified the port where the NVIDIA PhysX visual debugger is running "
+PRC_DESC("Specified the port where the NVIDIA PhysX visual debugger is running"
          "on. Only used if the config-varibale 'physx-want-visual-debugger' "
          "is set to 'true'."));
 
 ConfigVariableEnum<PhysxEnums::PhysxUpAxis> physx_up_axis
 ("physx-up-axis", PhysxEnums::Z_up,
 PRC_DESC("Set the up direction for controllers and heightfields."));
-
-ConfigVariableInt physx_internal_threads
-("physx-internal-threads", 0,
-PRC_DESC("Specified the number of internal threads to be created by the "
-         "PhysX engine. The threads will be moved to different cores, if "
-         "possible. Default value is '0'. PhysX then runs in an external "
-         "thread, but no additional internal threads will be created."));
 
 ////////////////////////////////////////////////////////////////////
 //     Function: init_libphysx
@@ -123,9 +112,6 @@ init_libphysx() {
   PhysxCapsuleController::init_type();
   PhysxCapsuleForceFieldShape::init_type();
   PhysxCapsuleShape::init_type();
-  PhysxCloth::init_type();
-  PhysxClothMesh::init_type();
-  PhysxClothNode::init_type();
   PhysxContactPair::init_type();
   PhysxContactPoint::init_type();
   PhysxController::init_type();
@@ -153,16 +139,15 @@ init_libphysx() {
   PhysxRevoluteJoint::init_type();
   PhysxScene::init_type();
   PhysxShape::init_type();
-  PhysxSoftBody::init_type();
-  PhysxSoftBodyMesh::init_type();
-  PhysxSoftBodyNode::init_type();
   PhysxSphereForceFieldShape::init_type();
   PhysxSphereShape::init_type();
   PhysxSphericalJoint::init_type();
   PhysxTriangleMesh::init_type();
   PhysxTriangleMeshShape::init_type();
-  PhysxVehicle::init_type();
-  PhysxWheel::init_type();
+  //PhysxVehicle::init_type();
+  //PhysxVehicleGears::init_type();
+  //PhysxVehicleMotor::init_type();
+  //PhysxWheel::init_type();
   PhysxWheelShape::init_type();
 
   PandaSystem *ps = PandaSystem::get_global_ptr();

@@ -35,24 +35,13 @@ LOCK _api_lock;
 
 bool 
 P3D_initialize(int api_version, const char *contents_filename,
-               const char *host_url, P3D_verify_contents verify_contents,
+               const char *host_url, bool verify_contents,
                const char *platform, const char *log_directory,
                const char *log_basename, bool trusted_environment,
-               bool console_environment,
-               const char *root_dir, const char *host_dir) {
+               bool console_environment, const char *root_dir) {
   if (api_version < 10 || api_version > P3D_API_VERSION) {
     // Can't accept an incompatible version.
     return false;
-  }
-
-  if (api_version < 13) {
-    // Prior to version 13, verify_contents was a bool.  Convert
-    // "true" to P3D_VC_normal and "false" to P3D_VC_none.
-    if ((int)verify_contents != 0) {
-      verify_contents = P3D_VC_normal;
-    } else {
-      verify_contents = P3D_VC_none;
-    }
   }
 
   if (!initialized_lock) {
@@ -80,13 +69,9 @@ P3D_initialize(int api_version, const char *contents_filename,
   if (log_basename == NULL) {
     log_basename = "";
   }
-
-  if (api_version < 12 || root_dir == NULL) {
+  
+  if (P3D_API_VERSION < 12 || root_dir == NULL) {
     root_dir = "";
-  }
-
-  if (api_version < 16 || host_dir == NULL) {
-    host_dir = "";
   }
 
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
@@ -94,7 +79,7 @@ P3D_initialize(int api_version, const char *contents_filename,
                                      verify_contents, platform,
                                      log_directory, log_basename,
                                      trusted_environment, console_environment,
-                                     root_dir, host_dir);
+                                     root_dir);
   RELEASE_LOCK(_api_lock);
   return result;
 }
@@ -109,8 +94,7 @@ void
 P3D_set_plugin_version(int major, int minor, int sequence,
                        bool official, const char *distributor,
                        const char *coreapi_host_url,
-                       const char *coreapi_timestamp_str,
-                       const char *coreapi_set_ver) {
+                       time_t coreapi_timestamp) {
   assert(P3DInstanceManager::get_global_ptr()->is_initialized());
   if (distributor == NULL) {
     distributor = "";
@@ -121,25 +105,8 @@ P3D_set_plugin_version(int major, int minor, int sequence,
 
   ACQUIRE_LOCK(_api_lock);
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-
-  time_t coreapi_timestamp = 0;
-  if (inst_mgr->get_api_version() < 15) {
-    // Before version 15, this was passed as a time_t.  
-    coreapi_timestamp = (time_t)coreapi_timestamp_str;
-  } else {
-    // Passing a time_t causes problems with disagreements about word
-    // size, so since version 15 we pass it as a string.
-    coreapi_timestamp = strtoul(coreapi_timestamp_str, NULL, 10);
-  }
-
-  if (inst_mgr->get_api_version() < 14 || coreapi_set_ver == NULL) {
-    // Prior to version 14 this parameter was absent.
-    coreapi_set_ver = "";
-  }
-
   inst_mgr->set_plugin_version(major, minor, sequence, official, distributor,
-                               coreapi_host_url, coreapi_timestamp,
-                               coreapi_set_ver);
+                               coreapi_host_url, coreapi_timestamp);
   RELEASE_LOCK(_api_lock);
 }
 

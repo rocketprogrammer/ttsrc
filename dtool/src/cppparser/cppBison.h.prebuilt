@@ -1,37 +1,27 @@
+/* A Bison parser, made by GNU Bison 2.0.  */
 
-/* A Bison parser, made by GNU Bison 2.4.1.  */
+/* Skeleton parser for Yacc-like parsing with Bison,
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
-   
-      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
-   Free Software Foundation, Inc.
-   
-   This program is free software: you can redistribute it and/or modify
+   This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-   
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.  */
 
-/* As a special exception, you may create a larger work that contains
-   part or all of the Bison parser skeleton and distribute that work
-   under terms of your choice, so long as that work isn't itself a
-   parser generator using the skeleton or a modified version thereof
-   as a parser skeleton.  Alternatively, if you modify or redistribute
-   the parser skeleton itself, you may (at your option) remove this
-   special exception, which will cause the skeleton and the resulting
-   Bison output files to be licensed under the GNU General Public
-   License without this special exception.
-   
-   This special exception was added by the Free Software Foundation in
-   version 2.2 of Bison.  */
-
+/* As a special exception, when this file is copied by Bison into a
+   Bison output file, you may use that output file without restriction.
+   This special exception was added by the Free Software Foundation
+   in version 1.24 of Bison.  */
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -94,55 +84,53 @@
      KW_ELSE = 310,
      KW_END_PUBLISH = 311,
      KW_ENUM = 312,
-     KW_EXTENSION = 313,
-     KW_EXTERN = 314,
-     KW_EXPLICIT = 315,
-     KW_PUBLISHED = 316,
-     KW_FALSE = 317,
-     KW_FLOAT = 318,
-     KW_FRIEND = 319,
-     KW_FOR = 320,
-     KW_GOTO = 321,
-     KW_IF = 322,
-     KW_INLINE = 323,
-     KW_INT = 324,
-     KW_LONG = 325,
-     KW_LONGLONG = 326,
-     KW_MAKE_SEQ = 327,
-     KW_MUTABLE = 328,
-     KW_NAMESPACE = 329,
-     KW_NEW = 330,
-     KW_OPERATOR = 331,
-     KW_PRIVATE = 332,
-     KW_PROTECTED = 333,
-     KW_PUBLIC = 334,
-     KW_REGISTER = 335,
-     KW_RETURN = 336,
-     KW_SHORT = 337,
-     KW_SIGNED = 338,
-     KW_SIZEOF = 339,
-     KW_STATIC = 340,
-     KW_STATIC_CAST = 341,
-     KW_STRUCT = 342,
-     KW_TEMPLATE = 343,
-     KW_THROW = 344,
-     KW_TRUE = 345,
-     KW_TRY = 346,
-     KW_TYPEDEF = 347,
-     KW_TYPENAME = 348,
-     KW_UNION = 349,
-     KW_UNSIGNED = 350,
-     KW_USING = 351,
-     KW_VIRTUAL = 352,
-     KW_VOID = 353,
-     KW_VOLATILE = 354,
-     KW_WHILE = 355,
-     START_CPP = 356,
-     START_CONST_EXPR = 357,
-     START_TYPE = 358
+     KW_EXTERN = 313,
+     KW_EXPLICIT = 314,
+     KW_PUBLISHED = 315,
+     KW_FALSE = 316,
+     KW_FLOAT = 317,
+     KW_FRIEND = 318,
+     KW_FOR = 319,
+     KW_GOTO = 320,
+     KW_IF = 321,
+     KW_INLINE = 322,
+     KW_INT = 323,
+     KW_LONG = 324,
+     KW_LONGLONG = 325,
+     KW_MAKE_SEQ = 326,
+     KW_MUTABLE = 327,
+     KW_NAMESPACE = 328,
+     KW_NEW = 329,
+     KW_OPERATOR = 330,
+     KW_PRIVATE = 331,
+     KW_PROTECTED = 332,
+     KW_PUBLIC = 333,
+     KW_REGISTER = 334,
+     KW_RETURN = 335,
+     KW_SHORT = 336,
+     KW_SIGNED = 337,
+     KW_SIZEOF = 338,
+     KW_STATIC = 339,
+     KW_STATIC_CAST = 340,
+     KW_STRUCT = 341,
+     KW_TEMPLATE = 342,
+     KW_THROW = 343,
+     KW_TRUE = 344,
+     KW_TRY = 345,
+     KW_TYPEDEF = 346,
+     KW_TYPENAME = 347,
+     KW_UNION = 348,
+     KW_UNSIGNED = 349,
+     KW_USING = 350,
+     KW_VIRTUAL = 351,
+     KW_VOID = 352,
+     KW_VOLATILE = 353,
+     KW_WHILE = 354,
+     START_CPP = 355,
+     START_CONST_EXPR = 356,
+     START_TYPE = 357
    };
 #endif
-/* Tokens.  */
 #define REAL 258
 #define INTEGER 259
 #define CHAR_TOK 260
@@ -198,65 +186,65 @@
 #define KW_ELSE 310
 #define KW_END_PUBLISH 311
 #define KW_ENUM 312
-#define KW_EXTENSION 313
-#define KW_EXTERN 314
-#define KW_EXPLICIT 315
-#define KW_PUBLISHED 316
-#define KW_FALSE 317
-#define KW_FLOAT 318
-#define KW_FRIEND 319
-#define KW_FOR 320
-#define KW_GOTO 321
-#define KW_IF 322
-#define KW_INLINE 323
-#define KW_INT 324
-#define KW_LONG 325
-#define KW_LONGLONG 326
-#define KW_MAKE_SEQ 327
-#define KW_MUTABLE 328
-#define KW_NAMESPACE 329
-#define KW_NEW 330
-#define KW_OPERATOR 331
-#define KW_PRIVATE 332
-#define KW_PROTECTED 333
-#define KW_PUBLIC 334
-#define KW_REGISTER 335
-#define KW_RETURN 336
-#define KW_SHORT 337
-#define KW_SIGNED 338
-#define KW_SIZEOF 339
-#define KW_STATIC 340
-#define KW_STATIC_CAST 341
-#define KW_STRUCT 342
-#define KW_TEMPLATE 343
-#define KW_THROW 344
-#define KW_TRUE 345
-#define KW_TRY 346
-#define KW_TYPEDEF 347
-#define KW_TYPENAME 348
-#define KW_UNION 349
-#define KW_UNSIGNED 350
-#define KW_USING 351
-#define KW_VIRTUAL 352
-#define KW_VOID 353
-#define KW_VOLATILE 354
-#define KW_WHILE 355
-#define START_CPP 356
-#define START_CONST_EXPR 357
-#define START_TYPE 358
+#define KW_EXTERN 313
+#define KW_EXPLICIT 314
+#define KW_PUBLISHED 315
+#define KW_FALSE 316
+#define KW_FLOAT 317
+#define KW_FRIEND 318
+#define KW_FOR 319
+#define KW_GOTO 320
+#define KW_IF 321
+#define KW_INLINE 322
+#define KW_INT 323
+#define KW_LONG 324
+#define KW_LONGLONG 325
+#define KW_MAKE_SEQ 326
+#define KW_MUTABLE 327
+#define KW_NAMESPACE 328
+#define KW_NEW 329
+#define KW_OPERATOR 330
+#define KW_PRIVATE 331
+#define KW_PROTECTED 332
+#define KW_PUBLIC 333
+#define KW_REGISTER 334
+#define KW_RETURN 335
+#define KW_SHORT 336
+#define KW_SIGNED 337
+#define KW_SIZEOF 338
+#define KW_STATIC 339
+#define KW_STATIC_CAST 340
+#define KW_STRUCT 341
+#define KW_TEMPLATE 342
+#define KW_THROW 343
+#define KW_TRUE 344
+#define KW_TRY 345
+#define KW_TYPEDEF 346
+#define KW_TYPENAME 347
+#define KW_UNION 348
+#define KW_UNSIGNED 349
+#define KW_USING 350
+#define KW_VIRTUAL 351
+#define KW_VOID 352
+#define KW_VOLATILE 353
+#define KW_WHILE 354
+#define START_CPP 355
+#define START_CONST_EXPR 356
+#define START_TYPE 357
 
 
 
 
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
+#if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
+typedef int YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 
 
-#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+#if ! defined (YYLTYPE) && ! defined (YYLTYPE_IS_DECLARED)
 typedef struct YYLTYPE
 {
   int first_line;
@@ -268,6 +256,7 @@ typedef struct YYLTYPE
 # define YYLTYPE_IS_DECLARED 1
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
+
 
 
 

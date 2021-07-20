@@ -123,7 +123,7 @@
   #define gl_ipath $[wildcard $[GL_IPATH]]
   #define gl_lpath $[wildcard $[GL_LPATH]]
   #define gl_cflags $[GL_CFLAGS]
-  #define gl_libs $[GL_LIBS]
+  #define gl_libs $[GL_LIBS] $[if $[HAVE_GLU],$[GLU_LIBS]]
   #define gl_framework $[GL_FRAMEWORK]
 #endif
 
@@ -171,13 +171,6 @@
   #define xrandr_libs $[XRANDR_LIBS]
 #endif
 
-#if $[HAVE_XCURSOR]
-  #define xcursor_ipath $[wildcard $[XCURSOR_IPATH]]
-  #define xcursor_lpath $[wildcard $[XCURSOR_LPATH]]
-  #define xcursor_cflags $[XCURSOR_CFLAGS]
-  #define xcursor_libs $[XCURSOR_LIBS]
-#endif
-
 #if $[HAVE_MESA]
   #define mesa_ipath $[wildcard $[MESA_IPATH]]
   #define mesa_lpath $[wildcard $[MESA_LPATH]]
@@ -204,6 +197,13 @@
   #define egl_lpath $[wildcard $[EGL_LPATH]]
   #define egl_cflags $[EGL_CFLAGS]
   #define egl_libs $[EGL_LIBS]
+#endif
+
+#if $[HAVE_GLUT]
+  #define glut_ipath $[wildcard $[GLUT_IPATH]]
+  #define glut_lpath $[wildcard $[GLUT_LPATH]]
+  #define glut_cflags $[GLUT_CFLAGS]
+  #define glut_libs $[GLUT_LIBS]
 #endif
 
 #if $[HAVE_DX8]
@@ -452,6 +452,18 @@
   #define physx_libs $[PHYSX_LIBS]
 #endif
 
+#if $[HAVE_TINYXML]
+  #define tinyxml_ipath $[wildcard $[TINYXML_IPATH]]
+  #define tinyxml_lpath $[wildcard $[TINYXML_LPATH]]
+  #define tinyxml_libs $[TINYXML_LIBS]
+#endif
+
+#if $[HAVE_TINYXML_MT]
+  #define tinyxml_mt_ipath $[wildcard $[TINYXML_MT_IPATH]]
+  #define tinyxml_mt_lpath $[wildcard $[TINYXML_MT_LPATH]]
+  #define tinyxml_mt_libs $[TINYXML_MT_LIBS]
+#endif
+
 #if $[HAVE_CHROMIUM]
   #define chromium_ipath $[wildcard $[CHROMIUM_IPATH]]
   #define chromium_lpath $[wildcard $[CHROMIUM_LPATH]]
@@ -615,7 +627,7 @@
 #defer get_igatescan \
   $[if $[and $[run_interrogate],$[IGATESCAN]], \
      $[if $[eq $[IGATESCAN], all], \
-      $[filter-out %.I %.T %.lxx %.yxx %.N %_src.cxx,$[get_sources]] $[filter %_ext.I,$[get_sources]], \
+      $[filter-out %.I %.T %.lxx %.yxx %.N %_src.cxx,$[get_sources]], \
       $[IGATESCAN]]]
 
 // This variable returns the name of the interrogate database file

@@ -12,8 +12,6 @@ panda3d_modules = {
     "vision"      : "libp3vision",
     "physx"       : "libpandaphysx",
     "ai"          : "libpandaai",
-    "awesomium"   : "libp3awesomium",
-    "speedtree"   : "libpandaspeedtree",
 }
 
 class panda3d_import_manager:
@@ -22,7 +20,7 @@ class panda3d_import_manager:
     os = os
     sys = sys
     imp = imp
-
+    
     # Figure out the dll suffix (commonly, _d for windows debug builds),
     # and the dll extension.
     dll_suffix = ''
@@ -39,24 +37,26 @@ class panda3d_import_manager:
             dll_suffix = ''
             if sys.executable.endswith('_d.exe'):
                 dll_suffix = '_d'
-
+    
     # On OSX, extension modules can be loaded from either .so or .dylib.
     if sys.platform == "darwin":
         dll_exts = ('.pyd', '.so', '.dylib')
-
+    
     prepared = False
-
+    
     @classmethod
     def __prepare(cls):
         # This method only needs to be called once.
         if cls.prepared:
             return
         cls.prepared = True
-
+        
         # First, we must ensure that the library path is
         # modified to locate all of the dynamic libraries.
         target = None
         filename = "libpandaexpress" + cls.dll_suffix
+        if cls.sys.platform == "win32":
+            filename += "_d"
         for dir in cls.sys.path + [cls.sys.prefix]:
             lib = cls.os.path.join(dir, filename)
             for dll_ext in cls.dll_exts:
@@ -72,41 +72,41 @@ class panda3d_import_manager:
             cls.__prepend_to_path("PATH", target)
         else:
             cls.__prepend_to_path("LD_LIBRARY_PATH", target)
-
+        
         if cls.sys.platform == "darwin":
             cls.__prepend_to_path("DYLD_LIBRARY_PATH", target)
-
+        
     @classmethod
     def __prepend_to_path(cls, varname, target):
         """ Prepends the given directory to the
         specified search path environment variable. """
-
+        
         # Get the current value
         if varname in cls.os.environ:
             path = cls.os.environ[varname].strip(cls.os.pathsep)
         else:
             path = ""
-
+        
         # Prepend our value, if it's not already the first thing
         if len(path) == 0:
             cls.os.environ[varname] = target
         elif not path.startswith(target):
             cls.os.environ[varname] = target + cls.os.pathsep + path
-
+    
     @classmethod
     def libimport(cls, name):
         """ Imports and returns the specified library name. The
         provided library name has to be without dll extension. """
-
+        
         if not cls.prepared: cls.__prepare()
-
+        
         # Try to import it normally first.
         try:
             return __import__(name)
         except ImportError, err:
             if str(err) != "No module named " + name:
                 raise
-
+        
         # Hm, importing normally didn't work. Let's try imp.load_dynamic.
         # But first, locate the desired library.
         target = None
@@ -129,9 +129,9 @@ class panda3d_submodule(type(sys)):
     """ Represents a submodule of 'panda3d' that represents a dynamic
     library. This dynamic library is loaded when something is accessed
     from the module. """
-
+    
     __manager__ = panda3d_import_manager
-
+    
     def __init__(self, name, library):
         type(sys).__init__(self, "panda3d." + name)
         self.__library__ = library
@@ -155,7 +155,7 @@ class panda3d_submodule(type(sys)):
             return self.__libraries__
         elif name in dir(mod):
             return mod.__dict__[name]
-
+        
         # Not found? Raise the error that Python would normally raise.
         raise AttributeError, "'module' object has no attribute '%s'" % name
 
@@ -163,23 +163,17 @@ class panda3d_multisubmodule(type(sys)):
     """ Represents a submodule of 'panda3d' that represents multiple
     dynamic libraries. These are loaded when something is accessed
     from the module. """
-
+    
     __manager__ = panda3d_import_manager
-
+    
     def __init__(self, name, libraries):
         type(sys).__init__(self, "panda3d." + name)
         self.__libraries__ = libraries
 
     def __load__(self):
         """ Forces the libraries to be loaded right now. """
-        err = []
         for lib in self.__libraries__:
-            try:
-                self.__manager__.libimport(lib)
-            except ImportError, msg:
-                err.append(str(msg).rstrip('.'))
-        if len(err) > 0:
-            raise ImportError, ', '.join(err)
+            self.__manager__.libimport(lib)
 
     def __getattr__(self, name):
         if name == "__all__":
@@ -202,23 +196,16 @@ class panda3d_multisubmodule(type(sys)):
 
 class panda3d_module(type(sys)):
     """ Represents the main 'panda3d' module. """
-
+    
     __file__ = __file__
     modules = panda3d_modules
     __manager__ = panda3d_import_manager
-
+    
     def __load__(self):
         """ Force all the libraries to be loaded right now. """
-        err = []
         for module in self.modules:
-            try:
-                self.__manager__.sys.modules["panda3d.%s" % module].__load__()
-            except ImportError, msg:
-                err.append(str(msg).rstrip('.'))
-        if len(err) > 0:
-            raise ImportError, ', '.join(err)
-
-
+            self.__manager__.sys.modules["panda3d.%s" % module].__load__()
+    
     def __getattr__(self, name):
         if name == "__all__":
             return self.modules.keys()

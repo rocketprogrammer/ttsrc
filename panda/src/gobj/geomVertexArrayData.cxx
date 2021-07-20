@@ -864,7 +864,7 @@ set_data(const string &data) {
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: GeomVertexArrayDataHandle::set_subdata
+//     Function: GeomVertexArrayDataHandle::copy_subdata_from
 //       Access: Public
 //  Description: Replaces a portion of the data array from the
 //               indicated string.  If size != data.size(), the size
@@ -888,8 +888,8 @@ set_subdata(size_t start, size_t size, const string &data) {
   if (from_size < size) {
     // Reduce the array.
     unsigned char *pointer = to_buffer.get_write_pointer();
-    memmove(pointer + start + from_size, 
-            pointer + start + size,
+    memmove(pointer + start + size, 
+            pointer + start + from_size,
             to_buffer_orig_size - (start + size));
     to_buffer.clean_realloc(to_buffer_orig_size + from_size - size);
 
@@ -897,8 +897,8 @@ set_subdata(size_t start, size_t size, const string &data) {
     // Expand the array.
     to_buffer.clean_realloc(to_buffer_orig_size + from_size - size);
     unsigned char *pointer = to_buffer.get_write_pointer();
-    memmove(pointer + start + from_size, 
-            pointer + start + size,
+    memmove(pointer + start + size, 
+            pointer + start + from_size,
             to_buffer_orig_size - (start + size));
   }
 

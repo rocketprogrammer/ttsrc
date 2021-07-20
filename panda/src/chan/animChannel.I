@@ -72,7 +72,7 @@ INLINE AnimChannel<SwitchType>::
 ~AnimChannel() {
 }
 
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
 ////////////////////////////////////////////////////////////////////
 //     Function: AnimChannel::get_value
 //       Access: Public, Virtual

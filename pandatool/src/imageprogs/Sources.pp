@@ -1,16 +1,12 @@
 #define LOCAL_LIBS \
   imagebase progbase
-
 #define OTHER_LIBS \
-    pipeline:c event:c pstatclient:c panda:m \
-    pandabase:c pnmimage:c pnmimagetypes:c \
-    mathutil:c linmath:c putil:c express:c \
-    pandaexpress:m \
-    interrogatedb:c prc:c dconfig:c dtoolconfig:m \
-    dtoolutil:c dtoolbase:c dtool:m \
-    $[if $[WANT_NATIVE_NET],nativenet:c] \
-    $[if $[and $[HAVE_NET],$[WANT_NATIVE_NET]],net:c downloader:c] \
-    pystub
+  egg:c pandaegg:m \
+  linmath:c event:c pipeline:c mathutil:c \
+  pnmimagetypes:c pnmimage:c putil:c express:c \
+  panda:m \
+  pandabase:c pandaexpress:m \
+  interrogatedb:c dtoolutil:c dtoolbase:c prc:c dconfig:c dtoolconfig:m dtool:m pystub
 
 #begin bin_target
   #define TARGET image-trans

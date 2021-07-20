@@ -68,7 +68,6 @@
 #include "modelNode.h"
 #include "py_panda.h"
 #include "bam.h"
-#include "bamWriter.h"
 
 // stack seems to overflow on Intel C++ at 7000.  If we need more than 
 // 7000, need to increase stack size.
@@ -3422,17 +3421,18 @@ set_texture(TextureStage *stage, Texture *tex, int priority) {
   const RenderAttrib *attrib =
     node()->get_attrib(TextureAttrib::get_class_slot());
   if (attrib != (const RenderAttrib *)NULL) {
+    priority = max(priority,
+                   node()->get_state()->get_override(TextureAttrib::get_class_slot()));
     const TextureAttrib *tsa = DCAST(TextureAttrib, attrib);
-    int sg_priority = node()->get_state()->get_override(TextureAttrib::get_class_slot());
 
     // Modify the existing TextureAttrib to add the indicated
     // texture.
-    node()->set_attrib(tsa->add_on_stage(stage, tex, priority), sg_priority);
+    node()->set_attrib(tsa->add_on_stage(stage, tex), priority);
 
   } else {
     // Create a new TextureAttrib for this node.
     CPT(TextureAttrib) tsa = DCAST(TextureAttrib, TextureAttrib::make());
-    node()->set_attrib(tsa->add_on_stage(stage, tex, priority));
+    node()->set_attrib(tsa->add_on_stage(stage, tex), priority);
   }
 }
 
@@ -3469,19 +3469,20 @@ set_texture_off(TextureStage *stage, int priority) {
   const RenderAttrib *attrib =
     node()->get_attrib(TextureAttrib::get_class_slot());
   if (attrib != (const RenderAttrib *)NULL) {
+    priority = max(priority,
+                   node()->get_state()->get_override(TextureAttrib::get_class_slot()));
     const TextureAttrib *tsa = DCAST(TextureAttrib, attrib);
-    int sg_priority = node()->get_state()->get_override(TextureAttrib::get_class_slot());
 
     // Modify the existing TextureAttrib to add the indicated texture
     // to the "off" list.  This also, incidentally, removes it from
     // the "on" list if it is there.
-    node()->set_attrib(tsa->add_off_stage(stage, priority), sg_priority);
+    node()->set_attrib(tsa->add_off_stage(stage), priority);
 
   } else {
     // Create a new TextureAttrib for this node that turns off the
     // indicated stage.
     CPT(TextureAttrib) tsa = DCAST(TextureAttrib, TextureAttrib::make());
-    node()->set_attrib(tsa->add_off_stage(stage, priority));
+    node()->set_attrib(tsa->add_off_stage(stage), priority);
   }
 }
 
@@ -6584,7 +6585,7 @@ find_net_python_tag(const string &key) const {
 //               error.
 ////////////////////////////////////////////////////////////////////
 bool NodePath::
-write_bam_file(const Filename &filename) const {
+write_bam_file(const string &filename) const {
   nassertr_always(!is_empty(), false);
 
   BamFile bam_file;
@@ -7631,9 +7632,7 @@ r_find_material(PandaNode *node, const RenderState *state,
         if (!ta->is_off()) {
           Material *material = ta->get_material();
           if (material != (Material *)NULL) {
-            if (glob.matches(material->get_name())) {
-              return material;
-            }
+            return material;
           }
         }
       }

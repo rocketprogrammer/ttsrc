@@ -137,7 +137,9 @@ class DistributedObjectAI(DistributedObjectBase):
                         """
                 self._DOAI_requestedDelete = False
 
-                self.releaseZoneData()
+                if self._zoneData is not None:
+                    self._zoneData.destroy()
+                self._zoneData = None
 
                 # Clean up all the pending barriers.
                 for barrier in self.__barriers.values():
@@ -218,7 +220,9 @@ class DistributedObjectAI(DistributedObjectBase):
         self.air.storeObjectLocation(self, parentId, zoneId)
         if ((oldParentId != parentId) or
             (oldZoneId != zoneId)):
-            self.releaseZoneData()
+            if self._zoneData is not None:
+                self._zoneData.destroy()
+                self._zoneData = None
             messenger.send(self.getZoneChangeEvent(), [zoneId, oldZoneId])
             # if we are not going into the quiet zone, send a 'logical' zone
             # change message

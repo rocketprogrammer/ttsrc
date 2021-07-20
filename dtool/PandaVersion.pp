@@ -3,7 +3,7 @@
 // ppremake scripts for Panda.
 
 // Use spaces to separate the major, minor, and sequence numbers here.
-#define PANDA_VERSION 1 7 2
+#define PANDA_VERSION 1 7 0
 
 // This variable will be defined to false in the CVS repository, but
 // scripts that generate source tarballs and/or binary releases for
@@ -11,7 +11,7 @@
 // should explictly set this to true.  When false, it indicates that
 // the current version of Panda was checked out from CVS, so it may
 // not be a complete representation of the indicated version.
-#define PANDA_OFFICIAL_VERSION 1
+#define PANDA_OFFICIAL_VERSION
 
 // This string is reported verbatim by PandaSystem::get_distributor().
 // It should be set by whoever provides a particular distribution of
@@ -34,15 +34,4 @@
 // PANDA_PACKAGE_VERSION, because it is anticipated that this plugin
 // code, once settled, will need to be updated much less frequently
 // than Panda itself.
-#define P3D_PLUGIN_VERSION 1 0 3
-
-// Finally, there's a separate version number for the Core API.  At
-// first, we didn't believe we needed a Core API version number, but
-// in this belief we were naive.  This version number is a little less
-// strict in its format requirements than P3D_PLUGIN_VERSION, above,
-// and it doesn't necessarily consist of a specific number of
-// integers, but by convention it will consist of four integers, and
-// with the first three matching the plugin version, and the fourth
-// integer being incremented with each new Core API revision.
-#define P3D_COREAPI_VERSION $[P3D_PLUGIN_VERSION] 3
-
+#define P3D_PLUGIN_VERSION 1 0 1

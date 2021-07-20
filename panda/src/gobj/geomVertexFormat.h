@@ -95,8 +95,6 @@ PUBLISHED:
   int get_array_with(const InternalName *name) const;
   const GeomVertexColumn *get_column(const InternalName *name) const;
   INLINE bool has_column(const InternalName *name) const;
-  
-  MAKE_SEQ(get_columns, get_num_columns, get_column);
 
   void remove_column(const InternalName *name);
   void pack_columns();

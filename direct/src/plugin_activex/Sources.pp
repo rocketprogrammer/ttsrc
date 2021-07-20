@@ -4,9 +4,10 @@
 // developing the plugin system itself.  Define HAVE_P3D_PLUGIN in
 // your Config.pp to build this directory.
 
-#define BUILD_DIRECTORY $[and $[HAVE_P3D_PLUGIN],$[WINDOWS_PLATFORM],$[HAVE_ACTIVEX],$[not $[eq $[USE_COMPILER],MSVC9x64]]]
+#define BUILD_DIRECTORY $[and $[HAVE_P3D_PLUGIN],$[HAVE_TINYXML],$[WINDOWS_PLATFORM],$[HAVE_ACTIVEX]]
 
 #define _MT $[if $[P3D_PLUGIN_MT],_mt]
+#define USE_PACKAGES tinyxml$[_MT]
 
 #begin lib_target
   #define TARGET p3dactivex
@@ -15,7 +16,6 @@
 
   #define LOCAL_LIBS plugin_common$[_MT]
   #define LINK_FORCE_STATIC_RELEASE_C_RUNTIME $[P3D_PLUGIN_MT]
-  #define OTHER_LIBS p3tinyxml$[_MT]
 
   #define COMBINED_SOURCES \
     $[TARGET]_composite1.cxx

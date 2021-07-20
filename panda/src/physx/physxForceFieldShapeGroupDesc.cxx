@@ -35,8 +35,7 @@ add_shape(PhysxForceFieldShapeDesc &desc) {
 void PhysxForceFieldShapeGroupDesc::
 set_name(const char *name) {
 
-  _name = name ? name : "";
-  _desc.name = _name.c_str();
+  _desc.name = name;
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -37,11 +37,13 @@ TextureAttrib() {
 INLINE TextureAttrib::
 TextureAttrib(const TextureAttrib &copy) :
   _on_stages(copy._on_stages),
-  _render_stages(copy._render_stages),
-  _render_ff_stages(copy._render_ff_stages),
+  _on_ptr_stages(copy._on_ptr_stages),
+  _on_ff_stages(copy._on_ff_stages),
+  _ff_tc_index(copy._ff_tc_index),
   _next_implicit_sort(copy._next_implicit_sort),
   _off_stages(copy._off_stages),
   _off_all_stages(copy._off_all_stages),
+  _on_textures(copy._on_textures),
   _sort_seq(copy._sort_seq),
   _filtered_seq(UpdateSeq::old())
 {
@@ -90,7 +92,7 @@ get_texture() const {
 INLINE int TextureAttrib::
 get_num_on_stages() const {
   check_sorted();
-  return _render_stages.size();
+  return _on_stages.size();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -101,8 +103,8 @@ get_num_on_stages() const {
 ////////////////////////////////////////////////////////////////////
 INLINE TextureStage *TextureAttrib::
 get_on_stage(int n) const {
-  nassertr(n >= 0 && n < (int)_render_stages.size(), (TextureStage *)NULL);
-  return _render_stages[n]->_stage;
+  nassertr(n >= 0 && n < (int)_on_stages.size(), (TextureStage *)NULL);
+  return _on_stages[n]._stage;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -115,11 +117,11 @@ get_on_stage(int n) const {
 INLINE int TextureAttrib::
 get_num_on_ff_stages() const {
   check_sorted();
-  return _render_ff_stages.size();
+  return _on_ff_stages.size();
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: TextureAttrib::get_render_ff_stage
+//     Function: TextureAttrib::get_on_ff_stage
 //       Access: Published
 //  Description: Returns the nth stage turned on by the attribute,
 //               sorted in render order, including only those relevant
@@ -128,8 +130,8 @@ get_num_on_ff_stages() const {
 ////////////////////////////////////////////////////////////////////
 INLINE TextureStage *TextureAttrib::
 get_on_ff_stage(int n) const {
-  nassertr(n >= 0 && n < (int)_render_ff_stages.size(), (TextureStage *)NULL);
-  return _render_ff_stages[n]->_stage;
+  nassertr(n >= 0 && n < (int)_on_ff_stages.size(), (TextureStage *)NULL);
+  return _on_ff_stages[n]._stage;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -139,13 +141,13 @@ get_on_ff_stage(int n) const {
 //               this returns a unique index number for the texture
 //               coordinate name used by that TextureStage.  It is
 //               guaranteed to remain the same index number for each
-//               texcoord name (for a given set of TextureStages),
-//               even if the texture render order changes.
+//               texcoord name, even if the texture render order
+//               changes.
 ////////////////////////////////////////////////////////////////////
 INLINE int TextureAttrib::
 get_ff_tc_index(int n) const {
-  nassertr(n >= 0 && n < (int)_render_ff_stages.size(), -1);
-  return _render_ff_stages[n]->_ff_tc_index;
+  nassertr(n >= 0 && n < (int)_ff_tc_index.size(), 0);
+  return _ff_tc_index[n];
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -156,7 +158,7 @@ get_ff_tc_index(int n) const {
 ////////////////////////////////////////////////////////////////////
 INLINE bool TextureAttrib::
 has_on_stage(TextureStage *stage) const {
-  return _on_stages.find(StageNode(stage)) != _on_stages.end();
+  return _on_textures.find(stage) != _on_textures.end();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -167,29 +169,12 @@ has_on_stage(TextureStage *stage) const {
 ////////////////////////////////////////////////////////////////////
 INLINE Texture *TextureAttrib::
 get_on_texture(TextureStage *stage) const {
-  Stages::const_iterator si;
-  si = _on_stages.find(StageNode(stage));
-  if (si != _on_stages.end()) {
-    return (*si)._texture;
+  OnTextures::const_iterator ti;
+  ti = _on_textures.find(stage);
+  if (ti != _on_textures.end()) {
+    return (*ti).second;
   }
   return NULL;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: TextureAttrib::get_on_stage_override
-//       Access: Published
-//  Description: Returns the override value associated with the
-//               indicated stage.
-////////////////////////////////////////////////////////////////////
-INLINE int TextureAttrib::
-get_on_stage_override(TextureStage *stage) const {
-  Stages::const_iterator si;
-  si = _on_stages.find(StageNode(stage));
-  if (si != _on_stages.end()) {
-    return (*si)._override;
-  }
-  nassert_raise("Specified TextureStage not included in attrib");
-  return 0;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -212,7 +197,7 @@ get_num_off_stages() const {
 INLINE TextureStage *TextureAttrib::
 get_off_stage(int n) const {
   nassertr(n >= 0 && n < (int)_off_stages.size(), (TextureStage *)NULL);
-  return _off_stages[n]._stage;
+  return _off_stages[n];
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -223,7 +208,7 @@ get_off_stage(int n) const {
 ////////////////////////////////////////////////////////////////////
 INLINE bool TextureAttrib::
 has_off_stage(TextureStage *stage) const {
-  return _off_stages.find(StageNode(stage)) != _off_stages.end() ||
+  return _off_stages.find(stage) != _off_stages.end() ||
     (_off_all_stages && !has_on_stage(stage));
 }
 
@@ -267,17 +252,14 @@ check_sorted() const {
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: TextureAttrib::StageNode::Constructor
+//     Function: TextureAttrib::OnStageNode::Constructor
 //       Access: Public
 //  Description: 
 ////////////////////////////////////////////////////////////////////
-INLINE TextureAttrib::StageNode::
-StageNode(const TextureStage *stage, unsigned int implicit_sort, int override) :
-  // Yeah, we cast away the constness here.  Just too much trouble to
-  // deal with it properly.
-  _stage((TextureStage *)stage),
-  _implicit_sort(implicit_sort),
-  _override(override)
+INLINE TextureAttrib::OnStageNode::
+OnStageNode(TextureStage *stage, unsigned int implicit_sort) :
+  _stage(stage),
+  _implicit_sort(implicit_sort)
 {
 }
 
@@ -290,15 +272,15 @@ StageNode(const TextureStage *stage, unsigned int implicit_sort, int override) :
 //               within priority, within order by sort.
 ////////////////////////////////////////////////////////////////////
 INLINE bool TextureAttrib::CompareTextureStagePriorities::
-operator () (const TextureAttrib::StageNode *a, 
-             const TextureAttrib::StageNode *b) const {
-  if (a->_stage->get_priority() != b->_stage->get_priority()) {
-    return a->_stage->get_priority() > b->_stage->get_priority();
+operator () (const TextureAttrib::OnStageNode &a, 
+             const TextureAttrib::OnStageNode &b) const {
+  if (a._stage->get_priority() != b._stage->get_priority()) {
+    return a._stage->get_priority() > b._stage->get_priority();
   }
-  if (a->_stage->get_sort() != b->_stage->get_sort()) {
-    return a->_stage->get_sort() < b->_stage->get_sort();
+  if (a._stage->get_sort() != b._stage->get_sort()) {
+    return a._stage->get_sort() < b._stage->get_sort();
   }
-  return a->_implicit_sort < b->_implicit_sort;
+  return a._implicit_sort < b._implicit_sort;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -308,12 +290,12 @@ operator () (const TextureAttrib::StageNode *a,
 //               texture stages in order by sort.
 ////////////////////////////////////////////////////////////////////
 INLINE bool TextureAttrib::CompareTextureStageSort::
-operator () (const TextureAttrib::StageNode *a, 
-             const TextureAttrib::StageNode *b) const {
-  if (a->_stage->get_sort() != b->_stage->get_sort()) {
-    return a->_stage->get_sort() < b->_stage->get_sort();
+operator () (const TextureAttrib::OnStageNode &a, 
+             const TextureAttrib::OnStageNode &b) const {
+  if (a._stage->get_sort() != b._stage->get_sort()) {
+    return a._stage->get_sort() < b._stage->get_sort();
   }
-  return a->_implicit_sort < b->_implicit_sort;
+  return a._implicit_sort < b._implicit_sort;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -323,7 +305,7 @@ operator () (const TextureAttrib::StageNode *a,
 //               texture stages in order by pointer.
 ////////////////////////////////////////////////////////////////////
 INLINE bool TextureAttrib::CompareTextureStagePointer::
-operator () (const TextureAttrib::StageNode &a, 
-             const TextureAttrib::StageNode &b) const {
+operator () (const TextureAttrib::OnStageNode &a, 
+             const TextureAttrib::OnStageNode &b) const {
   return a._stage < b._stage;
 }

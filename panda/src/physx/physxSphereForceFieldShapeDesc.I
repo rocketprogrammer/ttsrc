@@ -22,7 +22,7 @@
 INLINE PhysxSphereForceFieldShapeDesc::
 PhysxSphereForceFieldShapeDesc() : PhysxForceFieldShapeDesc() {
 
-  set_to_default();
+  _desc.name = "";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ INLINE void PhysxSphereForceFieldShapeDesc::
 set_to_default() {
 
   _desc.setToDefault();
-  set_name("");
 }
 
 ////////////////////////////////////////////////////////////////////

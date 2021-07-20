@@ -43,7 +43,6 @@ class InterestWatcher(DirectObject):
                 logFunc = self.notify.warning
             logFunc('%s: empty interest-complete set' % self.getName())
             self.destroy()
-            messenger.send(self.getDoneEvent())
         else:
             self.accept(self.getDoneEvent(), self.destroy)
 

@@ -56,11 +56,8 @@ class ShowBase(DirectObject.DirectObject):
 
     def __init__(self, fStartDirect = True, windowType = None):
         __builtin__.__dev__ = config.GetBool('want-dev', 0)
-        logStackDump = (config.GetBool('log-stack-dump', 0) or
-                        config.GetBool('client-log-stack-dump', 0))
-        uploadStackDump = config.GetBool('upload-stack-dump', 0)
-        if logStackDump or uploadStackDump:
-            ExceptionVarDump.install(logStackDump, uploadStackDump)
+        if config.GetBool('want-variable-dump', 0):
+            ExceptionVarDump.install()
 
         # Locate the directory containing the main program
         self.mainDir = ExecutionEnvironment.getEnvironmentVariable("MAIN_DIR")
@@ -951,41 +948,25 @@ class ShowBase(DirectObject.DirectObject):
         self.a2dRight = aspectRatio
 
         self.a2dTopCenter = self.aspect2d.attachNewNode("a2dTopCenter")
-        self.a2dTopCenterNs = self.aspect2d.attachNewNode("a2dTopCenterNS")
         self.a2dBottomCenter = self.aspect2d.attachNewNode("a2dBottomCenter")
-        self.a2dBottomCenterNs = self.aspect2d.attachNewNode("a2dBottomCenterNS")
         self.a2dLeftCenter = self.aspect2d.attachNewNode("a2dLeftCenter")
-        self.a2dLeftCenterNs = self.aspect2d.attachNewNode("a2dLeftCenterNS")
         self.a2dRightCenter = self.aspect2d.attachNewNode("a2dRightCenter")
-        self.a2dRightCenterNs = self.aspect2d.attachNewNode("a2dRightCenterNS")
 
         self.a2dTopLeft = self.aspect2d.attachNewNode("a2dTopLeft")
-        self.a2dTopLeftNs = self.aspect2d.attachNewNode("a2dTopLeftNS")
         self.a2dTopRight = self.aspect2d.attachNewNode("a2dTopRight")
-        self.a2dTopRightNs = self.aspect2d.attachNewNode("a2dTopRightNS")
         self.a2dBottomLeft = self.aspect2d.attachNewNode("a2dBottomLeft")
-        self.a2dBottomLeftNs = self.aspect2d.attachNewNode("a2dBottomLeftNS")
         self.a2dBottomRight = self.aspect2d.attachNewNode("a2dBottomRight")
-        self.a2dBottomRightNs = self.aspect2d.attachNewNode("a2dBottomRightNS")
 
         # Put the nodes in their places
         self.a2dTopCenter.setPos(0, 0, self.a2dTop)
-        self.a2dTopCenterNs.setPos(0, 0, self.a2dTop)
         self.a2dBottomCenter.setPos(0, 0, self.a2dBottom)
-        self.a2dBottomCenterNs.setPos(0, 0, self.a2dBottom)
         self.a2dLeftCenter.setPos(self.a2dLeft, 0, 0)
-        self.a2dLeftCenterNs.setPos(self.a2dLeft, 0, 0)
         self.a2dRightCenter.setPos(self.a2dRight, 0, 0)
-        self.a2dRightCenterNs.setPos(self.a2dRight, 0, 0)
 
         self.a2dTopLeft.setPos(self.a2dLeft, 0, self.a2dTop)
-        self.a2dTopLeftNs.setPos(self.a2dLeft, 0, self.a2dTop)
         self.a2dTopRight.setPos(self.a2dRight, 0, self.a2dTop)
-        self.a2dTopRightNs.setPos(self.a2dRight, 0, self.a2dTop)
         self.a2dBottomLeft.setPos(self.a2dLeft, 0, self.a2dBottom)
-        self.a2dBottomLeftNs.setPos(self.a2dLeft, 0, self.a2dBottom)
         self.a2dBottomRight.setPos(self.a2dRight, 0, self.a2dBottom)
-        self.a2dBottomRightNs.setPos(self.a2dRight, 0, self.a2dBottom)
         
         # This special root, pixel2d, uses units in pixels that are relative
         # to the window. The upperleft corner of the window is (0, 0),
@@ -1084,11 +1065,10 @@ class ShowBase(DirectObject.DirectObject):
             win = self.win
 
         if win != None and win.hasSize():
-            # Temporary hasattr for old Pandas
-            if not hasattr(win, 'getSbsLeftXSize'):
-                aspectRatio = float(win.getXSize()) / float(win.getYSize())
-            else:
-                aspectRatio = float(win.getSbsLeftXSize()) / float(win.getSbsLeftYSize())
+            if(win.getYSize() == 0 or win.getXSize() == 0):
+                #flub the aspect since we can't actually see anything
+                return 1
+            aspectRatio = float(win.getXSize()) / float(win.getYSize())
 
         else:
             if win == None or not hasattr(win, "getRequestedProperties"):
@@ -1406,16 +1386,6 @@ class ShowBase(DirectObject.DirectObject):
             name = win.getInputDeviceName(i)
             mk = self.dataRoot.attachNewNode(MouseAndKeyboard(win, i, name))
             mw = mk.attachNewNode(MouseWatcher("watcher%s" % (i)))
-
-            # Temporary hasattr for old Pandas
-            if hasattr(win, 'getSideBySideStereo') and win.getSideBySideStereo():
-                # If the window has side-by-side stereo enabled, then
-                # we should constrain the MouseWatcher to the window's
-                # DisplayRegion.  This will enable the MouseWatcher to
-                # track the left and right halves of the screen
-                # individually.
-                mw.node().setDisplayRegion(win.getOverlayDisplayRegion())
-                
             mb = mw.node().getModifierButtons()
             mb.addButton(KeyboardButton.shift())
             mb.addButton(KeyboardButton.control())
@@ -1449,7 +1419,7 @@ class ShowBase(DirectObject.DirectObject):
 
         aspectRatio = self.getAspectRatio()
         # Scale the smiley face to 32x32 pixels.
-        height = self.win.getSbsLeftYSize()
+        height = self.win.getYSize()
         lilsmiley.setScale(
             32.0 / height / aspectRatio,
             1.0, 32.0 / height)
@@ -1564,7 +1534,7 @@ class ShowBase(DirectObject.DirectObject):
     # to a user request so sfxActive/musicActive represent how things
     # *should* be, regardless of App/OS/HW state
     def enableMusic(self, bEnableMusic):
-        # don't setActive(1) if no audiofocus
+        # dont setActive(1) if no audiofocus
         if self.AppHasAudioFocus and self.musicManagerIsValid:
             self.musicManager.setActive(bEnableMusic)
         self.musicActive = bEnableMusic
@@ -1582,7 +1552,7 @@ class ShowBase(DirectObject.DirectObject):
                 self.sfxManagerList[i].setActive(bEnabled)
 
     def enableSoundEffects(self, bEnableSoundEffects):
-        # don't setActive(1) if no audiofocus
+        # dont setActive(1) if no audiofocus
         if self.AppHasAudioFocus or (bEnableSoundEffects==0):
             self.SetAllSfxEnables(bEnableSoundEffects)
         self.sfxActive=bEnableSoundEffects
@@ -1734,53 +1704,7 @@ class ShowBase(DirectObject.DirectObject):
         throwNewFrame()
         return Task.cont
 
-
-    def __igLoopSync(self, state):
-        # We render the watch variables for the onScreenDebug as soon
-        # as we reasonably can before the renderFrame().
-        onScreenDebug.render()
-
-        if self.recorder:
-            self.recorder.recordFrame()
-
-
-        self.cluster.collectData()
-
-        # Finally, render the frame.
-        self.graphicsEngine.renderFrame()
-        if self.clusterSyncFlag:
-            self.graphicsEngine.syncFrame()
-        if self.multiClientSleep:
-            time.sleep(0)
-
-        # We clear the text buffer for the onScreenDebug as soon
-        # as we reasonably can after the renderFrame().
-        onScreenDebug.clear()
-
-        if self.recorder:
-            self.recorder.playFrame()
-
-        if self.mainWinMinimized:
-            # If the main window is minimized, slow down the app a bit
-            # by sleeping here in igLoop so we don't use all available
-            # CPU needlessly.
-
-            # Note: this isn't quite right if multiple windows are
-            # open.  We should base this on whether *all* windows are
-            # minimized, not just the main window.  But it will do for
-            # now until someone complains.
-            time.sleep(0.1)
-
-        self.graphicsEngine.readyFlip()
-        self.cluster.waitForFlipCommand()
-        self.graphicsEngine.flipFrame()
-
-        # Lerp stuff needs this event, and it must be generated in
-        # C++, not in Python.
-        throwNewFrame()
-        return Task.cont    
-
-    def restart(self,clusterSync=False,cluster=None):
+    def restart(self):
         self.shutdown()
         # __resetPrevTransform goes at the very beginning of the frame.
         self.taskMgr.add(
@@ -1799,11 +1723,7 @@ class ShowBase(DirectObject.DirectObject):
         
         # give the igLoop task a reasonably "late" priority,
         # so that it will get run after most tasks
-        self.cluster = cluster
-        if (not clusterSync or (cluster == None)):
-            self.taskMgr.add(self.__igLoop, 'igLoop', priority = 50)
-        else:
-            self.taskMgr.add(self.__igLoopSync, 'igLoop', priority = 50)
+        self.taskMgr.add(self.__igLoop, 'igLoop', priority = 50)
         # the audioLoop updates the positions of 3D sounds.
         # as such, it needs to run after the cull traversal in the igLoop.
         self.taskMgr.add(self.__audioLoop, 'audioLoop', priority = 60)
@@ -2439,7 +2359,7 @@ class ShowBase(DirectObject.DirectObject):
         t.frameIndex = 0  # Frame 0 is not captured.
         t.numFrames = int(duration * fps)
         t.source = source
-        t.outputString = namePrefix + '_%0' + repr(sd) + 'd.' + format
+        t.outputString = namePrefix + '_%0' + `sd` + 'd.' + format
         t.setUponDeath(lambda state: globalClock.setMode(ClockObject.MNormal))
 
     def _movieTask(self, state):
@@ -2520,7 +2440,6 @@ class ShowBase(DirectObject.DirectObject):
                         self.a2dpLeft = -aspectRatio
                         self.a2dpRight = aspectRatio                        
 
-
                     # Reposition the aspect2d marker nodes
                     self.a2dTopCenter.setPos(0, 0, self.a2dTop)
                     self.a2dBottomCenter.setPos(0, 0, self.a2dBottom)
@@ -2530,16 +2449,6 @@ class ShowBase(DirectObject.DirectObject):
                     self.a2dTopRight.setPos(self.a2dRight, 0, self.a2dTop)
                     self.a2dBottomLeft.setPos(self.a2dLeft, 0, self.a2dBottom)
                     self.a2dBottomRight.setPos(self.a2dRight, 0, self.a2dBottom)
-
-                    # Reposition the aspect2d marker nodes
-                    self.a2dTopCenterNs.setPos(0, 0, self.a2dTop)
-                    self.a2dBottomCenterNs.setPos(0, 0, self.a2dBottom)
-                    self.a2dLeftCenterNs.setPos(self.a2dLeft, 0, 0)
-                    self.a2dRightCenterNs.setPos(self.a2dRight, 0, 0)                    
-                    self.a2dTopLeftNs.setPos(self.a2dLeft, 0, self.a2dTop)
-                    self.a2dTopRightNs.setPos(self.a2dRight, 0, self.a2dTop)
-                    self.a2dBottomLeftNs.setPos(self.a2dLeft, 0, self.a2dBottom)
-                    self.a2dBottomRightNs.setPos(self.a2dRight, 0, self.a2dBottom)                    
 
                     # Reposition the aspect2dp marker nodes
                     self.a2dpTopCenter.setPos(0, 0, self.a2dpTop)
@@ -2554,13 +2463,9 @@ class ShowBase(DirectObject.DirectObject):
                     # If anybody needs to update their GUI, put a callback on this event
                     messenger.send("aspectRatioChanged")
             
-            # Temporary hasattr for old Pandas
-            if not hasattr(win, 'getSbsLeftXSize'):
+            if win.getXSize() > 0 and win.getYSize() > 0:
                 self.pixel2d.setScale(2.0 / win.getXSize(), 1.0, 2.0 / win.getYSize())
                 self.pixel2dp.setScale(2.0 / win.getXSize(), 1.0, 2.0 / win.getYSize())
-            else:
-                self.pixel2d.setScale(2.0 / win.getSbsLeftXSize(), 1.0, 2.0 / win.getSbsLeftYSize())
-                self.pixel2dp.setScale(2.0 / win.getSbsLeftXSize(), 1.0, 2.0 / win.getSbsLeftYSize())
 
     def userExit(self):
         # The user has requested we exit the program.  Deal with this.
@@ -2601,9 +2506,6 @@ class ShowBase(DirectObject.DirectObject):
 
     def getRepository(self):
         return None
-
-    def getAxes(self):
-        return loader.loadModel("models/misc/xyzAxis.bam")
 
     def __doStartDirect(self):
         if self.__directStarted:

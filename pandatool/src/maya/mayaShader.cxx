@@ -1,7 +1,5 @@
 // Filename: mayaShader.cxx
 // Created by:  drose (01Feb00)
-// Modified 19Mar10 by ETC PandaSE team (see
-//   header comment for mayaToEgg.cxx for details)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -40,7 +38,7 @@
 //               relevant shader properties.
 ////////////////////////////////////////////////////////////////////
 MayaShader::
-MayaShader(MObject engine, bool texture_copy, Filename tout_dir, bool legacy_shader) {
+MayaShader(MObject engine) {
   MFnDependencyNode engine_fn(engine);
 
   set_name(engine_fn.name().asChar());
@@ -49,9 +47,7 @@ MayaShader(MObject engine, bool texture_copy, Filename tout_dir, bool legacy_sha
     maya_cat.debug()
       << "Reading shading engine " << get_name() << "\n";
   }
-  // passing the output texture dir to the shader constructor
-  _texture_copy = texture_copy;
-  _texture_out_dir = tout_dir;
+
   _legacy_mode = false;
   _flat_color.set(1,1,1,1);
 
@@ -63,12 +59,8 @@ MayaShader(MObject engine, bool texture_copy, Filename tout_dir, bool legacy_sha
     maya_cat.spam() << "shader plug connected to: " << shader_pa.length() << endl;
     for (size_t i = 0; i < shader_pa.length() && !found_shader; i++) {
       MObject shader = shader_pa[0].node();
-      if (shader.hasFn(MFn::kPhong)) { 
-        if (legacy_shader) {
-          found_shader = find_textures_legacy(shader);
-        } else {
-          found_shader = find_textures_modern(shader);
-        }
+      if (shader.hasFn(MFn::kPhong)) {
+        found_shader = find_textures_modern(shader);  
       } else if (shader.hasFn(MFn::kLambert)) {
         found_shader = find_textures_legacy(shader);
         if (found_shader) {
@@ -223,34 +215,34 @@ find_textures_modern(MObject shader) {
   
   if (maya_cat.is_spam()) {
     maya_cat.spam()
-      << "  Reading modern surface shader " << shader_fn.name().asChar() << "\n";
+      << "  Reading surface shader " << shader_fn.name().asChar() << "\n";
   }
 
   string n = shader_fn.name().asChar();
   
-  MayaShaderColorDef::find_textures_modern(n, _color_maps,  shader_fn.findPlug("color"), _texture_copy, _texture_out_dir,false);
+  MayaShaderColorDef::find_textures_modern(n, _color_maps,  shader_fn.findPlug("color"), false);
   if (_color_maps.size() == 0) {
-    MayaShaderColorDef::find_textures_modern(n, _color_maps,  shader_fn.findPlug("colorR"),_texture_copy, _texture_out_dir, false);
+    MayaShaderColorDef::find_textures_modern(n, _color_maps,  shader_fn.findPlug("colorR"), false);
   }
-  MayaShaderColorDef::find_textures_modern(n, _trans_maps,  shader_fn.findPlug("transparency"),_texture_copy, _texture_out_dir, true);
+  MayaShaderColorDef::find_textures_modern(n, _trans_maps,  shader_fn.findPlug("transparency"), true);
   if (_trans_maps.size() == 0) {
-    MayaShaderColorDef::find_textures_modern(n, _trans_maps,  shader_fn.findPlug("transparencyR"),_texture_copy, _texture_out_dir, true);
+    MayaShaderColorDef::find_textures_modern(n, _trans_maps,  shader_fn.findPlug("transparencyR"), true);
   }
-  MayaShaderColorDef::find_textures_modern(n, _normal_maps, shader_fn.findPlug("normalCamera"),_texture_copy, _texture_out_dir, false);
+  MayaShaderColorDef::find_textures_modern(n, _normal_maps, shader_fn.findPlug("normalCamera"), false);
   if (_normal_maps.size() == 0) {
-    MayaShaderColorDef::find_textures_modern(n, _normal_maps, shader_fn.findPlug("normalCameraR"),_texture_copy, _texture_out_dir, false);
+    MayaShaderColorDef::find_textures_modern(n, _normal_maps, shader_fn.findPlug("normalCameraR"), false);
   }
-  MayaShaderColorDef::find_textures_modern(n, _gloss_maps,  shader_fn.findPlug("specularColor"),_texture_copy, _texture_out_dir, true);
+  MayaShaderColorDef::find_textures_modern(n, _gloss_maps,  shader_fn.findPlug("specularColor"), true);
   if (_gloss_maps.size() == 0) {
-    MayaShaderColorDef::find_textures_modern(n, _gloss_maps,  shader_fn.findPlug("specularColorR"),_texture_copy, _texture_out_dir, true);
+    MayaShaderColorDef::find_textures_modern(n, _gloss_maps,  shader_fn.findPlug("specularColorR"), true);
   }
-  MayaShaderColorDef::find_textures_modern(n, _glow_maps,  shader_fn.findPlug("incandescence"),_texture_copy, _texture_out_dir, true);
+  MayaShaderColorDef::find_textures_modern(n, _glow_maps,  shader_fn.findPlug("incandescence"), true);
   if (_glow_maps.size() == 0) {
-    MayaShaderColorDef::find_textures_modern(n, _glow_maps,  shader_fn.findPlug("incandescenceR"),_texture_copy, _texture_out_dir, true);
+    MayaShaderColorDef::find_textures_modern(n, _glow_maps,  shader_fn.findPlug("incandescenceR"), true);
   }
-  MayaShaderColorDef::find_textures_modern(n, _height_maps,  shader_fn.findPlug("surfaceThickness"),_texture_copy, _texture_out_dir, true);
+  MayaShaderColorDef::find_textures_modern(n, _height_maps,  shader_fn.findPlug("surfaceThickness"), true);
   if (_height_maps.size() == 0) {
-    MayaShaderColorDef::find_textures_modern(n, _height_maps,  shader_fn.findPlug("surfaceThicknessR"),_texture_copy, _texture_out_dir, true);
+    MayaShaderColorDef::find_textures_modern(n, _height_maps,  shader_fn.findPlug("surfaceThicknessR"), true);
   }
   
   collect_maps();
@@ -462,7 +454,7 @@ find_textures_legacy(MObject shader) {
   
   if (maya_cat.is_spam()) {
     maya_cat.spam()
-      << "  Reading legacy surface shader " << shader_fn.name().asChar() << "\n";
+      << "  Reading surface shader " << shader_fn.name().asChar() << "\n";
   }
 
   // First, check for a connection to the color attribute.  This could
@@ -484,7 +476,7 @@ find_textures_legacy(MObject shader) {
     MayaShaderColorDef *color_p = new MayaShaderColorDef;
     for (size_t i = 0; i < color_pa.length(); i++) {
       maya_cat.spam() << "color_pa[" << i << "]:" << color_pa[i].name().asChar() << endl;
-      color_p->find_textures_legacy(this, color_pa[0].node(), _texture_copy, _texture_out_dir);
+      color_p->find_textures_legacy(this, color_pa[0].node());
     }
 
     if (color_pa.length() < 1) {
@@ -506,7 +498,7 @@ find_textures_legacy(MObject shader) {
 
     for (size_t i = 0; i < trans_pa.length(); i++) {
       maya_cat.spam() << "read a transparency texture" << endl;
-      _transparency.find_textures_legacy(this, trans_pa[0].node(), _texture_copy, _texture_out_dir, true);
+      _transparency.find_textures_legacy(this, trans_pa[0].node(), true);
     }
   }
 

@@ -115,6 +115,16 @@ get_priority() const {
 }
 
 ////////////////////////////////////////////////////////////////////
+//     Function: TextureStage::opertor <
+//       Access: Published
+//  Description: Compare if the sort order is lower
+////////////////////////////////////////////////////////////////////
+INLINE bool TextureStage::
+operator < (const TextureStage &other) const {
+  return (_sort < other._sort);
+}
+
+////////////////////////////////////////////////////////////////////
 //     Function: TextureStage::set_texcoord_name
 //       Access: Published
 //  Description: Indicate which set of UV's this texture stage will
@@ -661,36 +671,6 @@ uses_primary_color() const {
 INLINE bool TextureStage::
 uses_last_saved_result() const {
   return _uses_last_saved_result;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: TextureStage::operator ==
-//       Access: Published
-//  Description:
-////////////////////////////////////////////////////////////////////
-INLINE bool TextureStage::
-operator == (const TextureStage &other) const {
-  return compare_to(other) == 0;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: TextureStage::operator !=
-//       Access: Published
-//  Description:
-////////////////////////////////////////////////////////////////////
-INLINE bool TextureStage::
-operator != (const TextureStage &other) const {
-  return compare_to(other) != 0;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: TextureStage::operator <
-//       Access: Published
-//  Description:
-////////////////////////////////////////////////////////////////////
-INLINE bool TextureStage::
-operator < (const TextureStage &other) const {
-  return compare_to(other) < 0;
 }
 
 ////////////////////////////////////////////////////////////////////

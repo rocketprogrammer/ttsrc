@@ -91,7 +91,6 @@
 #include "bitArray.h"
 #include "thread.h"
 #include "uvScrollNode.h"
-#include "textureStagePool.h"
 
 #include <ctype.h>
 #include <algorithm>
@@ -371,12 +370,6 @@ make_polyset(EggBin *egg_bin, PandaNode *parent, const LMatrix4d *transform,
     bool has_overall_color;
     Colorf overall_color;
     vertex_pool->check_overall_color(has_overall_color, overall_color);
-    if (!egg_flat_colors) {
-      // If flat colors aren't allowed, then we don't care whether
-      // there is an overall color.  In that case, treat all vertex
-      // pools as if they contain a combination of multiple colors.
-      has_overall_color = false;
-    }
     
     // Create a handful of GeomPrimitives corresponding to the various
     // types of primitives that reference this vertex pool.
@@ -1412,8 +1405,7 @@ make_texture_stage(const EggTexture *egg_tex) {
       egg_tex->get_combine_mode(EggTexture::CC_alpha) == EggTexture::CM_unspecified &&
 
       !egg_tex->has_priority() &&
-      egg_tex->get_multitexture_sort() == 0 &&
-      !egg_tex->get_saved_result()) {
+      egg_tex->get_multitexture_sort() == 0) {
     return TextureStage::get_default();
   }
 
@@ -1575,7 +1567,7 @@ make_texture_stage(const EggTexture *egg_tex) {
     stage->set_color(egg_tex->get_color());
   }
 
-  return TextureStagePool::get_stage(stage);
+  return stage;
 }
 
 ////////////////////////////////////////////////////////////////////

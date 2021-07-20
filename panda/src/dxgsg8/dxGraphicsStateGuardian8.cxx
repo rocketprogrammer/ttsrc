@@ -3276,7 +3276,7 @@ free_nondx_resources() {
 ////////////////////////////////////////////////////////////////////
 void DXGraphicsStateGuardian8::
 free_d3d_device() {
-  // don't want a full reset of gsg, just a state clear
+  // dont want a full reset of gsg, just a state clear
   _state_rs = RenderState::make_empty();
   _state_mask.clear();
 
@@ -3295,7 +3295,7 @@ free_d3d_device() {
 
   free_nondx_resources();
 
-  // obviously we don't release ID3D8, just ID3DDevice8
+  // obviously we dont release ID3D8, just ID3DDevice8
 }
 
 ////////////////////////////////////////////////////////////////////

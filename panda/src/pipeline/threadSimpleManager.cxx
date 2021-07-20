@@ -588,15 +588,8 @@ choose_next_context(struct ThreadContext *from_context) {
           }
           TickRecord &record = _tick_records.front();
           _total_ticks -= record._tick_count;
-
-          if (record._thread->_run_ticks >= record._tick_count) {
-            // Ensure we don't go negative.
-            record._thread->_run_ticks -= record._tick_count;
-          } else {
-            // It is possible for this to happen if the application has been
-            // paused for more than 2^31 ticks.
-            record._thread->_run_ticks = 0;
-          }
+          nassertv(record._thread->_run_ticks >= record._tick_count);
+          record._thread->_run_ticks -= record._tick_count;
           _tick_records.pop_front();
         }
         new_epoch = true;
@@ -731,14 +724,8 @@ do_timeslice_accounting(ThreadSimpleImpl *thread, double now) {
     nassertv(!_tick_records.empty());
     TickRecord &record = _tick_records.front();
     _total_ticks -= record._tick_count;
-    if (record._thread->_run_ticks >= record._tick_count) {
-      // Ensure we don't go negative.
-      record._thread->_run_ticks -= record._tick_count;
-    } else {
-      // It is possible for this to happen if the application has been
-      // paused for more than 2^31 ticks.
-      record._thread->_run_ticks = 0;
-    }
+    nassertv(record._thread->_run_ticks >= record._tick_count);
+    record._thread->_run_ticks -= record._tick_count;
     _tick_records.pop_front();
   }
 

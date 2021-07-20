@@ -75,7 +75,7 @@ class SfxPlayer:
             
             self.setFinalVolume(sfx, node, volume, listenerNode, cutoff)
 
-            # don't start over if it's already playing, unless
+            # dont start over if it's already playing, unless
             # "interrupt" was specified
             if interrupt or (sfx.status() != AudioSound.PLAYING):
                 sfx.setTime(time)

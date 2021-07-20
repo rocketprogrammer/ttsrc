@@ -20,12 +20,8 @@
 #include "physxControllerDesc.h"
 #include "physxSceneStats2.h"
 #include "physxConstraintDominance.h"
-#include "physxVehicle.h"
-#include "physxVehicleDesc.h"
-#include "physxCloth.h"
-#include "physxClothDesc.h"
-#include "physxSoftBody.h"
-#include "physxSoftBodyDesc.h"
+//#include "physxVehicle.h"
+//#include "physxVehicleDesc.h"
 
 TypeHandle PhysxScene::_type_handle;
 
@@ -33,8 +29,6 @@ PStatCollector PhysxScene::_pcollector_fetch_results("App:PhysX:Fetch Results");
 PStatCollector PhysxScene::_pcollector_update_transforms("App:PhysX:Update Transforms");
 PStatCollector PhysxScene::_pcollector_debug_renderer("App:PhysX:Debug Renderer");
 PStatCollector PhysxScene::_pcollector_simulate("App:PhysX:Simulate");
-PStatCollector PhysxScene::_pcollector_cloth("App:PhysX:Cloth");
-PStatCollector PhysxScene::_pcollector_softbody("App:PhysX:Softbody");
 
 ////////////////////////////////////////////////////////////////////
 //     Function: PhysxScene::link
@@ -73,10 +67,10 @@ link(NxScene *scenePtr) {
 void PhysxScene::
 unlink() {
 
-  // Unlink vehicles
-  for (unsigned int i=0; i < _vehicles.size(); i++) {
-    _vehicles[i]->release();
-  }
+  // Destroy vehicles
+  //for (unsigned int i=0; i < _vehicles.size(); i++) {
+  //  _vehicles[i]->release();
+  //}
 
   // Unlink controllers
   NxU32 nControllers = _cm->getNbControllers();
@@ -129,23 +123,8 @@ unlink() {
     group->unlink();
   }
 
-  // Unlink cloths
-  NxCloth **cloths = _ptr->getCloths();
-  NxU32 nCloths = _ptr->getNbCloths();
-
-  for (NxU32 i=0; i < nCloths; i++) {
-    PhysxCloth *cloth = (PhysxCloth *)cloths[i]->userData;
-    cloth->unlink();
-  }
-
-  // Unlink softbodies
-  NxSoftBody **softbodies = _ptr->getSoftBodies();
-  NxU32 nSoftbodies = _ptr->getNbSoftBodies();
-
-  for (NxU32 i=0; i < nSoftbodies; i++) {
-    PhysxSoftBody *softbody = (PhysxSoftBody *)softbodies[i]->userData;
-    softbody->unlink();
-  }
+  // Unlink cloths TODO
+  // Unlink softbodies TODO
 
   // Unlink materials
   NxMaterial *materials[5];
@@ -204,10 +183,10 @@ simulate(float dt) {
   _pcollector_simulate.start();
 
   // Update all vehicles
-  for (unsigned int i=0; i < _vehicles.size(); i++) {
-    PhysxVehicle *vehicle = _vehicles[i];
-    vehicle->update_vehicle(dt);
-  }
+  //for (unsigned int i=0; i < _vehicles.size(); i++) {
+  //  PhysxVehicle *vehicle = _vehicles[i];
+  //  vehicle->update_vehicle(dt);
+  //}
 
   // Update all controllers
   for (NxU32 i=0; i < _cm->getNbControllers(); i++) {
@@ -242,7 +221,6 @@ void PhysxScene::
 fetch_results() {
 
   nassertv(_error_type == ET_ok);
-  nassertv(_ptr != NULL);
 
   _pcollector_fetch_results.start();
   _ptr->fetchResults(NX_RIGID_BODY_FINISHED, true);
@@ -275,28 +253,6 @@ fetch_results() {
   _pcollector_debug_renderer.stop();
 
   nassertv(_ptr->isWritable());
-
-  // Update cloth nodes
-  _pcollector_cloth.start();
-
-  NxCloth **cloths = _ptr->getCloths();
-  for (NxU32 i=0; i < _ptr->getNbCloths(); i++) {
-    PT(PhysxCloth) cloth = (PhysxCloth *)cloths[i]->userData;
-    cloth->update();
-  }
-
-  _pcollector_cloth.stop();
-
-  // Update softbody nodes
-  _pcollector_softbody.start();
-
-  NxSoftBody **softbodies = _ptr->getSoftBodies();
-  for (NxU32 i=0; i < _ptr->getNbSoftBodies(); i++) {
-    PT(PhysxSoftBody) softbody = (PhysxSoftBody *)softbodies[i]->userData;
-    softbody->update();
-  }
-
-  _pcollector_softbody.stop();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -706,7 +662,7 @@ create_controller(PhysxControllerDesc &desc) {
   nassertr(controllerPtr, NULL);
 
   controller->link(controllerPtr);
-  controller->get_actor()->set_name("");
+  controllerPtr->getActor()->setName("");
 
   return controller;
 }
@@ -900,108 +856,7 @@ get_force_field_shape_group(unsigned int idx) const {
   return groupPtr ? (PhysxForceFieldShapeGroup *)groupPtr->userData : NULL;
 }
 
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxScene::get_num_cloths
-//       Access: Published
-//  Description: Gets the number of cloths in the scene.
-////////////////////////////////////////////////////////////////////
-unsigned int PhysxScene::
-get_num_cloths() const {
-
-  nassertr(_error_type == ET_ok, -1);
-  return _ptr->getNbCloths();
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxScene::create_cloth
-//       Access: Published
-//  Description: Creates a cloth in this scene.
-////////////////////////////////////////////////////////////////////
-PhysxCloth *PhysxScene::
-create_cloth(PhysxClothDesc &desc) {
-
-  nassertr(_error_type == ET_ok, NULL);
-
-  PhysxCloth *cloth = new PhysxCloth();
-  nassertr(cloth, NULL);
-
-  NxCloth *clothPtr = _ptr->createCloth(desc._desc);
-  nassertr(clothPtr, NULL);
-
-  cloth->link(clothPtr);
-
-  return cloth;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxScene::get_cloth
-//       Access: Published
-//  Description: Returns the n-th cloth from the array of
-//               all the cloths in the scene.
-////////////////////////////////////////////////////////////////////
-PhysxCloth *PhysxScene::
-get_cloth(unsigned int idx) const {
-
-  nassertr(_error_type == ET_ok, NULL);
-  nassertr_always(idx < _ptr->getNbCloths(), NULL);
-
-  NxCloth **cloths = _ptr->getCloths();
-  NxCloth *clothPtr = cloths[idx];
-
-  return (PhysxCloth *)(clothPtr->userData);
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxScene::get_num_soft_bodies
-//       Access: Published
-//  Description: Gets the number of soft bodies in the scene.
-////////////////////////////////////////////////////////////////////
-unsigned int PhysxScene::
-get_num_soft_bodies() const {
-
-  nassertr(_error_type == ET_ok, -1);
-  return _ptr->getNbSoftBodies();
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxScene::create_soft_body
-//       Access: Published
-//  Description: Creates a soft body in this scene.
-////////////////////////////////////////////////////////////////////
-PhysxSoftBody *PhysxScene::
-create_soft_body(PhysxSoftBodyDesc &desc) {
-
-  nassertr(_error_type == ET_ok, NULL);
-
-  PhysxSoftBody *softbody = new PhysxSoftBody();
-  nassertr(softbody, NULL);
-
-  NxSoftBody *softbodyPtr = _ptr->createSoftBody(desc._desc);
-  nassertr(softbodyPtr, NULL);
-
-  softbody->link(softbodyPtr);
-
-  return softbody;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxScene::get_soft_body
-//       Access: Published
-//  Description: Returns the n-th soft body from the array of
-//               all the soft bodies in the scene.
-////////////////////////////////////////////////////////////////////
-PhysxSoftBody *PhysxScene::
-get_soft_body(unsigned int idx) const {
-
-  nassertr(_error_type == ET_ok, NULL);
-  nassertr_always(idx < _ptr->getNbSoftBodies(), NULL);
-
-  NxSoftBody **softbodies = _ptr->getSoftBodies();
-  NxSoftBody *softbodyPtr = softbodies[idx];
-
-  return (PhysxSoftBody *)(softbodyPtr->userData);
-}
-
+/*
 ////////////////////////////////////////////////////////////////////
 //     Function: PhysxScene::get_num_vehicles
 //       Access: Published
@@ -1047,6 +902,7 @@ get_vehicle(unsigned int idx) const {
 
   return _vehicles[idx];
 }
+*/
 
 ////////////////////////////////////////////////////////////////////
 //     Function: PhysxScene::get_stats2

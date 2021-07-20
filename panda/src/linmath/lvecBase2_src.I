@@ -249,7 +249,7 @@ set_y(FLOATTYPE value) {
 INLINE_LINMATH void FLOATNAME(LVecBase2)::
 add_to_cell(int i, FLOATTYPE value) {
   nassertv(i >= 0 && i < 2);
-  _v.data[i] += value;
+  _v.data[i] = value;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -259,7 +259,7 @@ add_to_cell(int i, FLOATTYPE value) {
 ////////////////////////////////////////////////////////////////////
 INLINE_LINMATH void FLOATNAME(LVecBase2)::
 add_x(FLOATTYPE value) {
-  _v.v._0 += value;
+  _v.v._0 = value;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -269,7 +269,7 @@ add_x(FLOATTYPE value) {
 ////////////////////////////////////////////////////////////////////
 INLINE_LINMATH void FLOATNAME(LVecBase2)::
 add_y(FLOATTYPE value) {
-  _v.v._1 += value;
+  _v.v._1 = value;
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -20,6 +20,10 @@
 #include "glxGraphicsPipe.h"
 #include "graphicsBuffer.h"
 
+#ifdef HAVE_GLXFBCONFIG
+// This whole class doesn't make sense unless we have the GLXFBConfig
+// and associated GLXPbuffer interfaces available.
+
 ////////////////////////////////////////////////////////////////////
 //       Class : glxGraphicsBuffer
 // Description : An offscreen buffer in the GLX environment.  This
@@ -66,5 +70,7 @@ private:
 };
 
 #include "glxGraphicsBuffer.I"
+
+#endif  // HAVE_GLXFBCONFIG
 
 #endif

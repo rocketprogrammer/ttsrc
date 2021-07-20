@@ -8,10 +8,6 @@ installer or an HTML webpage. It will attempt to create packages
 for every platform, if possible.
 Note that pdeploy requires an internet connection to run.
 
-When used with the 'installer' option, it is strongly advisable
-to specify most if not all of the descriptive information that can
-be passed on the command-line.
-
 Usage:
 
   %(prog)s [opts] app.p3d standalone|installer|html
@@ -42,10 +38,9 @@ Options:
      If omitted, the basename of the p3d file is used.
 
   -N "Your Application"
-     Full name of the application or game. This is the
-     name that will be displayed to the end-user.
-     The 'display_name' config is used by default.  If it
-     is missing, the short name is used.
+     Full name of the application or game. This value will
+     be used to display to the end-user.
+     If omitted, the short name is used.
 
   -v version_number
      This should define the version number of your application
@@ -63,9 +58,8 @@ Options:
   -t token=value
      Defines a web token or parameter to pass to the application.
      Use this to configure how the application will be run.
-     You can pass as many -t options as you need. Some examples of
-     useful token names are width, height, log_basename, auto_start,
-     hidden and console_environment.
+     You can pass as many -t options as you need. Examples of
+     tokens are width, height, log_basename, auto_start, hidden.
 
   -P platform
      If this option is provided, it should specify a comma-
@@ -106,18 +100,9 @@ Options:
      Short identifier of the author of the application. The default
      is "org.panda3d", but you will most likely want to change
      it to your own name or that of your organization or company.
-     Only relevant when generating a graphical installer.
 
   -A "Your Company"
-     Full name of the author of the application.  The default is
-     determined from the GECOS information of the current user if
-     available; if not, your username is used.
-     Only relevant when generating a graphical installer.
-
-  -e "you@your_company.com"
-     E-mail address of the maintainer of the application.  The default
-     is username@hostname.
-     Only relevant when generating a graphical installer.
+     Full name of the author of the application.
 
   -h
      Display this help
@@ -148,11 +133,10 @@ licensename = ""
 licensefile = Filename()
 authorid = ""
 authorname = ""
-authoremail = ""
 includeRequires = False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'n:N:v:o:t:P:csl:L:a:A:e:h')
+    opts, args = getopt.getopt(sys.argv[1:], 'n:N:v:o:t:P:csl:L:a:A:h')
 except getopt.error, msg:
     usage(1, msg)
 
@@ -182,9 +166,7 @@ for opt, arg in opts:
         authorid = arg.strip()
     elif opt == '-A':
         authorname = arg.strip()
-    elif opt == '-e':
-        authoremail = arg.strip()
-
+        
     elif opt == '-h':
         usage(0)
     else:
@@ -210,6 +192,9 @@ if shortname == '':
 if shortname.lower() != shortname or ' ' in shortname:
     print '\nProvided short name should be lowercase, and may not contain spaces!\n'
 
+if fullname == '':
+    fullname = shortname
+
 if version == '' and deploy_mode == 'installer':
     print '\nA version number is required in "installer" mode.\n'
     sys.exit(1)
@@ -227,7 +212,7 @@ elif not outputDir.isDirectory():
 if deploy_mode == 'standalone':
     s = Standalone(appFilename, tokens)
     s.basename = shortname
-
+    
     if currentPlatform:
         platform = PandaSystem.getPlatform()
         if platform.startswith("win"):
@@ -244,22 +229,13 @@ if deploy_mode == 'standalone':
                 s.build(Filename(outputDir, platform + "/" + shortname), platform)
 
 elif deploy_mode == 'installer':
-    if includeRequires:
-        tokens["verify_contents"] = "never"
-    i = Installer(appFilename, shortname, fullname, version, tokens = tokens)
-    i.includeRequires = includeRequires
+    i = Installer(shortname, fullname, appFilename, version, tokens = tokens)
     i.licensename = licensename
     i.licensefile = licensefile
-    if authorid:
-        i.authorid = authorid
-    if authorname:
-        i.authorname = authorname
-    if authoremail:
-        i.authoremail = authoremail
-    if not authorname or not authoremail or not authorid:
-        print "Using author \"%s\" <%s> with ID %s" % \
-            (i.authorname, i.authoremail, i.authorid)
-
+    i.authorid = authorid
+    i.authorname = authorname
+    i.includeRequires = includeRequires
+    
     if currentPlatform:
         platform = PandaSystem.getPlatform()
         if platform.startswith("win"):

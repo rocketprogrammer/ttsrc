@@ -57,7 +57,6 @@ struct { char *ver, *key; } maya_versions[] = {
   { "MAYA2008", "2008" },
   { "MAYA2009", "2009" },
   { "MAYA2010", "2010" },
-  { "MAYA2011", "2011"},
   { 0, 0 },
 };
 
@@ -288,12 +287,7 @@ int main(int argc, char **argv)
   // bin\python25.zip (within loc)
   // Python\lib\site-packages (within loc)
   // ...so set PYTHONPATH accordingly:
-  if (strcmp(key, "2011") == 0) {
-    //Maya 2011 is built against Python 2.6 so look for that one instead
-    sprintf(env4, "PYTHONPATH=%s\\bin\\python26.zip;%s\\Python\\lib\\site-packages", loc, loc);
-  } else {
-    sprintf(env4, "PYTHONPATH=%s\\bin\\python25.zip;%s\\Python\\lib\\site-packages", loc, loc);
-  }
+  sprintf(env4, "PYTHONPATH=%s\\bin\\python25.zip;%s\\Python\\lib\\site-packages", loc, loc);
   // Set environment variables MAYA_LOCATION, PYTHONHOME, PYTHONPATH, PATH
   _putenv(env2);
   _putenv(env3);
@@ -320,11 +314,6 @@ int main(int argc, char **argv)
   _putenv(env1);
   _putenv(env2);
 #endif // _WIN32
-
-  // When this is set, Panda3D will try not to use any functions from the
-  // CPython API.  This is necessary because Maya links with its own copy
-  // of Python, which may be incompatible with ours.
-  _putenv("PANDA_INCOMPATIBLE_PYTHON=1");
   
 #ifdef _WIN32
   STARTUPINFO si; PROCESS_INFORMATION pi;

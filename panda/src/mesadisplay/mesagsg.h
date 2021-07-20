@@ -28,10 +28,12 @@
 
 #ifdef MESA_MGL
   #define GLP(name) mgl##name
+  #define GLUP(name) mglu##name
   #define GLPREFIX_QUOTED "mgl"
   #define USE_MGL_NAMESPACE 1
 #else
   #define GLP(name) gl##name
+  #define GLUP(name) glu##name
   #define GLPREFIX_QUOTED "gl"
 #endif
 #define CLP(name) Mesa##name
@@ -72,6 +74,7 @@
 #define GL_GLEXT_VERSION 0
 
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/osmesa.h>
 
 #undef GL_GLEXT_VERSION

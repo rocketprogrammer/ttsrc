@@ -44,22 +44,6 @@ PNMTextMaker(const char *font_data, int data_length, int face_index) {
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: PNMTextMaker::Copy Constructor
-//       Access: Public
-//  Description: 
-////////////////////////////////////////////////////////////////////
-PNMTextMaker::
-PNMTextMaker(const PNMTextMaker &copy) :
-  FreetypeFont(copy),
-  _is_valid(copy._is_valid),
-  _align(copy._align),
-  _interior_flag(copy._interior_flag),
-  _fg(copy._fg),
-  _interior(copy._interior)
-{
-}
-
-////////////////////////////////////////////////////////////////////
 //     Function: PNMTextMaker::Destructor
 //       Access: Public
 //  Description: 
@@ -140,9 +124,7 @@ calc_width(const wstring &text) {
 ////////////////////////////////////////////////////////////////////
 PNMTextGlyph *PNMTextMaker::
 get_glyph(int character) {
-  FT_Face face = acquire_face();
-  int glyph_index = FT_Get_Char_Index(face, character);
-  release_face(face);
+  int glyph_index = FT_Get_Char_Index(_face->get_face(), character);
 
   Glyphs::iterator gi;
   gi = _glyphs.find(glyph_index);
@@ -177,25 +159,23 @@ initialize() {
 ////////////////////////////////////////////////////////////////////
 PNMTextGlyph *PNMTextMaker::
 make_glyph(int glyph_index) {
-  FT_Face face = acquire_face();
-  if (!load_glyph(face, glyph_index)) {
-    release_face(face);
+  if (!load_glyph(glyph_index)) {
     return (PNMTextGlyph *)NULL;
   }
 
-  FT_GlyphSlot slot = face->glyph;
-
+  FT_GlyphSlot slot = _face->get_face()->glyph;
   FT_Bitmap &bitmap = slot->bitmap;
 
   double advance = slot->advance.x / 64.0;
 
-  PNMTextGlyph *glyph = new PNMTextGlyph(advance);
-
   if (bitmap.width == 0 || bitmap.rows == 0) {
     // If we got an empty bitmap, it's a special case.
+    PNMTextGlyph *glyph = new PNMTextGlyph(advance);
     glyph->rescale(_scale_factor);
+    return glyph;
 
   } else {
+    PNMTextGlyph *glyph = new PNMTextGlyph(advance);
     PNMImage &glyph_image = glyph->_image;
     glyph_image.clear(bitmap.width, bitmap.rows, 3);
     copy_bitmap_to_pnmimage(bitmap, glyph_image);
@@ -207,10 +187,8 @@ make_glyph(int glyph_index) {
       glyph->determine_interior();
     }
     glyph->rescale(_scale_factor);
+    return glyph;
   }
-
-  release_face(face);
-  return glyph;
 }
 
 ////////////////////////////////////////////////////////////////////

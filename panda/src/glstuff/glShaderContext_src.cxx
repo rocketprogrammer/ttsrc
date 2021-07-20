@@ -14,7 +14,7 @@
 
 #ifndef OPENGLES_1
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
 #include "Cg/cgGL.h"
 #endif
 #include "pStatTimer.h"
@@ -33,7 +33,7 @@ TypeHandle CLP(ShaderContext)::_type_handle;
 #define GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT 0x8DE0
 #endif
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
 #ifndef NDEBUG
 #define cg_report_errors() { \
   CGerror err = cgGetError(); \
@@ -57,7 +57,7 @@ CLP(ShaderContext)(Shader *s, GSG *gsg) : ShaderContext(s) {
   _glsl_vshader = 0;
   _glsl_fshader = 0;
   _glsl_gshader = 0;
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   _cg_context = 0;
   if (s->get_language() == Shader::SL_Cg) {
     
@@ -367,7 +367,7 @@ CLP(ShaderContext)::
 ////////////////////////////////////////////////////////////////////
 void CLP(ShaderContext)::
 release_resources(GSG *gsg) {
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   if (_cg_context) {
     cgDestroyContext(_cg_context);
     _cg_context  = 0;
@@ -391,29 +391,23 @@ release_resources(GSG *gsg) {
     return;
   }
   if (_glsl_program != 0) {
-    if (_glsl_vshader != 0) {
+    if (!_glsl_vshader != 0) {
       gsg->_glDetachShader(_glsl_program, _glsl_vshader);
+      gsg->_glDeleteShader(_glsl_vshader);
+      _glsl_vshader = 0;
     }
-    if (_glsl_fshader != 0) {
+    if (!_glsl_fshader != 0) {
       gsg->_glDetachShader(_glsl_program, _glsl_fshader);
+      gsg->_glDeleteShader(_glsl_fshader);
+      _glsl_fshader = 0;
     }
-    if (_glsl_gshader != 0) {
+    if (!_glsl_gshader != 0) {
       gsg->_glDetachShader(_glsl_program, _glsl_gshader);
+      gsg->_glDeleteShader(_glsl_gshader);
+      _glsl_gshader = 0;
     }
     gsg->_glDeleteProgram(_glsl_program);
     _glsl_program = 0;
-  }
-  if (_glsl_vshader != 0) {
-    gsg->_glDeleteShader(_glsl_vshader);
-    _glsl_vshader = 0;
-  }
-  if (_glsl_fshader != 0) {
-    gsg->_glDeleteShader(_glsl_fshader);
-    _glsl_fshader = 0;
-  }
-  if (_glsl_gshader != 0) {
-    gsg->_glDeleteShader(_glsl_gshader);
-    _glsl_gshader = 0;
   }
   
   gsg->report_my_gl_errors();
@@ -440,7 +434,7 @@ bind(GSG *gsg, bool reissue_parameters) {
     issue_parameters(gsg, Shader::SSD_general);
   }
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   if (_cg_context != 0) {
     // Bind the shaders.
     if (_cg_vprogram != 0) {
@@ -472,7 +466,7 @@ void CLP(ShaderContext)::
 unbind(GSG *gsg) {
   _last_gsg = gsg;
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   if (_cg_context != 0) {
     if (_cg_vprogram != 0) {
       cgGLDisableProfile(cgGetProgramProfile(_cg_vprogram));
@@ -544,7 +538,7 @@ issue_parameters(GSG *gsg, int altered) {
           case Shader::SMP_row3x3: gsg->_glUniform3fv(p, 1, data+12); continue;
         }
       }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
       else if (_shader->get_language() == Shader::SL_Cg) {
         CGparameter p = _cg_parameter_map[_shader->_mat_spec[i]._id._seqno];
         switch (_shader->_mat_spec[i]._piece) {
@@ -566,7 +560,7 @@ issue_parameters(GSG *gsg, int altered) {
 #endif
     }
   }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   cg_report_errors();
 #endif
 
@@ -590,7 +584,7 @@ disable_shader_vertex_arrays(GSG *gsg) {
       gsg->_glDisableVertexAttribArray(i);
     }
   }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   else if (_shader->get_language() == Shader::SL_Cg) {
     for (int i=0; i<(int)_shader->_var_spec.size(); i++) {
       CGparameter p = _cg_parameter_map[_shader->_var_spec[i]._id._seqno];
@@ -623,7 +617,7 @@ update_shader_vertex_arrays(CLP(ShaderContext) *prev, GSG *gsg,
   if (!valid()) {
     return true;
   }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   cg_report_errors();
 #endif
 
@@ -638,7 +632,7 @@ update_shader_vertex_arrays(CLP(ShaderContext) *prev, GSG *gsg,
     int start, stride, num_values;
     int nvarying = _shader->_var_spec.size();
     for (int i=0; i<nvarying; i++) {
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
       if (_shader->get_language() == Shader::SL_Cg) {
         if (_cg_parameter_map[_shader->_var_spec[i]._id._seqno] == 0) {
           continue;
@@ -674,7 +668,7 @@ update_shader_vertex_arrays(CLP(ShaderContext) *prev, GSG *gsg,
 #ifndef OPENGLES_2
           glDisableClientState(GL_VERTEX_ARRAY);
 #endif
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
         } else if (_shader->get_language() == Shader::SL_Cg) {
           CGparameter p = _cg_parameter_map[_shader->_var_spec[i]._id._seqno];
           cgGLSetParameterPointer(p,
@@ -684,7 +678,7 @@ update_shader_vertex_arrays(CLP(ShaderContext) *prev, GSG *gsg,
 #endif
         }
       }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
       else if (_shader->get_language() == Shader::SL_Cg) {
         CGparameter p = _cg_parameter_map[_shader->_var_spec[i]._id._seqno];
         cgGLDisableClientState(p);
@@ -693,7 +687,7 @@ update_shader_vertex_arrays(CLP(ShaderContext) *prev, GSG *gsg,
     }
   }
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   cg_report_errors();
 #endif
   gsg->report_my_gl_errors();
@@ -721,7 +715,7 @@ disable_shader_texture_bindings(GSG *gsg) {
       } else {
         gsg->_glActiveTexture(GL_TEXTURE0 + _shader->_tex_spec[i]._stage + _stage_offset);
       }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
     } else if (_shader->get_language() == Shader::SL_Cg) {
       CGparameter p = _cg_parameter_map[_shader->_tex_spec[i]._id._seqno];
       if (p == 0) continue;
@@ -749,7 +743,7 @@ disable_shader_texture_bindings(GSG *gsg) {
 #endif  // OPENGLES_2
   _stage_offset = 0;
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   cg_report_errors();
 #endif
 
@@ -794,7 +788,7 @@ update_shader_texture_bindings(CLP(ShaderContext) *prev, GSG *gsg) {
         texunit += _stage_offset;
       }
     }
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
     if (_shader->get_language() == Shader::SL_Cg) {
       CGparameter p = _cg_parameter_map[_shader->_tex_spec[i]._id._seqno];
       if (p == 0) {
@@ -855,7 +849,7 @@ update_shader_texture_bindings(CLP(ShaderContext) *prev, GSG *gsg) {
     }
   }
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   cg_report_errors();
 #endif
 
@@ -879,7 +873,7 @@ glsl_report_shader_errors(GSG *gsg, unsigned int shader) {
     info_log = (char *) malloc(length);
     gsg->_glGetShaderInfoLog(shader, length, &num_chars, info_log);
     if (strcmp(info_log, "Success.\n") != 0) {
-      GLCAT.error(false) << info_log << "\n";
+      GLCAT.error(false) << info_log;
     }
   }
   delete[] info_log;
@@ -902,7 +896,7 @@ glsl_report_program_errors(GSG *gsg, unsigned int program) {
     info_log = (char *) malloc(length);
     gsg->_glGetProgramInfoLog(program, length, &num_chars, info_log);
     if (strcmp(info_log, "Success.\n") != 0) {
-      GLCAT.error(false) << info_log << "\n";
+      GLCAT.error(false) << info_log;
     }
   }
   delete[] info_log;

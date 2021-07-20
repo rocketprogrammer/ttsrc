@@ -41,8 +41,6 @@ class EXPCL_PANDA_TEXT StaticTextFont : public TextFont {
 PUBLISHED:
   StaticTextFont(PandaNode *font_def);
 
-  virtual PT(TextFont) make_copy() const;
-
   virtual void write(ostream &out, int indent_level) const;
 
 public:

@@ -179,13 +179,6 @@ open_window() {
     }
   }
   
-  if (glxgsg->_context == NULL) {
-    // We're supposed to have a context at this point.
-    glxdisplay_cat.error()
-      << "No GLX context: cannot open window.\n";
-    return false;
-  }
-  
   _visual_info = glxgsg->_visual;
   if (_visual_info == NULL) {
     // No X visual for this fbconfig; how can we open the window?
@@ -195,11 +188,15 @@ open_window() {
   }
   Visual *visual = _visual_info->visual;
   
+#ifdef HAVE_GLXFBCONFIG
   if (glxgsg->_fbconfig != None) {
     setup_colormap(glxgsg->_fbconfig);
   } else {
     setup_colormap(_visual_info);
   }
+#else
+  setup_colormap(_visual_info);
+#endif  // HAVE_GLXFBCONFIG
 
   if (!x11GraphicsWindow::open_window()) {
     return false;
@@ -221,6 +218,7 @@ open_window() {
   return true;
 }
 
+#ifdef HAVE_GLXFBCONFIG
 ////////////////////////////////////////////////////////////////////
 //     Function: glxGraphicsWindow::setup_colormap
 //       Access: Private
@@ -229,11 +227,7 @@ open_window() {
 ////////////////////////////////////////////////////////////////////
 void glxGraphicsWindow::
 setup_colormap(GLXFBConfig fbconfig) {
-  glxGraphicsStateGuardian *glxgsg;
-  DCAST_INTO_V(glxgsg, _gsg);
-  nassertv(glxgsg->_supports_fbconfig);
-
-  XVisualInfo *visual_info = glxgsg->_glXGetVisualFromFBConfig(_display, fbconfig);
+  XVisualInfo *visual_info = glXGetVisualFromFBConfig(_display, fbconfig);
   if (visual_info == NULL) {
     // No X visual; no need to set up a colormap.
     return;
@@ -250,7 +244,7 @@ setup_colormap(GLXFBConfig fbconfig) {
 
   switch (visual_class) {
     case PseudoColor:
-      rc = glxgsg->_glXGetFBConfigAttrib(_display, fbconfig, GLX_RGBA, &is_rgb);
+      rc = glXGetFBConfigAttrib(_display, fbconfig, GLX_RGBA, &is_rgb);
       if (rc == 0 && is_rgb) {
         glxdisplay_cat.warning()
           << "mesa pseudocolor not supported.\n";
@@ -280,6 +274,7 @@ setup_colormap(GLXFBConfig fbconfig) {
       break;
   }
 }
+#endif  // HAVE_GLXFBCONFIG
 
 ////////////////////////////////////////////////////////////////////
 //     Function: glxGraphicsWindow::setup_colormap

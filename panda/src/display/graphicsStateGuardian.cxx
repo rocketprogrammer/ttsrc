@@ -313,17 +313,6 @@ get_supported_geom_rendering() const {
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: GraphicsStateGuardian::get_supports_cg_profile
-//       Access: Published, Virtual
-//  Description: Returns true if this particular GSG supports the 
-//               specified Cg Shader Profile.
-////////////////////////////////////////////////////////////////////
-bool GraphicsStateGuardian::
-get_supports_cg_profile(const string &name) const {
-  return false;
-}
-
-////////////////////////////////////////////////////////////////////
 //     Function: GraphicsStateGuardian::set_coordinate_system
 //       Access: Published
 //  Description: Changes the coordinate system in effect on this

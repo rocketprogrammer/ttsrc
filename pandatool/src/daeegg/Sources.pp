@@ -1,6 +1,6 @@
 #define BUILD_DIRECTORY $[HAVE_FCOLLADA]
 
-#begin ss_lib_target
+#begin lib_target
   #define USE_PACKAGES fcollada
   #define TARGET daeegg
   #define LOCAL_LIBS converter pandatoolbase
@@ -24,4 +24,4 @@
     daeCharacter.h daeMaterials.h \
     pre_fcollada_include.h fcollada_utils.h
 
-#end ss_lib_target
+#end lib_target

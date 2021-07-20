@@ -25,8 +25,6 @@
 
 class PhysxConvexMesh;
 class PhysxTriangleMesh;
-class PhysxClothMesh;
-class PhysxSoftBodyMesh;
 
 ////////////////////////////////////////////////////////////////////
 //       Class : PhysxMeshPool
@@ -44,13 +42,9 @@ PUBLISHED:
 
   static PhysxConvexMesh *load_convex_mesh(const Filename &filename);
   static PhysxTriangleMesh *load_triangle_mesh(const Filename &filename);
-  static PhysxClothMesh *load_cloth_mesh(const Filename &filename);
-  static PhysxSoftBodyMesh *load_soft_body_mesh(const Filename &filename);
 
   static bool release_convex_mesh(PhysxConvexMesh *mesh);
   static bool release_triangle_mesh(PhysxTriangleMesh *mesh);
-  static bool release_cloth_mesh(PhysxClothMesh *mesh);
-  static bool release_soft_body_mesh(PhysxSoftBodyMesh *mesh);
 
   static void list_contents();
   static void list_contents(ostream &out);
@@ -59,16 +53,14 @@ private:
   static bool check_filename(const Filename &fn);
 
   typedef pmap<Filename, PT(PhysxConvexMesh)> ConvexMeshes;
-  static ConvexMeshes _convex_meshes;
-
   typedef pmap<Filename, PT(PhysxTriangleMesh)> TriangleMeshes;
+  //typedef pmap<Filename, PT(PhysxClothMesh)> ClothMeshes;
+  //typedef pmap<Filename, PT(PhysxSoftBodyMesh)> SoftbodyMeshes;
+
+  static ConvexMeshes _convex_meshes;
   static TriangleMeshes _triangle_meshes;
-
-  typedef pmap<Filename, PT(PhysxClothMesh)> ClothMeshes;
-  static ClothMeshes _cloth_meshes;
-
-  typedef pmap<Filename, PT(PhysxSoftBodyMesh)> SoftbodyMeshes;
-  static SoftbodyMeshes _softbody_meshes;
+  //static ClothMeshes _cloth_meshes;
+  //static SoftbodyMeshes _softbody_meshes;
 };
 
 #include "physxMeshPool.I"

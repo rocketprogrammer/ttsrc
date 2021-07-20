@@ -370,7 +370,7 @@ class TaskManager:
     def __setupTask(self, funcOrTask, name, priority, sort, extraArgs, taskChain, appendTask, owner, uponDeath):
         if isinstance(funcOrTask, AsyncTask):
             task = funcOrTask
-        elif hasattr(funcOrTask, '__call__'):
+        elif callable(funcOrTask):
             task = PythonTask(funcOrTask)
         else:
             self.notify.error(
@@ -519,7 +519,7 @@ class TaskManager:
                         self.stop()
                         print_exc_plus()
                     else:
-                        if (ExceptionVarDump.wantStackDumpLog and
+                        if (ExceptionVarDump.wantVariableDump and
                             ExceptionVarDump.dumpOnExceptionInit):
                             ExceptionVarDump._varDump__print(e)
                         raise

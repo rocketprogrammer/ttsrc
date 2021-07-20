@@ -5,7 +5,7 @@
 #begin lib_target
   #define TARGET pnmimage
   #define LOCAL_LIBS \
-    linmath putil express mathutil
+    linmath putil express
 
   #define COMBINED_SOURCES $[TARGET]_composite1.cxx $[TARGET]_composite2.cxx 
 

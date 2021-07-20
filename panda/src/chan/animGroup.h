@@ -47,7 +47,6 @@ PUBLISHED:
   AnimGroup *get_child(int n) const;
   MAKE_SEQ(get_children, get_num_children, get_child);
 
-  AnimGroup *get_child_named(const string &name) const;
   AnimGroup *find_child(const string &name) const;
 
 public:

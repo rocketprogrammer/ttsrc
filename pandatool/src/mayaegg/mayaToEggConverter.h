@@ -160,11 +160,6 @@ private:
                          bool mesh);
   void set_shader_legacy(EggPrimitive &primitive, const MayaShader &shader,
                          bool mesh);
-  void set_vertex_color(EggVertex &vert, MItMeshPolygon &pi, int vert_index, const MayaShader *shader, const Colorf &color);
-
-  void set_vertex_color_legacy(EggVertex &vert, MItMeshPolygon &pi, int vert_index, const MayaShader *shader, const Colorf &color);
-
-  void set_vertex_color_modern(EggVertex &vert, MItMeshPolygon &pi, int vert_index, const MayaShader *shader, const Colorf &color);
 
   int round(double value);
 
@@ -180,7 +175,7 @@ private:
   Globs _force_joints;
 
   MayaNodeTree _tree;
-  
+
 public:
   MayaShaders _shaders;
   EggTextureCollection _textures;
@@ -192,10 +187,6 @@ public:
   bool _always_show_vertex_color;
   bool _keep_all_uvsets;
   bool _round_uvs;
-  bool _texture_copy;
-  Filename _texture_out_dir;
-  bool _legacy_shader;
-
 
   enum TransformType {
     TT_invalid,

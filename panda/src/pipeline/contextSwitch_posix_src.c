@@ -160,8 +160,7 @@ alloc_thread_context() {
 
   pthread_mutexattr_t attr;
   pthread_mutexattr_init(&attr);
-  // The symbol PTHREAD_MUTEX_DEFAULT isn't always available?
-  //  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_DEFAULT);
+  pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_NORMAL);
   int result = pthread_mutex_init(&context->_ready_mutex, &attr);
   pthread_mutexattr_destroy(&attr);
 

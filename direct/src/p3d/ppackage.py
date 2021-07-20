@@ -31,8 +31,7 @@ Parameters:
     Specify the names of the package(s) you wish to build out of the
     package.pdef file.  This allows you to build only a subset of the
     packages defined in this file.  If you omit these parameters, all
-    packages are built, and packages that cannot be built are silently
-    ignored.
+    packages are built.
 
 Options:
 
@@ -110,15 +109,8 @@ Options:
   -H
      Treats a packager.setHost() call in the pdef file as if it were
      merely a call to packager.addHost().  This allows producing a
-     package for an alternate host than itsP3DSUFFIX normally configured host,
+     package for an alternate host than its normally configured host,
      which is sometimes useful in development.
-
-  -a suffix
-     Appends the given suffix to the p3d filename, before the extension.
-     This is useful when the same packages are compiled several times
-     but using different settings, and you want to mark those packages
-     as such.  This only applies to .p3d packages, not to other types
-     of packages!
 
   -h
      Display this help
@@ -144,11 +136,10 @@ allowPythonDev = False
 universalBinaries = False
 systemRoot = None
 ignoreSetHost = False
-p3dSuffix = ''
 platforms = []
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'i:ps:S:DuP:R:Ha:h')
+    opts, args = getopt.getopt(sys.argv[1:], 'i:ps:S:DuP:R:Hh')
 except getopt.error, msg:
     usage(1, msg)
 
@@ -175,9 +166,7 @@ for opt, arg in opts:
         systemRoot = arg
     elif opt == '-H':
         ignoreSetHost = True
-    elif opt == '-a':
-        p3dSuffix = arg
-
+        
     elif opt == '-h':
         usage(0)
     else:
@@ -221,7 +210,6 @@ for platform in platforms:
     packager.allowPythonDev = allowPythonDev
     packager.systemRoot = systemRoot
     packager.ignoreSetHost = ignoreSetHost
-    packager.p3dSuffix = p3dSuffix
 
     try:
         packager.setup()

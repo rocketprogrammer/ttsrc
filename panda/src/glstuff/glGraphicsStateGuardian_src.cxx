@@ -62,7 +62,7 @@
 #include "graphicsEngine.h"
 #include "shaderGenerator.h"
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
 #include "Cg/cgGL.h"
 #endif
 
@@ -833,7 +833,7 @@ reset() {
     }
   }
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   if (cgGLIsProfileSupported(CG_PROFILE_ARBFP1) &&
       cgGLIsProfileSupported(CG_PROFILE_ARBVP1)) {
     _supports_basic_shaders = true;
@@ -1606,7 +1606,7 @@ reset() {
   void gl_set_stencil_functions (StencilRenderStates *stencil_render_states);
   gl_set_stencil_functions (_stencil_render_states);
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
 
   typedef struct
   {
@@ -1861,11 +1861,6 @@ void CLP(GraphicsStateGuardian)::
 clear_before_callback() {
   disable_standard_vertex_arrays();
   unbind_buffers();
-
-  // Some callbacks may quite reasonably assume that the active
-  // texture stage is still set to stage 0.  CEGUI, in particular,
-  // makes this assumption.
-  _glActiveTexture(GL_TEXTURE0);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -4310,7 +4305,6 @@ do_issue_shader(bool state_has_changed) {
       context->bind(this);
       _current_shader = shader;
       _current_shader_context = context;
-      context->issue_parameters(this, Shader::SSD_shaderinputs);
     } else {
 #ifdef OPENGLES_2
       context->bind(this, false);
@@ -5116,6 +5110,7 @@ gl_get_error() const {
 bool CLP(GraphicsStateGuardian)::
 report_errors_loop(int line, const char *source_file, GLenum error_code,
                    int &error_count) {
+#ifndef NDEBUG
   while ((CLP(max_errors) < 0 || error_count < CLP(max_errors)) &&
          (error_code != GL_NO_ERROR)) {
     GLCAT.error()
@@ -5126,39 +5121,25 @@ report_errors_loop(int line, const char *source_file, GLenum error_code,
     error_count++;
   }
 
+#endif
   return (error_code == GL_NO_ERROR);
 }
 
 ////////////////////////////////////////////////////////////////////
 //     Function: GLGraphicsStateGuardian::get_error_string
 //       Access: Protected, Static
-//  Description: Returns an error string for an OpenGL error code.
+//  Description: Returns gluGetErrorString(), if GLU is available;
+//               otherwise, returns some default error message.
 ////////////////////////////////////////////////////////////////////
 string CLP(GraphicsStateGuardian)::
 get_error_string(GLenum error_code) {
-  // We used to use gluErrorString here, but I (rdb) took it out
-  // because that was really the only function we used from GLU.
-  // The idea with the error table was taken from SGI's sample implementation.
-  static const char *error_strings[GL_OUT_OF_MEMORY - GL_INVALID_ENUM + 1] = {
-    "invalid enumerant",
-    "invalid value",
-    "invalid operation",
-    "stack overflow",
-    "stack underflow",
-    "out of memory",
-  };
-
-  if (error_code == GL_NO_ERROR) {
-    return "no error";
-#ifndef OPENGLES
-  } else if (error_code == GL_TABLE_TOO_LARGE) {
-    return "table too large";
-#endif
-  } else if (error_code >= GL_INVALID_ENUM && error_code <= GL_OUT_OF_MEMORY) {
-    return error_strings[error_code - GL_INVALID_ENUM];
+#ifdef HAVE_GLU
+  const GLubyte *error_string = GLUP(ErrorString)(error_code);
+  if (error_string != (const GLubyte *)NULL) {
+    return string((const char *)error_string);
   }
+#endif  // HAVE_GLU
 
-  // Other error, somehow?  Just display the error code then.
   ostringstream strm;
   strm << "GL error " << (int)error_code;
 
@@ -8480,7 +8461,7 @@ upload_texture_image(CLP(TextureContext) *gtc,
                      bool one_page_only, int z,
                      Texture::CompressionMode image_compression) {
   // Make sure the error stack is cleared out before we begin.
-  clear_my_gl_errors();
+  report_my_gl_errors();
 
   if (texture_target == GL_NONE) {
     // Unsupported target (e.g. 3-d texturing on GL 1.1).
@@ -8694,7 +8675,7 @@ upload_texture_image(CLP(TextureContext) *gtc,
 
     // Did that fail?  If it did, we'll immediately try again, this
     // time loading the texture from scratch.
-    GLenum error_code = gl_get_error();
+    GLenum error_code = GLP(GetError)();
     if (error_code != GL_NO_ERROR) {
       if (GLCAT.is_debug()) {
         GLCAT.debug()
@@ -8720,13 +8701,12 @@ upload_texture_image(CLP(TextureContext) *gtc,
 #ifndef OPENGLES_2
       if ((external_format == GL_DEPTH_STENCIL_EXT) && get_supports_depth_stencil()) {
         GLP(TexImage2D)(page_target, 0, GL_DEPTH_STENCIL_EXT,
-                        width, height, 0, GL_DEPTH_STENCIL_EXT, 
+                        width, height, 0,
 #ifdef OPENGLES_1
-                        GL_UNSIGNED_INT_24_8_OES, 
+                        GL_DEPTH_STENCIL_EXT, GL_UNSIGNED_INT_24_8_OES, NULL);
 #else
-                        GL_UNSIGNED_INT_24_8_EXT, 
+                        GL_DEPTH_STENCIL_EXT, GL_UNSIGNED_INT_24_8_EXT, NULL);
 #endif  // OPENGLES_1
-                        NULL);
       } else {
 #endif  // OPENGLES_2
         GLP(TexImage2D)(page_target, 0, internal_format,
@@ -8829,7 +8809,7 @@ upload_texture_image(CLP(TextureContext) *gtc,
 
     // Report the error message explicitly if the GL texture creation
     // failed.
-    GLenum error_code = gl_get_error();
+    GLenum error_code = GLP(GetError)();
     if (error_code != GL_NO_ERROR) {
       GLCAT.error()
         << "GL texture creation failed for " << tex->get_name()
@@ -8968,7 +8948,7 @@ get_texture_memory_size(Texture *tex) {
   GLP(GetTexParameteriv)(target, GL_TEXTURE_MIN_FILTER, &minfilter);
   bool has_mipmaps = is_mipmap_filter(minfilter);
 
-  clear_my_gl_errors();
+  report_my_gl_errors();
 
   GLint internal_format;
   GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
@@ -8979,7 +8959,7 @@ get_texture_memory_size(Texture *tex) {
     GLP(GetTexLevelParameteriv)(page_target, 0,
                                 GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &image_size);
 
-    GLenum error_code = gl_get_error();
+    GLenum error_code = GLP(GetError)();
     if (error_code != GL_NO_ERROR) {
       if (GLCAT.is_debug()) {
         GLCAT.debug()
@@ -9137,7 +9117,7 @@ do_extract_texture_data(CLP(TextureContext) *gtc) {
     depth = 6;
   }
 #endif
-  clear_my_gl_errors();
+  report_my_gl_errors();
 
   if (width <= 0 || height <= 0 || depth <= 0) {
     GLCAT.error()
@@ -9151,7 +9131,7 @@ do_extract_texture_data(CLP(TextureContext) *gtc) {
 #endif  // OPENGLES
 
   // Make sure we were able to query those parameters properly.
-  GLenum error_code = gl_get_error();
+  GLenum error_code = GLP(GetError)();
   if (error_code != GL_NO_ERROR) {
     GLCAT.error()
       << "Unable to query texture parameters for " << tex->get_name()
@@ -9462,14 +9442,16 @@ extract_texture_image(PTA_uchar &image, size_t &page_size,
   }
 
   // Now see if we were successful.
-  GLenum error_code = gl_get_error();
-  if (error_code != GL_NO_ERROR) {
-    GLCAT.error()
-      << "Unable to extract texture for " << *tex
-      << ", mipmap level " << n
-      << " : " << get_error_string(error_code) << "\n";
-    nassertr(false, false);
-    return false;
+  if (_track_errors) {
+    GLenum error_code = GLP(GetError)();
+    if (error_code != GL_NO_ERROR) {
+      GLCAT.error()
+        << "Unable to extract texture for " << *tex
+        << ", mipmap level " << n
+        << " : " << get_error_string(error_code) << "\n";
+      nassertr(false, false);
+      return false;
+    }
   }
   return true;
 #endif  // OPENGLES
@@ -9515,27 +9497,6 @@ do_point_size() {
   }
 
   report_my_gl_errors();
-#endif
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: GLGraphicsStateGuardian::get_supports_cg_profile
-//       Access: Public, Virtual
-//  Description: Returns true if this particular GSG supports the 
-//               specified Cg Shader Profile.
-////////////////////////////////////////////////////////////////////
-bool CLP(GraphicsStateGuardian)::
-get_supports_cg_profile(const string &name) const {
-#if !defined(HAVE_CG) || defined(OPENGLES)
-  return false;
-#else
-  CGprofile profile = cgGetProfile(name.c_str());
-  
-  if (profile ==CG_PROFILE_UNKNOWN) {
-    GLCAT.error() << name <<", unknown Cg-profile\n";
-    return false;
-  }
-  return cgGLIsProfileSupported(profile);
 #endif
 }
 

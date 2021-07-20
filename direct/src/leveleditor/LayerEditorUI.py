@@ -17,7 +17,6 @@ class LayerEditorUI(wx.Panel):
         self.saveData = []
         self.layersDataDict = dict()
         self.layersDataDictNextKey = 0
-        self.systemLayerKeys = []
         self.llist = wx.ListCtrl(self, -1, style=wx.LC_REPORT|wx.LC_EDIT_LABELS|wx.LC_NO_HEADER)
         self.llist.InsertColumn(0, "Layers")
 
@@ -61,11 +60,8 @@ class LayerEditorUI(wx.Panel):
             menuItem = self.popupmenu.Append(-1, item)
             self.Bind(wx.EVT_MENU, self.onPopupItemSelected, menuItem)
 
-    def menuAppendObjItems(self, hitItem):
+    def menuAppendObjItems(self):
         for item in self.menuItemsObj:
-            if hitItem in self.systemLayerKeys:
-                if item in [self.opRemoveObj, self.opDelete, self.opAddObj]:
-                    continue
             menuItem = self.popupmenu.Append(-1, item)
             self.Bind(wx.EVT_MENU, self.onPopupItemSelected, menuItem)
 
@@ -81,7 +77,7 @@ class LayerEditorUI(wx.Panel):
         if hitItem == -1:
            self.menuAppendGenItems()
         else:
-           self.menuAppendObjItems(hitItem)
+           self.menuAppendObjItems()
         self.PopupMenu(self.popupmenu, pos)
 
     def onPopupItemSelected(self, event):
@@ -109,7 +105,6 @@ class LayerEditorUI(wx.Panel):
         self.layersDataDict.clear()
         self.layersDataDictNextKey = 0
         self.llist.DeleteAllItems()
-        self.systemLayerKeys = []
 
     def findLabel(self, text):
         found = False

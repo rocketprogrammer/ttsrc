@@ -1,5 +1,4 @@
 from direct.p3d.FileSpec import FileSpec
-from direct.p3d.SeqValue import SeqValue
 from pandac.PandaModules import *
 import copy
 
@@ -428,15 +427,14 @@ class PatchMaker:
 
                 if doProcessing:
                     newCompressedFilename = '%s.%s.pz' % (self.currentFile.filename, self.patchVersion)
-                    if newCompressedFilename != oldCompressedFilename:
-                        oldCompressedPathname = Filename(self.packageDir, oldCompressedFilename)
-                        newCompressedPathname = Filename(self.packageDir, newCompressedFilename)
-                        if oldCompressedPathname.renameTo(newCompressedPathname):
-                            compressedFile.fromFile(self.packageDir, newCompressedFilename)
-                            compressedFile.storeXml(xcompressed)
+                    oldCompressedPathname = Filename(self.packageDir, oldCompressedFilename)
+                    newCompressedPathname = Filename(self.packageDir, newCompressedFilename)
+                    if oldCompressedPathname.renameTo(newCompressedPathname):
+                        compressedFile.fromFile(self.packageDir, newCompressedFilename)
+                        compressedFile.storeXml(xcompressed)
 
-                        self.compressedFilename = newCompressedFilename
-                        self.anyChanges = True
+                    self.compressedFilename = newCompressedFilename
+                    self.anyChanges = True
 
             # Get the base_version--the bottom (oldest) of the patch
             # chain.
@@ -486,11 +484,6 @@ class PatchMaker:
             if not xpackage:
                 return
 
-            packageSeq = SeqValue()
-            packageSeq.loadXml(xpackage, 'seq')
-            packageSeq += 1
-            packageSeq.storeXml(xpackage, 'seq')
-
             # Remove all of the old patch entries from the desc file
             # we read earlier.
             xremove = []
@@ -523,20 +516,6 @@ class PatchMaker:
 
             self.doc.SaveFile()
 
-            # Also copy the seq to the import desc file, for
-            # documentation purposes.
-
-            importDescFilename = self.packageDesc.cStr()[:-3] + 'import.xml'
-            importDescFullpath = Filename(self.patchMaker.installDir, importDescFilename)
-            doc = TiXmlDocument(importDescFullpath.toOsSpecific())
-            if doc.LoadFile():
-                xpackage = doc.FirstChildElement('package')
-                if xpackage:
-                    packageSeq.storeXml(xpackage, 'seq')
-                    doc.SaveFile()
-            else:
-                print "Couldn't read %s" % (importDescFullpath)
-
             if self.contentsDocPackage:
                 # Now that we've rewritten the xml file, we have to
                 # change the contents.xml file that references it to
@@ -544,21 +523,7 @@ class PatchMaker:
                 fileSpec = FileSpec()
                 fileSpec.fromFile(self.patchMaker.installDir, self.packageDesc)
                 fileSpec.storeXml(self.contentsDocPackage)
-
-                # Also important to update the import.xml hash.
-                ximport = self.contentsDocPackage.FirstChildElement('import')
-                if ximport:
-                    fileSpec = FileSpec()
-                    fileSpec.fromFile(self.patchMaker.installDir, importDescFilename)
-                    fileSpec.storeXml(ximport)
-
-                # Also copy the package seq value into the
-                # contents.xml file, mainly for documentation purposes
-                # (the authoritative seq value is within the desc
-                # file).
-                packageSeq.storeXml(self.contentsDocPackage, 'seq')
-
-
+            
     # PatchMaker constructor.
     def __init__(self, installDir):
         self.installDir = installDir
@@ -636,11 +601,6 @@ class PatchMaker:
 
         xcontents = doc.FirstChildElement('contents')
         if xcontents:
-            contentsSeq = SeqValue()
-            contentsSeq.loadXml(xcontents)
-            contentsSeq += 1
-            contentsSeq.storeXml(xcontents)
-            
             xpackage = xcontents.FirstChildElement('package')
             while xpackage:
                 solo = xpackage.Attribute('solo')

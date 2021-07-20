@@ -149,7 +149,6 @@ class file:
             self.__reader = pm.StreamReader(self.__stream, False)
         if writeMode:
             self.__writer = pm.StreamWriter(self.__stream, False)
-            self.__lastWrite = True
 
     def __del__(self):
         self.close()
@@ -180,8 +179,7 @@ class file:
         if not self.__reader:
             if not self.__writer:
                 # The stream is not even open at all.
-                message = 'I/O operation on closed file'
-                raise ValueError, message
+                raise ValueError
             # The stream is open only in write mode.
             message = 'Attempt to read from write-only stream'
             raise IOError, message
@@ -200,8 +198,7 @@ class file:
         if not self.__reader:
             if not self.__writer:
                 # The stream is not even open at all.
-                message = 'I/O operation on closed file'
-                raise ValueError, message
+                raise ValueError
             # The stream is open only in write mode.
             message = 'Attempt to read from write-only stream'
             raise IOError, message
@@ -232,8 +229,7 @@ class file:
         else:
             if self.__reader:
                 return self.__stream.tellg()
-        message = 'I/O operation on closed file'
-        raise ValueError, message
+        raise ValueError
     
     def truncate(self):
         """ Sorry, this isn't supported by Panda's low-level I/O,
@@ -244,8 +240,7 @@ class file:
         if not self.__writer:
             if not self.__reader:
                 # The stream is not even open at all.
-                message = 'I/O operation on closed file'
-                raise ValueError, message
+                raise ValueError
             # The stream is open only in read mode.
             message = 'Attempt to write to read-only stream'
             raise IOError, message
@@ -256,20 +251,13 @@ class file:
         if not self.__writer:
             if not self.__reader:
                 # The stream is not even open at all.
-                message = 'I/O operation on closed file'
-                raise ValueError, message
+                raise ValueError
             # The stream is open only in read mode.
             message = 'Attempt to write to read-only stream'
             raise IOError, message
         for line in lines:
             self.__writer.appendData(line)
         self.__lastWrite = True
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, t, v, tb):
-        self.close()
 
 open = file
 

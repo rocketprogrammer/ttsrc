@@ -25,8 +25,8 @@ class DistributedObjectGlobalUD(DistributedObjectUD):
         DistributedObjectUD.delete(self)
 
     def execCommand(self, command, mwMgrId, avId, zoneId):
-        text = str(self.__execMessage(command))[:config.GetInt("ai-debug-length",300)]
-        
+        text = self.__execMessage(command)
+        print text
         dclass = uber.air.dclassesByName.get("PiratesMagicWordManagerAI")
         dg = dclass.aiFormatUpdate(
             "setMagicWordResponse", mwMgrId, (1<<32)+avId, uber.air.ourChannel, [text])

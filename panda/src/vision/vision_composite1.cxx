@@ -2,9 +2,5 @@
 #include "config_vision.cxx"
 #include "openCVTexture.cxx"
 #include "webcamVideo.cxx"
-#include "webcamVideoCursorOpenCV.cxx"
-#include "webcamVideoCursorV4L.cxx"
 #include "webcamVideoDS.cxx"
-#include "webcamVideoOpenCV.cxx"
-#include "webcamVideoV4L.cxx"
 

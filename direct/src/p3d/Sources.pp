@@ -31,13 +31,13 @@
   #endif
 
   #foreach scriptname $[BUILD_P3D_SCRIPTS]
-    #if $[MAKE_BAT_SCRIPTS]
+    #if $[eq $[PLATFORM],Win32]
       #set INSTALL_SCRIPTS $[INSTALL_SCRIPTS] $[scriptname].bat
     #else
       #set INSTALL_SCRIPTS $[INSTALL_SCRIPTS] $[scriptname]
     #endif
 
-    #if $[MAT_BAT_SCRIPTS]
+    #if $[eq $[PLATFORM],Win32]
   #output $[scriptname].bat notouch
 @echo off
 rem #### Generated automatically by $[PPREMAKE] $[PPREMAKE_VERSION] from $[notdir $[THISFILENAME]].
@@ -46,7 +46,7 @@ rem ################################# DO NOT EDIT ###########################
 $[python] -u $[osfilename $[install_bin_dir]/$[scriptname].py] %1 %2 %3 %4 %5 %6 %7 %8 %9
   #end $[scriptname].bat
 
-  #else  // MAKE_BAT_SCRIPTS
+  #else  // Win32
 
   #output $[scriptname] binary notouch
 #! /bin/sh
@@ -66,7 +66,7 @@ $[python] -u '$[osfilename $[install_bin_dir]/$[scriptname].py]' "$@"
   #endif
   #end $[scriptname]
 
-  #endif  // MAKE_BAT_SCRIPTS
+  #endif  // Win32
 
   #end scriptname
 

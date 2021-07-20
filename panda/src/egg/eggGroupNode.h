@@ -75,7 +75,7 @@ PUBLISHED:
   // except through the limited add_child/remove_child or insert/erase
   // interface.  The following implements this.
 public:
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
   typedef const PT(EggNode) *pointer;
   typedef const PT(EggNode) *const_pointer;
 #else

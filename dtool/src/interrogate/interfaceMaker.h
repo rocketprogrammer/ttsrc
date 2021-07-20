@@ -103,7 +103,6 @@ public:
     ~Object();
 
     void check_protocols();
-    bool is_static_method(const string &name);
 
     const InterrogateType &_itype;
     Functions _constructors;

@@ -20,7 +20,6 @@
 #include "datagram.h"
 #include "datagramIterator.h"
 #include "dcast.h"
-#include "textureStagePool.h"
 
 CPT(RenderAttrib) TextureAttrib::_empty_attrib;
 CPT(RenderAttrib) TextureAttrib::_all_off_attrib;
@@ -109,9 +108,10 @@ make_default() {
 ////////////////////////////////////////////////////////////////////
 int TextureAttrib::
 find_on_stage(const TextureStage *stage) const {
-  Stages::const_iterator si = _on_stages.find(StageNode(stage));
-  if (si != _on_stages.end()) {
-    return (int)(si - _on_stages.begin());
+  for (int n = 0; n < (int)_on_stages.size(); ++n) {
+    if (_on_stages[n]._stage == stage) {
+      return n;
+    }
   }
 
   return -1;
@@ -125,15 +125,37 @@ find_on_stage(const TextureStage *stage) const {
 //               turned on by this attrib.
 ////////////////////////////////////////////////////////////////////
 CPT(RenderAttrib) TextureAttrib::
-add_on_stage(TextureStage *stage, Texture *tex, int override) const {
+add_on_stage(TextureStage *stage, Texture *tex) const {
   TextureAttrib *attrib = new TextureAttrib(*this);
-  Stages::iterator si = attrib->_on_stages.insert(StageNode(stage)).first;
-  (*si)._override = override;
-  (*si)._texture = tex;
-  (*si)._implicit_sort = attrib->_next_implicit_sort;
-  ++(attrib->_next_implicit_sort);
+  pair<OnTextures::iterator, bool> insert_result = 
+    attrib->_on_textures.insert(OnTextures::value_type(stage, tex));
+  if (insert_result.second) {
+    // If the insert was successful--we have added a new stage that
+    // wasn't present before--then add the stage to the linear list
+    // also.
+    attrib->_on_stages.push_back(OnStageNode(stage, attrib->_next_implicit_sort));
+    ++(attrib->_next_implicit_sort);
 
-  // We now need to re-sort the attrib list.
+    // Also ensure it is removed from the off_stages list.
+    attrib->_off_stages.erase(stage);
+
+  } else {
+    // If the insert was unsuccessful, it means there was already a
+    // definition for that stage.  Replace it.
+    (*insert_result.first).second = tex;
+
+    // Also update the implicit sort.
+    OnStages::iterator si;
+    for (si = attrib->_on_stages.begin(); si != attrib->_on_stages.end(); ++si) {
+      if ((*si)._stage == stage) {
+        (*si)._implicit_sort = attrib->_next_implicit_sort;
+        ++(attrib->_next_implicit_sort);
+        break;
+      }
+    }
+  }
+
+  // In either case, we now need to re-sort the attrib list.
   attrib->_sort_seq = UpdateSeq::old();
   attrib->_filtered_seq = UpdateSeq::old();
 
@@ -151,9 +173,17 @@ CPT(RenderAttrib) TextureAttrib::
 remove_on_stage(TextureStage *stage) const {
   TextureAttrib *attrib = new TextureAttrib(*this);
 
-  Stages::iterator si = attrib->_on_stages.find(StageNode(stage));
-  if (si != attrib->_on_stages.end()) {
-    attrib->_on_stages.erase(si);
+  OnTextures::iterator ti = attrib->_on_textures.find(stage);
+  if (ti != attrib->_on_textures.end()) {
+    attrib->_on_textures.erase(ti);
+    
+    OnStages::iterator si;
+    for (si = attrib->_on_stages.begin(); si != attrib->_on_stages.end(); ++si) {
+      if ((*si)._stage == stage) {
+        attrib->_on_stages.erase(si);
+        break;
+      }
+    }
 
     attrib->_sort_seq = UpdateSeq::old();
     attrib->_filtered_seq = UpdateSeq::old();
@@ -170,17 +200,23 @@ remove_on_stage(TextureStage *stage) const {
 //               turned off by this attrib.
 ////////////////////////////////////////////////////////////////////
 CPT(RenderAttrib) TextureAttrib::
-add_off_stage(TextureStage *stage, int override) const {
+add_off_stage(TextureStage *stage) const {
   TextureAttrib *attrib = new TextureAttrib(*this);
   if (!_off_all_stages) {
-    StageNode sn(stage);
-    Stages::iterator sfi = attrib->_off_stages.insert(sn).first;
-    (*sfi)._override = override;
+    attrib->_off_stages.insert(stage);
 
     // Also ensure it is removed from the on_stages list.
-    Stages::iterator si = attrib->_on_stages.find(sn);
-    if (si != attrib->_on_stages.end()) {
-      attrib->_on_stages.erase(si);
+    OnTextures::iterator ti = attrib->_on_textures.find(stage);
+    if (ti != attrib->_on_textures.end()) {
+      attrib->_on_textures.erase(ti);
+    
+      OnStages::iterator si;
+      for (si = attrib->_on_stages.begin(); si != attrib->_on_stages.end(); ++si) {
+        if ((*si)._stage == stage) {
+          attrib->_on_stages.erase(si);
+          break;
+        }
+      }
       attrib->_sort_seq = UpdateSeq::old();
       attrib->_filtered_seq = UpdateSeq::old();
     }
@@ -198,7 +234,7 @@ add_off_stage(TextureStage *stage, int override) const {
 CPT(RenderAttrib) TextureAttrib::
 remove_off_stage(TextureStage *stage) const {
   TextureAttrib *attrib = new TextureAttrib(*this);
-  attrib->_off_stages.erase(StageNode(stage));
+  attrib->_off_stages.erase(stage);
   return return_new(attrib);
 }
 
@@ -217,35 +253,41 @@ unify_texture_stages(TextureStage *stage) const {
   attrib->_off_all_stages = _off_all_stages;
   bool any_changed = false;
 
-  Stages::const_iterator si;
+  OnStages::const_iterator si;
   for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
     TextureStage *this_stage = (*si)._stage;
+    Texture *tex = get_on_texture(this_stage);
+    nassertr(tex != (Texture *)NULL, this);
 
     if (this_stage->get_name() == stage->get_name()) {
       this_stage = stage;
       any_changed = true;
     }
 
-    Stages::iterator osi = attrib->_on_stages.insert(StageNode(this_stage)).first;
-    (*osi)._texture = (*si)._texture;
-    (*osi)._ff_tc_index = (*si)._ff_tc_index;
-    (*osi)._implicit_sort = (*si)._implicit_sort;
-    (*osi)._override = (*si)._override;
+    bool inserted = attrib->_on_textures.insert(OnTextures::value_type(this_stage, tex)).second;
+    if (inserted) {
+      // If the texture was successfully inserted, it was the first
+      // appearance of this stage.  Add it to the on_stages list.
+      attrib->_on_stages.push_back(OnStageNode(this_stage, (*si)._implicit_sort));
+    } else {
+      // If the texture was not successfully inserted, it was a
+      // duplicate texture stage.  This should only be possible if we
+      // have just collapsed a stage.
+      nassertr(this_stage == stage, this);
+    }
   }
 
   attrib->_next_implicit_sort = _next_implicit_sort;
 
-  Stages::const_iterator fsi;
+  OffStages::const_iterator fsi;
   for (fsi = _off_stages.begin(); fsi != _off_stages.end(); ++fsi) {
-    TextureStage *this_stage = (*fsi)._stage;
-
-    if (this_stage != stage && 
-        this_stage->get_name() == stage->get_name()) {
-      this_stage = stage;
+    if ((*fsi) != stage && 
+        (*fsi)->get_name() == stage->get_name()) {
+      attrib->_off_stages.insert(stage);
       any_changed = true;
+    } else {
+      attrib->_off_stages.insert(*fsi);
     }
-
-    attrib->_off_stages.insert(StageNode(this_stage));
   }
 
   if (!any_changed) {
@@ -288,7 +330,7 @@ filter_to_max(int max_texture_stages) const {
   // case of equal priority, we prefer the stage with the lower sort.
   check_sorted();
 
-  RenderStages priority_stages = _render_stages;
+  OnStages priority_stages = _on_stages;
 
   // This sort function uses the STL function object defined above.
   sort(priority_stages.begin(), priority_stages.end(), 
@@ -301,11 +343,13 @@ filter_to_max(int max_texture_stages) const {
   // And create a new attrib reflecting these stages.
   PT(TextureAttrib) attrib = new TextureAttrib;
 
-  RenderStages::const_iterator ri;
-  for (ri = priority_stages.begin(); ri != priority_stages.end(); ++ri) {
-    attrib->_on_stages.insert(*(*ri));
+  OnStages::const_iterator si;
+  for (si = priority_stages.begin(); si != priority_stages.end(); ++si) {
+    TextureStage *stage = (*si)._stage;
+    attrib->_on_textures[stage] = get_on_texture(stage);
   }
 
+  attrib->_on_stages.swap(priority_stages);
   attrib->_next_implicit_sort = _next_implicit_sort;
 
   CPT(RenderAttrib) new_attrib = return_new(attrib);
@@ -315,44 +359,6 @@ filter_to_max(int max_texture_stages) const {
   CPT(TextureAttrib) tex_attrib = (const TextureAttrib *)new_attrib.p();
   ((TextureAttrib *)this)->_filtered[max_texture_stages] = tex_attrib;
   return tex_attrib;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: TextureAttrib::lower_attrib_can_override
-//       Access: Public, Virtual
-//  Description: Intended to be overridden by derived RenderAttrib
-//               types to specify how two consecutive RenderAttrib
-//               objects of the same type interact.
-//
-//               This should return false if a RenderAttrib on a
-//               higher node will compose into a RenderAttrib on a
-//               lower node that has a higher override value, or false
-//               if the lower RenderAttrib will completely replace the
-//               state.
-//
-//               The default behavior is false: normally, a
-//               RenderAttrib in the graph cannot completely override
-//               a RenderAttrib above it, regardless of its override
-//               value--instead, the two attribs are composed.  But
-//               for some kinds of RenderAttribs, it is useful to
-//               allow this kind of override.
-//
-//               This method only handles the one special case of a
-//               lower RenderAttrib with a higher override value.  If
-//               the higher RenderAttrib has a higher override value,
-//               it always completely overrides.  And if both
-//               RenderAttribs have the same override value, they are
-//               always composed.
-////////////////////////////////////////////////////////////////////
-bool TextureAttrib::
-lower_attrib_can_override() const {
-  // A TextureAttrib doesn't compose through an override.  Normally,
-  // there won't be a scene-graph override on a TextureAttrib anyway,
-  // since the NodePath::set_texture() override is applied to the
-  // per-TextureStage override value.  But there might be a
-  // scene-graph override if NodePath::adjust_all_priorities() is
-  // used, and in this case, we'd like for it to stick.
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -382,13 +388,10 @@ output(ostream &out) const {
 
   } else {
     out << "off";
-    Stages::const_iterator fi;
+    OffStages::const_iterator fi;
     for (fi = _off_stages.begin(); fi != _off_stages.end(); ++fi) {
-      TextureStage *stage = (*fi)._stage;
+      TextureStage *stage = (*fi);
       out << " " << stage->get_name();
-      if ((*fi)._override != 0) {
-        out << "^" << (*fi)._override;
-      }
     }
 
     if (!_on_stages.empty()) {
@@ -396,18 +399,15 @@ output(ostream &out) const {
     }
   }
     
-  RenderStages::const_iterator ri;
-  for (ri = _render_stages.begin(); ri != _render_stages.end(); ++ri) {
-    const StageNode &sn = *(*ri);
-    TextureStage *stage = sn._stage;
-    Texture *tex = sn._texture;
-    if (tex != NULL) {
+  OnStages::const_iterator si;
+  for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
+    TextureStage *stage = (*si)._stage;
+    OnTextures::const_iterator ti = _on_textures.find(stage);
+    if (ti != _on_textures.end()) {
+      Texture *tex = (*ti).second;
       out << " " << stage->get_name() << ":" << tex->get_name();
     } else {
       out << " " << stage->get_name();
-    }
-    if (sn._override != 0) {
-      out << "^" << sn._override;
     }
   }
 }
@@ -423,9 +423,9 @@ output(ostream &out) const {
 ////////////////////////////////////////////////////////////////////
 bool TextureAttrib::
 has_cull_callback() const {
-  Stages::const_iterator si;
-  for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
-    Texture *texture = (*si)._texture;
+  OnTextures::const_iterator nti;
+  for (nti = _on_textures.begin(); nti != _on_textures.end(); ++nti) {
+    Texture *texture = (*nti).second;
     if (texture->has_cull_callback()) {
       return true;
     }
@@ -449,9 +449,9 @@ has_cull_callback() const {
 ////////////////////////////////////////////////////////////////////
 bool TextureAttrib::
 cull_callback(CullTraverser *trav, const CullTraverserData &data) const {
-  Stages::const_iterator si;
-  for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
-    Texture *texture = (*si)._texture;
+  OnTextures::const_iterator nti;
+  for (nti = _on_textures.begin(); nti != _on_textures.end(); ++nti) {
+    Texture *texture = (*nti).second;
     if (!texture->cull_callback(trav, data)) {
       return false;
     }
@@ -484,22 +484,57 @@ compare_to_impl(const RenderAttrib *other) const {
     return (int)_off_all_stages - (int)ta->_off_all_stages;
   }
 
-  Stages::const_iterator si = _on_stages.begin();
-  Stages::const_iterator osi = ta->_on_stages.begin();
+  // First, verify that the texture assigned to each stage is the
+  // same.
+  OnTextures::const_iterator li = _on_textures.begin();
+  OnTextures::const_iterator oli = ta->_on_textures.begin();
 
-  while (si != _on_stages.end() && osi != ta->_on_stages.end()) {
-    TextureStage *stage = (*si)._stage;
-    TextureStage *other_stage = (*osi)._stage;
+  while (li != _on_textures.end() && oli != ta->_on_textures.end()) {
+    TextureStage *stage = (*li).first;
+    TextureStage *other_stage = (*oli).first;
 
     if (stage != other_stage) {
       return stage < other_stage ? -1 : 1;
     }
 
-    Texture *texture = (*si)._texture;
-    Texture *other_texture = (*osi)._texture;
+    Texture *tex = (*li).second;
+    Texture *other_tex = (*oli).second;
 
-    if (texture != other_texture) {
-      return texture < other_texture ? -1 : 1;
+    if (tex != other_tex) {
+      return tex < other_tex ? -1 : 1;
+    }
+
+    ++li;
+    ++oli;
+  }
+
+  if (li != _on_textures.end()) {
+    return 1;
+  }
+  if (oli != ta->_on_textures.end()) {
+    return -1;
+  }
+
+  // Then, we also have to check the linear list of texture stages, to
+  // ensure primarily that the implicit sort numbers match between the
+  // two attribs.  (If they did not, then a later call to
+  // texture_stage->set_sort() might make these attribs apply textures
+  // differently, even if they are the same now.)
+  check_sorted();
+  ta->check_sorted();
+
+  nassertr(_on_ptr_stages.size() == _on_stages.size() &&
+           ta->_on_ptr_stages.size() == ta->_on_stages.size(), 0)
+
+  OnStages::const_iterator si = _on_ptr_stages.begin();
+  OnStages::const_iterator osi = ta->_on_ptr_stages.begin();
+
+  while (si != _on_ptr_stages.end() && osi != ta->_on_ptr_stages.end()) {
+    TextureStage *stage = (*si)._stage;
+    TextureStage *other_stage = (*osi)._stage;
+
+    if (stage != other_stage) {
+      return stage < other_stage ? -1 : 1;
     }
 
     int implicit_sort = (*si)._implicit_sort;
@@ -509,41 +544,27 @@ compare_to_impl(const RenderAttrib *other) const {
       return implicit_sort < other_implicit_sort ? -1 : 1;
     }
 
-    int override = (*si)._override;
-    int other_override = (*osi)._override;
-
-    if (override != other_override) {
-      return override < other_override ? -1 : 1;
-    }
-
     ++si;
     ++osi;
   }
 
-  if (si != _on_stages.end()) {
+  if (si != _on_ptr_stages.end()) {
     return 1;
   }
-  if (osi != ta->_on_stages.end()) {
+  if (osi != ta->_on_ptr_stages.end()) {
     return -1;
   }
 
   // Finally, ensure that the set of off stages is the same.
-  Stages::const_iterator fi = _off_stages.begin();
-  Stages::const_iterator ofi = ta->_off_stages.begin();
+  OffStages::const_iterator fi = _off_stages.begin();
+  OffStages::const_iterator ofi = ta->_off_stages.begin();
 
   while (fi != _off_stages.end() && ofi != ta->_off_stages.end()) {
-    TextureStage *stage = (*fi)._stage;
-    TextureStage *other_stage = (*ofi)._stage;
+    TextureStage *stage = (*fi);
+    TextureStage *other_stage = (*ofi);
 
     if (stage != other_stage) {
       return stage < other_stage ? -1 : 1;
-    }
-
-    int override = (*fi)._override;
-    int other_override = (*ofi)._override;
-
-    if (override != other_override) {
-      return override < other_override ? -1 : 1;
     }
 
     ++fi;
@@ -591,120 +612,145 @@ compose_impl(const RenderAttrib *other) const {
   // This is a three-way merge between ai, bi, and ci, except that bi
   // and ci should have no intersection and therefore needn't be
   // compared to each other.
-  Stages::const_iterator ai = _on_stages.begin();
-  Stages::const_iterator bi = ta->_on_stages.begin();
-  Stages::const_iterator ci = ta->_off_stages.begin();
+  OnTextures::const_iterator ai = _on_textures.begin();
+  OnTextures::const_iterator bi = ta->_on_textures.begin();
+  OffStages::const_iterator ci = ta->_off_stages.begin();
+
+  // TextureStages that are kept from the original attrib are inserted
+  // into a_stages.  Those that are inherited from the secondary
+  // attrib are inserted into b_stages.
+  pset<TextureStage *> a_stages;
+  pset<TextureStage *> b_stages;
 
   // Create a new TextureAttrib that will hold the result.
   TextureAttrib *attrib = new TextureAttrib;
 
-  while (ai != _on_stages.end() && 
-         bi != ta->_on_stages.end() && 
+  while (ai != _on_textures.end() && 
+         bi != ta->_on_textures.end() && 
          ci != ta->_off_stages.end()) {
-    if ((*ai)._stage < (*bi)._stage) {
-      if ((*ai)._stage < (*ci)._stage) {
+    if ((*ai).first < (*bi).first) {
+      if ((*ai).first < (*ci)) {
         // Here is a stage that we have in the original, which is not
         // present in the secondary.
-        attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
+        attrib->_on_textures.insert(attrib->_on_textures.end(), *ai);
+        a_stages.insert((*ai).first);
         ++ai;
 
-      } else if ((*ci)._stage < (*ai)._stage) {
+      } else if ((*ci) < (*ai).first) {
         // Here is a stage that is turned off in the secondary, but
         // was not present in the original.
         ++ci;
 
-      } else { // (*ci)._stage == (*ai)._stage
+      } else { // (*ci) == (*ai).first
         // Here is a stage that is turned off in the secondary, and
         // was present in the original.
-        if ((*ai)._override > (*ci)._override) {
-          // But never mind, keep it anyway.
-          attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
-        }
-
         ++ai;
         ++ci;
       }
 
-    } else if ((*bi)._stage < (*ai)._stage) {
+    } else if ((*bi).first < (*ai).first) {
       // Here is a new stage we have in the secondary, that was not
       // present in the original.
-      attrib->_on_stages.insert(attrib->_on_stages.end(), *bi);
+      attrib->_on_textures.insert(attrib->_on_textures.end(), *bi);
+      b_stages.insert((*bi).first);
       ++bi;
 
-    } else {  // (*bi)._stage == (*ai)._stage
+    } else {  // (*bi).first == (*ai).first
       // Here is a stage we have in both.
-      if ((*ai)._override > (*bi)._override) {
-        attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
-      } else {
-        attrib->_on_stages.insert(attrib->_on_stages.end(), *bi);
-      }
+      attrib->_on_textures.insert(attrib->_on_textures.end(), *bi);
+      b_stages.insert((*bi).first);
       ++ai;
       ++bi;
     }
   }
 
-  while (ai != _on_stages.end() && bi != ta->_on_stages.end()) {
-    if ((*ai)._stage < (*bi)._stage) {
+  while (ai != _on_textures.end() && bi != ta->_on_textures.end()) {
+    if ((*ai).first < (*bi).first) {
       // Here is a stage that we have in the original, which is not
       // present in the secondary.
-      attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
+      attrib->_on_textures.insert(attrib->_on_textures.end(), *ai);
+      a_stages.insert((*ai).first);
       ++ai;
 
-    } else if ((*bi)._stage < (*ai)._stage) {
+    } else if ((*bi).first < (*ai).first) {
       // Here is a new stage we have in the secondary, that was not
       // present in the original.
-      attrib->_on_stages.insert(attrib->_on_stages.end(), *bi);
+      attrib->_on_textures.insert(attrib->_on_textures.end(), *bi);
+      b_stages.insert((*bi).first);
       ++bi;
 
     } else {
       // Here is a stage we have in both.
-      if ((*ai)._override > (*bi)._override) {
-        attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
-      } else {
-        attrib->_on_stages.insert(attrib->_on_stages.end(), *bi);
-      }
+      attrib->_on_textures.insert(attrib->_on_textures.end(), *bi);
+      b_stages.insert((*bi).first);
       ++ai;
       ++bi;
     }
   }
 
-  while (ai != _on_stages.end() && ci != ta->_off_stages.end()) {
-    if ((*ai)._stage < (*ci)._stage) {
+  while (ai != _on_textures.end() && ci != ta->_off_stages.end()) {
+    if ((*ai).first < (*ci)) {
       // Here is a stage that we have in the original, which is not
       // present in the secondary.
-      attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
+      attrib->_on_textures.insert(attrib->_on_textures.end(), *ai);
+      a_stages.insert((*ai).first);
       ++ai;
       
-    } else if ((*ci)._stage < (*ai)._stage) {
+    } else if ((*ci) < (*ai).first) {
       // Here is a stage that is turned off in the secondary, but
       // was not present in the original.
       ++ci;
       
-    } else { // (*ci)._stage == (*ai)._stage
+    } else { // (*ci) == (*ai).first
       // Here is a stage that is turned off in the secondary, and
       // was present in the original.
-      if ((*ai)._override > (*ci)._override) {
-        // But never mind, keep it anyway.
-        attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
-      }
       ++ai;
       ++ci;
     }
   }
 
-  while (ai != _on_stages.end()) {
-    attrib->_on_stages.insert(attrib->_on_stages.end(), *ai);
+  while (ai != _on_textures.end()) {
+    attrib->_on_textures.insert(attrib->_on_textures.end(), *ai);
+    a_stages.insert((*ai).first);
     ++ai;
   }
 
-  while (bi != ta->_on_stages.end()) {
-    attrib->_on_stages.insert(attrib->_on_stages.end(), *bi);
+  while (bi != ta->_on_textures.end()) {
+    attrib->_on_textures.insert(attrib->_on_textures.end(), *bi);
+    b_stages.insert((*bi).first);
     ++bi;
   }
 
+  // Now we need to build up the linear list.  We must put this in
+  // order so that the original stages are first, followed by the
+  // secondary stages.  If a texture stage is listed in both, it
+  // receives the secondary sort.
+
+  OnStages::const_iterator asi;
+  for (asi = _on_stages.begin(); asi != _on_stages.end(); ++asi) {
+    TextureStage *stage = (*asi)._stage;
+
+    if (a_stages.find(stage) != a_stages.end()) {
+      // This stage came from the original, and thus receives the
+      // original sort.
+      int implicit_sort = (*asi)._implicit_sort;
+      attrib->_on_stages.push_back(OnStageNode(stage, implicit_sort));
+    }
+  }
+
+  OnStages::const_iterator bsi;
+  for (bsi = ta->_on_stages.begin(); bsi != ta->_on_stages.end(); ++bsi) {
+    TextureStage *stage = (*bsi)._stage;
+
+    if (b_stages.find(stage) != b_stages.end()) {
+      // This stage was inherited from the secondary, and thus
+      // receives the secondary sort.
+      int implicit_sort = _next_implicit_sort + (*bsi)._implicit_sort;
+      attrib->_on_stages.push_back(OnStageNode(stage, implicit_sort));
+    }
+  }
+
   attrib->_next_implicit_sort = _next_implicit_sort + ta->_next_implicit_sort;
-  attrib->_sort_seq = UpdateSeq::old();
-  attrib->_filtered_seq = UpdateSeq::old();
 
   return return_new(attrib);
 }
@@ -750,24 +796,23 @@ write_datagram(BamWriter *manager, Datagram &dg) {
   // Write the off_stages information
   dg.add_bool(_off_all_stages);
   dg.add_uint16(get_num_off_stages());
-  Stages::const_iterator fi;
+  OffStages::const_iterator fi;
   for (fi = _off_stages.begin(); fi != _off_stages.end(); ++fi) {
-    TextureStage *stage = (*fi)._stage;
+    TextureStage *stage = (*fi);
     manager->write_pointer(dg, stage);
   }
 
   // Write the on_stages information
   dg.add_uint16(get_num_on_stages());
-  Stages::const_iterator si;
+  OnStages::const_iterator si;
   for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
     TextureStage *stage = (*si)._stage;
-    Texture *tex = (*si)._texture;
+    Texture *tex = get_on_texture(stage);
     nassertv(tex != (Texture *)NULL);
 
     manager->write_pointer(dg, stage);
     manager->write_pointer(dg, tex);
     dg.add_uint16((*si)._implicit_sort);
-    dg.add_int32((*si)._override);
   }
 }
 
@@ -782,36 +827,29 @@ int TextureAttrib::
 complete_pointers(TypedWritable **p_list, BamReader *manager) {
   int pi = RenderAttrib::complete_pointers(p_list, manager);
 
-  Stages::iterator ci;
+  OffStages::iterator ci;
   for (ci = _off_stages.begin(); ci != _off_stages.end(); ++ci) {
     TextureStage *ts = DCAST(TextureStage, p_list[pi++]);
-    *ci = StageNode(ts);
+    *ci = ts;
   }
 
-  size_t sni = 0;
-  while (sni < _on_stages.size()) {
-    // Filter the TextureStage through the TextureStagePool.
-    PT(TextureStage) ts = DCAST(TextureStage, p_list[pi++]);
-    ts = TextureStagePool::get_stage(ts);
-
-    // The Texture pointer filters itself through the TexturePool, so
-    // we don't have to do anything special here.
+  size_t sn = 0;
+  while (sn < _on_stages.size()) {
+    TextureStage *ts = DCAST(TextureStage, p_list[pi++]);
     Texture *tex = DCAST(Texture, p_list[pi++]);
     
     if (tex != (Texture *)NULL) {
-      StageNode &sn = _on_stages[sni];
-      sn._stage = ts;
-      sn._texture = tex;
-      ++sni;
+      _on_textures[ts] = tex;
+      _on_stages[sn]._stage = ts;
+      ++sn;
       
     } else {
       // If we couldn't load a texture pointer, turn off that
       // particular texture stage.
-      _off_stages.push_back(StageNode(ts));
-      _on_stages.erase(_on_stages.begin() + sni);
+      _off_stages.push_back(ts);
+      _on_stages.erase(_on_stages.begin() + sn);
     }
   }
-  _on_stages.sort();
   _sort_seq = UpdateSeq::old();
   _filtered_seq = UpdateSeq::old();
 
@@ -859,7 +897,7 @@ fillin(DatagramIterator &scan, BamReader *manager) {
   _off_stages.reserve(num_off_stages);
   for (i = 0; i < num_off_stages; i++) {
     manager->read_pointer(scan);
-    _off_stages.push_back(StageNode(NULL));
+    _off_stages.push_back(NULL);
   }
 
   // Read the _on_stages data.
@@ -879,14 +917,8 @@ fillin(DatagramIterator &scan, BamReader *manager) {
     } else {
       implicit_sort = (unsigned int)i;
     }
-    int override = 0;
-    if (manager->get_file_minor_ver() >= 23) {
-      override = scan.get_int32();
-    }
-
     _next_implicit_sort = max(_next_implicit_sort, implicit_sort + 1);
-    _on_stages.push_back(StageNode(NULL, _next_implicit_sort, override));
-    ++_next_implicit_sort;
+    _on_stages.push_back(OnStageNode(NULL, implicit_sort));
   }
 }
 
@@ -899,17 +931,25 @@ fillin(DatagramIterator &scan, BamReader *manager) {
 ////////////////////////////////////////////////////////////////////
 void TextureAttrib::
 sort_on_stages() {
+  // First, we have to build up the tc_index mapping.  We need a
+  // unique number for each different texcoord name for the various
+  // TextureStages.
+
+  // It's important that this assignment not be based on the whims of
+  // render order--it mustn't change arbitrarily--so we must first
+  // sort the on_stages list into pointer order for this purpose.
+  _on_ptr_stages = _on_stages;
+  sort(_on_ptr_stages.begin(), _on_ptr_stages.end(), CompareTextureStagePointer());
+
   typedef pmap<const InternalName *, int> UsedTexcoordIndex;
   UsedTexcoordIndex used_texcoord_index;
 
-  _render_stages.clear();
-  _render_ff_stages.clear();
+  typedef pmap<const TextureStage *, int> TexcoordMap;
+  TexcoordMap tc_map;
 
-  Stages::iterator si;
-  for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
-    StageNode &sn = (*si);
-    TextureStage *stage = sn._stage;
-    nassertv(stage != NULL);
+  OnStages::const_iterator si;
+  for (si = _on_ptr_stages.begin(); si != _on_ptr_stages.end(); ++si) {
+    TextureStage *stage = (*si)._stage;
     if (stage->is_fixed_function()) {
       const InternalName *name = stage->get_texcoord_name();
 
@@ -918,24 +958,32 @@ sort_on_stages() {
       // particular texcoord name; otherwise, it will return the same
       // index number it returned before.
       UsedTexcoordIndex::iterator ti = used_texcoord_index.insert(UsedTexcoordIndex::value_type(name, (int)used_texcoord_index.size())).first;
-      (*si)._ff_tc_index = (*ti).second;
+      int texcoord_index = (*ti).second;
 
-      _render_ff_stages.push_back(&sn);
-    } else {
-      (*si)._ff_tc_index = -1;
+      tc_map[stage] = texcoord_index;
     }
-
-    _render_stages.push_back(&sn);
   }
 
-  sort(_render_stages.begin(), _render_stages.end(), CompareTextureStageSort());
-  sort(_render_ff_stages.begin(), _render_ff_stages.end(), CompareTextureStageSort());
+  // Now we can sort the on_stages list into render order.
+  sort(_on_stages.begin(), _on_stages.end(), CompareTextureStageSort());
 
-  // We'd like to clear the _filtered map, in case the TextureStage
-  // priority values have changed as well, but we can't do that here:
-  // it's too dangerous.  Clearing _filtered might cause
-  // TextureAttribs to be deleted, and hence removed from the map that
-  // we might be in the middle of traversing!
+  _on_ff_stages.clear();
+  _ff_tc_index.clear();
+
+  for (si = _on_stages.begin(); si != _on_stages.end(); ++si) {
+    TextureStage *stage = (*si)._stage;
+    if (stage->is_fixed_function()) {
+      _on_ff_stages.push_back(*si);
+      int texcoord_index = tc_map[stage];
+      _ff_tc_index.push_back(texcoord_index);
+    }
+  }
+
+  // We'd like to clear the _filtered map, in case the priority orders
+  // have changed as well, but we can't do that here: too dangerous.
+  // Clearing _filtered might cause TextureAttribs to be deleted, and
+  // hence removed from the map that we might be in the middle of
+  // traversing!
 
   _sort_seq = TextureStage::get_sort_seq();
 }

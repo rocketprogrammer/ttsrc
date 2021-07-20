@@ -409,7 +409,7 @@ class DirectBoundingBox:
         return '%.2f %.2f %.2f' % (vec[0], vec[1], vec[2])
 
     def __repr__(self):
-        return (repr(self.__class__) +
+        return (`self.__class__` +
                 '\nNodePath:\t%s\n' % self.nodePath.getName() +
                 'Min:\t\t%s\n' % self.vecAsString(self.min) +
                 'Max:\t\t%s\n' % self.vecAsString(self.max) +
@@ -419,9 +419,7 @@ class DirectBoundingBox:
 
 
 class SelectionQueue(CollisionHandlerQueue):
-    def __init__(self, parentNP = None):
-        if parentNP is None:
-            parentNP = render
+    def __init__(self, parentNP = render):
         # Initialize the superclass
         CollisionHandlerQueue.__init__(self)
         # Current index and entry in collision queue
@@ -579,9 +577,7 @@ class SelectionQueue(CollisionHandlerQueue):
         return self.getCurrentEntry()
 
 class SelectionRay(SelectionQueue):
-    def __init__(self, parentNP = None):
-        if parentNP is None:
-            parentNP = render
+    def __init__(self, parentNP = render):
         # Initialize the superclass
         SelectionQueue.__init__(self, parentNP)
         self.addCollider(CollisionRay())
@@ -610,27 +606,21 @@ class SelectionRay(SelectionQueue):
         self.sortEntries()
 
     def pickBitMask(self, bitMask = BitMask32.allOff(),
-                    targetNodePath = None,
+                    targetNodePath = render,
                     skipFlags = SKIP_ALL):
-        if parentNodePath is None:
-            parentNodePath = render
         self.collideWithBitMask(bitMask)
         self.pick(targetNodePath)
         # Determine collision entry
         return self.findCollisionEntry(skipFlags)
 
-    def pickGeom(self, targetNodePath = None, skipFlags = SKIP_ALL,
+    def pickGeom(self, targetNodePath = render, skipFlags = SKIP_ALL,
                  xy = None):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithGeom()
         self.pick(targetNodePath, xy = xy)
         # Determine collision entry
         return self.findCollisionEntry(skipFlags)
 
-    def pickWidget(self, targetNodePath = None, skipFlags = SKIP_NONE):
-        if targetNodePath is None:
-            targetNodePath = render
+    def pickWidget(self, targetNodePath = render, skipFlags = SKIP_NONE):
         self.collideWithWidget()
         self.pick(targetNodePath)
         # Determine collision entry
@@ -643,22 +633,18 @@ class SelectionRay(SelectionQueue):
         self.ct.traverse(targetNodePath)
         self.sortEntries()
 
-    def pickGeom3D(self, targetNodePath = None,
+    def pickGeom3D(self, targetNodePath = render,
                    origin = Point3(0), dir = Vec3(0, 0, -1),
                    skipFlags = SKIP_HIDDEN | SKIP_CAMERA):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithGeom()
         self.pick3D(targetNodePath, origin, dir)
         # Determine collision entry
         return self.findCollisionEntry(skipFlags)
 
     def pickBitMask3D(self, bitMask = BitMask32.allOff(),
-                      targetNodePath = None,
+                      targetNodePath = render,
                       origin = Point3(0), dir = Vec3(0, 0, -1),
                       skipFlags = SKIP_ALL):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithBitMask(bitMask)
         self.pick3D(targetNodePath, origin, dir)
         # Determine collision entry
@@ -668,9 +654,7 @@ class SelectionRay(SelectionQueue):
 class SelectionSegment(SelectionQueue):
     # Like a selection ray but with two endpoints instead of an endpoint
     # and a direction
-    def __init__(self, parentNP = None, numSegments = 1):
-        if parentNP is None:
-            parentNP = render
+    def __init__(self, parentNP = render, numSegments = 1):
         # Initialize the superclass
         SelectionQueue.__init__(self, parentNP)
         self.colliders = []
@@ -685,10 +669,8 @@ class SelectionSegment(SelectionQueue):
         self.collisionNode.addSolid(collider)
         self.numColliders += 1
 
-    def pickGeom(self, targetNodePath = None, endPointList = [],
+    def pickGeom(self, targetNodePath = render, endPointList = [],
                  skipFlags = SKIP_HIDDEN | SKIP_CAMERA):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithGeom()
         for i in range(min(len(endPointList), self.numColliders)):
             pointA, pointB = endPointList[i]
@@ -700,10 +682,8 @@ class SelectionSegment(SelectionQueue):
         return self.findCollisionEntry(skipFlags)
 
     def pickBitMask(self, bitMask = BitMask32.allOff(),
-                    targetNodePath = None, endPointList = [],
+                    targetNodePath = render, endPointList = [],
                  skipFlags = SKIP_HIDDEN | SKIP_CAMERA):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithBitMask(bitMask)
         for i in range(min(len(endPointList), self.numColliders)):
             pointA, pointB = endPointList[i]
@@ -717,9 +697,7 @@ class SelectionSegment(SelectionQueue):
 
 class SelectionSphere(SelectionQueue):
     # Wrapper around collision sphere
-    def __init__(self, parentNP = None, numSpheres = 1):
-        if parentNP is None:
-            parentNP = render
+    def __init__(self, parentNP = render, numSpheres = 1):
         # Initialize the superclass
         SelectionQueue.__init__(self, parentNP)
         self.colliders = []
@@ -768,18 +746,14 @@ class SelectionSphere(SelectionQueue):
         self.sortEntries()
         return self.findCollisionEntry(skipFlags)
 
-    def pickGeom(self, targetNodePath = None,
+    def pickGeom(self, targetNodePath = render,
                  skipFlags = SKIP_HIDDEN | SKIP_CAMERA):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithGeom()
         return self.pick(targetNodePath, skipFlags)
 
     def pickBitMask(self, bitMask = BitMask32.allOff(),
-                    targetNodePath = None,
+                    targetNodePath = render,
                     skipFlags = SKIP_HIDDEN | SKIP_CAMERA):
-        if targetNodePath is None:
-            targetNodePath = render
         self.collideWithBitMask(bitMask)
         return self.pick(targetNodePath, skipFlags)
 

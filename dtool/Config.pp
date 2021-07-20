@@ -115,7 +115,7 @@
 // but you must put /usr/local/panda/lib (or $INSTALL_DIR/lib) on
 // your PYTHONPATH.
 
-// #define INSTALL_LIB_DIR /usr/lib/python2.6/site-packages
+// #define INSTALL_LIB_DIR /usr/lib/python2.2/site-packages
 
 
 // The character used to separate components of an OS-specific
@@ -250,17 +250,6 @@
 // remaining variables are of general interest to everyone.
 
 
-// You may define this to build or develop the plugin.
-//#define HAVE_P3D_PLUGIN 1
-
-// You may define both of these to build or develop the Panda3D
-// rtdist, the environment packaged up for distribution with the
-// plugin.
-//#define PANDA_PACKAGE_VERSION local_dev
-//#define PANDA_PACKAGE_HOST_URL http://some.url/
-#defer HAVE_P3D_RTDIST $[PANDA_PACKAGE_HOST_URL]
-
-
 
 // NOTE: In the following, to indicate "yes" to a yes/no question,
 // define the variable to be a nonempty string.  To indicate "no",
@@ -314,12 +303,9 @@
 #define INTERROGATE interrogate
 #define INTERROGATE_MODULE interrogate_module
 
-// What is the name of the C# compiler binary?
-#define CSHARP csc
-
 // Is Python installed, and should Python interfaces be generated?  If
 // Python is installed, which directory is it in?
-#define PYTHON_IPATH /usr/include/python2.6
+#define PYTHON_IPATH /usr/include/python2.4
 #define PYTHON_LPATH
 #define PYTHON_FPATH
 #define PYTHON_COMMAND python
@@ -365,7 +351,7 @@
 // overhead to have this option available even if it is unused, it is
 // by default enabled only in a development build.  This has no effect
 // on DirectX rendering.
-#defer SUPPORT_IMMEDIATE_MODE $[<= $[OPTIMIZE], 3]
+#define SUPPORT_IMMEDIATE_MODE $[<= $[OPTIMIZE], 3]
 
 // Do you want to compile in support for pipelining?  This enables
 // setting and accessing multiple different copies of frame-specific
@@ -461,6 +447,8 @@
 #define OPENSSL_LPATH /usr/local/ssl/lib
 #define OPENSSL_LIBS ssl crypto
 #defer HAVE_OPENSSL $[libtest $[OPENSSL_LPATH],$[OPENSSL_LIBS]]
+// Redefine this to empty if your version of OpenSSL is prior to 0.9.7.
+#define OPENSSL_097 1
 
 // Define this true to include the OpenSSL code to report verbose
 // error messages when they occur.
@@ -471,14 +459,6 @@
 #define JPEG_LPATH
 #define JPEG_LIBS jpeg
 #defer HAVE_JPEG $[libtest $[JPEG_LPATH],$[JPEG_LIBS]]
-
-// Some versions of libjpeg did not provide jpegint.h.  Redefine this
-// to empty if you lack this header file.
-#define PHAVE_JPEGINT_H 1
-
-// Do you want to compile video-for-linux?  If you have an older Linux
-// system with incompatible headers, define this to empty string.
-#defer HAVE_VIDEO4LINUX $[IS_LINUX]
 
 // Is libpng installed, and where?
 #define PNG_IPATH
@@ -596,19 +576,27 @@
 #define ZLIB_LIBS z
 #defer HAVE_ZLIB $[libtest $[ZLIB_LPATH],$[ZLIB_LIBS]]
 
-// Is OpenGL installed, and where?
+// Is OpenGL installed, and where?  This should include libGL as well
+// as libGLU, if they are in different places.
 #defer GL_IPATH /usr/include
 #defer GL_LPATH
 #defer GL_LIBS
+#defer GLU_LIBS
 #if $[WINDOWS_PLATFORM]
   #define GL_LIBS opengl32.lib
+  #define GLU_LIBS glu32.lib
 #elif $[OSX_PLATFORM]
   #defer GL_FRAMEWORK OpenGL
 #else
   #defer GL_LPATH /usr/X11R6/lib
   #defer GL_LIBS GL
+  #defer GLU_LIBS GLU
 #endif
 #defer HAVE_GL $[libtest $[GL_LPATH],$[GL_LIBS]]
+
+// GLU is an auxiliary library that is usually provided with OpenGL,
+// but is sometimes missing (e.g. the default FC5 installation).
+#defer HAVE_GLU $[libtest $[GL_LPATH],$[GLU_LIBS]]
 
 // If you are having trouble linking in OpenGL extension functions at
 // runtime for some reason, you can set this variable.  This defines
@@ -700,7 +688,7 @@
 #define X11_IPATH
 #define X11_LPATH /usr/X11R6/lib
 #define X11_LIBS X11
-#defer HAVE_X11 $[and $[UNIX_PLATFORM],$[libtest $[X11_LPATH],$[X11_LIBS]]]
+#defer HAVE_X11 $[and $[IS_LINUX],$[libtest $[X11_LPATH],$[X11_LIBS]]]
 
 // This defines if we have XF86DGA installed. This enables smooth
 // FPS-style mouse in x11display, when mouse mode M_relative is used.
@@ -709,19 +697,12 @@
 #define XF86DGA_LIBS Xxf86dga
 #defer HAVE_XF86DGA $[libtest $[XF86DGA_LPATH],$[XF86DGA_LIBS]]
 
-// This defines if we have XRANDR installed. This
+// This defines if we have XF86DGA installed. This
 // enables resolution switching in x11display.
 #define XRANDR_IPATH /usr/include/X11/extensions
 #define XRANDR_LPATH /usr/lib
 #define XRANDR_LIBS Xrandr
 #defer HAVE_XRANDR $[libtest $[XRANDR_LPATH],$[XRANDR_LIBS]]
-
-// This defines if we have XCURSOR installed. This
-// enables custom cursor support in x11display.
-#define XCURSOR_IPATH /usr/include/X11/extensions
-#define XCURSOR_LPATH /usr/lib
-#define XCURSOR_LIBS Xcursor
-#defer HAVE_XCURSOR $[libtest $[XCURSOR_LPATH],$[XCURSOR_LIBS]]
 
 // How about GLX?
 #define GLX_IPATH
@@ -753,9 +734,6 @@
 #define DX9_LPATH
 #define DX9_LIBS d3d9.lib d3dx9.lib dxerr9.lib
 #defer HAVE_DX9 $[libtest $[DX9_LPATH],$[DX9_LIBS]]
-
-// Set this nonempty to use <dxerr.h> instead of <dxerr9.h>.
-#define USE_GENERIC_DXERR_LIBRARY
 
 // Is OpenCV installed, and where?
 #define OPENCV_IPATH /usr/local/include/opencv
@@ -932,10 +910,16 @@
 #defer HAVE_OPENAL $[or $[OPENAL_FRAMEWORK],$[libtest $[OPENAL_LPATH],$[OPENAL_LIBS]]]
 
 // Info for the NVIDIA PhysX SDK
-#define PHYSX_IPATH /usr/include/PhysX/v2.8.3/SDKs/Cooking/include /usr/include/PhysX/v2.8.3/SDKs/Foundation/include /usr/include/PhysX/v2.8.3/SDKs/NxCharacter/include /usr/include/PhysX/v2.8.3/SDKs/Physics/include /usr/include/PhysX/v2.8.3/SDKs/PhysXLoader/include
-#define PHYSX_LPATH /usr/lib/PhysX/v2.8.3
+#define PHYSX_IPATH
+#define PHYSX_LPATH
 #define PHYSX_LIBS $[if $[WINDOWS_PLATFORM],PhysXLoader.lib NxCharacter.lib NxCooking.lib NxExtensions.lib,PhysXLoader NxCharacter NxCooking]
 #defer HAVE_PHYSX $[libtest $[PHYSX_LPATH],$[PHYSX_LIBS]]
+
+// Info for TinyXML library
+#define TINYXML_IPATH
+#define TINYXML_LPATH
+#define TINYXML_LIBS $[if $[WINDOWS_PLATFORM],tinyxml.lib,tinyxml]
+#defer HAVE_TINYXML $[libtest $[TINYXML_LPATH],$[TINYXML_LIBS]]
 
 // Info for http://www.sourceforge.net/projects/chromium
 #define CHROMIUM_IPATH /usr/include/chromium/include

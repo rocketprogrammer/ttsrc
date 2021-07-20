@@ -101,9 +101,9 @@ P3DInstance(P3D_request_ready_func *func,
             int argc, const char *argv[], void *user_data) :
   _func(func)
 {
-  _dom_object = NULL;
-  _main_object = new P3DMainObject;
-  _main_object->set_instance(this);
+  _browser_script_object = NULL;
+  _panda_script_object = new P3DMainObject;
+  _panda_script_object->set_instance(this);
   _user_data = user_data;
   _request_pending = false;
   _total_time_reports = 0;
@@ -151,10 +151,8 @@ P3DInstance(P3D_request_ready_func *func,
   _instance_window_attached = false;
   _stuff_to_download = false;
   _download_package_index = 0;
-  _prev_downloaded = 0;
   _total_download_size = 0;
   _total_downloaded = 0;
-  _packages_specified = false;
   _download_started = false;
   _download_complete = false;
   _instance_started = false;
@@ -180,16 +178,16 @@ P3DInstance(P3D_request_ready_func *func,
 #endif  // __APPLE__
 
   // Set some initial properties.
-  _main_object->set_float_property("instanceDownloadProgress", 0.0);
-  _main_object->set_float_property("downloadProgress", 0.0);
-  _main_object->set_undefined_property("downloadElapsedSeconds");
-  _main_object->set_undefined_property("downloadElapsedFormatted");
-  _main_object->set_undefined_property("downloadRemainingSeconds");
-  _main_object->set_undefined_property("downloadRemainingFormatted");
-  _main_object->set_string_property("downloadPackageName", "");
-  _main_object->set_string_property("downloadPackageDisplayName", "");
-  _main_object->set_bool_property("downloadComplete", false);
-  _main_object->set_string_property("status", "initial");
+  _panda_script_object->set_float_property("instanceDownloadProgress", 0.0);
+  _panda_script_object->set_float_property("downloadProgress", 0.0);
+  _panda_script_object->set_undefined_property("downloadElapsedSeconds");
+  _panda_script_object->set_undefined_property("downloadElapsedFormatted");
+  _panda_script_object->set_undefined_property("downloadRemainingSeconds");
+  _panda_script_object->set_undefined_property("downloadRemainingFormatted");
+  _panda_script_object->set_string_property("downloadPackageName", "");
+  _panda_script_object->set_string_property("downloadPackageDisplayName", "");
+  _panda_script_object->set_bool_property("downloadComplete", false);
+  _panda_script_object->set_string_property("status", "initial");
 
   ostringstream stream;
   stream << inst_mgr->get_plugin_major_version() << "."
@@ -199,8 +197,8 @@ P3DInstance(P3D_request_ready_func *func,
     stream << "c";
   }
   
-  // The plugin version as a single number, with three digits reserved
-  // for each component.
+// The plugin version as a single number, with three digits reserved
+// for each component.
   int numeric_version = 
     inst_mgr->get_plugin_major_version() * 1000000 + 
     inst_mgr->get_plugin_minor_version() * 1000 + 
@@ -210,22 +208,17 @@ P3DInstance(P3D_request_ready_func *func,
     --numeric_version;
   }
 
-  _main_object->set_string_property("pluginVersionString", stream.str());
-  _main_object->set_int_property("pluginMajorVersion", inst_mgr->get_plugin_major_version());
-  _main_object->set_int_property("pluginMinorVersion", inst_mgr->get_plugin_minor_version());
-  _main_object->set_int_property("pluginSequenceVersion", inst_mgr->get_plugin_sequence_version());
-  _main_object->set_bool_property("pluginOfficialVersion", inst_mgr->get_plugin_official_version());
-  _main_object->set_int_property("pluginNumericVersion", numeric_version);
-  _main_object->set_string_property("pluginDistributor", inst_mgr->get_plugin_distributor());
-  _main_object->set_string_property("coreapiHostUrl", inst_mgr->get_coreapi_host_url());
+  _panda_script_object->set_string_property("pluginVersionString", stream.str());
+  _panda_script_object->set_int_property("pluginMajorVersion", inst_mgr->get_plugin_major_version());
+  _panda_script_object->set_int_property("pluginMinorVersion", inst_mgr->get_plugin_minor_version());
+  _panda_script_object->set_int_property("pluginSequenceVersion", inst_mgr->get_plugin_sequence_version());
+  _panda_script_object->set_bool_property("pluginOfficialVersion", inst_mgr->get_plugin_official_version());
+  _panda_script_object->set_int_property("pluginNumericVersion", numeric_version);
+  _panda_script_object->set_string_property("pluginDistributor", inst_mgr->get_plugin_distributor());
+  _panda_script_object->set_string_property("coreapiHostUrl", inst_mgr->get_coreapi_host_url());
   time_t timestamp = inst_mgr->get_coreapi_timestamp();
-  _main_object->set_int_property("coreapiTimestamp", (int)timestamp);
-  const char *timestamp_string = ctime(&timestamp);
-  if (timestamp_string == NULL) {
-    timestamp_string = "";
-  }
-  _main_object->set_string_property("coreapiTimestampString", timestamp_string);
-  _main_object->set_string_property("coreapiVersionString", inst_mgr->get_coreapi_set_ver());
+  _panda_script_object->set_int_property("coreapiTimestamp", (int)timestamp);
+  _panda_script_object->set_string_property("coreapiTimestampString", ctime(&timestamp));
 
 
   // We'll start off with the "download" image displayed in the splash
@@ -238,7 +231,7 @@ P3DInstance(P3D_request_ready_func *func,
   // put up a splash image (for instance, the above IT_download image)
   // while we download the real contents.
   P3DHost *host = inst_mgr->get_host(inst_mgr->get_host_url());
-  _image_package = host->get_package("images", "", "");
+  _image_package = host->get_package("images", "");
   if (_image_package != NULL) {
     _image_package->add_instance(this);
   }
@@ -266,17 +259,17 @@ P3DInstance::
   assert(_session == NULL);
   cleanup();
 
-  if (_dom_object != NULL) {
-    P3D_OBJECT_DECREF(_dom_object);
-    _dom_object = NULL;
+  if (_browser_script_object != NULL) {
+    P3D_OBJECT_DECREF(_browser_script_object);
+    _browser_script_object = NULL;
   }
 
-  if (_main_object != NULL) {
+  if (_panda_script_object != NULL) {
     nout << "panda_script_object ref = "
-         << _main_object->_ref_count << "\n";
-    _main_object->set_instance(NULL);
-    P3D_OBJECT_DECREF(_main_object);
-    _main_object = NULL;
+         << _panda_script_object->_ref_count << "\n";
+    _panda_script_object->set_instance(NULL);
+    P3D_OBJECT_DECREF(_panda_script_object);
+    _panda_script_object = NULL;
   }
 
   Downloads::iterator di;
@@ -438,7 +431,7 @@ set_p3d_url(const string &p3d_url) {
     download->set_total_expected_data(_fparams.lookup_token_int("p3d_size"));
   }
 
-  _main_object->set_string_property("status", "downloading_instance");
+  _panda_script_object->set_string_property("status", "downloading_instance");
   start_download(download);
 }
 
@@ -480,7 +473,7 @@ make_p3d_stream(const string &p3d_url) {
     download->set_total_expected_data(_fparams.lookup_token_int("p3d_size"));
   }
 
-  _main_object->set_string_property("status", "downloading_instance");
+  _panda_script_object->set_string_property("status", "downloading_instance");
   return start_download(download, false);
 }
 
@@ -505,6 +498,10 @@ set_p3d_filename(const string &p3d_filename, const int &p3d_offset) {
 ////////////////////////////////////////////////////////////////////
 void P3DInstance::
 set_wparams(const P3DWindowParams &wparams) {
+  if (is_failed()) {
+    return;
+  }
+
   bool prev_got_wparams = _got_wparams;
   _got_wparams = true;
   _wparams = wparams;
@@ -527,15 +524,7 @@ set_wparams(const P3DWindowParams &wparams) {
     } else {
       make_splash_window();
     }
-  }
-  
-  // It doesn't make much sense to go further than this point
-  // if the instance is already in the failed state.
-  if (is_failed()) {
-    return;
-  }
-  
-  if (_wparams.get_window_type() != P3D_WT_hidden) {
+    
 #ifdef __APPLE__
     // On Mac, we have to communicate the results of the rendering
     // back via shared memory, instead of directly parenting windows
@@ -588,7 +577,7 @@ set_wparams(const P3DWindowParams &wparams) {
 P3D_object *P3DInstance::
 get_panda_script_object() const {
   nout << "get_panda_script_object\n";
-  return _main_object;
+  return _panda_script_object;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -603,11 +592,11 @@ get_panda_script_object() const {
 void P3DInstance::
 set_browser_script_object(P3D_object *browser_script_object) {
   nout << "set_browser_script_object\n";
-  if (browser_script_object != _dom_object) {
-    P3D_OBJECT_XDECREF(_dom_object);
-    _dom_object = browser_script_object;
-    if (_dom_object != NULL) {
-      P3D_OBJECT_INCREF(_dom_object);
+  if (browser_script_object != _browser_script_object) {
+    P3D_OBJECT_XDECREF(_browser_script_object);
+    _browser_script_object = browser_script_object;
+    if (_browser_script_object != NULL) {
+      P3D_OBJECT_INCREF(_browser_script_object);
     }
 
     if (_session != NULL) {
@@ -621,8 +610,8 @@ set_browser_script_object(P3D_object *browser_script_object) {
   _origin_protocol.clear();
   _origin_hostname.clear();
   _origin_port.clear();
-  if (_dom_object != NULL) {
-    P3D_object *location = P3D_OBJECT_GET_PROPERTY(_dom_object, "location");
+  if (_browser_script_object != NULL) {
+    P3D_object *location = P3D_OBJECT_GET_PROPERTY(_browser_script_object, "location");
     if (location != NULL) {
       P3D_object *protocol = P3D_OBJECT_GET_PROPERTY(location, "protocol");
       if (protocol != NULL) {
@@ -721,8 +710,8 @@ get_request() {
         string message = request->_request._notify._message;
         string expression = _fparams.lookup_token(message);
         nout << "notify: " << message << " " << expression << "\n";
-        if (!expression.empty() && _dom_object != NULL) {
-          P3D_object *result = P3D_OBJECT_EVAL(_dom_object, expression.c_str());
+        if (!expression.empty() && _browser_script_object != NULL) {
+          P3D_object *result = P3D_OBJECT_EVAL(_browser_script_object, expression.c_str());
           P3D_OBJECT_XDECREF(result);
         }
       }
@@ -732,14 +721,14 @@ get_request() {
       {
         // We also send an implicit message when Python requests itself
         // to shutdown.
-        _main_object->set_pyobj(NULL);
-        _main_object->set_string_property("status", "stopped");
+        _panda_script_object->set_pyobj(NULL);
+        _panda_script_object->set_string_property("status", "stopped");
         
         string message = "onpythonstop";
         string expression = _fparams.lookup_token(message);
         nout << "notify: " << message << " " << expression << "\n";
-        if (!expression.empty() && _dom_object != NULL) {
-          P3D_object *result = P3D_OBJECT_EVAL(_dom_object, expression.c_str());
+        if (!expression.empty() && _browser_script_object != NULL) {
+          P3D_object *result = P3D_OBJECT_EVAL(_browser_script_object, expression.c_str());
           P3D_OBJECT_XDECREF(result);
         }
       }
@@ -768,7 +757,7 @@ get_request() {
         P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
         P3DHost *host = inst_mgr->get_host(host_url);
         if (package_name != NULL) {
-          P3DPackage *package = host->get_package(package_name, package_version, "");
+          P3DPackage *package = host->get_package(package_name, package_version);
           host->forget_package(package);
         } else {
           // If a NULL package name is given, forget the whole host.
@@ -1031,17 +1020,9 @@ get_log_pathname() const {
 //               instance.  The instance will share responsibility for
 //               downloading the package with any of the other
 //               instances that use the same package.
-//
-//               The seq value should be the expected minimum
-//               package_seq value for the indicated package.  If the
-//               given seq value is higher than the package_seq value
-//               in the contents.xml file cached for the host, it is a
-//               sign that the contents.xml file is out of date and
-//               needs to be redownloaded.
 ////////////////////////////////////////////////////////////////////
 void P3DInstance::
-add_package(const string &name, const string &version, const string &seq,
-            P3DHost *host) {
+add_package(const string &name, const string &version, P3DHost *host) {
   string alt_host = _fparams.lookup_token("alt_host");
 
   // Look up in the p3d_info.xml file to see if this p3d file has
@@ -1061,7 +1042,7 @@ add_package(const string &name, const string &version, const string &seq,
     get_host_info(host);
   }
   
-  P3DPackage *package = host->get_package(name, version, seq, alt_host);
+  P3DPackage *package = host->get_package(name, version, alt_host);
   add_package(package);
 }
     
@@ -1133,11 +1114,6 @@ remove_package(P3DPackage *package) {
 ////////////////////////////////////////////////////////////////////
 bool P3DInstance::
 get_packages_info_ready() const {
-  if (!_packages_specified) {
-    // We haven't even specified the full set of required packages yet.
-    return false;
-  }
-
   Packages::const_iterator pi;
   for (pi = _packages.begin(); pi != _packages.end(); ++pi) {
     if (!(*pi)->get_info_ready()) {
@@ -1159,11 +1135,6 @@ get_packages_info_ready() const {
 ////////////////////////////////////////////////////////////////////
 bool P3DInstance::
 get_packages_ready() const {
-  if (!_packages_specified) {
-    // We haven't even specified the full set of required packages yet.
-    return false;
-  }
-
   Packages::const_iterator pi;
   for (pi = _packages.begin(); pi != _packages.end(); ++pi) {
     if (!(*pi)->get_ready()) {
@@ -1354,7 +1325,6 @@ make_xml() {
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
   xinstance->SetAttribute("root_dir", inst_mgr->get_root_dir());
   xinstance->SetAttribute("log_directory", inst_mgr->get_log_directory());
-  xinstance->SetAttribute("verify_contents", (int)inst_mgr->get_verify_contents());
 
   if (!inst_mgr->get_super_mirror().empty()) {
     xinstance->SetAttribute("super_mirror", inst_mgr->get_super_mirror());
@@ -1373,10 +1343,6 @@ make_xml() {
     TiXmlElement *xpackage = (*pi)->make_xml();
     xinstance->LinkEndChild(xpackage);
   }
-
-  TiXmlElement *xmain = _session->p3dobj_to_xml(_main_object);
-  xmain->SetValue("main");
-  xinstance->LinkEndChild(xmain);
 
   return xinstance;
 }
@@ -1412,7 +1378,6 @@ void P3DInstance::
 splash_button_clicked_main_thread() {
   if (is_failed()) {
     // Can't click the button after we've failed.
-    nout << "Ignoring click for failed instance\n";
     return;
   }
 
@@ -1420,8 +1385,6 @@ splash_button_clicked_main_thread() {
     auth_button_clicked();
   } else if (_session == NULL) {
     play_button_clicked();
-  } else {
-    nout << "Ignoring click for already-started instance\n";
   }
 }
 
@@ -1517,17 +1480,8 @@ auth_finished_main_thread() {
 //               normally called by JavaScript, via
 //               P3DMainObject::call_uninstall().
 ////////////////////////////////////////////////////////////////////
-bool P3DInstance::
+void P3DInstance::
 uninstall_packages() {
-  if (_packages.empty()) {
-    // If we have no packages (for instance, because we're untrusted),
-    // we can't uninstall anything.
-    nout << "Uninstall failed: no packages.\n";
-    return false;
-  }
-
-  nout << "Uninstalling " << _packages.size() << " packages\n";
-
   Packages::const_iterator pi;
   for (pi = _packages.begin(); pi != _packages.end(); ++pi) {
     P3DPackage *package = (*pi);
@@ -1538,18 +1492,13 @@ uninstall_packages() {
   }
 
   // Also clean up the start directory, if we have a custom start dir.
-  // We won't do this if verify_contents is 'none'.
-  P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
-  if (inst_mgr->get_verify_contents() != P3D_VC_never) {
-    string start_dir_suffix = get_start_dir_suffix();
-    if (!start_dir_suffix.empty()) {
-      string start_dir = inst_mgr->get_root_dir() + "/start" + start_dir_suffix;
-      nout << "Cleaning up start directory " << start_dir << "\n";
-      inst_mgr->delete_directory_recursively(start_dir);
-    }
+  string start_dir_suffix = get_start_dir_suffix();
+  if (!start_dir_suffix.empty()) {
+    P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
+    string start_dir = inst_mgr->get_root_dir() + "/start" + start_dir_suffix;
+    nout << "Cleaning up start directory " << start_dir << "\n";
+    inst_mgr->delete_directory_recursively(start_dir);
   }
-
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1562,15 +1511,8 @@ uninstall_packages() {
 //               is normally called by JavaScript, via
 //               P3DMainObject::call_uninstall().
 ////////////////////////////////////////////////////////////////////
-bool P3DInstance::
+void P3DInstance::
 uninstall_host() {
-  if (_packages.empty()) {
-    // If we have no packages (for instance, because we're untrusted),
-    // we can't uninstall anything.
-    nout << "Uninstall failed: no packages.\n";
-    return false;
-  }
-
   uninstall_packages();
 
   // Collect the set of hosts referenced by this instance.
@@ -1583,7 +1525,6 @@ uninstall_host() {
       hosts.insert(package->get_host());
     }
   }
-  nout << "Uninstalling " << hosts.size() << " hosts\n";
 
   // Uninstall all of them.
   set<P3DHost *>::iterator hi;
@@ -1591,8 +1532,6 @@ uninstall_host() {
     P3DHost *host = (*hi);
     host->uninstall();
   }
-
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1618,7 +1557,7 @@ priv_set_p3d_filename(const string &p3d_filename, const int &p3d_offset) {
   }
   _got_fparams = true;
 
-  _main_object->set_float_property("instanceDownloadProgress", 1.0);
+  _panda_script_object->set_float_property("instanceDownloadProgress", 1.0);
 
   // Generate a special notification: onpluginload, indicating the
   // plugin has read its parameters and is ready to be queried (even
@@ -1884,7 +1823,7 @@ check_p3d_signature() {
     // We have to go download this package.
     P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
     P3DHost *host = inst_mgr->get_host(inst_mgr->get_host_url());
-    _certlist_package = host->get_package("certlist", "", "");
+    _certlist_package = host->get_package("certlist", "");
     if (_certlist_package != NULL) {
       _certlist_package->add_instance(this);
     }
@@ -1925,7 +1864,7 @@ mark_p3d_untrusted() {
     // We have to go download this package.
     P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
     P3DHost *host = inst_mgr->get_host(inst_mgr->get_host_url());
-    _p3dcert_package = host->get_package("p3dcert", "", "");
+    _p3dcert_package = host->get_package("p3dcert", "");
     if (_p3dcert_package != NULL) {
       _p3dcert_package->add_instance(this);
     }
@@ -1949,7 +1888,7 @@ mark_p3d_untrusted() {
   // button now.
 
   // Notify JS that we've got no trust of the p3d file.
-  _main_object->set_bool_property("trusted", false);
+  _panda_script_object->set_bool_property("trusted", false);
   send_notify("onunauth");
   set_background_image(IT_unauth);
   set_button_image(IT_auth_ready);
@@ -2000,7 +1939,7 @@ mark_p3d_trusted() {
   _session_key = strm.str();
 
   // Notify JS that we've accepted the trust of the p3d file.
-  _main_object->set_bool_property("trusted", true);
+  _panda_script_object->set_bool_property("trusted", true);
   send_notify("onauth");
 
   // Now that we're all set up, start downloading the required
@@ -2135,8 +2074,6 @@ scan_app_desc_file(TiXmlDocument *doc) {
 ////////////////////////////////////////////////////////////////////
 void P3DInstance::
 add_packages() {
-  assert(!_packages_specified);
-
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
 
   TiXmlElement *xrequires = _xpackage->FirstChildElement("requires");
@@ -2148,20 +2085,12 @@ add_packages() {
       if (version == NULL) {
         version = "";
       }
-      const char *seq = xrequires->Attribute("seq");
-      if (seq == NULL) {
-        seq = "";
-      }
       P3DHost *host = inst_mgr->get_host(host_url);
-      add_package(name, version, seq, host);
+      add_package(name, version, host);
     }
 
     xrequires = xrequires->NextSiblingElement("requires");
   }
-
-  _packages_specified = true;
-
-  consider_start_download();
 }
 
 
@@ -2279,8 +2208,8 @@ send_browser_script_object() {
   TiXmlElement *xcommand = new TiXmlElement("command");
   xcommand->SetAttribute("cmd", "pyobj");
   xcommand->SetAttribute("op", "set_browser_script_object");
-  if (_dom_object != NULL) {
-    xcommand->LinkEndChild(_session->p3dobj_to_xml(_dom_object));
+  if (_browser_script_object != NULL) {
+    xcommand->LinkEndChild(_session->p3dobj_to_xml(_browser_script_object));
   }
   
   doc->LinkEndChild(xcommand);
@@ -2406,42 +2335,38 @@ handle_notify_request(const string &message) {
     // Once Python is up and running, we can get the actual main
     // object from the Python side, and merge it with our own.
 
-    TiXmlDocument *doc = new TiXmlDocument;
-    TiXmlElement *xcommand = new TiXmlElement("command");
-    xcommand->SetAttribute("cmd", "pyobj");
-    xcommand->SetAttribute("op", "get_panda_script_object");
-    doc->LinkEndChild(xcommand);
-    TiXmlDocument *response = _session->command_and_response(doc);
-
-    P3D_object *result = NULL;
-    if (response != NULL) {
-      TiXmlElement *xresponse = response->FirstChildElement("response");
-      if (xresponse != NULL) {
-        TiXmlElement *xvalue = xresponse->FirstChildElement("value");
-        if (xvalue != NULL) {
-          result = _session->xml_to_p3dobj(xvalue);
+    // But only if this web page is allowed to call our scripting
+    // functions.
+    if (_matches_script_origin) {
+      TiXmlDocument *doc = new TiXmlDocument;
+      TiXmlElement *xcommand = new TiXmlElement("command");
+      xcommand->SetAttribute("cmd", "pyobj");
+      xcommand->SetAttribute("op", "get_panda_script_object");
+      doc->LinkEndChild(xcommand);
+      TiXmlDocument *response = _session->command_and_response(doc);
+      
+      P3D_object *result = NULL;
+      if (response != NULL) {
+        TiXmlElement *xresponse = response->FirstChildElement("response");
+        if (xresponse != NULL) {
+          TiXmlElement *xvalue = xresponse->FirstChildElement("value");
+          if (xvalue != NULL) {
+            result = _session->xml_to_p3dobj(xvalue);
+          }
         }
+        delete response;
       }
-      delete response;
+      
+      if (result != NULL) {
+        _panda_script_object->set_pyobj(result);
+        P3D_OBJECT_DECREF(result);
+      }
     }
 
-    if (result != NULL) {
-      if (_matches_script_origin) {
-        // We only actually merge the objects if this web page is
-        // allowed to call our scripting functions.
-        _main_object->set_pyobj(result);
-      } else {
-        // Otherwise, we just do a one-time application of the
-        // toplevel properties down to Python.
-        _main_object->apply_properties(result);
-      }
-      P3D_OBJECT_DECREF(result);
-    }
-
-    _main_object->set_string_property("status", "starting");
+    _panda_script_object->set_string_property("status", "starting");
 
   } else if (message == "onwindowopen") {
-    // The process told us that it just successfully opened its
+    // The process told us that it just succesfully opened its
     // window, for the first time.  Hide the splash window.
     _instance_window_opened = true;
     if (_splash_window != NULL) {
@@ -2455,7 +2380,7 @@ handle_notify_request(const string &message) {
       }
     }
 
-    _main_object->set_string_property("status", "open");
+    _panda_script_object->set_string_property("status", "open");
 
   } else if (message == "onwindowattach") {
     // The graphics window has been attached to the browser frame
@@ -2632,13 +2557,8 @@ void P3DInstance::
 set_failed() {
   set_button_image(IT_none);
   set_background_image(IT_failed);
-  _main_object->set_string_property("status", "failed");
-
-  if (!_failed) {
-    _failed = true;
-    make_splash_window();
-    send_notify("onfail");
-  }
+  _failed = true;
+  make_splash_window();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -2897,37 +2817,20 @@ report_package_info_ready(P3DPackage *package) {
   P3DPackage::Requires::const_iterator ri;
   for (ri = package->_requires.begin(); ri != package->_requires.end(); ++ri) {
     const P3DPackage::RequiredPackage &rp = (*ri);
-    add_package(rp._package_name, rp._package_version, rp._package_seq, 
-                rp._host);
+    add_package(rp._package_name, rp._package_version, rp._host);
   }
 
-  consider_start_download();
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: P3DInstance::consider_start_download
-//       Access: Private
-//  Description: When all package info files have been obtained,
-//               begins downloading stuff.
-////////////////////////////////////////////////////////////////////
-void P3DInstance::
-consider_start_download() {
   if (get_packages_info_ready()) {
     // All packages are ready to go.  Let's start some download
     // action.
     _downloading_packages.clear();
-    _prev_downloaded = 0;
     _total_download_size = 0;
     Packages::const_iterator pi;
     for (pi = _packages.begin(); pi != _packages.end(); ++pi) {
       P3DPackage *package = (*pi);
-      if (package->get_info_ready()) {
-        if (!package->get_ready()) {
-          _downloading_packages.push_back(package);
-          _total_download_size += package->get_download_size();
-        } else {
-          _prev_downloaded += package->get_download_size();
-        }
+      if (package->get_info_ready() && !package->get_ready()) {
+        _downloading_packages.push_back(package);
+        _total_download_size += package->get_download_size();
       }
     }
     ready_to_install();
@@ -2967,8 +2870,7 @@ ready_to_install() {
 
     nout << "Beginning install of " << _downloading_packages.size()
          << " packages, total " << _total_download_size
-         << " bytes required (" << _prev_downloaded
-         << " previously downloaded).\n";
+         << " bytes required.\n";
     
     if (_downloading_packages.size() > 0) {
       _stuff_to_download = true;
@@ -2977,25 +2879,14 @@ ready_to_install() {
       make_splash_window();
     }
     
-    _main_object->set_string_property("status", "downloading");
-    _main_object->set_int_property("numDownloadingPackages", _downloading_packages.size());
-    _main_object->set_int_property("totalDownloadSize", _total_download_size);
-    _main_object->set_int_property("downloadElapsedSeconds", 0);
-    _main_object->set_undefined_property("downloadRemainingSeconds");
-
-    double progress = 0.0;
-    if (_prev_downloaded != 0) {
-      // We might start off with more than 0 progress, if we've
-      // already downloaded some of it previously.
-      progress = (_prev_downloaded) / (_total_download_size + _prev_downloaded);
-      progress = min(progress, 1.0);
-
-      _main_object->set_float_property("downloadProgress", progress);
-    }
     if (_splash_window != NULL) {
-      _splash_window->set_install_progress(progress, true, 0);
+      _splash_window->set_install_progress(0.0, true, 0);
     }
-
+    _panda_script_object->set_string_property("status", "downloading");
+    _panda_script_object->set_int_property("numDownloadingPackages", _downloading_packages.size());
+    _panda_script_object->set_int_property("totalDownloadSize", _total_download_size);
+    _panda_script_object->set_int_property("downloadElapsedSeconds", 0);
+    _panda_script_object->set_undefined_property("downloadRemainingSeconds");
     send_notify("ondownloadbegin");
     
     start_next_download();
@@ -3014,7 +2905,6 @@ start_next_download() {
   while (_download_package_index < (int)_downloading_packages.size()) {
     P3DPackage *package = _downloading_packages[_download_package_index];
     if (package->get_failed()) {
-      send_notify("ondownloadfail");
       set_failed();
       return;
     }
@@ -3022,10 +2912,10 @@ start_next_download() {
     if (!package->get_ready()) {
       // This package is ready to download.  Begin.
       string name = package->get_formatted_name();
-      _main_object->set_string_property("downloadPackageName", package->get_package_name());
-      _main_object->set_string_property("downloadPackageDisplayName", name);
-      _main_object->set_int_property("downloadPackageNumber", _download_package_index + 1);
-      _main_object->set_int_property("downloadPackageSize", package->get_download_size());
+      _panda_script_object->set_string_property("downloadPackageName", package->get_package_name());
+      _panda_script_object->set_string_property("downloadPackageDisplayName", name);
+      _panda_script_object->set_int_property("downloadPackageNumber", _download_package_index + 1);
+      _panda_script_object->set_int_property("downloadPackageSize", package->get_download_size());
       set_install_label("Installing " + name);
 
       nout << "Installing " << package->get_package_name()
@@ -3066,8 +2956,8 @@ mark_download_complete() {
 
   if (!_download_complete) {
     _download_complete = true;
-    _main_object->set_bool_property("downloadComplete", true);
-    _main_object->set_string_property("status", "downloadcomplete");
+    _panda_script_object->set_bool_property("downloadComplete", true);
+    _panda_script_object->set_string_property("status", "downloadcomplete");
     send_notify("ondownloadcomplete");
   }
   
@@ -3091,12 +2981,13 @@ mark_download_complete() {
 ////////////////////////////////////////////////////////////////////
 void P3DInstance::
 ready_to_start() {
+  nout << "_instance_started = " << _instance_started << "\n";
   if (_instance_started || is_failed()) {
     // Already started--or never mind.
     return;
   }
 
-  _main_object->set_string_property("status", "ready");
+  _panda_script_object->set_string_property("status", "ready");
   send_notify("onready");
 
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
@@ -3158,7 +3049,7 @@ report_instance_progress(double progress, bool is_progress_known,
   if (_splash_window != NULL && _show_dl_instance_progress) {
     _splash_window->set_install_progress(progress, is_progress_known, received_data);
   }
-  _main_object->set_float_property("instanceDownloadProgress", progress);
+  _panda_script_object->set_float_property("instanceDownloadProgress", progress);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -3189,13 +3080,13 @@ report_package_progress(P3DPackage *package, double progress) {
   }
 
   // Scale the progress into the range appropriate to this package.
-  progress = (progress * package->get_download_size() + _total_downloaded + _prev_downloaded) / (_total_download_size + _prev_downloaded);
+  progress = (progress * package->get_download_size() + _total_downloaded) / _total_download_size;
   progress = min(progress, 1.0);
 
   if (_splash_window != NULL) {
     _splash_window->set_install_progress(progress, true, 0);
   }
-  _main_object->set_float_property("downloadProgress", progress);
+  _panda_script_object->set_float_property("downloadProgress", progress);
 
   static const size_t buffer_size = 256;
   char buffer[buffer_size];
@@ -3212,10 +3103,10 @@ report_package_progress(P3DPackage *package, double progress) {
 #endif
 
   int ielapsed = (int)elapsed;
-  _main_object->set_int_property("downloadElapsedSeconds", ielapsed);
+  _panda_script_object->set_int_property("downloadElapsedSeconds", ielapsed);
 
   sprintf(buffer, "%d:%02d", ielapsed / 60, ielapsed % 60);
-  _main_object->set_string_property("downloadElapsedFormatted", buffer);
+  _panda_script_object->set_string_property("downloadElapsedFormatted", buffer);
 
   if (progress > 0 && (elapsed > 5.0 || progress > 0.2)) {
     double this_total = elapsed / progress;
@@ -3244,9 +3135,9 @@ report_package_progress(P3DPackage *package, double progress) {
       double total = _total_time_reports / (double)_time_reports.size();
       double remaining = max(total - elapsed, 0.0);
       int iremaining = (int)(remaining + 0.5);
-      _main_object->set_int_property("downloadRemainingSeconds", iremaining);
+      _panda_script_object->set_int_property("downloadRemainingSeconds", iremaining);
       sprintf(buffer, "%d:%02d", iremaining / 60, iremaining % 60);
-      _main_object->set_string_property("downloadRemainingFormatted", buffer);
+      _panda_script_object->set_string_property("downloadRemainingFormatted", buffer);
     }
   }
 }
@@ -3336,7 +3227,6 @@ report_package_done(P3DPackage *package, bool success) {
     report_package_progress(package, 1.0);
     start_next_download();
   } else {
-    send_notify("ondownloadfail");
     set_failed();
   }
 }
@@ -3619,7 +3509,7 @@ handle_event_osx_event_record(const P3D_event_data &event) {
     CGPoint cgpt = { pt.h, pt.v };
     HIPointConvert(&cgpt, kHICoordSpaceScreenPixel, NULL,
                    kHICoordSpaceWindow, window);
-    
+
     // Then convert to plugin coordinates.
     pt.h = (short)(cgpt.x - _wparams.get_win_x());
     pt.v = (short)(cgpt.y - _wparams.get_win_y());
@@ -3631,8 +3521,6 @@ handle_event_osx_event_record(const P3D_event_data &event) {
   swb_event._code = 0;
   swb_event._flags = 0;
   add_carbon_modifier_flags(swb_event._flags, er->modifiers);
-
-  bool trust_mouse_data = true;
 
   switch (er->what) {
   case mouseDown:
@@ -3673,23 +3561,14 @@ handle_event_osx_event_record(const P3D_event_data &event) {
     _mouse_active = ((er->modifiers & 1) != 0);
     break;
 
-  case osEvt:
-    // The mouse data sent with an "os event" seems to be in an
-    // indeterminate space.
-    trust_mouse_data = false;
-    break;
-
   default:
     break;
   }
 
   if (_mouse_active) {
-    swb_event._flags |= SubprocessWindowBuffer::EF_has_mouse;
-    if (trust_mouse_data) {
-      swb_event._x = pt.h;
-      swb_event._y = pt.v;
-      swb_event._flags |= SubprocessWindowBuffer::EF_mouse_position;
-    }
+    swb_event._x = pt.h;
+    swb_event._y = pt.v;
+    swb_event._flags |= SubprocessWindowBuffer::EF_mouse_position | SubprocessWindowBuffer::EF_has_mouse;
   }
 
   if (_swbuffer != NULL) {
@@ -4094,7 +3973,6 @@ download_finished(bool success) {
     _inst->priv_set_p3d_filename(get_filename());
   } else {
     // Oops, no joy on the instance data.
-    _inst->send_notify("ondownloadfail");
     _inst->set_failed();
   }
 }

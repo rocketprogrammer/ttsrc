@@ -56,12 +56,6 @@ PUBLISHED:
 private:
   typedef PTA(PT(TextureStage)) TextureStages;
   TextureStages _texture_stages;
-
-  class CompareTextureStageSort {
-  public:
-    INLINE bool operator () (const TextureStage *a, const TextureStage *b) const;
-  };
-
 };
 
 INLINE ostream &operator << (ostream &out, const TextureStageCollection &col) {

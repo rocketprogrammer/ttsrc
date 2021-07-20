@@ -24,13 +24,3 @@ PhysxForceFieldShapeDesc() {
 
 }
 
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxForceFieldShapeDesc::Destructor
-//       Access: Protected
-//  Description:
-////////////////////////////////////////////////////////////////////
-INLINE PhysxForceFieldShapeDesc::
-~PhysxForceFieldShapeDesc() {
-
-}
-

@@ -30,8 +30,6 @@ link(NxShape *shapePtr) {
   _ptr->userData = this;
   _error_type = ET_ok;
 
-  set_name(shapePtr->getName());
-
   PhysxActor *actor = (PhysxActor *)_ptr->getActor().userData;
   actor->_shapes.add(this);
 }

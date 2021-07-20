@@ -1,6 +1,5 @@
 // Filename: dxGraphicsStateGuardian9.cxx
 // Created by:  mike (02Feb99)
-// Updated by: fperazzi, PandaSE (05May10) (added get_supports_cg_profile)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -4211,7 +4210,7 @@ free_nondx_resources() {
 ////////////////////////////////////////////////////////////////////
 void DXGraphicsStateGuardian9::
 free_d3d_device() {
-  // don't want a full reset of gsg, just a state clear
+  // dont want a full reset of gsg, just a state clear
   _state_rs = RenderState::make_empty();
   _state_mask.clear();
 
@@ -4234,7 +4233,7 @@ free_d3d_device() {
 
   free_nondx_resources();
 
-  // obviously we don't release ID3D9, just ID3DDevice9
+  // obviously we dont release ID3D9, just ID3DDevice9
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -5710,27 +5709,6 @@ void DXGraphicsStateGuardian9::
 atexit_function(void) {
   set_cg_device(NULL);
   static_set_gamma(true, 1.0f);
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: DXGraphicsStateGuardian9::get_supports_cg_profile
-//       Access: Public, Virtual
-//  Description: Returns true if this particular GSG supports the 
-//               specified Cg Shader Profile.
-////////////////////////////////////////////////////////////////////
-bool DXGraphicsStateGuardian9::
-get_supports_cg_profile(const string &name) const {
-#ifndef HAVE_CG
-  return false;
-#else
-  CGprofile profile = cgGetProfile(name.c_str());
-  
-  if (profile ==CG_PROFILE_UNKNOWN) {
-    dxgsg9_cat.error() << name <<", unknown Cg-profile\n";
-    return false;
-  }
-  return cgD3D9IsProfileSupported(cgGetProfile(name.c_str()));
-#endif  // HAVE_CG
 }
 
 ////////////////////////////////////////////////////////////////////

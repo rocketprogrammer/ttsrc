@@ -30,7 +30,7 @@ static const int max_doobers_per_chunk = 1000;
 // The number of threads to spawn.
 static const int number_of_threads = 4;
 
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
 static int last_rand = 0;
 #endif /* __WIN32__ */
 
@@ -40,7 +40,7 @@ static double
 random_f(double max) {
   MutexHolder l(rand_mutex);
   int i = rand();
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
   last_rand = i;
 #endif /* __WIN32__ */
   return max * (double)i / (double)RAND_MAX;
@@ -89,7 +89,7 @@ public:
   thread_main() {
     OUTPUT(nout << *this << " beginning.\n");
 
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
     rand_mutex.acquire();
     srand(last_rand);
     rand_mutex.release();

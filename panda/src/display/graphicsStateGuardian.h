@@ -151,7 +151,6 @@ PUBLISHED:
   INLINE void set_shader_model(int shader_model);
 
   virtual int get_supported_geom_rendering() const;
-  virtual bool get_supports_cg_profile(const string &name) const;
 
   INLINE bool get_color_scale_via_lighting() const;
   INLINE bool get_alpha_scale_via_texture() const;

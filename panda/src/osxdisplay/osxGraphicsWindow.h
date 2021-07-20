@@ -20,6 +20,7 @@
 
 #define __glext_h_
 #include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #include <AGL/agl.h>
 
 #define HACK_SCREEN_HASH_CONTEXT true

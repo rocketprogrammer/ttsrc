@@ -199,7 +199,7 @@ class DirectSession(DirectObject):
         keyList.extend(map(chr, range(48, 58)))
         keyList.extend(["`", "-", "=", "[", "]", ";", "'", ",", ".", "/", "\\"])
 
-        self.specialKeys = ['escape', 'delete', 'page_up', 'page_down', 'enter']
+        self.specialKeys = ['escape', 'delete', 'page_up', 'page_down']
 
         def addCtrl(a):
             return "control-%s"%a
@@ -285,10 +285,6 @@ class DirectSession(DirectObject):
             'control-o': ('Open Scene', 'LE-OpenScene'),
             'control-q': ('Quit', 'LE-Quit'),
             }
-
-        self.speicalKeyMap = {
-                              'enter': 'DIRECT-enter',
-                             }
 
         self.passThroughKeys = ['v','b','l','p', 'r', 'shift-r', 's', 't','shift-a', 'w'] 
 
@@ -559,8 +555,6 @@ class DirectSession(DirectObject):
         if input in self.hotKeyMap.keys():
             keyDesc = self.hotKeyMap[input]
             messenger.send(keyDesc[1])
-        elif input in self.speicalKeyMap.keys():
-            messenger.send(self.speicalKeyMap[input])
         elif input in self.directOnlyKeyMap.keys():
             if self.fIgnoreDirectOnlyKeyMap:
                 return
@@ -1300,15 +1294,6 @@ class DisplayRegionList(DirectObject):
         self.mouseUpdate()
         # hack to test movement
         return Task.cont
-        
-    def addDisplayRegionContext(self, cam):
-        self.displayRegionList.append(DisplayRegionContext(cam))
-        
-    def removeDisplayRegionContext(self, cam):
-        for drc in self.displayRegionList:
-            if drc.cam == cam:
-                self.displayRegionList.remove(drc)
-                break
 
 # Create one
 __builtins__['direct'] = base.direct = DirectSession()

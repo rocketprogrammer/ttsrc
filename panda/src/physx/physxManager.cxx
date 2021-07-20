@@ -40,7 +40,6 @@ PhysxManager() {
   else {
     physx_cat.error() << "Error when setting up the PhysX subsystem: "
                       << get_sdk_error_string(error) << endl;
-    _sdk = NULL;
   }
 
   nassertv_always(error == NXCE_NO_ERROR);
@@ -107,12 +106,7 @@ get_global_ptr() {
     _global_ptr = new PhysxManager;
   }
 
-  if (_global_ptr->_sdk == NULL) {
-    return NULL;
-  }
-  else {
-    return _global_ptr;
-  }
+  return _global_ptr;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -132,29 +126,21 @@ get_num_scenes() const {
 //  Description:
 ////////////////////////////////////////////////////////////////////
 PhysxScene *PhysxManager::
-create_scene(PhysxSceneDesc &sceneDesc) {
+create_scene(PhysxSceneDesc &desc) {
 
-  nassertr(sceneDesc.is_valid(),NULL);
+  nassertr(desc.is_valid(),NULL);
 
   //_desc.timeStepMethod = NX_TIMESTEP_FIXED;
   //_desc.maxTimestep = 1.0f / 240.0f;
   //_desc.maxIter = 8;
 
-  sceneDesc._desc.flags |= NX_SF_ENABLE_ACTIVETRANSFORMS;
-  sceneDesc._desc.flags |= NX_SF_SIMULATE_SEPARATE_THREAD;
-
-  if (physx_internal_threads > 0) {
-    sceneDesc._desc.flags |= NX_SF_ENABLE_MULTITHREAD;
-    sceneDesc._desc.threadMask=0xfffffffe;
-    sceneDesc._desc.internalThreadCount = physx_internal_threads;
-    physx_cat.info() << "Multithreading enabled. " 
-                     << "Additional threads: " << physx_internal_threads << endl;
-  }
+  desc._desc.flags |= NX_SF_ENABLE_ACTIVETRANSFORMS;
+  desc._desc.flags |= NX_SF_SIMULATE_SEPARATE_THREAD;
 
   PhysxScene *scene = new PhysxScene();
   nassertr(scene, NULL);
 
-  NxScene *scenePtr = _sdk->createScene(sceneDesc._desc);
+  NxScene *scenePtr = _sdk->createScene(desc._desc);
   nassertr(scenePtr, NULL);
 
   scene->link(scenePtr);
@@ -269,54 +255,6 @@ get_triangle_mesh(unsigned int idx) {
   nassertr_always(idx < _sdk->getNbTriangleMeshes(), NULL);
 
   return (PhysxTriangleMesh *)_triangle_meshes[idx];
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxManager::get_num_cloth_meshes
-//       Access: Published
-//  Description: 
-////////////////////////////////////////////////////////////////////
-unsigned int PhysxManager::
-get_num_cloth_meshes() {
-
-  return _sdk->getNbClothMeshes();
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxManager::get_cloth_mesh
-//       Access: Public
-//  Description: 
-////////////////////////////////////////////////////////////////////
-PhysxClothMesh *PhysxManager::
-get_cloth_mesh(unsigned int idx) {
-
-  nassertr_always(idx < _sdk->getNbClothMeshes(), NULL);
-
-  return (PhysxClothMesh *)_cloth_meshes[idx];
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxManager::get_num_soft_body_meshes
-//       Access: Published
-//  Description: 
-////////////////////////////////////////////////////////////////////
-unsigned int PhysxManager::
-get_num_soft_body_meshes() {
-
-  return _sdk->getNbSoftBodyMeshes();
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: PhysxManager::get_soft_body_mesh
-//       Access: Public
-//  Description: 
-////////////////////////////////////////////////////////////////////
-PhysxSoftBodyMesh *PhysxManager::
-get_soft_body_mesh(unsigned int idx) {
-
-  nassertr_always(idx < _sdk->getNbSoftBodyMeshes(), NULL);
-
-  return (PhysxSoftBodyMesh *)_softbody_meshes[idx];
 }
 
 ////////////////////////////////////////////////////////////////////

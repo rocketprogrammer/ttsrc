@@ -19,6 +19,7 @@
 #include "pnmImage.h"
 
 #include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #import <mach-o/dyld.h>
 
 // This is generated data for the standard texture we use for drawing

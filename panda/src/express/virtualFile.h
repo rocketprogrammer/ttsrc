@@ -63,10 +63,9 @@ PUBLISHED:
 public:
   INLINE void set_original_filename(const Filename &filename);
   bool read_file(string &result, bool auto_unwrap) const;
-  virtual bool read_file(pvector<unsigned char> &result, bool auto_unwrap) const;
-
-  static bool simple_read_file(istream *stream, pvector<unsigned char> &result);
-  static bool simple_read_file(istream *stream, pvector<unsigned char> &result, size_t max_bytes);
+  bool read_file(pvector<unsigned char> &result, bool auto_unwrap) const;
+  static bool read_file(istream *stream, pvector<unsigned char> &result);
+  static bool read_file(istream *stream, pvector<unsigned char> &result, size_t max_bytes);
 
 
 protected:

@@ -4,99 +4,47 @@ to build for as many platforms as possible. """
 
 __all__ = ["Standalone", "Installer"]
 
-import os, sys, subprocess, tarfile, shutil, time, zipfile, glob, socket, getpass
-from cStringIO import StringIO
+import os, sys, subprocess, tarfile, shutil, time, zipfile, glob
 from direct.directnotify.DirectNotifyGlobal import *
-from direct.showbase.AppRunnerGlobal import appRunner
-from pandac.PandaModules import PandaSystem, HTTPClient, Filename, VirtualFileSystem, Multifile
-from pandac.PandaModules import TiXmlDocument, TiXmlDeclaration, TiXmlElement, readXmlStream
+from pandac.PandaModules import PandaSystem, HTTPClient, Filename, VirtualFileSystem, Multifile, readXmlStream
 from direct.p3d.HostInfo import HostInfo
-# This is important for some reason
-import encodings
 
-try:
-    import pwd
-except ImportError:
-    pwd = None
+class CachedFile:
+    def __init__(self): self.str = ""
+    def write(self, data): self.str += data
 
 # Make sure this matches with the magic in p3dEmbed.cxx.
 P3DEMBED_MAGIC = "\xFF\x3D\x3D\x00"
 
-# This filter function is used when creating
-# an archive that should be owned by root.
-def archiveFilter(info):
-    basename = os.path.basename(info.name)
-    if basename in [".DS_Store", "Thumbs.db"]:
-        return None
-
-    info.uid = info.gid = 0
-    info.uname = info.gname = "root"
-
-    # All files without an extension get mode 0755,
-    # all other files are chmodded to 0644.
-    # Somewhat hacky, but it's the only way
-    # permissions can work on a Windows box.
-    if info.type != tarfile.DIRTYPE and '.' in info.name.rsplit('/', 1)[-1]:
-        info.mode = 0644
-    else:
-        info.mode = 0755
-
-    return info
-
-# Hack to make all files in a tar file owned by root.
-# The tarfile module doesn't have filter functionality until Python 2.7.
-# Yay duck typing!
-class TarInfoRoot(tarfile.TarInfo):
-    uid = property(lambda self: 0, lambda self, x: None)
-    gid = property(lambda self: 0, lambda self, x: None)
-    uname = property(lambda self: "root", lambda self, x: None)
-    gname = property(lambda self: "root", lambda self, x: None)
-    mode = property(lambda self: 0644 if self.type != tarfile.DIRTYPE and \
-                    '.' in self.name.rsplit('/', 1)[-1] else 0755,
-                    lambda self, x: None)
-
-# On OSX, the root group is named "wheel".
-class TarInfoRootOSX(TarInfoRoot):
-    gname = property(lambda self: "wheel", lambda self, x: None)
-
-
 class Standalone:
     """ This class creates a standalone executable from a given .p3d file. """
     notify = directNotify.newCategory("Standalone")
-
+    
     def __init__(self, p3dfile, tokens = {}):
         self.p3dfile = Filename(p3dfile)
         self.basename = self.p3dfile.getBasenameWoExtension()
         self.tokens = tokens
-
-        self.tempDir = Filename.temporary("", self.basename, "") + "/"
-        self.tempDir.makeDir()
-        self.host = HostInfo(PandaSystem.getPackageHostUrl(), appRunner = appRunner, hostDir = self.tempDir, asMirror = False, perPlatform = True)
-
+        
+        hostDir = Filename(Filename.getTempDirectory(), 'pdeploy/')
+        hostDir.makeDir()
+        self.host = HostInfo(PandaSystem.getPackageHostUrl(), appRunner = base.appRunner, hostDir = hostDir, asMirror = False, perPlatform = True)
+        
         self.http = HTTPClient.getGlobalPtr()
-        if not self.host.hasContentsFile:
-            if not self.host.readContentsFile():
-                if not self.host.downloadContentsFile(self.http):
-                    Standalone.notify.error("couldn't read host")
-                    return
-
-    def __del__(self):
-        try:
-            appRunner.rmtree(self.tempDir)
-        except:
-            try: shutil.rmtree(self.tempDir.toOsSpecific())
-            except: pass
-
+        if not self.host.readContentsFile():
+            if not self.host.downloadContentsFile(self.http):
+                Standalone.notify.error("couldn't read host")
+                return False
+    
     def buildAll(self, outputDir = "."):
         """ Builds standalone executables for every known platform,
         into the specified output directory. """
-
+        
         platforms = set()
         for package in self.host.getPackages(name = "p3dembed"):
             platforms.add(package.platform)
         if len(platforms) == 0:
             Standalone.notify.warning("No platforms found to build for!")
-
+        
         outputDir = Filename(outputDir + "/")
         outputDir.makeDir()
         for platform in platforms:
@@ -104,17 +52,14 @@ class Standalone:
                 self.build(Filename(outputDir, platform + "/" + self.basename + ".exe"), platform)
             else:
                 self.build(Filename(outputDir, platform + "/" + self.basename), platform)
-
-    def build(self, output, platform = None, extraTokens = {}):
+    
+    def build(self, output, platform = None):
         """ Builds a standalone executable and stores it into the path
         indicated by the 'output' argument. You can specify to build for
         a different platform by altering the 'platform' argument. """
-
+        
         if platform == None:
             platform = PandaSystem.getPlatform()
-
-        vfs = VirtualFileSystem.getGlobalPtr()
-
         for package in self.host.getPackages(name = "p3dembed", platform = platform):
             if not package.downloadDescFile(self.http):
                 Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
@@ -122,58 +67,46 @@ class Standalone:
             if not package.downloadPackage(self.http):
                 Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
                 continue
-
+            
             # Figure out where p3dembed might be now.
             if package.platform.startswith("win"):
-                # Use p3dembedw unless console_environment was set.
-                if extraTokens.get("console_environment", self.tokens.get("console_environment", 0)) != 0:
-                    p3dembed = Filename(self.host.hostDir, "p3dembed/%s/p3dembed.exe" % package.platform)
-                else:
-                    p3dembed = Filename(self.host.hostDir, "p3dembed/%s/p3dembedw.exe" % package.platform)
-                    # Fallback for older p3dembed versions
-                    if not vfs.exists(p3dembed):
-                        Filename(self.host.hostDir, "p3dembed/%s/p3dembed.exe" % package.platform)
+                p3dembed = Filename(self.host.hostDir, "p3dembed/%s/p3dembed.exe" % package.platform)
             else:
                 p3dembed = Filename(self.host.hostDir, "p3dembed/%s/p3dembed" % package.platform)
-
-            if not vfs.exists(p3dembed):
+            
+            if not p3dembed.exists():
                 Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
                 continue
-
-            return self.embed(output, p3dembed, extraTokens)
-
+            
+            return self.embed(output, p3dembed)
+        
         Standalone.notify.error("Failed to build standalone for platform %s" % platform)
-
-    def embed(self, output, p3dembed, extraTokens = {}):
+    
+    def embed(self, output, p3dembed):
         """ Embeds the p3d file into the provided p3dembed executable.
         This function is not really useful - use build() or buildAll() instead. """
-
+        
         # Load the p3dembed data into memory
         size = p3dembed.getFileSize()
         p3dembed_data = VirtualFileSystem.getGlobalPtr().readFile(p3dembed, True)
         assert len(p3dembed_data) == size
-
+        
         # Find the magic size string and replace it with the real size,
         # regardless of the endianness of the p3dembed executable.
         hex_size = hex(size)[2:].rjust(8, "0")
         enc_size = "".join([chr(int(hex_size[i] + hex_size[i + 1], 16)) for i in range(0, len(hex_size), 2)])
         p3dembed_data = p3dembed_data.replace(P3DEMBED_MAGIC, enc_size)
         p3dembed_data = p3dembed_data.replace(P3DEMBED_MAGIC[::-1], enc_size[::-1])
-
+        
         # Write the output file
         Standalone.notify.info("Creating %s..." % output)
         output.makeDir()
         ohandle = open(output.toOsSpecific(), "wb")
         ohandle.write(p3dembed_data)
-
-        # Write out the tokens. Set log_basename to the basename by default
-        tokens = {"log_basename" : self.basename}
-        tokens.update(self.tokens)
-        tokens.update(extraTokens)
-        for token in tokens.items():
+        for token in self.tokens.items():
             ohandle.write("\0%s=%s" % token)
         ohandle.write("\0\0")
-
+        
         # Buffer the p3d file to the output file. 1 MB buffer size.
         phandle = open(self.p3dfile.toOsSpecific(), "rb")
         buf = phandle.read(1024 * 1024)
@@ -182,151 +115,51 @@ class Standalone:
             buf = phandle.read(1024 * 1024)
         ohandle.close()
         phandle.close()
-
+        
         os.chmod(output.toOsSpecific(), 0755)
 
     def getExtraFiles(self, platform):
         """ Returns a list of extra files that will need to be included
         with the standalone executable in order for it to run, such as
         dependent libraries. The returned paths are full absolute paths. """
-
+        
         package = self.host.getPackages(name = "p3dembed", platform = platform)[0]
-
+        
         if not package.downloadDescFile(self.http):
             Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
             return []
         if not package.downloadPackage(self.http):
             Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
             return []
-
+        
         filenames = []
-        vfs = VirtualFileSystem.getGlobalPtr()
         for e in package.extracts:
-            if e.basename not in ["p3dembed", "p3dembed.exe", "p3dembed.exe.manifest", "p3dembedw.exe", "p3dembedw.exe.manifest"]:
+            if e.basename not in ["p3dembed", "p3dembed.exe"]:
                 filename = Filename(package.getPackageDir(), e.filename)
                 filename.makeAbsolute()
-                if vfs.exists(filename):
+                if filename.exists():
                     filenames.append(filename)
                 else:
                     Standalone.notify.error("%s mentioned in xml, but does not exist" % e.filename)
-
+        
         return filenames
-
-
-class PackageTree:
-    """ A class used internally to build a temporary package
-    tree for inclusion into an installer. """
-
-    def __init__(self, platform, hostDir, hostUrl):
-        self.platform = platform
-        self.hosts = {}
-        self.packages = {}
-        self.hostUrl = hostUrl
-        self.hostDir = Filename(hostDir)
-        self.hostDir.makeDir()
-        self.http = HTTPClient.getGlobalPtr()
-
-    def getHost(self, hostUrl):
-        if hostUrl in self.hosts:
-            return self.hosts[hostUrl]
-
-        host = HostInfo(hostUrl, appRunner = appRunner, hostDir = self.hostDir, asMirror = False, perPlatform = False)
-        if not host.hasContentsFile:
-            if not host.readContentsFile():
-                if not host.downloadContentsFile(self.http):
-                    Installer.notify.error("couldn't read host %s" % host.hostUrl)
-                    return None
-        self.hosts[hostUrl] = host
-        return host
-
-    def installPackage(self, name, version, hostUrl = None):
-        """ Installs the named package into the tree. """
-
-        if hostUrl is None:
-            hostUrl = self.hostUrl
-
-        pkgIdent = (name, version)
-        if pkgIdent in self.packages:
-            return self.packages[pkgIdent]
-
-        package = None
-        # Always try the super host first, if any.
-        if appRunner and appRunner.superMirrorUrl:
-            superHost = self.getHost(appRunner.superMirrorUrl)
-            if self.platform:
-                package = superHost.getPackage(name, version, self.platform)
-            if not package:
-                package = superHost.getPackage(name, version)
-
-        if not package:
-            host = self.getHost(hostUrl)
-            if self.platform:
-                package = host.getPackage(name, version, self.platform)
-            if not package:
-                package = host.getPackage(name, version)
-
-        if not package:
-            Installer.notify.error("Package %s %s for %s not known on %s" % (
-                name, version, self.platform, hostUrl))
-            return
-
-        package.installed = True # Hack not to let it unnecessarily install itself
-        if not package.downloadDescFile(self.http):
-            Installer.notify.error("  -> %s failed for platform %s" % (package.packageName, package.platform))
-            return
-        if not package.downloadPackage(self.http):
-            Installer.notify.error("  -> %s failed for platform %s" % (package.packageName, package.platform))
-            return
-
-        self.packages[pkgIdent] = package
-
-        # Check for any dependencies.
-        for rname, rversion, rhost in package.requires:
-            self.installPackage(rname, rversion, rhost.hostUrl)
-
-        return package
-
 
 class Installer:
     """ This class creates a (graphical) installer from a given .p3d file. """
     notify = directNotify.newCategory("Installer")
 
-    def __init__(self, p3dfile, shortname, fullname, version, tokens = {}):
-        if not shortname:
-            shortname = p3dfile.getBasenameWoExtension()
+    def __init__(self, shortname, fullname, p3dfile, version, tokens = {}):
         self.shortname = shortname
         self.fullname = fullname
         self.version = str(version)
         self.includeRequires = False
         self.licensename = ""
-        self.licensefile = Filename()
         self.authorid = "org.panda3d"
-        self.authorname = os.environ.get("DEBFULLNAME", "")
-        self.authoremail = os.environ.get("DEBEMAIL", "")
-
-        # Try to determine a default author name ourselves.
-        uname = None
-        if pwd is not None and hasattr(os, 'getuid'):
-            uinfo = pwd.getpwuid(os.getuid())
-            if uinfo:
-                uname = uinfo.pw_name
-                if not self.authorname:
-                    self.authorname = \
-                        uinfo.pw_gecos.split(',', 1)[0]
-
-        # Fallbacks in case that didn't work or wasn't supported.
-        if not uname:
-            uname = getpass.getuser()
-        if not self.authorname:
-            self.authorname = uname
-        if not self.authoremail and ' ' not in uname:
-            self.authoremail = "%s@%s" % (uname, socket.gethostname())
-
+        self.authorname = ""
+        self.licensefile = Filename()
         self.standalone = Standalone(p3dfile, tokens)
-        self.tempDir = Filename.temporary("", self.shortname, "") + "/"
-        self.tempDir.makeDir()
-        self.__linuxRoot = None
-
+        self.http = self.standalone.http
+        
         # Load the p3d file to read out the required packages
         mf = Multifile()
         if not mf.openRead(p3dfile):
@@ -337,7 +170,7 @@ class Installer:
         self.hostUrl = PandaSystem.getPackageHostUrl()
         if not self.hostUrl:
             self.hostUrl = self.standalone.host.hostUrl
-        self.requires = []
+        self.requirements = []
         i = mf.findSubfile('p3d_info.xml')
         if i >= 0:
             stream = mf.openReadSubfile(i)
@@ -350,310 +183,193 @@ class Installer:
                     self.hostUrl = p3dHost.Attribute('url')
                 p3dRequires = p3dPackage.FirstChildElement('requires')
                 while p3dRequires:
-                    self.requires.append((
-                        p3dRequires.Attribute('name'),
-                        p3dRequires.Attribute('version'),
-                        p3dRequires.Attribute('host')))
+                    self.requirements.append((p3dRequires.Attribute('name'), p3dRequires.Attribute('version')))
                     p3dRequires = p3dRequires.NextSiblingElement('requires')
 
-                if not self.fullname:
-                    p3dConfig = p3dPackage.FirstChildElement('config')
-                    if p3dConfig:
-                        self.fullname = p3dConfig.Attribute('display_name')
-
-        if not self.fullname:
-            self.fullname = self.shortname
-
-    def __del__(self):
-        try:
-            appRunner.rmtree(self.tempDir)
-        except:
-            try: shutil.rmtree(self.tempDir.toOsSpecific())
-            except: pass
-
-    def installPackagesInto(self, hostDir, platform):
+    def installPackagesInto(self, rootDir, platform):
         """ Installs the packages required by the .p3d file into
-        the specified directory, for the given platform. """
-
+        the specified root directory, for the given platform. """
+        
         if not self.includeRequires:
             return
-
-        pkgTree = PackageTree(platform, hostDir, self.hostUrl)
-        pkgTree.installPackage("images", None, self.standalone.host.hostUrl)
-
-        for name, version, hostUrl in self.requires:
-            pkgTree.installPackage(name, version, hostUrl)
-
-        # Remove the extracted files from the compressed archive, to save space.
-        vfs = VirtualFileSystem.getGlobalPtr()
-        for package in pkgTree.packages.values():
-            if package.uncompressedArchive:
-                archive = Filename(package.getPackageDir(), package.uncompressedArchive.filename)
-                if not archive.exists():
-                    continue
-
-                mf = Multifile()
-                # Make sure that it isn't mounted before altering it, just to be safe
-                vfs.unmount(archive)
-                os.chmod(archive.toOsSpecific(), 0644)
-                if not mf.openReadWrite(archive):
-                    Installer.notify.warning("Failed to open archive %s" % (archive))
-                    continue
-
-                # We don't iterate over getNumSubfiles because we're
-                # removing subfiles while we're iterating over them.
-                subfiles = mf.getSubfileNames()
-                for subfile in subfiles:
-                    # We do *NOT* call vfs.exists here in case the package is mounted.
-                    if Filename(package.getPackageDir(), subfile).exists():
-                        Installer.notify.debug("Removing already-extracted %s from multifile" % (subfile))
-                        mf.removeSubfile(subfile)
-
-                # This seems essential for mf.close() not to crash later.
-                mf.repack()
-
-                # If we have no subfiles left, we can just remove the multifile.
-                #if mf.getNumSubfiles() == 0:
-                #    Installer.notify.info("Removing empty archive %s" % (package.uncompressedArchive.filename))
-                #    mf.close()
-                #    archive.unlink()
-                #else:
-                mf.close()
-                try: os.chmod(archive.toOsSpecific(), 0444)
-                except: pass
-
-        # Write out our own contents.xml file.
-        doc = TiXmlDocument()
-        decl = TiXmlDeclaration("1.0", "utf-8", "")
-        doc.InsertEndChild(decl)
-
-        xcontents = TiXmlElement("contents")
-        for package in pkgTree.packages.values():
-            xpackage = TiXmlElement('package')
-            xpackage.SetAttribute('name', package.packageName)
-            if package.platform:
-                xpackage.SetAttribute('platform', package.platform)
-                assert package.platform == platform
-            if package.packageVersion:
-                xpackage.SetAttribute('version', version)
-                xpackage.SetAttribute('filename', package.packageName + "/" + package.packageVersion + "/" + package.descFileBasename)
-            else:
-                xpackage.SetAttribute('filename', package.packageName + "/" + package.descFileBasename)
-            xcontents.InsertEndChild(xpackage)
-
-        doc.InsertEndChild(xcontents)
-        doc.SaveFile(Filename(hostDir, "contents.xml").toOsSpecific())
+        
+        host = HostInfo(self.hostUrl, appRunner = base.appRunner, rootDir = rootDir, asMirror = True, perPlatform = False)
+        if not host.readContentsFile():
+            if not host.downloadContentsFile(self.http):
+                Installer.notify.error("couldn't read host")
+                return
+        
+        for name, version in self.requirements:
+            package = host.getPackage(name, version, platform)
+            if not package.downloadDescFile(self.http):
+                Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
+                continue
+            if not package.downloadPackage(self.http):
+                Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
+                continue
+        
+        # Also install the 'images' package from the same host that p3dembed was downloaded from.
+        host = HostInfo(self.standalone.host.hostUrl, appRunner = base.appRunner, rootDir = rootDir, asMirror = False, perPlatform = False)
+        if not host.readContentsFile():
+            if not host.downloadContentsFile(self.http):
+                Installer.notify.error("couldn't read host")
+                return
+        
+        for package in host.getPackages(name = "images"):
+            if not package.downloadDescFile(self.http):
+                Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
+                continue
+            if not package.downloadPackage(self.http):
+                Standalone.notify.warning("  -> %s failed for platform %s" % (package.packageName, package.platform))
+                continue
+            break
 
     def buildAll(self, outputDir = "."):
         """ Creates a (graphical) installer for every known platform.
         Call this after you have set the desired parameters. """
-
+        
         platforms = set()
         for package in self.standalone.host.getPackages(name = "p3dembed"):
             platforms.add(package.platform)
         if len(platforms) == 0:
             Installer.notify.warning("No platforms found to build for!")
-
+        
         outputDir = Filename(outputDir + "/")
         outputDir.makeDir()
         for platform in platforms:
             output = Filename(outputDir, platform + "/")
             output.makeDir()
             self.build(output, platform)
-
+    
     def build(self, output, platform = None):
-        """ Builds (graphical) installers and stores it into the path
+        """ Builds a (graphical) installer and stores it into the path
         indicated by the 'output' argument. You can specify to build for
         a different platform by altering the 'platform' argument.
         If 'output' is a directory, the installer will be stored in it. """
-
+        
         if platform == None:
             platform = PandaSystem.getPlatform()
-
+        
         if platform == "win32":
-            self.buildNSIS(output, platform)
-            return
+            return self.buildNSIS(output, platform)
         elif "_" in platform:
-            osname, arch = platform.split("_", 1)
-            if osname == "linux":
-                self.buildDEB(output, platform)
-                self.buildArch(output, platform)
-                return
-            elif osname == "osx":
-                self.buildPKG(output, platform)
-                return
+            os, arch = platform.split("_", 1)
+            if os == "linux":
+                return self.buildDEB(output, platform)
+            elif os == "osx":
+                return self.buildPKG(output, platform)
+            elif os == "freebsd":
+                return self.buildDEB(output, platform)
         Installer.notify.info("Ignoring unknown platform " + platform)
-
-    def __buildTempLinux(self, platform):
-        """ Builds a filesystem for Linux.  Used so that buildDEB,
-        buildRPM and buildArch can share the same temp directory. """
-
-        if self.__linuxRoot is not None:
-            return self.__linuxRoot
-
-        tempdir = Filename(self.tempDir, platform)
-        tempdir.makeDir()
-
-        Filename(tempdir, "usr/bin/").makeDir()
-        if self.includeRequires:
-            extraTokens = {"host_dir" : "/usr/lib/" + self.shortname.lower()}
-        else:
-            extraTokens = {}
-        self.standalone.build(Filename(tempdir, "usr/bin/" + self.shortname.lower()), platform, extraTokens)
-        if not self.licensefile.empty():
-            Filename(tempdir, "usr/share/doc/%s/" % self.shortname.lower()).makeDir()
-            shutil.copyfile(self.licensefile.toOsSpecific(), Filename(tempdir, "usr/share/doc/%s/copyright" % self.shortname.lower()).toOsSpecific())
-            shutil.copyfile(self.licensefile.toOsSpecific(), Filename(tempdir, "usr/share/doc/%s/LICENSE" % self.shortname.lower()).toOsSpecific())
-
-        if self.includeRequires:
-            hostDir = Filename(tempdir, "usr/lib/" + self.shortname.lower())
-            hostDir.makeDir()
-            self.installPackagesInto(hostDir, platform)
-
-        totsize = 0
-        for root, dirs, files in self.os_walk(tempdir.toOsSpecific()):
-            for name in files:
-                totsize += os.path.getsize(os.path.join(root, name))
-
-        self.__linuxRoot = (tempdir, totsize)
-        return self.__linuxRoot
 
     def buildDEB(self, output, platform):
         """ Builds a .deb archive and stores it in the path indicated
         by the 'output' argument. It will be built for the architecture
         specified by the 'arch' argument.
         If 'output' is a directory, the deb file will be stored in it. """
-
+        
         arch = platform.rsplit("_", 1)[-1]
         output = Filename(output)
         if output.isDirectory():
             output = Filename(output, "%s_%s_%s.deb" % (self.shortname.lower(), self.version, arch))
         Installer.notify.info("Creating %s..." % output)
-        modtime = int(time.time())
 
-        # Create a temporary directory and write the launcher and dependencies to it.
-        tempdir, totsize = self.__buildTempLinux(platform)
-
-        # Create a control file in memory.
-        controlfile = StringIO()
+        # Create a temporary directory and write the control file + launcher to it
+        tempdir = Filename.temporary("", self.shortname.lower() + "_deb_", "") + "/"
+        tempdir.makeDir()
+        controlfile = open(Filename(tempdir, "control").toOsSpecific(), "w")
         print >>controlfile, "Package: %s" % self.shortname.lower()
         print >>controlfile, "Version: %s" % self.version
-        print >>controlfile, "Maintainer: %s <%s>" % (self.authorname, self.authoremail)
         print >>controlfile, "Section: games"
         print >>controlfile, "Priority: optional"
         print >>controlfile, "Architecture: %s" % arch
-        print >>controlfile, "Installed-Size: %d" % -(-totsize / 1024)
         print >>controlfile, "Description: %s" % self.fullname
-        print >>controlfile, "Depends: libc6, libgcc1, libstdc++6, libx11-6"
-        controlinfo = TarInfoRoot("control")
-        controlinfo.mtime = modtime
-        controlinfo.size = controlfile.tell()
-        controlfile.seek(0)
+        print >>controlfile, "Depends: libc6, libgcc1, libstdc++6, libx11-6 libssl0.9.8"
+        controlfile.close()
+        postinst = open(Filename(tempdir, "postinst").toOsSpecific(), "w")
+        print >>postinst, "#!/bin/sh"
+        print >>postinst, "/usr/bin/%s --prep" % self.shortname.lower()
+        print >>postinst, "chmod -R 777 /usr/share/%s" % self.shortname.lower()
+        print >>postinst, "chmod -R 555 /usr/share/%s/hosts" % self.shortname.lower()
+        postinst.close()
+        os.chmod(Filename(tempdir, "postinst").toOsSpecific(), 0755)
+        postrmfile = open(Filename(tempdir, "postrm").toOsSpecific(), "w")
+        print >>postrmfile, "#!/bin/sh"
+        print >>postrmfile, "rm -rf /usr/share/%s" % self.shortname.lower()
+        postrmfile.close()
+        os.chmod(Filename(tempdir, "postrm").toOsSpecific(), 0755)
+        Filename(tempdir, "usr/bin/").makeDir()
+        self.standalone.tokens["root_dir"] = "/usr/share/" + self.shortname.lower()
+        self.standalone.build(Filename(tempdir, "usr/bin/" + self.shortname.lower()), platform)
+        if not self.licensefile.empty():
+            Filename(tempdir, "usr/share/doc/%s/" % self.shortname.lower()).makeDir()
+            shutil.copyfile(self.licensefile.toOsSpecific(), Filename(tempdir, "usr/share/doc/%s/copyright" % self.shortname.lower()).toOsSpecific())
+        rootDir = Filename(tempdir, "usr/share/" + self.shortname.lower())
+        rootDir.makeDir()
+        Filename(rootDir, "log").makeDir()
+        Filename(rootDir, "prc").makeDir()
+        Filename(rootDir, "start").makeDir()
+        Filename(rootDir, "certs").makeDir()
+        self.installPackagesInto(rootDir, platform)
+
+        # Create a control.tar.gz file in memory
+        controlfile = Filename(tempdir, "control")
+        postinstfile = Filename(tempdir, "postinst")
+        postrmfile = Filename(tempdir, "postrm")
+        controltargz = CachedFile()
+        controltarfile = tarfile.TarFile.gzopen("control.tar.gz", "w", controltargz, 9)
+        controltarfile.add(controlfile.toOsSpecific(), "control")
+        controltarfile.add(postinstfile.toOsSpecific(), "postinst")
+        controltarfile.add(postrmfile.toOsSpecific(), "postrm")
+        controltarfile.close()
+        controlfile.unlink()
+        postinstfile.unlink()
+        postrmfile.unlink()
+
+        # Create the data.tar.gz file in the temporary directory
+        datatargz = CachedFile()
+        datatarfile = tarfile.TarFile.gzopen("data.tar.gz", "w", datatargz, 9)
+        datatarfile.add(Filename(tempdir, "usr").toOsSpecific(), "/usr")
+        datatarfile.close()
 
         # Open the deb file and write to it. It's actually
         # just an AR file, which is very easy to make.
+        modtime = int(time.time())
         if output.exists():
             output.unlink()
         debfile = open(output.toOsSpecific(), "wb")
         debfile.write("!<arch>\x0A")
         debfile.write("debian-binary   %-12lu0     0     100644  %-10ld\x60\x0A" % (modtime, 4))
         debfile.write("2.0\x0A")
-
-        # Write the control.tar.gz to the archive.
-        debfile.write("control.tar.gz  %-12lu0     0     100644  %-10ld\x60\x0A" % (modtime, 0))
-        ctaroffs = debfile.tell()
-        ctarfile = tarfile.open("control.tar.gz", "w:gz", debfile, tarinfo = TarInfoRoot)
-        ctarfile.addfile(controlinfo, controlfile)
-        ctarfile.close()
-        ctarsize = debfile.tell() - ctaroffs
-        if (ctarsize & 1): debfile.write("\x0A")
-
-        # Write the data.tar.gz to the archive.
-        debfile.write("data.tar.gz     %-12lu0     0     100644  %-10ld\x60\x0A" % (modtime, 0))
-        dtaroffs = debfile.tell()
-        dtarfile = tarfile.open("data.tar.gz", "w:gz", debfile, tarinfo = TarInfoRoot)
-        dtarfile.add(Filename(tempdir, "usr").toOsSpecific(), "/usr")
-        dtarfile.close()
-        dtarsize = debfile.tell() - dtaroffs
-        if (dtarsize & 1): debfile.write("\x0A")
-
-        # Write the correct sizes of the archives.
-        debfile.seek(ctaroffs - 12)
-        debfile.write("%-10ld" % ctarsize)
-        debfile.seek(dtaroffs - 12)
-        debfile.write("%-10ld" % dtarsize)
-
+        debfile.write("control.tar.gz  %-12lu0     0     100644  %-10ld\x60\x0A" % (modtime, len(controltargz.str)))
+        debfile.write(controltargz.str)
+        if (len(controltargz.str) & 1): debfile.write("\x0A")
+        debfile.write("data.tar.gz     %-12lu0     0     100644  %-10ld\x60\x0A" % (modtime, len(datatargz.str)))
+        debfile.write(datatargz.str)
+        if (len(datatargz.str) & 1): debfile.write("\x0A")
         debfile.close()
-
-        return output
-
-    def buildArch(self, output, platform):
-        """ Builds an ArchLinux package and stores it in the path
-        indicated by the 'output' argument. It will be built for the
-        architecture specified by the 'arch' argument.
-        If 'output' is a directory, the deb file will be stored in it. """
-
-        arch = platform.rsplit("_", 1)[-1]
-        assert arch in ("i386", "amd64")
-        arch = {"i386" : "i686", "amd64" : "x86_64"}[arch]
-        pkgver = self.version + "-1"
-
-        output = Filename(output)
-        if output.isDirectory():
-            output = Filename(output, "%s-%s-%s.pkg.tar.gz" % (self.shortname.lower(), pkgver, arch))
-        Installer.notify.info("Creating %s..." % output)
-        modtime = int(time.time())
-
-        # Create a temporary directory and write the launcher and dependencies to it.
-        tempdir, totsize = self.__buildTempLinux(platform)
-
-        # Create a pkginfo file in memory.
-        pkginfo = StringIO()
-        print >>pkginfo, "# Generated using pdeploy"
-        print >>pkginfo, "# %s" % time.ctime(modtime)
-        print >>pkginfo, "pkgname = %s" % self.shortname.lower()
-        print >>pkginfo, "pkgver = %s" % pkgver
-        print >>pkginfo, "pkgdesc = %s" % self.fullname
-        print >>pkginfo, "builddate = %s" % modtime
-        print >>pkginfo, "packager = %s <%s>" % (self.authorname, self.authoremail)
-        print >>pkginfo, "size = %d" % totsize
-        print >>pkginfo, "arch = %s" % arch
-        if self.licensename != "":
-            print >>pkginfo, "license = %s" % self.licensename
-        pkginfoinfo = TarInfoRoot(".PKGINFO")
-        pkginfoinfo.mtime = modtime
-        pkginfoinfo.size = pkginfo.tell()
-        pkginfo.seek(0)
-
-        # Create the actual package now.
-        pkgfile = tarfile.open(output.toOsSpecific(), "w:gz", tarinfo = TarInfoRoot)
-        pkgfile.addfile(pkginfoinfo, pkginfo)
-        pkgfile.add(tempdir.toOsSpecific(), "/")
-        if not self.licensefile.empty():
-            pkgfile.add(self.licensefile.toOsSpecific(), "/usr/share/licenses/%s/LICENSE" % self.shortname.lower())
-        pkgfile.close()
-
-        return output
+        try:
+            base.appRunner.rmtree(tempdir)
+        except:
+            try: shutil.rmtree(tempdir.toOsSpecific())
+            except: pass
 
     def buildAPP(self, output, platform):
-
+        
         output = Filename(output)
         if output.isDirectory() and output.getExtension() != 'app':
             output = Filename(output, "%s.app" % self.fullname)
         Installer.notify.info("Creating %s..." % output)
-
+        
         # Create the executable for the application bundle
         exefile = Filename(output, "Contents/MacOS/" + self.shortname)
         exefile.makeDir()
-        if self.includeRequires:
-            extraTokens = {"host_dir" : "../Resources"}
-        else:
-            extraTokens = {}
-        self.standalone.build(exefile, platform, extraTokens)
-        hostDir = Filename(output, "Contents/Resources/")
-        hostDir.makeDir()
-        self.installPackagesInto(hostDir, platform)
-
+        self.standalone.tokens["root_dir"] = "../Resources"
+        self.standalone.build(exefile, platform)
+        rootDir = Filename(output, "Contents/Resources/")
+        rootDir.makeDir()
+        self.installPackagesInto(rootDir, platform)
+        
         # Create the application plist file.
         # Although it might make more sense to use Python's plistlib module here,
         # it is not available on non-OSX systems before Python 2.6.
@@ -689,7 +405,7 @@ class Installer:
         print >>plist, '</dict>'
         print >>plist, '</plist>'
         plist.close()
-
+        
         return output
 
     def buildPKG(self, output, platform):
@@ -699,7 +415,7 @@ class Installer:
         if output.isDirectory():
             output = Filename(output, "%s %s.pkg" % (self.fullname, self.version))
         Installer.notify.info("Creating %s..." % output)
-
+        
         Filename(output, "Contents/Resources/en.lproj/").makeDir()
         if self.licensefile:
             shutil.copyfile(self.licensefile.toOsSpecific(), Filename(output, "Contents/Resources/License.txt").toOsSpecific())
@@ -709,7 +425,7 @@ class Installer:
         pkginfo = open(Filename(output, "Contents/Resources/package_version").toOsSpecific(), "w")
         pkginfo.write("major: 1\nminor: 9")
         pkginfo.close()
-
+        
         # Although it might make more sense to use Python's plistlib here,
         # it is not available on non-OSX systems before Python 2.6.
         plist = open(Filename(output, "Contents/Info.plist").toOsSpecific(), "w")
@@ -755,7 +471,7 @@ class Installer:
         plist.write('</dict>\n')
         plist.write('</plist>\n')
         plist.close()
-
+        
         plist = open(Filename(output, "Contents/Resources/TokenDefinitions.plist").toOsSpecific(), "w")
         plist.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         plist.write('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n')
@@ -775,7 +491,7 @@ class Installer:
         plist.write('</dict>\n')
         plist.write('</plist>\n')
         plist.close()
-
+        
         plist = open(Filename(output, "Contents/Resources/en.lproj/Description.plist").toOsSpecific(), "w")
         plist.write('<?xml version="1.0" encoding="UTF-8"?>\n')
         plist.write('<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n')
@@ -788,43 +504,43 @@ class Installer:
         plist.write('</dict>\n')
         plist.write('</plist>\n')
         plist.close()
-
+        
+        postflight = open(Filename(output, "Contents/Resources/postflight").toOsSpecific(), "w")
+        print >>postflight, '#!/bin/sh'
+        print >>postflight, 'chmod -R 777 "%s"' % appname
+        print >>postflight, 'chmod -R 755 "%s/hosts/"' % appname
+        postflight.close()
+        os.chmod(Filename(output, "Contents/Resources/postflight").toOsSpecific(), 0755)
+        
         if hasattr(tarfile, "PAX_FORMAT"):
-            archive = tarfile.open(Filename(output, "Contents/Archive.pax.gz").toOsSpecific(), "w:gz", format = tarfile.PAX_FORMAT, tarinfo = TarInfoRootOSX)
+            archive = tarfile.open(Filename(output, "Contents/Archive.pax.gz").toOsSpecific(), "w:gz", format = tarfile.PAX_FORMAT)
         else:
-            archive = tarfile.open(Filename(output, "Contents/Archive.pax.gz").toOsSpecific(), "w:gz", tarinfo = TarInfoRootOSX)
+            archive = tarfile.open(Filename(output, "Contents/Archive.pax.gz").toOsSpecific(), "w:gz")
         archive.add(appfn.toOsSpecific(), appname)
         archive.close()
-
+        
         # Put the .pkg into a zipfile
         archive = Filename(output.getDirname(), "%s %s.zip" % (self.fullname, self.version))
         dir = Filename(output.getDirname())
         dir.makeAbsolute()
         zip = zipfile.ZipFile(archive.toOsSpecific(), 'w')
-        for root, dirs, files in self.os_walk(output.toOsSpecific()):
+        for root, dirs, files in os.walk(output.toOsSpecific()):
             for name in files:
                 file = Filename.fromOsSpecific(os.path.join(root, name))
                 file.makeAbsolute()
                 file.makeRelativeTo(dir)
                 zip.write(os.path.join(root, name), str(file))
         zip.close()
-
+        
         return output
 
     def buildNSIS(self, output, platform):
         # Check if we have makensis first
         makensis = None
         if (sys.platform.startswith("win")):
-            syspath = os.defpath.split(";") + os.environ["PATH"].split(";")
-            for p in set(syspath):
-                p1 = os.path.join(p, "makensis.exe")
-                p2 = os.path.join(os.path.dirname(p), "nsis", "makensis.exe")
-                if os.path.isfile(p1):
-                    makensis = p1
-                    break
-                elif os.path.isfile(p2):
-                    makensis = p2
-                    break
+            for p in os.defpath.split(";") + os.environ["PATH"].split(";"):
+                if os.path.isfile(os.path.join(p, "makensis.exe")):
+                    makensis = os.path.join(p, "makensis.exe")
             if not makensis:
                 import pandac
                 makensis = os.path.dirname(os.path.dirname(pandac.__file__))
@@ -834,11 +550,11 @@ class Installer:
             for p in os.defpath.split(":") + os.environ["PATH"].split(":"):
                 if os.path.isfile(os.path.join(p, "makensis")):
                     makensis = os.path.join(p, "makensis")
-
+        
         if makensis == None:
             Installer.notify.warning("Makensis utility not found, no Windows installer will be built!")
-            return None
-
+            return
+        
         output = Filename(output)
         if output.isDirectory():
             output = Filename(output, "%s %s.exe" % (self.fullname, self.version))
@@ -848,17 +564,13 @@ class Installer:
 
         exefile = Filename(Filename.getTempDirectory(), self.shortname + ".exe")
         exefile.unlink()
-        if self.includeRequires:
-            extraTokens = {"host_dir" : "."}
-        else:
-            extraTokens = {}
-        self.standalone.build(exefile, platform, extraTokens)
-
-        # Temporary directory to store the hostdir in
-        hostDir = Filename(self.tempDir, platform + "/")
-        if not hostDir.exists():
-            hostDir.makeDir()
-            self.installPackagesInto(hostDir, platform)
+        self.standalone.tokens["root_dir"] = "."
+        self.standalone.build(exefile, platform)
+        
+        # Temporary directory to store the rootdir in
+        rootDir = Filename.temporary("", self.shortname.lower() + "_exe_", "") + "/"
+        rootDir.makeDir()
+        self.installPackagesInto(rootDir, platform)
 
         nsifile = Filename(Filename.getTempDirectory(), self.shortname + ".nsi")
         nsifile.unlink()
@@ -885,14 +597,12 @@ class Installer:
         nsi.write('!define MUI_ABORTWARNING\n')
         nsi.write('!define MUI_FINISHPAGE_RUN\n')
         nsi.write('!define MUI_FINISHPAGE_RUN_FUNCTION launch\n')
-        nsi.write('!define MUI_FINISHPAGE_RUN_TEXT "Run %s"\n' % self.fullname)
+        nsi.write('!define MUI_FINISHPAGE_RUN_TEXT "Play %s"\n' % self.fullname)
         nsi.write('\n')
         nsi.write('Var StartMenuFolder\n')
         nsi.write('!insertmacro MUI_PAGE_WELCOME\n')
         if not self.licensefile.empty():
-            abs = Filename(self.licensefile)
-            abs.makeAbsolute()
-            nsi.write('!insertmacro MUI_PAGE_LICENSE "%s"\n' % abs.toOsSpecific())
+            nsi.write('!insertmacro MUI_PAGE_LICENSE "%s"\n' % self.licensefile.toOsSpecific())
         nsi.write('!insertmacro MUI_PAGE_DIRECTORY\n')
         nsi.write('!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder\n')
         nsi.write('!insertmacro MUI_PAGE_INSTFILES\n')
@@ -910,11 +620,11 @@ class Installer:
         for f in extrafiles:
             nsi.write('  File "%s"\n' % f.toOsSpecific())
         curdir = ""
-        for root, dirs, files in self.os_walk(hostDir.toOsSpecific()):
+        for root, dirs, files in os.walk(rootDir.toOsSpecific()):
             for name in files:
                 file = Filename.fromOsSpecific(os.path.join(root, name))
                 file.makeAbsolute()
-                file.makeRelativeTo(hostDir)
+                file.makeRelativeTo(rootDir)
                 outdir = file.getDirname().replace('/', '\\')
                 if curdir != outdir:
                     nsi.write('  SetOutPath "$INSTDIR\\%s"\n' % outdir)
@@ -924,7 +634,6 @@ class Installer:
         nsi.write('  ; Start menu items\n')
         nsi.write('  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application\n')
         nsi.write('    CreateDirectory "$SMPROGRAMS\\$StartMenuFolder"\n')
-        nsi.write('    CreateShortCut "$SMPROGRAMS\\$StartMenuFolder\\%s.lnk" "$INSTDIR\\%s.exe"\n' % (self.fullname, self.shortname))
         nsi.write('    CreateShortCut "$SMPROGRAMS\\$StartMenuFolder\\Uninstall.lnk" "$INSTDIR\\Uninstall.exe"\n')
         nsi.write('  !insertmacro MUI_STARTMENU_WRITE_END\n')
         nsi.write('SectionEnd\n')
@@ -943,44 +652,21 @@ class Installer:
         nsi.write('SectionEnd')
         nsi.close()
 
-        cmd = [makensis]
-        for o in ["V2"]:
+        options = ["V2"]
+        cmd = "\"" + makensis + "\""
+        for o in options:
             if sys.platform.startswith("win"):
-                cmd.append("/" + o)
+                cmd += " /" + o
             else:
-                cmd.append("-" + o)
-        cmd.append(nsifile.toOsSpecific())
+                cmd += " -" + o
+        cmd += " " + nsifile.toOsSpecific()
         print cmd
-        try:
-            retcode = subprocess.call(cmd, shell = False)
-            if retcode != 0:
-                self.notify.warning("Failure invoking NSIS command.")
-        except OSError:
-            self.notify.warning("Unable to invoke NSIS command.")
+        os.system(cmd)
 
         nsifile.unlink()
+        try:
+            base.appRunner.rmtree(rootDir)
+        except:
+            try: shutil.rmtree(rootDir.toOsSpecific())
+            except: pass
         return output
-
-    def os_walk(self, top):
-        """ Re-implements os.walk().  For some reason the built-in
-        definition is failing on Windows when this is run within a p3d
-        environment!? """
-
-        dirnames = []
-        filenames = []
-
-        dirlist = os.listdir(top)
-        if dirlist:
-            for file in dirlist:
-                path = os.path.join(top, file)
-                if os.path.isdir(path):
-                    dirnames.append(file)
-                else:
-                    filenames.append(file)
-
-        yield (top, dirnames, filenames)
-
-        for dir in dirnames:
-            next = os.path.join(top, dir)
-            for tuple in self.os_walk(next):
-                yield tuple

@@ -20,7 +20,7 @@
     glxGraphicsWindow.h glxGraphicsWindow.cxx \
     glxGraphicsStateGuardian.h glxGraphicsStateGuardian.I \
     glxGraphicsStateGuardian.cxx \
-    panda_glxext.h
+    glxext.h
 
   #define INSTALL_HEADERS \
     glxGraphicsBuffer.I glxGraphicsBuffer.h \

@@ -30,10 +30,7 @@ class ScanDirectoryNode:
                         self.fileSize = diskSpace
                         return
 
-        files = vfs.scanDirectory(self.pathname)
-        if files is None:
-            files = []
-        for vfile in files:
+        for vfile in vfs.scanDirectory(self.pathname):
             if hasattr(vfile, 'getMount'):
                 if not isinstance(vfile.getMount(), VirtualFileMountSystem):
                     # Not a real file; ignore it.

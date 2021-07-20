@@ -62,12 +62,8 @@ PUBLISHED:
 public:
   virtual NxShapeDesc *ptr() const = 0;
 
-private:
-  string _name;
-
 protected:
   INLINE PhysxShapeDesc();
-  INLINE ~PhysxShapeDesc();
 };
 
 #include "physxShapeDesc.I"

@@ -133,32 +133,26 @@ TinyOsxGraphicsWindow* TinyOsxGraphicsWindow::GetCurrentOSxWindow(WindowRef wind
 //  Description: The standard window event handler for non-fullscreen
 //               windows.
 ////////////////////////////////////////////////////////////////////
-OSStatus TinyOsxGraphicsWindow::
-event_handler(EventHandlerCallRef myHandler, EventRef event) {
+OSStatus TinyOsxGraphicsWindow::event_handler(EventHandlerCallRef myHandler, EventRef event) {
 
   OSStatus result = eventNotHandledErr;
   UInt32 the_class = GetEventClass(event);
   UInt32 kind = GetEventKind(event);
 
   WindowRef window = NULL;
-  GetEventParameter(event, kEventParamDirectObject, typeWindowRef, NULL,
-                    sizeof(window), NULL, &window);
-
-  UInt32 attributes = 0;
-  GetEventParameter(event, kEventParamAttributes, typeUInt32, NULL,
-                    sizeof(attributes), NULL, &attributes);
+  GetEventParameter(event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &window);
 
   if (tinydisplay_cat.is_spam()) {
     tinydisplay_cat.spam() << ClockObject::get_global_clock()->get_real_time() << " event_handler: " << (void *)this << ", " << window << ", " << the_class << ", " << kind << "\n";
   }
 
   switch (the_class) {
-  case kEventClassMouse:
-    result  = handleWindowMouseEvents (myHandler, event);
-    break;
-    
-  case kEventClassWindow:
-    switch (kind) {
+    case kEventClassMouse:
+      result  = handleWindowMouseEvents (myHandler, event);
+      break;
+
+    case kEventClassWindow:
+      switch (kind) {
         case kEventWindowCollapsing:
           /*
           Rect r;
@@ -185,44 +179,27 @@ event_handler(EventHandlerCallRef myHandler, EventRef event) {
           if (window == FrontNonFloatingWindow ())
             SetUserFocusWindow (window);
           break;
-
-      case kEventWindowBoundsChanging:
-        // Gives us a chance to intercept resize attempts
-        if (attributes & kWindowBoundsChangeSizeChanged) {
-          // If the window is supposed to be fixed-size, enforce this.
-          if (_properties.get_fixed_size()) {
-            Rect bounds;
-            GetEventParameter(event, kEventParamCurrentBounds,
-                              typeQDRectangle, NULL, sizeof(bounds), NULL, &bounds);
-            bounds.right = bounds.left + _properties.get_x_size();
-            bounds.bottom = bounds.top + _properties.get_y_size();
-            SetEventParameter(event, kEventParamCurrentBounds,
-                              typeQDRectangle, sizeof(bounds), &bounds);                   result = noErr;
+        case kEventWindowBoundsChanged: // called for resize and moves (drag)
+          DoResize();
+          break;
+        case kEventWindowZoomed:
+          break;
+        case kEventWindowCollapsed:
+          {
+            WindowProperties properties;
+            properties.set_minimized(true);
+            system_changed_properties(properties);
           }
-        }
-        break;
-        
-    case kEventWindowBoundsChanged: // called for resize and moves (drag)
-      DoResize();
-      break;
-    case kEventWindowZoomed:
-      break;
-    case kEventWindowCollapsed:
-      {
-        WindowProperties properties;
-        properties.set_minimized(true);
-        system_changed_properties(properties);
+          break;
+        case kEventWindowExpanded:
+          {
+            WindowProperties properties;
+            properties.set_minimized(false);
+            system_changed_properties(properties);
+          }
+          break;
       }
       break;
-    case kEventWindowExpanded:
-      {
-        WindowProperties properties;
-        properties.set_minimized(false);
-        system_changed_properties(properties);
-      }
-      break;
-    }
-    break;
   }
 
   return result;
@@ -456,6 +433,7 @@ void TinyOsxGraphicsWindow::ReleaseSystemResources() {
     _pending_icon = NULL;
   }
   if (_current_icon != NULL) {
+    cerr << "release current icon\n";
     CGImageRelease(_current_icon);
     _current_icon = NULL;
   }
@@ -920,46 +898,48 @@ bool TinyOsxGraphicsWindow::OSOpenWindow(WindowProperties &req_properties) {
     FullScreenWindow = this;
     req_properties.clear_fullscreen();
   } else {
-    int x_origin = 10;
-    int y_origin = 50;
-    if (req_properties.has_origin()) { 
-      y_origin  = req_properties.get_y_origin();
-      x_origin = req_properties.get_x_origin();
-    }
-
-    int x_size = 512;
-    int y_size = 512;
-    if (req_properties.has_size()) {
-      x_size = req_properties.get_x_size();
-      y_size = req_properties.get_y_size();
-    }
-      
-    // A coordinate of -2 means to center the window on screen.
-    if (y_origin == -2 || x_origin == -2) {
-      if (y_origin == -2) {
-        y_origin = (_pipe->get_display_height() - y_size) / 2;
-      }
-      if (x_origin == -2) {
-        x_origin = (_pipe->get_display_width() - x_size) / 2;
-      }
-    }
-
-    // A coordinate of -1 means a default location.
-    if (y_origin == -1) {
-      y_origin = 50;
-    }
-    if (x_origin == -1) {
-      x_origin = 10;
-    }
-
-    _properties.set_origin(x_origin, y_origin);
-    _properties.set_size(x_size, y_size);
-
     Rect r;
-    r.top = y_origin;
-    r.left = x_origin;
-    r.right = r.left + x_size;
-    r.bottom = r.top + y_size;
+    if (req_properties.has_origin()) {
+      r.top = req_properties.get_y_origin();
+      r.left = req_properties.get_x_origin();
+      
+      // A coordinate of -2 means to center the window on screen.
+      if (r.top == -2 || r.left == -2) {
+        if (req_properties.has_size()) {
+          if (r.top == -2) {
+            r.top = 0.5 * (_pipe->get_display_height() - req_properties.get_y_size());
+          }
+          if (r.left == -2) {
+            r.left = 0.5 * (_pipe->get_display_width() - req_properties.get_x_size());
+          }
+        } else {
+          if (r.top == -2) {
+            r.top = 0.5 * (_pipe->get_display_height() - req_properties.get_y_size());
+          }
+          if (r.left == -2) {
+            r.left = 0.5 * (_pipe->get_display_width() - req_properties.get_x_size());
+          }
+        }
+        _properties.set_origin(r.left, r.top);
+      }
+      if (r.top == -1) {
+        r.top = 50;
+      }
+      if (r.left == -1) {
+        r.left = 10;
+      }
+    } else {
+      r.top = 50;
+      r.left = 10;
+    }
+
+    if (req_properties.has_size()) {
+      r.right = r.left + req_properties.get_x_size();
+      r.bottom = r.top + req_properties.get_y_size();
+    } else {
+      r.right = r.left + 512;
+      r.bottom = r.top + 512;
+    }
 
             /*
     if (req_properties.has_parent_window()) {
@@ -973,23 +953,16 @@ bool TinyOsxGraphicsWindow::OSOpenWindow(WindowProperties &req_properties) {
     }
     else */
     {
-      int attributes = kWindowStandardDocumentAttributes | kWindowStandardHandlerAttribute;
-      if (req_properties.has_fixed_size() && req_properties.get_fixed_size()) {
-        attributes &= ~kWindowResizableAttribute;
-      }
-
       if (req_properties.has_undecorated() && req_properties.get_undecorated()) { // create a unmovable .. no edge window..
 	tinydisplay_cat.info() << "Creating undecorated window\n";
 
-        // We don't want a resize box either.
-        attributes &= ~kWindowResizableAttribute;
-        attributes |= kWindowNoTitleBarAttribute;
-	CreateNewWindow(kDocumentWindowClass, attributes, &r, &_osx_window);
+	CreateNewWindow(kDocumentWindowClass, kWindowStandardDocumentAttributes |  kWindowNoTitleBarAttribute, &r, &_osx_window);
       }
       else
       { // create a window with crome and sizing and sucj
 	// In this case, we want to constrain the window to the
 	// available size.
+
 	Rect bounds;
 	GetAvailableWindowPositioningBounds(GetMainDevice(), &bounds);
 
@@ -999,7 +972,7 @@ bool TinyOsxGraphicsWindow::OSOpenWindow(WindowProperties &req_properties) {
 	r.bottom = min(r.bottom, bounds.bottom);
 
 	tinydisplay_cat.info() << "Creating standard window\n";
-	CreateNewWindow(kDocumentWindowClass, attributes, &r, &_osx_window);
+	CreateNewWindow(kDocumentWindowClass, kWindowStandardDocumentAttributes | kWindowStandardHandlerAttribute, &r, &_osx_window);
 	AddAWindow(_osx_window);
       }
     }
@@ -1015,7 +988,6 @@ bool TinyOsxGraphicsWindow::OSOpenWindow(WindowProperties &req_properties) {
           { kEventClassWindow, kEventWindowActivated },
           { kEventClassWindow, kEventWindowDeactivated },
           { kEventClassWindow, kEventWindowClose },
-          { kEventClassWindow, kEventWindowBoundsChanging },
           { kEventClassWindow, kEventWindowBoundsChanged },
 
           { kEventClassWindow, kEventWindowCollapsed },
@@ -1576,12 +1548,12 @@ bool TinyOsxGraphicsWindow::do_reshape_request(int x_origin, int y_origin, bool 
   }
 
   // A coordinate of -2 means to center the window on screen.
-  if (x_origin == -2 || y_origin == -2 || x_origin == -1 || y_origin == -1) {
+  if (x_origin == -2 || y_origin == -2) {
     if (y_origin == -2) {
-      y_origin = (_pipe->get_display_height() - y_size) / 2;
+      y_origin = 0.5 * (_pipe->get_display_height() - y_size);
     }
     if (x_origin == -2) {
-      x_origin = (_pipe->get_display_width() - x_size) / 2;
+      x_origin = 0.5 * (_pipe->get_display_width() - x_size);
     }
     if (y_origin == -1) {
       y_origin = 50;

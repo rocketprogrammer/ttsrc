@@ -229,19 +229,16 @@ find_root_dir_default() {
     return root;
   }
 
-#else  // The Linux/*BSD case
+#else  // The Linux case
   // e.g., /home/<username>/.panda3d
 
   string root;
-  const passwd *pwdata = getpwuid(getuid());
+  const char *uname = getlogin();
+  if (uname == NULL) uname = getenv("USER");
+
+  const passwd *pwdata = getpwnam(uname);
   if (pwdata == NULL) {
-    char *home = getenv("HOME");
-    if (home == NULL) {
-      // Beh.  Let's hope it never gets to this point.
-      return ".";
-    } else {
-      root = home;
-    }
+    root = getenv("HOME");
   } else {
     root = pwdata->pw_dir;
   }

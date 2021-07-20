@@ -22,6 +22,7 @@
 #include "config_gles2gsg.h"
 
 #define GLP(name) gl##name
+#define GLUP(name) glu##name
 #define CLP(name) GLES2##name
 #define GLPREFIX_QUOTED "gl"
 #define CLASSPREFIX_QUOTED "GLES2"
@@ -40,15 +41,8 @@
   #define OPENGLES_2
 #endif
 
-#ifdef IS_OSX
-  #include <OpenGLES/ES2/gl.h>
-  #include <OpenGLES/ES2/glext.h>
-#else
-  #include <GLES2/gl2.h>
-  #include <GLES2/gl2ext.h>
-#endif
-
-#include "panda_esgl2ext.h" 
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 
 // This helps to keep the source clean of hundreds of #ifdefs.
 typedef char GLchar;

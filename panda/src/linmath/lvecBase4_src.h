@@ -12,9 +12,6 @@
 //
 ////////////////////////////////////////////////////////////////////
 
-class FLOATNAME(LVecBase2);
-class FLOATNAME(LVecBase3);
-
 ////////////////////////////////////////////////////////////////////
 //       Class : LVecBase4
 // Description : This is the base class for all three-component
@@ -43,8 +40,6 @@ PUBLISHED:
 
 #ifdef HAVE_PYTHON
   PyObject *__reduce__(PyObject *self) const;
-  PyObject *__getattr__(const string &attr_name) const;
-  int __setattr__(PyObject *self, const string &attr_name, PyObject *assign);
 #endif
 
   INLINE_LINMATH FLOATTYPE operator [](int i) const;

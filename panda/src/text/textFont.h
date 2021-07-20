@@ -36,7 +36,6 @@
 class EXPCL_PANDA_TEXT TextFont : public TypedReferenceCount, public Namable {
 public:
   TextFont();
-  TextFont(const TextFont &copy);
 
 PUBLISHED:
   virtual ~TextFont();
@@ -69,7 +68,6 @@ PUBLISHED:
     WO_invalid,
   };
 
-  virtual PT(TextFont) make_copy() const=0;
 
   INLINE bool is_valid() const;
   INLINE operator bool () const;

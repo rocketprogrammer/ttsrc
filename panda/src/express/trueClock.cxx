@@ -21,7 +21,7 @@
 
 TrueClock *TrueClock::_global_ptr = NULL;
 
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
 
 ////////////////////////////////////////////////////////////////////
 //

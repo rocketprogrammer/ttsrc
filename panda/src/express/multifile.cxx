@@ -21,7 +21,6 @@
 #include "zStream.h"
 #include "encryptStream.h"
 #include "virtualFileSystem.h"
-#include "virtualFile.h"
 
 #include <algorithm>
 #include <time.h>
@@ -111,7 +110,7 @@ Multifile() :
      PRC_DESC("This is a special value of encryption-iteration-count used to encrypt "
               "subfiles within a multifile.  It has a default value of 0 (just one "
               "application), on the assumption that the files from a multifile must "
-              "be loaded quickly, without paying the cost of an expensive hash on "
+          "be loaded quickly, without paying the cost of an expensive hash on "
               "each subfile in order to decrypt it."));
   
   _read = (IStreamWrapper *)NULL;
@@ -188,25 +187,16 @@ operator = (const Multifile &copy) {
 bool Multifile::
 open_read(const Filename &multifile_name, const streampos &offset) {
   close();
+  _offset = offset;
   Filename fname = multifile_name;
   fname.set_binary();
-
-  VirtualFileSystem *vfs = VirtualFileSystem::get_global_ptr();
-  PT(VirtualFile) vfile = vfs->get_file(fname);
-  if (vfile == NULL) {
+  if (!fname.open_read(_read_file)) {
     return false;
   }
-  istream *multifile_stream = vfile->open_read_file(false);
-  if (multifile_stream == NULL) {
-    return false;
-  }
-
-  _timestamp = vfile->get_timestamp();
+  _timestamp = fname.get_timestamp();
   _timestamp_dirty = true;
-  _read = new IStreamWrapper(multifile_stream, true);
-  _owns_stream = true;
+  _read = &_read_filew;
   _multifile_name = multifile_name;
-  _offset = offset;
   return read_index();
 }
 
@@ -223,14 +213,12 @@ open_read(const Filename &multifile_name, const streampos &offset) {
 //               function returns false.
 ////////////////////////////////////////////////////////////////////
 bool Multifile::
-open_read(IStreamWrapper *multifile_stream, bool owns_pointer,
-          const streampos &offset) {
+open_read(IStreamWrapper *multifile_stream, bool owns_pointer) {
   close();
   _timestamp = time(NULL);
   _timestamp_dirty = true;
   _read = multifile_stream;
   _owns_stream = owns_pointer;
-  _offset = offset;
   return read_index();
 }
 
@@ -1997,72 +1985,14 @@ read_subfile(int index, pvector<unsigned char> &result) {
   nassertr(index >= 0 && index < (int)_subfiles.size(), false);
   result.clear();
 
-  // Now look up the particular Subfile we are reading.
-  nassertr(is_read_valid(), NULL);
-  nassertr(index >= 0 && index < (int)_subfiles.size(), NULL);
-  Subfile *subfile = _subfiles[index];
-
-  if (subfile->_source != (istream *)NULL ||
-      !subfile->_source_filename.empty()) {
-    // The subfile has not yet been copied into the physical
-    // Multifile.  Force a flush operation to incorporate it.
-    flush();
-
-    // That shouldn't change the subfile index or delete the subfile
-    // pointer.
-    nassertr(subfile == _subfiles[index], NULL);
-  }
-
-  result.reserve(subfile->_uncompressed_length);
-
-  bool success = true;
-  if (subfile->_flags & (SF_encrypted | SF_compressed)) {
-    // If the subfile is encrypted or compressed, we can't read it
-    // directly.  Fall back to the generic implementation.
-    istream *in = open_read_subfile(index);
-    if (in == (istream *)NULL) {
-      return false;
-    }
-
-    success = VirtualFile::simple_read_file(in, result);
-    close_read_subfile(in);
-
-  } else {
-    // But if the subfile is just a plain file, we can just read the
-    // data directly from the Multifile, without paying the cost of an
-    // ISubStream.
-    static const size_t buffer_size = 4096;
-    char buffer[buffer_size];
-
-    streamsize pos = _offset + subfile->_data_start;
-    size_t max_bytes = subfile->_data_length;
-    streamsize count = 0;
-    bool eof = true;
-
-    streamsize num_bytes = (streamsize)min(buffer_size, max_bytes);
-    _read->seek_read(pos, buffer, num_bytes, count, eof);
-    while (count != 0) {
-      thread_consider_yield();
-      nassertr(count <= max_bytes, false);
-      result.insert(result.end(), buffer, buffer + (size_t)count);
-      max_bytes -= (size_t)count;
-      pos += count;
-
-      num_bytes = (streamsize)min(buffer_size, max_bytes);
-      _read->seek_read(pos, buffer, num_bytes, count, eof);
-    }
-
-    success = !eof;
-  }
-
-  if (!success) {
-    ostringstream message;
-    message << "I/O error reading from " << get_multifile_name() << " at "
-            << get_subfile_name(index);
-    nassert_raise(message.str());
+  istream *in = open_read_subfile(index);
+  if (in == (istream *)NULL) {
     return false;
   }
 
+  bool success = read_to_pvector(result, *in);
+  close_read_subfile(in);
+  nassertr(success, false);
   return true;
 }
 
@@ -2233,6 +2163,31 @@ standardize_subfile_name(const string &subfile_name) const {
   } else {
     return name.get_fullpath();
   }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: Multifile::read_to_pvector
+//       Access: Private, Static
+//  Description: Helper function to read the entire contents of the
+//               indicated stream from the current position, and
+//               append it onto the indicated pvector.  Returns true
+//               on success, false on failure.
+////////////////////////////////////////////////////////////////////
+bool Multifile::
+read_to_pvector(pvector<unsigned char> &result, istream &stream) {
+  static const size_t buffer_size = 4096;
+  char buffer[buffer_size];
+
+  stream.read(buffer, buffer_size);
+  size_t count = stream.gcount();
+  while (count != 0) {
+    result.insert(result.end(), buffer, buffer + count);
+    stream.read(buffer, buffer_size);
+    count = stream.gcount();
+  }
+
+  bool failed = stream.fail() && !stream.eof();
+  return !failed;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -2528,7 +2483,7 @@ check_signatures() {
 
     // Read the remaining buffer of certificate data.
     pvector<unsigned char> buffer;
-    bool success = VirtualFile::simple_read_file(stream, buffer);
+    bool success = read_to_pvector(buffer, *stream);
     nassertv(success);
     close_read_subfile(stream);
 

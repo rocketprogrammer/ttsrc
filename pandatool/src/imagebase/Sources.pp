@@ -2,14 +2,12 @@
   #define TARGET imagebase
   #define LOCAL_LIBS \
     progbase
-
   #define OTHER_LIBS \
-    pipeline:c event:c pstatclient:c panda:m \
-    pandabase:c pnmimage:c mathutil:c linmath:c putil:c express:c \
+    linmath:c putil:c pnmimage:c pipeline:c event:c \
+    panda:m \
+    pandabase:c express:c pandaexpress:m \
     interrogatedb:c prc:c dconfig:c dtoolconfig:m \
-    dtoolutil:c dtoolbase:c dtool:m \
-    $[if $[WANT_NATIVE_NET],nativenet:c] \
-    $[if $[and $[HAVE_NET],$[WANT_NATIVE_NET]],net:c downloader:c]
+    dtoolutil:c dtoolbase:c dtool:m
 
   #define COMBINED_SOURCES $[TARGET]_composite1.cxx 
 

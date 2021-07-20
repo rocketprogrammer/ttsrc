@@ -22,7 +22,7 @@
 INLINE PhysxCapsuleForceFieldShapeDesc::
 PhysxCapsuleForceFieldShapeDesc() : PhysxForceFieldShapeDesc() {
 
-  set_to_default();
+  _desc.name = "";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ INLINE void PhysxCapsuleForceFieldShapeDesc::
 set_to_default() {
 
   _desc.setToDefault();
-  set_name("");
 }
 
 ////////////////////////////////////////////////////////////////////

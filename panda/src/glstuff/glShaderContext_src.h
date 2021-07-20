@@ -51,7 +51,7 @@ public:
 
 private:
 
-#if defined(HAVE_CG) && !defined(OPENGLES)
+#ifdef HAVE_CG
   CGcontext _cg_context;
   CGprogram _cg_vprogram;
   CGprogram _cg_fprogram;

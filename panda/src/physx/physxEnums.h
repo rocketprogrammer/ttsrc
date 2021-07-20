@@ -107,10 +107,10 @@
 #define NX_FORCE_FIELD_CUSTOM_KERNEL_EPSILON 97
 #define NX_IMPROVED_SPRING_SOLVER 98
 
-#if NX_SDK_VERSION_NUMBER > 281
+#ifdef PHYSX283
 #define NX_FAST_MASSIVE_BP_VOLUME_DELETION 99
 #define NX_LEGACY_JOINT_DRIVE 100
-#endif /* NX_SDK_VERSION_NUMBER > 281 */
+#endif /* PHYSX283 */
 
 // PhysxActorFlag
 #define NX_AF_DISABLE_COLLISION 1<<0
@@ -140,26 +140,6 @@
 // PhysxBroadPhaseType
 #define NX_BP_TYPE_SAP_SINGLE 0
 #define NX_BP_TYPE_SAP_MULTI 1
-
-// PhysxClothFlag
-#define NX_CLF_PRESSURE 1<<0
-#define NX_CLF_STATIC 1<<1
-#define NX_CLF_DISABLE_COLLISION 1<<2
-#define NX_CLF_SELFCOLLISION 1<<3
-#define NX_CLF_VISUALIZATION 1<<4
-#define NX_CLF_GRAVITY 1<<5
-#define NX_CLF_BENDING 1<<6
-#define NX_CLF_BENDING_ORTHO 1<<7
-#define NX_CLF_DAMPING 1<<8
-#define NX_CLF_COLLISION_TWOWAY 1<<9
-#define NX_CLF_TRIANGLE_COLLISION 1<<11
-#define NX_CLF_TEARABLE 1<<12
-#define NX_CLF_HARDWARE 1<<13
-#define NX_CLF_COMDAMPING 1<<14
-#define NX_CLF_VALIDBOUNDS 1<<15
-#define NX_CLF_FLUID_COLLISION 1<<16
-#define NX_CLF_DISABLE_DYNAMIC_CCD 1<<17
-#define NX_CLF_ADHERE 1<<18
 
 // PhysxContactPairFlag
 #define NX_IGNORE_PAIR 1<<0
@@ -297,23 +277,6 @@
 #define NX_DYNAMIC_SHAPES 1<<1
 #define NX_ALL_SHAPES (1<<0|1<<1)
 
-// PhysxSoftBodyFlag
-#define NX_SBF_STATIC 1<<1
-#define NX_SBF_DISABLE_COLLISION 1<<2
-#define NX_SBF_SELFCOLLISION 1<<3
-#define NX_SBF_VISUALIZATION 1<<4
-#define NX_SBF_GRAVITY 1<<5
-#define NX_SBF_VOLUME_CONSERVATION 1<<6
-#define NX_SBF_DAMPING 1<<7
-#define NX_SBF_COLLISION_TWOWAY 1<<8
-#define NX_SBF_TEARABLE 1<<9
-#define NX_SBF_HARDWARE 1<<10
-#define NX_SBF_COMDAMPING 1<<11
-#define NX_SBF_VALIDBOUNDS 1<<12
-#define NX_SBF_FLUID_COLLISION 1<<13
-#define NX_SBF_DISABLE_DYNAMIC_CCD 1<<14
-#define NX_SBF_ADHERE 1<<15
-
 // PhysxSphericalJointFlag
 #define NX_SJF_TWIST_LIMIT_ENABLED 1<<0
 #define NX_SJF_SWING_LIMIT_ENABLED 1<<1
@@ -326,11 +289,6 @@
 #define NX_X 1
 #define NX_Y 2
 #define NX_Z 3
-
-// PhysxVertexAttachmentStatus
-#define NX_CLOTH_VERTEX_ATTACHMENT_NONE 0
-#define NX_CLOTH_VERTEX_ATTACHMENT_GLOBAL 1
-#define NX_CLOTH_VERTEX_ATTACHMENT_SHAPE 2
 
 // PhysxWheelShapeFlag
 #define NX_WF_WHEEL_AXIS_CONTACT_NORMAL 1<<0
@@ -383,10 +341,10 @@ PUBLISHED:
     P_force_field_custom_kernel_epsilon     = NX_FORCE_FIELD_CUSTOM_KERNEL_EPSILON,
     P_improved_spring_solver                = NX_IMPROVED_SPRING_SOLVER,
 
-#if NX_SDK_VERSION_NUMBER > 281
+#ifndef LINUX /* The following enums are only defined in SDK version 2.8.1 */
     P_fast_massive_bp_volume_deletion       = NX_FAST_MASSIVE_BP_VOLUME_DELETION,
     P_legacy_joint_drive                    = NX_LEGACY_JOINT_DRIVE,
-#endif
+#endif /* LINUX */
 
     P_visualize_world_axes                  = NX_VISUALIZE_WORLD_AXES,
     P_visualize_body_axes                   = NX_VISUALIZE_BODY_AXES,
@@ -480,27 +438,6 @@ PUBLISHED:
   enum PhysxBroadPhaseType {
     BPT_sap_single = NX_BP_TYPE_SAP_SINGLE,
     BPT_sap_multi  = NX_BP_TYPE_SAP_MULTI
-  };
-
-  enum PhysxClothFlag {
-    CLF_pressure            = NX_CLF_PRESSURE,
-    CLF_static              = NX_CLF_STATIC,
-    CLF_disable_collision   = NX_CLF_DISABLE_COLLISION,
-    CLF_selfcollision       = NX_CLF_SELFCOLLISION,
-    CLF_visualization       = NX_CLF_VISUALIZATION,
-    CLF_gravity             = NX_CLF_GRAVITY,
-    CLF_bending             = NX_CLF_BENDING,
-    CLF_bending_ortho       = NX_CLF_BENDING_ORTHO,
-    CLF_damping             = NX_CLF_DAMPING,
-    CLF_collision_twoway    = NX_CLF_COLLISION_TWOWAY,
-    CLF_triangle_collision  = NX_CLF_TRIANGLE_COLLISION,
-    CLF_tearable            = NX_CLF_TEARABLE,
-    CLF_hardware            = NX_CLF_HARDWARE,
-    CLF_comdamping          = NX_CLF_COMDAMPING,
-    CLF_validbounds         = NX_CLF_VALIDBOUNDS,
-    CLF_fluid_collision     = NX_CLF_FLUID_COLLISION,
-    CLF_disable_dynamic_ccd = NX_CLF_DISABLE_DYNAMIC_CCD,
-    CLF_adhere              = NX_CLF_ADHERE
   };
 
   enum PhysxContactPairFlag {
@@ -651,24 +588,6 @@ PUBLISHED:
     SF_softbody_twoway            = NX_SF_SOFTBODY_TWOWAY
   };
 
-  enum PhysxSoftBodyFlag {
-    SBF_static              = NX_SBF_STATIC,
-    SBF_disable_collision   = NX_SBF_DISABLE_COLLISION,
-    SBF_selfcollision       = NX_SBF_SELFCOLLISION,
-    SBF_visualization       = NX_SBF_VISUALIZATION,
-    SBF_gravity             = NX_SBF_GRAVITY,
-    SBF_volume_conservtion  = NX_SBF_VOLUME_CONSERVATION,
-    SBF_damping             = NX_SBF_DAMPING,
-    SBF_collision_twoway    = NX_SBF_COLLISION_TWOWAY,
-    SBF_tearable            = NX_SBF_TEARABLE,
-    SBF_hardware            = NX_SBF_HARDWARE,
-    SBF_comdamping          = NX_SBF_COMDAMPING,
-    SBF_validbounds         = NX_SBF_VALIDBOUNDS,
-    SBF_fluid_collision     = NX_SBF_FLUID_COLLISION,
-    SBF_disable_dynamic_ccd = NX_SBF_DISABLE_DYNAMIC_CCD,
-    SBF_adhere              = NX_SBF_ADHERE
-  };
-
   enum PhysxShapesType {
     ST_static   = NX_STATIC_SHAPES ,
     ST_dynamic  = NX_DYNAMIC_SHAPES ,
@@ -688,12 +607,6 @@ PUBLISHED:
     X_up  = NX_X,
     Y_up  = NX_Y,
     Z_up  = NX_Z
-  };
-
-  enum PhysxVertexAttachmentStatus {
-    VAS_none   = NX_CLOTH_VERTEX_ATTACHMENT_NONE,
-    VAS_global = NX_CLOTH_VERTEX_ATTACHMENT_GLOBAL,
-    VAS_shape  = NX_CLOTH_VERTEX_ATTACHMENT_SHAPE
   };
 
   enum PhysxWheelFlag {

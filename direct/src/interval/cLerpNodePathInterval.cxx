@@ -463,12 +463,10 @@ priv_step(double t) {
 
       const RenderAttrib *attrib =
         state->get_attrib(TexMatrixAttrib::get_class_type());
-      CPT(TexMatrixAttrib) tma;
+      const TexMatrixAttrib *tma = NULL;
       if (attrib != (const TexMatrixAttrib *)NULL) {
         tma = DCAST(TexMatrixAttrib, attrib);
         transform = tma->get_transform(_texture_stage);
-      } else {
-        tma = DCAST(TexMatrixAttrib, TexMatrixAttrib::make());
       }
 
       if ((_flags & F_end_tex_offset) != 0) {
@@ -514,7 +512,11 @@ priv_step(double t) {
       }
 
       // Apply the modified transform back to the state.
-      state = state->set_attrib(tma->add_stage(_texture_stage, transform, _override));
+      if (tma != (TexMatrixAttrib *)NULL) {
+        state = state->add_attrib(tma->add_stage(_texture_stage, transform), _override);
+      } else {
+        state = state->add_attrib(TexMatrixAttrib::make(_texture_stage, transform), _override);
+      }
     }    
 
 

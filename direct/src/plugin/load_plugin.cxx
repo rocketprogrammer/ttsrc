@@ -135,11 +135,10 @@ static void unload_dso();
 bool
 load_plugin(const string &p3d_plugin_filename, 
             const string &contents_filename, const string &host_url, 
-            P3D_verify_contents verify_contents, const string &platform,
+            bool verify_contents, const string &platform,
             const string &log_directory, const string &log_basename,
             bool trusted_environment, bool console_environment,
-            const string &root_dir, const string &host_dir,
-            ostream &logfile) {
+            const string &root_dir, ostream &logfile) {
   if (plugin_loaded) {
     return true;
   }
@@ -255,7 +254,7 @@ load_plugin(const string &p3d_plugin_filename,
                    verify_contents, platform,
                    log_directory, log_basename,
                    trusted_environment, console_environment,
-                   root_dir, host_dir, logfile)) {
+                   root_dir, logfile)) {
     unload_dso();
     return false;
   }
@@ -275,11 +274,10 @@ load_plugin(const string &p3d_plugin_filename,
 ////////////////////////////////////////////////////////////////////
 bool
 init_plugin(const string &contents_filename, const string &host_url, 
-            P3D_verify_contents verify_contents, const string &platform,
+            bool verify_contents, const string &platform,
             const string &log_directory, const string &log_basename,
             bool trusted_environment, bool console_environment,
-            const string &root_dir, const string &host_dir,
-            ostream &logfile) {
+            const string &root_dir, ostream &logfile) {
 
   // Ensure that all of the function pointers have been found.
   if (P3D_initialize_ptr == NULL ||
@@ -371,7 +369,7 @@ init_plugin(const string &contents_filename, const string &host_url,
                           host_url.c_str(), verify_contents, platform.c_str(),
                           log_directory.c_str(), log_basename.c_str(),
                           trusted_environment, console_environment, 
-                          root_dir.c_str(), host_dir.c_str())) {
+                          root_dir.c_str())) {
     // Oops, failure to initialize.
     logfile
       << "Failed to initialize plugin (passed API version " 

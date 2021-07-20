@@ -27,11 +27,6 @@ class PhysxScene;
 class PhysxSceneDesc;
 class PhysxHeightField;
 class PhysxHeightFieldDesc;
-class PhysxTriangleMesh;
-class PhysxConvexMesh;
-class PhysxClothMesh;
-class PhysxSoftBodyMesh;
-class PhysxOutputStream;
 
 ////////////////////////////////////////////////////////////////////
 //       Class : PhysxManager
@@ -76,14 +71,6 @@ PUBLISHED:
   PhysxTriangleMesh *get_triangle_mesh(unsigned int idx);
   MAKE_SEQ(get_triangle_meshes, get_num_triangle_meshes, get_triangle_mesh);
 
-  unsigned int get_num_cloth_meshes();
-  PhysxClothMesh *get_cloth_mesh(unsigned int idx);
-  MAKE_SEQ(get_cloth_meshes, get_num_cloth_meshes, get_cloth_mesh);
-
-  unsigned int get_num_soft_body_meshes();
-  PhysxSoftBodyMesh *get_soft_body_mesh(unsigned int idx);
-  MAKE_SEQ(get_soft_body_meshes, get_num_soft_body_meshes, get_soft_body_mesh);
-
   INLINE void ls() const;
   INLINE void ls(ostream &out, int indent_level=0) const;
 
@@ -94,8 +81,6 @@ public:
   PhysxObjectCollection<PhysxHeightField> _heightfields;
   PhysxObjectCollection<PhysxConvexMesh> _convex_meshes;
   PhysxObjectCollection<PhysxTriangleMesh> _triangle_meshes;
-  PhysxObjectCollection<PhysxClothMesh> _cloth_meshes;
-  PhysxObjectCollection<PhysxSoftBodyMesh> _softbody_meshes;
 
   INLINE static NxVec3 vec3_to_nxVec3(const LVector3f &v);
   INLINE static LVector3f nxVec3_to_vec3(const NxVec3 &v);

@@ -249,8 +249,7 @@ void DAEToEggConverter::process_node(PT(EggGroupNode) parent, const FCDSceneNode
     return;
   }
   // Create an egg group for this node
-  PT(EggGroup) node_group = new EggGroup(FROM_FSTRING(node->GetName()));
-  process_extra(node_group, node->GetExtra());
+  PT(EggGroup) node_group = new EggGroup(node_id);
   parent->add_child(node_group);
   // Check if its a joint
   if (node->IsJoint()) {
@@ -290,7 +289,7 @@ void DAEToEggConverter::process_instance(PT(EggGroup) parent, const FCDEntityIns
         process_mesh(parent, geometry->GetMesh(), new DaeMaterials((const FCDGeometryInstance*) instance));
       }
       if (geometry->IsSpline()) {
-        process_spline(parent, FROM_FSTRING(geometry->GetName()), const_cast<FCDGeometrySpline*> (geometry->GetSpline()));
+        process_spline(parent, FROM_FSTRING(geometry->GetDaeId()), const_cast<FCDGeometrySpline*> (geometry->GetSpline()));
       }
       break; }
     case FCDEntityInstance::CONTROLLER: {
@@ -317,29 +316,19 @@ void DAEToEggConverter::process_instance(PT(EggGroup) parent, const FCDEntityIns
 void DAEToEggConverter::process_mesh(PT(EggGroup) parent, const FCDGeometryMesh* mesh, PT(DaeMaterials) materials) {
   nassertv(mesh != NULL);
   daeegg_cat.debug() << "Processing mesh with id " << FROM_FSTRING(mesh->GetDaeId()) << endl;
-  
   // Create the egg stuff to hold this mesh
   PT(EggGroup) mesh_group = new EggGroup(FROM_FSTRING(mesh->GetDaeId()));
   parent->add_child(mesh_group);
   PT(EggVertexPool) mesh_pool = new EggVertexPool(FROM_FSTRING(mesh->GetDaeId()));
   mesh_group->add_child(mesh_pool);
   _vertex_pools[FROM_FSTRING(mesh->GetDaeId())] = mesh_pool;
-  
   // First retrieve the vertex source
-  if (mesh->GetSourceCount() == 0) {
-    daeegg_cat.debug() << "Mesh with id " << FROM_FSTRING(mesh->GetDaeId()) << " has no sources" << endl;
-    return;
-  }
-  const FCDGeometrySource* vsource = mesh->FindSourceByType(FUDaeGeometryInput::POSITION);  
-  if (vsource == NULL) {
-    daeegg_cat.debug() << "Mesh with id " << FROM_FSTRING(mesh->GetDaeId()) << " has no source for POSITION data" << endl;
-    return;
-  }
-  
+  if (mesh->GetSourceCount() == 0) return;
+  const FCDGeometrySource* vsource = mesh->FindSourceByType(FUDaeGeometryInput::POSITION);
+  if (vsource == NULL) return;
   // Loop through the polygon groups and add them
   daeegg_cat.spam() << "Mesh with id " << FROM_FSTRING(mesh->GetDaeId()) << " has " << mesh->GetPolygonsCount() << " polygon groups" << endl;
   if (mesh->GetPolygonsCount() == 0) return;
-  
   // This is an array of pointers, I know. But since they are refcounted, I don't have a better idea.
   PT(EggGroup) *primitive_holders = new PT(EggGroup) [mesh->GetPolygonsCount()];
   for (size_t gr = 0; gr < mesh->GetPolygonsCount(); ++gr) {
@@ -426,14 +415,9 @@ void DAEToEggConverter::process_mesh(PT(EggGroup) parent, const FCDGeometryMesh*
       }
       // Process the color
       if (csource != NULL && cinput != NULL) {
-        assert(csource->GetStride() == 3 || csource->GetStride() == 4);
-        if (csource->GetStride() == 3) {
-          data = &csource->GetData()[cindices[ix]*3];
-          vertex->set_color(Colorf(data[0], data[1], data[2], 1.0f));
-        } else {
-          data = &csource->GetData()[cindices[ix]*4];
-          vertex->set_color(Colorf(data[0], data[1], data[2], data[3]));
-        }
+        assert(csource->GetStride() == 4);
+        data = &csource->GetData()[cindices[ix]*4];
+        vertex->set_color(Colorf(data[0], data[1], data[2], data[3]));
       }
       // Possibly add a UV object
       if ((bsource != NULL && binput != NULL) || (tsource != NULL && tinput != NULL)) {
@@ -558,7 +542,7 @@ void DAEToEggConverter::process_controller(PT(EggGroup) parent, const FCDControl
       }
     }
     if (geometry->IsSpline()) {
-      process_spline(parent, FROM_FSTRING(geometry->GetName()), const_cast<FCDGeometrySpline*> (geometry->GetSpline()));
+      process_spline(parent, FROM_FSTRING(geometry->GetDaeId()), const_cast<FCDGeometrySpline*> (geometry->GetSpline()));
     }
   }
   // Add the joint hierarchy
@@ -618,7 +602,7 @@ void DAEToEggConverter::process_controller(PT(EggGroup) parent, const FCDControl
     for (size_t mt = 0; mt < morph_controller->GetTargetCount(); ++mt) {
       const FCDMorphTarget* morph_target = morph_controller->GetTarget(mt);
       assert(morph_target != NULL);
-      PT(EggSAnimData) target = new EggSAnimData(FROM_FSTRING(morph_target->GetGeometry()->GetName()));
+      PT(EggSAnimData) target = new EggSAnimData(FROM_FSTRING(morph_target->GetGeometry()->GetDaeId()));
       if (morph_target->IsAnimated()) {
         //TODO
       } else {
@@ -631,32 +615,6 @@ void DAEToEggConverter::process_controller(PT(EggGroup) parent, const FCDControl
   // Get a <Bundle> for the character and add it to the table
   PT(DaeCharacter) character = new DaeCharacter(parent->get_name(), instance);
   _table->add_child(character->as_egg_bundle());
-}
-
-void DAEToEggConverter::process_extra(PT(EggGroup) group, const FCDExtra* extra) {
-  if (extra == NULL) {
-    return;
-  }
-  nassertv(group != NULL);
-  
-  const FCDEType* etype = extra->GetDefaultType();
-  if (etype == NULL) {
-    return;
-  }
-  
-  const FCDENode* enode = (const FCDENode*) etype->FindTechnique("PANDA3D");
-  if (enode == NULL) {
-    return;
-  }
-  
-  FCDENodeList tags;
-  enode->FindChildrenNodes("param", tags);
-  for (FCDENodeList::iterator it = tags.begin(); it != tags.end(); ++it) {
-    const FCDEAttribute* attr = (*it)->FindAttribute("sid");
-    if (attr) {
-      group->set_tag(FROM_FSTRING(attr->GetValue()), (*it)->GetContent());
-    }
-  }
 }
 
 LMatrix4d DAEToEggConverter::convert_matrix(const FMMatrix44& matrix) {
@@ -672,5 +630,21 @@ LMatrix4d DAEToEggConverter::convert_matrix(const FMMatrix44& matrix) {
 void DAEToEggConverter::apply_transform(const PT(EggGroup) to, const FCDTransform* from) {
   assert(from != NULL);
   assert(to != NULL);
-  to->set_transform3d(convert_matrix(from->ToMatrix()) * to->get_transform3d());
+  switch (from->GetType()) {
+    case FCDTransform::TRANSLATION:
+      to->add_translate3d(TO_VEC3(((FCDTTranslation*) from)->GetTranslation()));
+      break;
+    case FCDTransform::ROTATION:
+      to->add_rotate3d(((FCDTRotation*) from)->GetAngle(), TO_VEC3(((FCDTRotation*) from)->GetAxis()));
+      break;
+    case FCDTransform::SCALE:
+      to->add_scale3d(TO_VEC3(((FCDTScale*) from)->GetScale()));
+      break;
+    case FCDTransform::MATRIX:
+      to->add_matrix4(convert_matrix(((FCDTMatrix*) from)->GetTransform()));
+      break;
+    default:
+      // We don't know this, so let FCollada convert it into a matrix
+      to->add_matrix4(convert_matrix(from->ToMatrix()));
+  }
 }

@@ -43,7 +43,7 @@ public:
   
 protected:
   void fetch_packet();
-  bool reload_buffer();
+  void reload_buffer();
   void cleanup();
   Filename _filename;
   int _initial_dts;

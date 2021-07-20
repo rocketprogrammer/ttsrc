@@ -29,10 +29,6 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 
-#ifndef MAP_ANON
-#define MAP_ANON 0x1000
-#endif
-
 #endif  // WIN32
 
 
@@ -126,7 +122,7 @@ MemoryHook() {
 #else
 
   // Posix case.
-  _page_size = sysconf(_SC_PAGESIZE);
+  _page_size = getpagesize();
 
 #endif  // WIN32
 

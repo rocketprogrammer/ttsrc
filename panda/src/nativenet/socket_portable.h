@@ -43,7 +43,7 @@ typedef unsigned long SOCKET;
 /************************************************************************
 * WINSOCK 32 bit STUFF
 ************************************************************************/
-#elif defined(WIN32) || defined(WIN32_VC) || defined(WIN64_VC)
+#elif defined(WIN32) || defined(WIN32_VC)
 #include <winsock2.h>
 #include <Ws2tcpip.h>
 
@@ -132,7 +132,7 @@ const int LOCAL_BLOCKING_ERROR = WSAEWOULDBLOCK;
 const int LOCAL_CONNECT_BLOCKING = WSAEWOULDBLOCK;
 const int LOCAL_NOTCONNECTED_ERROR = WSAENOTCONN;
 const int LOCAL_TIMEOUT_ERROR = WSAETIMEDOUT;
-const SOCKET BAD_SOCKET = (SOCKET)-1;
+const SOCKET BAD_SOCKET = 0xffffffff;
 
 /************************************************************************
 * Solaris 2.6 and Irix 6.4 STUFF
@@ -351,8 +351,7 @@ inline bool do_shutdown_send(SOCKET s)
 
 
 const long LOCAL_NONBLOCK = 1;
-// With BSDBLOCK defined, we don't need FIONBIO.  Solaris doesn't provide it.
-//const long LOCAL_FL_SET = FIONBIO ;
+const long LOCAL_FL_SET = FIONBIO ;
 const int LOCAL_BLOCKING_ERROR = EAGAIN;
 const int LOCAL_CONNECT_BLOCKING = EINPROGRESS;
 

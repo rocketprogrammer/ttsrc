@@ -44,7 +44,7 @@ INLINE void PhysxJoint::
 ls(ostream &out, int indent_level) const {
 
   indent(out, indent_level) << get_type().get_name()
-                            << " " << _name
+                            << " " << get_name( )
                             << " (at 0x" << this << ")";
 
   NxActor *actorPtr[2];

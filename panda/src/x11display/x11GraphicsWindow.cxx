@@ -25,7 +25,6 @@
 #include "throw_event.h"
 #include "lightReMutexHolder.h"
 #include "nativeWindowHandle.h"
-#include "virtualFileSystem.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -33,11 +32,6 @@
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-
-#ifdef HAVE_XCURSOR
-#include <X11/Xcursor/Xcursor.h>
-#endif
-
 #ifdef HAVE_XF86DGA
 #include <X11/extensions/xf86dga.h>
 #endif
@@ -52,35 +46,6 @@
 
 #ifdef HAVE_LINUX_INPUT_H
 #include <linux/input.h>
-#endif
-
-#ifdef HAVE_XCURSOR
-static int xcursor_read(XcursorFile *file, unsigned char *buf, int len) {
-  istream* str = (istream*) file->closure;
-  str->read((char*) buf, len);
-  return str->gcount();
-}
-
-static int xcursor_write(XcursorFile *file, unsigned char *buf, int len) {
-  // Not implemented, we don't need it.
-  nassertr_always(false, 0);
-}
-
-static int xcursor_seek(XcursorFile *file, long offset, int whence) {
-  istream* str = (istream*) file->closure;
-  switch (whence) {
-  case SEEK_SET:
-    str->seekg(offset, istream::beg);
-    break;
-  case SEEK_CUR:
-    str->seekg(offset, istream::cur);
-    break;
-  case SEEK_END:
-    str->seekg(offset, istream::end);
-  }
-  
-  return str->tellg();
-}
 #endif
 
 TypeHandle x11GraphicsWindow::_type_handle;
@@ -137,11 +102,6 @@ x11GraphicsWindow(GraphicsEngine *engine, GraphicsPipe *pipe,
 ////////////////////////////////////////////////////////////////////
 x11GraphicsWindow::
 ~x11GraphicsWindow() {
-  pmap<Filename, Cursor>::iterator it;
-
-  for (it = _cursor_filenames.begin(); it != _cursor_filenames.end(); it++) {
-    XFreeCursor(_display, it->second);
-  }
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -318,15 +278,6 @@ process_events() {
 
     case ConfigureNotify:
       _awaiting_configure = false;
-
-      // Is this the inner corner or the outer corner?  The Xlib docs
-      // say it should be the outer corner, but it appears to be the
-      // inner corner on my own implementation, which is inconsistent
-      // with XConfigureWindow.  (Panda really wants to work with the
-      // inner corner, anyway, but that means we need to fix
-      // XConfigureWindow too.)
-      properties.set_origin(event.xconfigure.x, event.xconfigure.y);
-
       if (_properties.get_fixed_size()) {
         // If the window properties indicate a fixed size only, undo
         // any attempt by the user to change them.  In X, there
@@ -347,8 +298,8 @@ process_events() {
       } else {
         // A normal window may be resized by the user at will.
         properties.set_size(event.xconfigure.width, event.xconfigure.height);
+        system_changed_properties(properties);
       }
-      system_changed_properties(properties);
       break;
 
     case ButtonPress:
@@ -457,7 +408,7 @@ process_events() {
       break;
 
     default:
-      x11display_cat.warning()
+      x11display_cat.error()
         << "unhandled X event type " << event.type << "\n";
     }
   }
@@ -665,32 +616,14 @@ set_properties_now(WindowProperties &properties) {
   }
 
   // We hide the cursor by setting it to an invisible pixmap.
-  // We can also load a custom cursor from a file.
-  if (properties.has_cursor_hidden() || properties.has_cursor_filename()) {
-    if (properties.has_cursor_hidden()) {
-      _properties.set_cursor_hidden(properties.get_cursor_hidden());
-      properties.clear_cursor_hidden();
-    }
-    Filename cursor_filename;
-    if (properties.has_cursor_filename()) {
-      cursor_filename = properties.get_cursor_filename();
-      _properties.set_cursor_filename(cursor_filename);
-      properties.clear_cursor_filename();
-    }
-    Filename filename = properties.get_cursor_filename();
-    _properties.set_cursor_filename(filename);
-
-    if (_properties.get_cursor_hidden()) {
+  if (properties.has_cursor_hidden()) {
+    _properties.set_cursor_hidden(properties.get_cursor_hidden());
+    if (properties.get_cursor_hidden()) {
       XDefineCursor(_display, _xwindow, x11_pipe->get_hidden_cursor());
-
-    } else if (!cursor_filename.empty()) {
-      // Note that if the cursor fails to load, cursor will be None
-      Cursor cursor = get_cursor(cursor_filename);
-      XDefineCursor(_display, _xwindow, cursor);
-
     } else {
       XDefineCursor(_display, _xwindow, None);
     }
+    properties.clear_cursor_hidden();
   }
 
   if (properties.has_foreground()) {
@@ -945,11 +878,6 @@ open_window() {
 
   if (_properties.get_cursor_hidden()) {
     XDefineCursor(_display, _xwindow, x11_pipe->get_hidden_cursor());
-
-  } else if (_properties.has_cursor_filename() && !_properties.get_cursor_filename().empty()) {
-    // Note that if the cursor fails to load, cursor will be None
-    Cursor cursor = get_cursor(_properties.get_cursor_filename());
-    XDefineCursor(_display, _xwindow, cursor);
   }
   
   XMapWindow(_display, _xwindow);
@@ -1020,7 +948,7 @@ set_wm_properties(const WindowProperties &properties, bool already_mapped) {
         size_hints_p->height = properties.get_y_size();
         size_hints_p->flags |= USSize;
 
-        if (properties.get_fixed_size()) {
+        if (properties.has_fixed_size()) {
           size_hints_p->min_width = properties.get_x_size();
           size_hints_p->min_height = properties.get_y_size();
           size_hints_p->max_width = properties.get_x_size();
@@ -1866,7 +1794,6 @@ get_mouse_button(XButtonEvent &button_event) {
     return MouseButton::button(index - 1);
   }
 }
-
 ////////////////////////////////////////////////////////////////////
 //     Function: x11GraphicsWindow::check_event
 //       Access: Private, Static
@@ -1882,281 +1809,3 @@ check_event(Display *display, XEvent *event, char *arg) {
   // We accept any event that is sent to our window.
   return (event->xany.window == self->_xwindow);
 }
-
-////////////////////////////////////////////////////////////////////
-//     Function: x11GraphicsWindow::get_cursor
-//       Access: Private
-//  Description: Loads and returns an Cursor corresponding to the
-//               indicated filename.  If the file cannot be loaded,
-//               returns None.
-////////////////////////////////////////////////////////////////////
-Cursor x11GraphicsWindow::
-get_cursor(const Filename &filename) {
-#ifndef HAVE_XCURSOR
-  return None;
-}
-#else
-  // First, look for the unresolved filename in our index.
-  pmap<Filename, Cursor>::iterator fi = _cursor_filenames.find(filename);
-  if (fi != _cursor_filenames.end()) {
-    return fi->second;
-  }
-
-  // If it wasn't found, resolve the filename and search for that.
-  Filename resolved = filename;
-  if (!resolved.resolve_filename(get_model_path())) {
-    // The filename doesn't exist.
-    x11display_cat.warning()
-      << "Could not find cursor filename " << filename << "\n";
-    return None;
-  }
-  fi = _cursor_filenames.find(resolved);
-  if (fi != _cursor_filenames.end()) {
-    _cursor_filenames[filename] = (*fi).second;
-    return fi->second;
-  }
-
-  // Open the file through the virtual file system.
-  VirtualFileSystem *vfs = VirtualFileSystem::get_global_ptr();
-  istream *str = vfs->open_read_file(resolved, true);
-  if (str == NULL) {
-    x11display_cat.warning()
-      << "Could not open cursor file " << filename << "\n";
-    return None;
-  }
-  
-  // Check the first four bytes to see what kind of file it is.
-  char magic[4];
-  str->read(magic, 4);
-  if (!str->good()) {
-    x11display_cat.warning()
-      << "Could not read from cursor file " << filename << "\n";
-    return None;
-  }
-  str->seekg(0, istream::beg);
-
-  Cursor h = None;
-  if (memcmp(magic, "Xcur", 4) == 0) {
-    // X11 cursor.
-    x11display_cat.debug()
-      << "Loading X11 cursor " << filename << "\n";
-    XcursorFile xcfile;
-    xcfile.closure = str;
-    xcfile.read = &xcursor_read;
-    xcfile.write = &xcursor_write;
-    xcfile.seek = &xcursor_seek;
-
-    XcursorImages *images = XcursorXcFileLoadImages(&xcfile, XcursorGetDefaultSize(_display));
-    if (images != NULL) {
-      h = XcursorImagesLoadCursor(_display, images);
-      XcursorImagesDestroy(images);
-    }
-
-  } else if (memcmp(magic, "\0\0\1\0", 4) == 0
-          || memcmp(magic, "\0\0\2\0", 4) == 0) {
-    // Windows .ico or .cur file.
-    x11display_cat.debug()
-      << "Loading Windows cursor " << filename << "\n";
-    h = read_ico(*str);
-  }
-
-  // Delete the istream.
-  vfs->close_read_file(str);
-
-  if (h == None) {
-    x11display_cat.warning()
-      << "X11 cursor filename '" << resolved << "' could not be loaded!\n";
-  }
-
-  _cursor_filenames[resolved] = h;
-  return h;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: x11GraphicsWindow::load_ico
-//       Access: Private
-//  Description: Reads a Windows .ico or .cur file from the
-//               indicated stream and returns it as an X11 Cursor.
-//               If the file cannot be loaded, returns None.
-////////////////////////////////////////////////////////////////////
-Cursor x11GraphicsWindow::
-read_ico(istream &ico) {
- // Local structs, this is just POD, make input easier
- typedef struct {
-    uint16_t reserved, type, count;
-  } IcoHeader;
-
-  typedef struct {
-    uint8_t width, height, colorCount, reserved;
-    uint16_t xhot, yhot;
-    uint32_t bitmapSize, offset;
-  } IcoEntry;
-
-  typedef struct {
-    uint32_t headerSize, width, height;
-    uint16_t planes, bitsPerPixel;
-    uint32_t compression, imageSize, xPixelsPerM, yPixelsPerM, colorsUsed, colorsImportant;
-  } IcoInfoHeader;
-
-  typedef struct {
-    uint8_t blue, green, red, reserved;
-  } IcoColor;
-
-  int i, entry = 0;
-  unsigned int j, k, mask, shift;
-  size_t colorCount, bitsPerPixel;
-  IcoHeader header;
-  IcoInfoHeader infoHeader;
-  IcoEntry *entries = NULL;
-  IcoColor color, *palette = NULL;
-
-  size_t xorBmpSize, andBmpSize;
-  char *curXor, *curAnd;
-  char *xorBmp = NULL, *andBmp = NULL;
-  XcursorImage *image = NULL;
-  Cursor ret = None;
-
-  int def_size = XcursorGetDefaultSize(_display);
-
-  // Get our header, note that ICO = type 1 and CUR = type 2.
-  ico.read(reinterpret_cast<char *>(&header), sizeof(IcoHeader));
-  if (!ico.good()) goto cleanup;
-  if (header.type != 1 && header.type != 2) goto cleanup;
-  if (header.count < 1) goto cleanup;
-
-  // Read the entry table into memory, select the largest entry.
-  entries = new IcoEntry[header.count];
-  ico.read(reinterpret_cast<char *>(entries), header.count * sizeof(IcoEntry));
-  if (!ico.good()) goto cleanup;
-  for (i = 1; i < header.count; i++) {
-    if (entries[i].width == def_size && entries[i].height == def_size) {
-      // Wait, this is the default cursor size.  This is perfect.
-      entry = i;
-      break;
-    }
-    if (entries[i].width > entries[entry].width ||
-        entries[i].height > entries[entry].height)
-        entry = i;
-  }
-
-  // Seek to the image in the ICO.
-  ico.seekg(entries[entry].offset);
-  if (!ico.good()) goto cleanup;
-  ico.read(reinterpret_cast<char *>(&infoHeader), sizeof(IcoInfoHeader));
-  if (!ico.good()) goto cleanup;
-  bitsPerPixel = infoHeader.bitsPerPixel;
-
-  // TODO: Support PNG compressed ICOs.
-  if (infoHeader.compression != 0) goto cleanup;
-
-  // Load the color palette, if one exists.
-  if (bitsPerPixel != 24 && bitsPerPixel != 32) {
-    colorCount = 1 << bitsPerPixel;
-    palette = new IcoColor[colorCount];
-    ico.read(reinterpret_cast<char *>(palette), colorCount * sizeof(IcoColor));
-    if (!ico.good()) goto cleanup;
-  }
-
-  // Read in the pixel data.
-  xorBmpSize = (infoHeader.width * (infoHeader.height / 2) * bitsPerPixel) / 8;
-  andBmpSize = (infoHeader.width * (infoHeader.height / 2)) / 8;
-  curXor = xorBmp = new char[xorBmpSize];
-  curAnd = andBmp = new char[andBmpSize];
-  ico.read(xorBmp, xorBmpSize);
-  if (!ico.good()) goto cleanup;
-  ico.read(andBmp, andBmpSize);
-  if (!ico.good()) goto cleanup;
-
-  // If this is an actual CUR not an ICO set up the hotspot properly.
-  image = XcursorImageCreate(infoHeader.width, infoHeader.height / 2);
-  if (header.type == 2) { image->xhot = entries[entry].xhot; image->yhot = entries[entry].yhot; }
-
-  // Support all the formats that GIMP supports, minus PNG compressed ICOs.
-  // Would need to use libpng to decode the compressed ones.
-  switch (bitsPerPixel) {
-  case 1:
-  case 4:
-  case 8:
-    // For colors less that a byte wide, shift and mask the palette indices
-    // off each element of the xorBmp and append them to the image.
-    mask = ((1 << bitsPerPixel) - 1);
-    for (i = image->height - 1; i >= 0; i--) {
-      for (j = 0; j < image->width; j += 8 / bitsPerPixel) {
-        for (k = 0; k < 8 / bitsPerPixel; k++) {
-          shift = 8 - ((k + 1) * bitsPerPixel);
-          color = palette[(*curXor & (mask << shift)) >> shift];
-          image->pixels[(i * image->width) + j + k] = (color.red << 16) +
-                                                      (color.green << 8) +
-                                                      (color.blue);
-        }
-
-        curXor++;
-      }
-
-      // Set the alpha byte properly according to the andBmp.
-      for (j = 0; j < image->width; j += 8) {
-        for (k = 0; k < 8; k++) {
-          shift = 7 - k;
-          image->pixels[(i * image->width) + j + k] |=
-            ((*curAnd & (1 << shift)) >> shift) ? 0x0 : (0xff << 24);
-        }
-
-        curAnd++;
-      }
-    }
-
-    break;
-  case 24:
-    // Pack each of the three bytes into a single color, BGR -> 0RGB
-    for (i = image->height - 1; i >= 0; i--) {
-      for (j = 0; j < image->width; j++) {
-        image->pixels[(i * image->width) + j] = (*(curXor + 2) << 16) +
-                                                (*(curXor + 1) << 8) + (*curXor);
-        curXor += 3;
-      }
-
-      // Set the alpha byte properly according to the andBmp.
-      for (j = 0; j < image->width; j += 8) {
-        for (k = 0; k < 8; k++) {
-          shift = 7 - k;
-          image->pixels[(i * image->width) + j + k] |=
-            ((*curAnd & (1 << shift)) >> shift) ? 0x0 : (0xff << 24);
-        }
-
-        curAnd++;
-      }
-
-    }
-
-    break;
-  case 32:
-    // Pack each of the four bytes into a single color, BGRA -> ARGB
-    for (i = image->height - 1; i >= 0; i--) {
-      for (j = 0; j < image->width; j++) {
-        image->pixels[(i * image->width) + j] = (*(curXor + 3) << 24) +
-                                                (*(curXor + 2) << 16) +
-                                                (*(curXor + 1) << 8) +
-                                                (*curXor);
-        curXor += 4;
-      }
-    }
-
-    break;
-  default:
-    goto cleanup;
-    break;
-  }
-
-  ret = XcursorImageLoadCursor(_display, image);
-
-cleanup:
-  XcursorImageDestroy(image);
-  delete[] entries;
-  delete[] palette;
-  delete[] xorBmp;
-  delete[] andBmp;
-
-  return ret;
-}
-#endif  // HAVE_XCURSOR
-

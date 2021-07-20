@@ -1,7 +1,5 @@
 // Filename: mayaCopy.cxx
 // Created by:  drose (10May02)
-// Modified 19Mar10 by ETC PandaSE team (see
-//   header comment for mayaToEgg.cxx for more details)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -434,8 +432,7 @@ collect_shader_for_node(const MDagPath &dag_path) {
   if (dag_path.hasFn(MFn::kNurbsSurface)) {
     MFnNurbsSurface surface(dag_path, &status);
     if (status) {
-      Filename dummy;
-      _shaders.find_shader_for_node(surface.object(),false,dummy,false);
+      _shaders.find_shader_for_node(surface.object());
     }
 
   } else if (dag_path.hasFn(MFn::kMesh)) {
@@ -453,8 +450,7 @@ collect_shader_for_node(const MDagPath &dag_path) {
              shader_index < num_shaders; 
              shader_index++) {
           MObject engine = shaders[shader_index];
-          Filename dummy;
-          _shaders.find_shader_for_shading_engine(engine,false,dummy,false);
+          _shaders.find_shader_for_shading_engine(engine);
         }
       }
     }

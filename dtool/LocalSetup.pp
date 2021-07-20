@@ -101,6 +101,11 @@
 #else
 #print - Did not find Ageia PhysX
 #endif
+#if $[HAVE_TINYXML]
+#print + TinyXML
+#else
+#print - Did not find TinyXML
+#endif
 #if $[HAVE_GTK]
 #print + gtk+-2
 #else
@@ -251,6 +256,9 @@ $[cdefine HAVE_FMODEX]
 /* Define if we have OpenAL installed. */
 $[cdefine HAVE_OPENAL]
 
+/* Define if we have Ageia PhysX SDK installed. */
+$[cdefine HAVE_PHYSX]
+
 /* Define if we have Freetype 2.0 or better available. */
 $[cdefine HAVE_FREETYPE]
 
@@ -272,14 +280,11 @@ $[cdefine HAVE_ARTOOLKIT]
 
 /* Define if we have OpenSSL installed.  */
 $[cdefine HAVE_OPENSSL]
+$[cdefine OPENSSL_097]
 $[cdefine REPORT_OPENSSL_ERRORS]
 
 /* Define if we have libjpeg installed.  */
 $[cdefine HAVE_JPEG]
-$[cdefine PHAVE_JPEGINT_H]
-
-/* Define to build video-for-linux. */
-$[cdefine HAVE_VIDEO4LINUX]
 
 /* Define if we have libpng installed.  */
 $[cdefine HAVE_PNG]
@@ -328,14 +333,12 @@ $[cdefine HAVE_CGDX9]
 /* Define if we have CGDX10 installed.  */
 $[cdefine HAVE_CGDX10]
 
-/* Define for dxerr.h instead of dxerr9.h. */
-$[cdefine USE_GENERIC_DXERR_LIBRARY]
-
 /* Define if we have zlib installed.  */
 $[cdefine HAVE_ZLIB]
 
 /* Define if we have OpenGL installed and want to build for GL.  */
 $[cdefine HAVE_GL]
+$[cdefine HAVE_GLU]
 #if HAVE_GL
 # define MIN_GL_VERSION_MAJOR $[word 1,$[MIN_GL_VERSION]]
 # define MIN_GL_VERSION_MINOR $[word 2,$[MIN_GL_VERSION]]
@@ -383,11 +386,6 @@ $[cdefine HAVE_DX8]
 /* Define if we have DirectX installed and want to build for DX.  */
 $[cdefine HAVE_DX9]
 
-/* If we're building 64-bit, we want to use generic DirectX error libraries.  */
-#if $[eq $[USE_COMPILER],MSVC9x64]
-  $[cdefine USE_GENERIC_DXERR_LIBRARY]
-#endif
-
 /* Define if we want to build tinydisplay. */
 $[cdefine HAVE_TINYDISPLAY]
 
@@ -402,9 +400,6 @@ $[cdefine HAVE_XF86DGA]
 
 /* Define if we have the XRandR extension. */
 $[cdefine HAVE_XRANDR]
-
-/* Define if we have the XCursor extension. */
-$[cdefine HAVE_XCURSOR]
 
 /* Define if we want to compile the threading code.  */
 $[cdefine HAVE_THREADS]
@@ -635,9 +630,6 @@ $[cdefine PHAVE_UCONTEXT_H]
 /* Do we have <linux/input.h> ? This enables us to use raw mouse input. */
 $[cdefine PHAVE_LINUX_INPUT_H]
 
-/* Do we have <stdint.h>? */
-$[cdefine PHAVE_STDINT_H]
-
 /* Do we have RTTI (and <typeinfo>)? */
 $[cdefine HAVE_RTTI]
 
@@ -689,10 +681,10 @@ $[cdefine USE_DELETED_CHAIN]
 $[cdefine WANT_NATIVE_NET]
 
 /* Turn off warnings for using scanf and such */
-#if $[or $[eq $[USE_COMPILER],MSVC9], $[USE_COMPILER],MSVC9x64]
+#if $[eq $[USE_COMPILER],MSVC9]
         #print Will ignore CRT_SECURE warnings for MSVC9
         $[cdefine _CRT_SECURE_NO_WARNINGS]
-        # pragma warning( disable : 4996 4275 4267 4099 4049 4013 4005 )
+        # pragma warning( disable : 4996 4275 )
 #endif
 
 

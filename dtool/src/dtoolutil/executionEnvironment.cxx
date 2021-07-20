@@ -36,21 +36,8 @@
 #define environ (*_NSGetEnviron())
 #endif
 
-#ifdef IS_LINUX
-// extern char **environ is defined here:
-#include <unistd.h>
-#endif
-
 #ifdef IS_FREEBSD
 extern char **environ;
-
-// For Link_map and dlinfo.
-#include <link.h>
-#include <dlfcn.h>
-
-// This is for sysctl.
-#include <sys/types.h>
-#include <sys/sysctl.h>
 #endif
 
 #ifdef HAVE_PYTHON
@@ -230,7 +217,7 @@ ns_get_environment_variable(const string &var) const {
   } else if (var == "MAIN_DIR") {
 #ifdef HAVE_PYTHON
     // If we're running from Python code, read out sys.argv.
-    if (!ns_has_environment_variable("PANDA_INCOMPATIBLE_PYTHON") && Py_IsInitialized()) {
+    if (Py_IsInitialized()) {
       PyObject* obj = PySys_GetObject((char*) "argv");
       if (obj) {
         Filename main_dir = Filename::from_os_specific(PyString_AsString(PyList_GetItem(obj, 0)));
@@ -243,7 +230,7 @@ ns_get_environment_variable(const string &var) const {
       }
     }
 #endif
-
+    
     // Otherwise, Return the binary name's parent directory.
     if (!_binary_name.empty()) {
       Filename main_dir (_binary_name);
@@ -283,7 +270,7 @@ ns_set_environment_variable(const string &var, const string &value) {
 ////////////////////////////////////////////////////////////////////
 //     Function: ExecutionEnvironment::ns_shadow_environment_variable
 //       Access: Private
-//  Description:
+//  Description: 
 ////////////////////////////////////////////////////////////////////
 void ExecutionEnvironment::
 ns_shadow_environment_variable(const string &var, const string &value) {
@@ -294,7 +281,7 @@ ns_shadow_environment_variable(const string &var, const string &value) {
 ////////////////////////////////////////////////////////////////////
 //     Function: ExecutionEnvironment::ns_clear_shadow
 //       Access: Private
-//  Description:
+//  Description: 
 ////////////////////////////////////////////////////////////////////
 void ExecutionEnvironment::
 ns_clear_shadow(const string &var) {
@@ -396,33 +383,11 @@ get_ptr() {
 void ExecutionEnvironment::
 read_environment_variables() {
 #ifdef PREREAD_ENVIRONMENT
-#if defined(IS_OSX) || defined(IS_FREEBSD) || defined(IS_LINUX)
-  // In the case of Mac, we'll try reading _NSGetEnviron().
-  // In the case of FreeBSD and Linux, use the "environ" variable.
-
-  char **envp;
-  for (envp = environ; envp && *envp; envp++) {
-    string variable;
-    string value;
-
-    char *envc;
-    for (envc = *envp; envc && *envc && strncmp(envc, "=", 1) != 0; envc++) {
-      variable += (char) *envc;
-    }
-
-    if (strncmp(envc, "=", 1) == 0) {
-      for (envc++; envc && *envc; envc++) {
-        value += (char) *envc;
-      }
-    }
-
-    if (!variable.empty()) {
-      _variables[variable] = value;
-    }
-  }
-#elif defined(HAVE_PROC_SELF_ENVIRON)
-  // In some cases, we may have a file called /proc/self/environ
-  // that may be read to determine all of our environment variables.
+#if defined(HAVE_PROC_SELF_ENVIRON)
+  // In Linux, and possibly in other systems, we might not be able to
+  // use getenv() at static init time.  However, we may be lucky and
+  // have a file called /proc/self/environ that may be read to
+  // determine all of our environment variables.
 
   pifstream proc("/proc/self/environ");
   if (proc.fail()) {
@@ -453,6 +418,30 @@ read_environment_variables() {
     }
     ch = proc.get();
   }
+#elif defined(IS_OSX) || defined(IS_FREEBSD)
+  // In the case of Mac, there's always _NSGetEnviron() which we can read.
+  // In the case of FreeBSD, it's the "environ" variable.
+  
+  char **envp;
+  for (envp = environ; envp && *envp; envp++) {
+    string variable;
+    string value;
+    
+    char *envc;
+    for (envc = *envp; envc && *envc && strncmp(envc, "=", 1) != 0; envc++) {
+      variable += (char) *envc;
+    }
+    
+    if (strncmp(envc, "=", 1) == 0) {
+      for (envc++; envc && *envc; envc++) {
+        value += (char) *envc;
+      }
+    }
+    
+    if (!variable.empty()) {
+      _variables[variable] = value;
+    }
+  }
 #else
   cerr << "Warning: environment variables unavailable to dconfig.\n";
 #endif
@@ -468,9 +457,6 @@ read_environment_variables() {
 void ExecutionEnvironment::
 read_args() {
 
-  // First, we need to fill in _dtool_name.  This contains
-  // the full path to the p3dtool library.
-
 #ifdef WIN32_VC
 #ifdef _DEBUG
   HMODULE dllhandle = GetModuleHandle("libp3dtool_d.dll");
@@ -482,87 +468,75 @@ read_args() {
     char buffer[buffer_size];
     DWORD size = GetModuleFileName(dllhandle, buffer, buffer_size);
     if (size != 0) {
-      Filename tmp = Filename::from_os_specific(string(buffer, size));
+      Filename tmp = Filename::from_os_specific(string(buffer,size));
       tmp.make_true_case();
       _dtool_name = tmp;
     }
   }
 #endif
 
-#if defined(__APPLE__)
-  // And on OSX we don't have /proc/self/maps, but some _dyld_* functions.
+#if defined(HAVE_PROC_SELF_MAPS) || defined(HAVE_PROC_CURPROC_MAP)
+  // This is how you tell whether or not libdtool.so is loaded,
+  // and if so, where it was loaded from.
+#ifdef HAVE_PROC_CURPROC_MAP
+  pifstream maps("/proc/curproc/map");
+#else
+  pifstream maps("/proc/self/maps");
+#endif
+  while (!maps.fail() && !maps.eof()) {
+    char buffer[PATH_MAX];
+    buffer[0] = 0;
+    maps.getline(buffer, PATH_MAX);
+    char *tail = strrchr(buffer,'/');
+    char *head = strchr(buffer,'/');
+    if (tail && head && (strcmp(tail,"/libp3dtool.so." PANDA_VERSION_STR)==0)) {
+      _dtool_name = head;
+    } else if (tail && head && (strcmp(tail,"/libp3dtool.so")==0)) {
+      _dtool_name = head;
+    }
+  }
+  maps.close();
+#endif
 
+#ifdef __APPLE__
+  // And on OSX we don't have /proc/self/maps, but some _dyld_* functions.
   if (_dtool_name.empty()) {
     uint32_t ic = _dyld_image_count();
     for (uint32_t i = 0; i < ic; ++i) {
       const char *buffer = _dyld_get_image_name(i);
       const char *tail = strrchr(buffer, '/');
-      if (tail && (strcmp(tail, "/libp3dtool." PANDA_ABI_VERSION_STR ".dylib") == 0
-                || strcmp(tail, "/libp3dtool.dylib") == 0
-                || strcmp(tail, "/libdtool.dylib") == 0)) {
+      if (tail && (strcmp(tail,"/libp3dtool." PANDA_VERSION_STR ".dylib")==0)) {
+        _dtool_name = buffer;
+      } else if (tail && (strcmp(tail,"/libp3dtool.dylib")==0)) {
         _dtool_name = buffer;
       }
     }
   }
 #endif
 
-#if defined(IS_FREEBSD)
-  // On FreeBSD, we can use dlinfo to get the linked libraries.
-
-  if (_dtool_name.empty()) {
-    Link_map *map;
-    dlinfo(RTLD_SELF, RTLD_DI_LINKMAP, &map);
-
-    while (map != NULL) {
-      char *tail = strrchr(map->l_name, '/');
-      char *head = strchr(map->l_name, '/');
-      if (tail && head && (strcmp(tail, "/libp3dtool.so." PANDA_ABI_VERSION_STR) == 0
-                        || strcmp(tail, "/libp3dtool.so") == 0
-                        || strcmp(tail, "/libdtool.so") == 0)) {
-        _dtool_name = head;
-      }
-      map = map->l_next;
-    }
-  }
-#endif
-
-#if defined(HAVE_PROC_SELF_MAPS) || defined(HAVE_PROC_CURPROC_MAP)
-  // Some operating systems provide a file in the /proc filesystem.
-
-  if (_dtool_name.empty()) {
-#ifdef HAVE_PROC_CURPROC_MAP
-    pifstream maps("/proc/curproc/map");
-#else
-    pifstream maps("/proc/self/maps");
-#endif
-    while (!maps.fail() && !maps.eof()) {
-      char buffer[PATH_MAX];
-      buffer[0] = 0;
-      maps.getline(buffer, PATH_MAX);
-      char *tail = strrchr(buffer, '/');
-      char *head = strchr(buffer, '/');
-      if (tail && head && (strcmp(tail, "/libp3dtool.so." PANDA_ABI_VERSION_STR) == 0
-                        || strcmp(tail, "/libp3dtool.so") == 0
-                        || strcmp(tail, "/libdtool.so") == 0)) {
-        _dtool_name = head;
-      }
-    }
-    maps.close();
-  }
-#endif
-
-  // Now, we need to fill in _binary_name.  This contains
-  // the full path to the currently running executable.
-
 #ifdef WIN32_VC
+  static const DWORD buffer_size = 1024;
+  char buffer[buffer_size];
+  DWORD size = GetModuleFileName(NULL, buffer, buffer_size);
+  if (size != 0) {
+    Filename tmp = Filename::from_os_specific(string(buffer, size));
+    tmp.make_true_case();
+    _binary_name = tmp;
+  }
+#endif  // WIN32_VC
+
+#if defined(HAVE_PROC_SELF_EXE) || defined(HAVE_PROC_CURPROC_FILE)
+  // This is more reliable than using (argc,argv), so it given precedence.
   if (_binary_name.empty()) {
-    static const DWORD buffer_size = 1024;
-    char buffer[buffer_size];
-    DWORD size = GetModuleFileName(NULL, buffer, buffer_size);
-    if (size != 0) {
-      Filename tmp = Filename::from_os_specific(string(buffer, size));
-      tmp.make_true_case();
-      _binary_name = tmp;
+    char readlinkbuf[PATH_MAX];
+#ifdef HAVE_PROC_CURPROC_FILE
+    int pathlen = readlink("/proc/curproc/file",readlinkbuf,PATH_MAX-1);
+#else
+    int pathlen = readlink("/proc/self/exe",readlinkbuf,PATH_MAX-1);
+#endif
+    if (pathlen > 0) {
+      readlinkbuf[pathlen] = 0;
+      _binary_name = readlinkbuf;
     }
   }
 #endif
@@ -579,72 +553,14 @@ read_args() {
   }
 #endif
 
-#if defined(IS_FREEBSD)
-  // In FreeBSD, we can use sysctl to determine the pathname.
-
-  if (_binary_name.empty()) {
-    size_t bufsize = 4096;
-    char buffer[4096];
-    int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1};
-    mib[3] = getpid();
-    if (sysctl(mib, 4, (void*) buffer, &bufsize, NULL, 0) == -1) {
-      perror("sysctl");
-    } else {
-      _binary_name = buffer;
-    }
-  }
-#endif
-
-#if defined(HAVE_PROC_SELF_EXE) || defined(HAVE_PROC_CURPROC_FILE)
-  // Some operating systems provide a symbolic link to the executable
-  // in the /proc filesystem.  Use readlink to resolve that link.
-
-  if (_binary_name.empty()) {
-    char readlinkbuf [PATH_MAX];
-#ifdef HAVE_PROC_CURPROC_FILE
-    int pathlen = readlink("/proc/curproc/file", readlinkbuf, PATH_MAX - 1);
-#else
-    int pathlen = readlink("/proc/self/exe", readlinkbuf, PATH_MAX - 1);
-#endif
-    if (pathlen > 0) {
-      readlinkbuf[pathlen] = 0;
-      _binary_name = readlinkbuf;
-    }
-  }
-#endif
-
-  // Next we need to fill in _args, which is a vector containing
-  // the command-line arguments that the executable was invoked with.
-
-#if defined(IS_FREEBSD)
-  // In FreeBSD, we can use sysctl to determine the command-line arguments.
-
-  size_t bufsize = 4096;
-  char buffer[4096];
-  int mib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_ARGS, 0};
-  mib[3] = getpid();
-  if (sysctl(mib, 4, (void*) buffer, &bufsize, NULL, 0) == -1) {
-    perror("sysctl");
-  } else {
-    if (_binary_name.empty()) {
-      _binary_name = buffer;
-    }
-    int idx = strlen(buffer) + 1;
-    while (idx < bufsize) {
-      _args.push_back((char*)(buffer + idx));
-      int newidx = strlen(buffer + idx);
-      idx += newidx + 1;
-    }
-  }
-
-#elif defined(HAVE_GLOBAL_ARGV)
+#if defined(HAVE_GLOBAL_ARGV)
   int argc = GLOBAL_ARGC;
 
   if (_binary_name.empty() && argc > 0) {
     _binary_name = GLOBAL_ARGV[0];
     // This really needs to be resolved against PATH.
   }
-
+  
   for (int i = 1; i < argc; i++) {
     _args.push_back(GLOBAL_ARGV[i]);
   }
@@ -660,50 +576,35 @@ read_args() {
   pifstream proc("/proc/curproc/cmdline");
   if (proc.fail()) {
     cerr << "Cannot read /proc/curproc/cmdline; command-line arguments unavailable to config.\n";
+    return;
+  }
 #else
   pifstream proc("/proc/self/cmdline");
   if (proc.fail()) {
     cerr << "Cannot read /proc/self/cmdline; command-line arguments unavailable to config.\n";
+    return;
+  }
 #endif
-  } else {
-    int ch = proc.get();
-    int index = 0;
-    while (!proc.eof() && !proc.fail()) {
-      string arg;
+  
+  int ch = proc.get();
+  int index = 0;
+  while (!proc.eof() && !proc.fail()) {
+    string arg;
 
-      while (!proc.eof() && !proc.fail() && ch != '\0') {
-        arg += (char)ch;
-        ch = proc.get();
-      }
-
-      if (index == 0) {
-        if (_binary_name.empty())
-          _binary_name = arg;
-      } else {
-        _args.push_back(arg);
-      }
-      index++;
-
+    while (!proc.eof() && !proc.fail() && ch != '\0') {
+      arg += (char)ch;
       ch = proc.get();
     }
-  }
-#endif
 
-#ifndef WIN32
-  // Try to use realpath to get cleaner paths.
-
-  if (!_binary_name.empty()) {
-    char newpath [PATH_MAX + 1];
-    if (realpath(_binary_name.c_str(), newpath) != NULL) {
-      _binary_name = newpath;
+    if (index == 0) {
+      if (_binary_name.empty())
+        _binary_name = arg;
+    } else {
+      _args.push_back(arg);
     }
-  }
+    index++;
 
-  if (!_dtool_name.empty()) {
-    char newpath [PATH_MAX + 1];
-    if (realpath(_dtool_name.c_str(), newpath) != NULL) {
-      _dtool_name = newpath;
-    }
+    ch = proc.get();
   }
 #endif
 

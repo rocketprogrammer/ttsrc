@@ -7,7 +7,6 @@ import os
 import marshal
 import imp
 import platform
-import types
 from distutils.sysconfig import PREFIX, get_python_inc, get_python_version
 
 # Temporary (?) try..except to protect against unbuilt extend_frozen.
@@ -50,7 +49,7 @@ class CompilationEnvironment:
 
     def __init__(self, platform):
         self.platform = platform
-
+        
         # The command to compile a c to an object file.  Replace %(basename)s
         # with the basename of the source file, and an implicit .c extension.
         self.compileObj = 'error'
@@ -93,8 +92,6 @@ class CompilationEnvironment:
                 self.MSVC = os.environ['VCINSTALLDIR']
             elif (Filename('/c/Program Files/Microsoft Visual Studio 9.0/VC').exists()):
                 self.MSVC = Filename('/c/Program Files/Microsoft Visual Studio 9.0/VC').toOsSpecific()
-            elif (Filename('/c/Program Files (x86)/Microsoft Visual Studio 9.0/VC').exists()):
-                self.MSVC = Filename('/c/Program Files (x86)/Microsoft Visual Studio 9.0/VC').toOsSpecific()
             elif (Filename('/c/Program Files/Microsoft Visual Studio .NET 2003/Vc7').exists()):
                 self.MSVC = Filename('/c/Program Files/Microsoft Visual Studio .NET 2003/Vc7').toOsSpecific()
             else:
@@ -144,11 +141,11 @@ class CompilationEnvironment:
 
         else:
             # Unix
-            self.compileObj = "gcc -fPIC -c -o %(basename)s.o -O2 %(filename)s -I%(pythonIPath)s"
-            self.linkExe = "gcc -o %(basename)s %(basename)s.o -L/usr/local/lib -lpython%(pythonVersion)s"
-            self.linkDll = "gcc -shared -o %(basename)s.so %(basename)s.o -L/usr/local/lib -lpython%(pythonVersion)s"
+            self.compileObj = "gcc -fPIC -c -o %(basename)s.o -O2 %(filename)s -I %(pythonIPath)s"
+            self.linkExe = "gcc -o %(basename)s %(basename)s.o -lpython%(pythonVersion)s"
+            self.linkDll = "gcc -shared -o %(basename)s.so %(basename)s.o -lpython%(pythonVersion)s"
 
-            if (os.path.isdir("/usr/PCBSD/local/lib")):
+            if (platform.uname()[1]=="pcbsd"):
                 self.linkExe += " -L/usr/PCBSD/local/lib"
                 self.linkDll += " -L/usr/PCBSD/local/lib"
 
@@ -314,7 +311,7 @@ void PyWinFreeze_ExeInit(void)
 
 /*
   Called by a frozen .EXE only, so that built-in extension
-  modules are cleaned up
+  modules are cleaned up 
 */
 void PyWinFreeze_ExeTerm(void)
 {
@@ -332,7 +329,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     BOOL ret = TRUE;
     switch (dwReason) {
-        case DLL_PROCESS_ATTACH:
+        case DLL_PROCESS_ATTACH: 
         {
             char **modName;
             for (modName = possibleModules;*modName;*modName++) {
@@ -342,7 +339,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
             }
             break;
         }
-        case DLL_PROCESS_DETACH:
+        case DLL_PROCESS_DETACH: 
         {
             // Must go backwards
             char **modName;
@@ -398,7 +395,7 @@ static PyMethodDef nullMethods[] = {
  * array of frozen modules, provided in a C-style array, at runtime.
  * Returns the total number of frozen modules.
  */
-static int
+static int 
 extend_frozen_modules(const struct _frozen *new_modules, int new_count) {
   int orig_count;
   struct _frozen *realloc_FrozenModules;
@@ -491,8 +488,6 @@ class Freezer:
 
             # The file on disk it was loaded from, if any.
             self.filename = filename
-            if isinstance(filename, types.StringTypes):
-                self.filename = Filename(filename)
 
             # True if the module was found via the modulefinder.
             self.implicit = implicit
@@ -644,7 +639,7 @@ class Freezer:
             modulefinder.AddPackagePath(moduleName, path)
 
     def getModulePath(self, moduleName):
-        """ Looks for the indicated directory module and returns the
+        """ Looks for the indicated directory module and returns the 
         __path__ member: the list of directories in which its python
         files can be found.  If the module is a .py file and not a
         directory, returns None. """
@@ -661,7 +656,7 @@ class Freezer:
             for symbol in moduleName.split('.')[1:]:
                 module = getattr(module, symbol)
             return module.__path__
-
+        
         # If it didn't work--maybe the module is unimportable because
         # it makes certain assumptions about the builtins, or
         # whatever--then just look for file on disk.  That's usually
@@ -673,7 +668,7 @@ class Freezer:
             path = self.getModulePath(parentName)
             if path == None:
                 return None
-
+            
         file, pathname, description = imp.find_module(baseName, path)
 
         if not os.path.isdir(pathname):
@@ -681,7 +676,7 @@ class Freezer:
         return [pathname]
 
     def getModuleStar(self, moduleName):
-        """ Looks for the indicated directory module and returns the
+        """ Looks for the indicated directory module and returns the 
         __all__ member: the list of symbols within the module. """
 
         # First, try to import the module directly.  That's the most
@@ -697,7 +692,7 @@ class Freezer:
                 module = getattr(module, symbol)
             if hasattr(module, '__all__'):
                 return module.__all__
-
+        
         # If it didn't work, just open the directory and scan for *.py
         # files.
         path = None
@@ -723,7 +718,7 @@ class Freezer:
                 modules.append(basename[:-3])
 
         return modules
-
+            
     def addModule(self, moduleName, implicit = False, newName = None,
                   filename = None, guess = False, fromSource = None):
         """ Adds a module to the list of modules to be exported by
@@ -802,7 +797,7 @@ class Freezer:
         writeMultifile() to dump the resulting output.  After a call
         to done(), you may not add any more modules until you call
         reset(). """
-
+        
         assert self.mf == None
 
         # If we are building an exe, we also need to implicitly
@@ -815,7 +810,7 @@ class Freezer:
         # Excluding a parent module also excludes all its
         # (non-explicit) children, unless the parent has allowChildren
         # set.
-
+        
         # Walk through the list in sorted order, so we reach parents
         # before children.
         names = self.modules.items()
@@ -846,15 +841,6 @@ class Freezer:
         self.mf = PandaModuleFinder(excludes = excludeDict.keys())
 
         # Attempt to import the explicit modules into the modulefinder.
-
-        # First, ensure the includes are sorted in order so that
-        # packages appear before the modules they contain.  This
-        # resolves potential ordering issues, especially with modules
-        # that are discovered by filename rather than through import
-        # statements.
-        includes.sort(key = self.__sortModuleKey)
-
-        # Now walk through the list and import them all.
         for mdef in includes:
             try:
                 self.__loadModule(mdef)
@@ -877,7 +863,7 @@ class Freezer:
         for origName in self.mf.modules.keys():
             if origName not in origToNewName:
                 self.modules[origName] = self.ModuleDef(origName, implicit = True)
-
+                            
         missing = []
         for origName in self.mf.any_missing_maybe()[0]:
             if origName in startupModules:
@@ -905,25 +891,9 @@ class Freezer:
             missing.sort()
             print "There are some missing modules: %r" % missing
 
-    def __sortModuleKey(self, mdef):
-        """ A sort key function to sort a list of mdef's into order,
-        primarily to ensure that packages proceed their modules. """
-
-        if mdef.moduleName:
-            # If we have a moduleName, the key consists of the split
-            # tuple of packages names.  That way, parents always sort
-            # before children.
-            return ('a', mdef.moduleName.split('.'))
-        else:
-            # If we don't have a moduleName, the key doesn't really
-            # matter--we use filename--but we start with 'b' to ensure
-            # that all of non-named modules appear following all of
-            # the named modules.
-            return ('b', mdef.filename)
-
     def __loadModule(self, mdef):
         """ Adds the indicated module to the modulefinder. """
-
+        
         if mdef.filename:
             # If it has a filename, then we found it as a file on
             # disk.  In this case, the moduleName may not be accurate
@@ -961,7 +931,7 @@ class Freezer:
         FreezeTool object for a new pass.  More modules may be added
         and dumped to a new target.  Previously-added modules are
         remembered and will not be dumped again. """
-
+        
         self.mf = None
         self.previousModules = dict(self.modules)
 
@@ -993,7 +963,7 @@ class Freezer:
         """ Return a list of all of the modules we will be explicitly
         or implicitly including.  The return value is actually a list
         of tuples: (moduleName, moduleDef)."""
-
+        
         moduleDefs = []
 
         for newName, mdef in self.modules.items():
@@ -1005,10 +975,13 @@ class Freezer:
                 if prev and not prev.exclude:
                     # Previously exported.
                     pass
-                elif mdef.moduleName in self.mf.modules or \
-                     mdef.moduleName in startupModules or \
-                     mdef.filename:
-                    moduleDefs.append((newName, mdef))
+                else:
+                    if mdef.moduleName in self.mf.modules or \
+                       mdef.moduleName in startupModules or \
+                       mdef.filename:
+                        moduleDefs.append((newName, mdef))
+                    elif not mdef.guess:
+                        print "Unknown module %s" % (mdef.moduleName)
             elif mdef.forbid:
                 if not prev or not prev.forbid:
                     moduleDefs.append((newName, mdef))
@@ -1048,7 +1021,7 @@ class Freezer:
         """ Adds all of the names on dirnames as a module directory. """
         if not dirnames:
             return
-
+        
         str = '.'.join(dirnames)
         if str not in moduleDirs:
             # Add an implicit __init__.py file.
@@ -1102,7 +1075,7 @@ class Freezer:
         elif getattr(module, '__file__', None):
             sourceFilename = Filename.fromOsSpecific(module.__file__)
             sourceFilename.setExtension("py")
-
+            
         if self.storePythonSource:
             if sourceFilename and sourceFilename.exists():
                 filename += '.py'
@@ -1152,7 +1125,7 @@ class Freezer:
             if not mdef.exclude:
                 self.__addPythonFile(multifile, moduleDirs, moduleName, mdef,
                                      compressionLevel)
-
+    
     def writeMultifile(self, mfname):
         """ After a call to done(), this stores all of the accumulated
         python code into a Multifile with the indicated filename,
@@ -1181,7 +1154,7 @@ class Freezer:
         The return value is the newly-generated filename, including
         the filename extension.  Additional extension modules are
         listed in self.extras. """
-
+        
         if compileToExe:
             # We must have a __main__ module to make an exe file.
             if not self.__writingModule('__main__'):
@@ -1193,7 +1166,7 @@ class Freezer:
         # Now generate the actual export table.
         moduleDefs = []
         moduleList = []
-
+        
         for moduleName, mdef in self.getModuleDefs():
             origName = mdef.moduleName
             if mdef.forbid:
@@ -1247,7 +1220,7 @@ class Freezer:
 
         if not self.cenv:
             self.cenv = CompilationEnvironment(platform = self.platform)
-
+            
         if compileToExe:
             code = self.frozenMainCode
             if self.platform == 'win32':
@@ -1265,13 +1238,13 @@ class Freezer:
                 target = basename
 
             compileFunc = self.cenv.compileExe
-
+            
         else:
             if self.platform == 'win32':
                 target = basename + self.cenv.dllext + '.pyd'
             else:
                 target = basename + '.so'
-
+            
             initCode = dllInitCode % {
                 'moduleName' : os.path.basename(basename),
                 'newcount' : len(moduleList),
@@ -1297,7 +1270,7 @@ class Freezer:
                 os.unlink(filename)
             if (os.path.exists(basename + self.objectExtension)):
                 os.unlink(basename + self.objectExtension)
-
+        
         return target
 
     def makeModuleDef(self, mangledName, code):
@@ -1325,7 +1298,7 @@ class Freezer:
         """ Returns true if we are outputting the named module in this
         pass, false if we have already output in a previous pass, or
         if it is not yet on the output table. """
-
+        
         mdef = self.modules.get(moduleName, (None, None))
         if mdef.exclude:
             return False
@@ -1353,7 +1326,7 @@ class PandaModuleFinder(modulefinder.ModuleFinder):
                 partname = libname
                 fqname = libname
                 parent = None
-
+                
         return modulefinder.ModuleFinder.import_module(self, partname, fqname, parent)
 
     def find_module(self, name, path, parent=None):
@@ -1382,7 +1355,7 @@ class PandaModuleFinder(modulefinder.ModuleFinder):
 
         message = "DLL loader cannot find %s." % (name)
         raise ImportError, message
-
+        
     def load_module(self, fqname, fp, pathname, (suffix, mode, type)):
         if type == imp.PY_FROZEN:
             # It's a frozen module.
@@ -1398,5 +1371,5 @@ class PandaModuleFinder(modulefinder.ModuleFinder):
             self.scan_code(co, m)
             self.msgout(2, "load_module ->", m)
             return m
-
+        
         return modulefinder.ModuleFinder.load_module(self, fqname, fp, pathname, (suffix, mode, type))

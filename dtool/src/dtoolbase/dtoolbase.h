@@ -59,16 +59,16 @@
 #if _MSC_VER >= 1300
  #if _MSC_VER >= 1310
    #define USING_MSVC7_1
-//#pragma message("VC 7.1")
+//#pragma message("VC 7.1")    
  #else
-//#pragma message("VC 7.0")
+//#pragma message("VC 7.0") 
  #endif
 #define USING_MSVC7
-#else
+#else 
 // #pragma message("VC 6.0")
 #endif
 
-// Use NODEFAULT to optimize a switch() stmt to tell MSVC to automatically go to the final untested case
+// Use NODEFAULT to optimize a switch() stmt to tell MSVC to automatically go to the final untested case 
 // after it has failed all the other cases (i.e. 'assume at least one of the cases is always true')
 #ifdef _DEBUG
 # define NODEFAULT  default: assert(0);
@@ -94,18 +94,7 @@
 #endif
 #define _WIN32_WINNT 0x0502
 
-#if defined(PHAVE_STDINT_H) && defined(__cplusplus)
-#ifndef __STDC_LIMIT_MACROS
-#define __STDC_LIMIT_MACROS
-#endif
-#ifndef __STDC_CONSTANT_MACROS
-#define __STDC_CONSTANT_MACROS
-#endif
-#endif
-
 #ifdef HAVE_PYTHON
-#undef _POSIX_C_SOURCE
-#undef _XOPEN_SOURCE
 #include "pyconfig.h"
 #endif
 
@@ -173,10 +162,6 @@
 #include <sys/time.h>
 #endif
 
-#ifdef PHAVE_STDINT_H
-#include <stdint.h>
-#endif
-
 #ifdef CPPPARSER
 #include <stdtypedefs.h>
 #endif
@@ -190,19 +175,19 @@
 /* Otherwise, if we're not building with the Tau instrumentor, turn
    off all the TAU macros.  We could include the Tau header file to do
    this, but it's better not to assume that Tau is installed. */
-#define TAU_TYPE_STRING(profileString, str)
-#define TAU_PROFILE(name, type, group)
+#define TAU_TYPE_STRING(profileString, str) 
+#define TAU_PROFILE(name, type, group) 
 #define TAU_PROFILE_TIMER(var, name, type, group)
 #define TAU_PROFILE_START(var)
 #define TAU_PROFILE_STOP(var)
-#define TAU_PROFILE_STMT(stmt)
+#define TAU_PROFILE_STMT(stmt) 
 #define TAU_PROFILE_EXIT(msg)
 #define TAU_PROFILE_INIT(argc, argv)
 #define TAU_PROFILE_SET_NODE(node)
 #define TAU_PROFILE_SET_CONTEXT(context)
 #define TAU_PROFILE_SET_GROUP_NAME(newname)
 #define TAU_PROFILE_TIMER_SET_GROUP_NAME(t, newname)
-#define TAU_PROFILE_CALLSTACK()
+#define TAU_PROFILE_CALLSTACK()    
 #define TAU_DB_DUMP()
 #define TAU_DB_PURGE()
 
@@ -220,9 +205,9 @@
 #define TAU_REPORT_STATISTICS()
 #define TAU_REPORT_THREAD_STATISTICS()
 #define TAU_REGISTER_THREAD()
-#define TAU_REGISTER_FORK(id, op)
-#define TAU_ENABLE_INSTRUMENTATION()
-#define TAU_DISABLE_INSTRUMENTATION()
+#define TAU_REGISTER_FORK(id, op) 
+#define TAU_ENABLE_INSTRUMENTATION() 
+#define TAU_DISABLE_INSTRUMENTATION() 
 #define TAU_ENABLE_GROUP(group)
 #define TAU_DISABLE_GROUP(group)
 #define TAU_ENABLE_GROUP_NAME(group)
@@ -240,26 +225,26 @@
 #define TAU_TRACK_MUSE_EVENTS()
 #define TAU_SET_INTERRUPT_INTERVAL(value)
 
-#define TAU_TRACE_SENDMSG(type, destination, length)
+#define TAU_TRACE_SENDMSG(type, destination, length) 
 #define TAU_TRACE_RECVMSG(type, source, length)
 
 #define TAU_MAPPING(stmt, group) stmt
-#define TAU_MAPPING_OBJECT(FuncInfoVar)
-#define TAU_MAPPING_LINK(FuncInfoVar, Group)
-#define TAU_MAPPING_PROFILE(FuncInfoVar)
-#define TAU_MAPPING_CREATE(name, type, key, groupname, tid)
+#define TAU_MAPPING_OBJECT(FuncInfoVar) 
+#define TAU_MAPPING_LINK(FuncInfoVar, Group) 
+#define TAU_MAPPING_PROFILE(FuncInfoVar) 
+#define TAU_MAPPING_CREATE(name, type, key, groupname, tid) 
 #define TAU_MAPPING_PROFILE_TIMER(Timer, FuncInfoVar, tid)
 #define TAU_MAPPING_TIMER_CREATE(t, name, type, gr, group_name)
-#define TAU_MAPPING_PROFILE_START(Timer, tid)
-#define TAU_MAPPING_PROFILE_STOP(tid)
-#define TAU_MAPPING_PROFILE_EXIT(msg, tid)
+#define TAU_MAPPING_PROFILE_START(Timer, tid) 
+#define TAU_MAPPING_PROFILE_STOP(tid) 
+#define TAU_MAPPING_PROFILE_EXIT(msg, tid)  
 #define TAU_MAPPING_DB_DUMP(tid)
 #define TAU_MAPPING_DB_PURGE(tid)
-#define TAU_MAPPING_PROFILE_SET_NODE(node, tid)
+#define TAU_MAPPING_PROFILE_SET_NODE(node, tid)  
 #define TAU_MAPPING_PROFILE_SET_GROUP_NAME(timer, name)
 #define TAU_PROFILE_TIMER_SET_NAME(t, newname)
 #define TAU_PROFILE_TIMER_SET_TYPE(t, newname)
-#define TAU_PROFILE_TIMER_SET_GROUP(t, id)
+#define TAU_PROFILE_TIMER_SET_GROUP(t, id) 
 #define TAU_MAPPING_PROFILE_SET_NAME(timer, name)
 #define TAU_MAPPING_PROFILE_SET_TYPE(timer, name)
 #define TAU_MAPPING_PROFILE_SET_GROUP(timer, id)
@@ -268,15 +253,15 @@
 #define TAU_MAPPING_PROFILE_GET_NAME(timer)
 #define TAU_MAPPING_PROFILE_GET_TYPE(timer)
 
-#define TAU_PHASE(name, type, group)
-#define TAU_PHASE_CREATE_STATIC(var, name, type, group)
-#define TAU_PHASE_CREATE_DYNAMIC(var, name, type, group)
-#define TAU_PHASE_START(var)
-#define TAU_PHASE_STOP(var)
-#define TAU_GLOBAL_PHASE(timer, name, type, group)
-#define TAU_GLOBAL_PHASE_START(timer)
-#define TAU_GLOBAL_PHASE_STOP(timer)
-#define TAU_GLOBAL_PHASE_EXTERNAL(timer)
+#define TAU_PHASE(name, type, group) 
+#define TAU_PHASE_CREATE_STATIC(var, name, type, group) 
+#define TAU_PHASE_CREATE_DYNAMIC(var, name, type, group) 
+#define TAU_PHASE_START(var) 
+#define TAU_PHASE_STOP(var) 
+#define TAU_GLOBAL_PHASE(timer, name, type, group) 
+#define TAU_GLOBAL_PHASE_START(timer) 
+#define TAU_GLOBAL_PHASE_STOP(timer)  
+#define TAU_GLOBAL_PHASE_EXTERNAL(timer) 
 #define TAU_GLOBAL_TIMER(timer, name, type, group)
 #define TAU_GLOBAL_TIMER_EXTERNAL(timer)
 #define TAU_GLOBAL_TIMER_START(timer)
@@ -304,9 +289,7 @@
 
 /* Try to determine if we're compiling in a 64-bit mode. */
 
-#ifdef __WORDSIZE
-#define NATIVE_WORDSIZE __WORDSIZE
-#elif defined(_LP64)
+#if defined(_LP64)
 #define NATIVE_WORDSIZE 64
 #else
 #define NATIVE_WORDSIZE 32
@@ -325,24 +308,12 @@
 #define END_PUBLISH __end_publish
 #define BLOCKING __blocking
 #define MAKE_SEQ(seq_name, num_name, element_name) __make_seq(seq_name, num_name, element_name)
-#undef USE_STL_ALLOCATOR  /* Don't try to parse these template classes in interrogate. */
-#define EXTENSION(x) __extension x
-#define EXTEND __extension
-#define EXT_FUNC(func) ::func()
-#define EXT_FUNC_ARGS(func, ...) ::func(__VA_ARGS__)
-#define CALL_EXT_FUNC(func, ...) ::func (__VA_ARGS__)
+#undef USE_STL_ALLOCATOR  // Don't try to parse these template classes in interrogate.
 #else
 #define BEGIN_PUBLISH
 #define END_PUBLISH
 #define BLOCKING
 #define MAKE_SEQ(seq_name, num_name, element_name)
-#define EXTENSION(x)
-#define EXTEND
-/* If you change these, don't forget to also change it in interrogate itself. */
-#define _EXT_FUNC(func) _ext__ ## func
-#define EXT_FUNC(func) _EXT_FUNC(func) ()
-#define EXT_FUNC_ARGS(func, ...) _EXT_FUNC(func) (__VA_ARGS__)
-#define CALL_EXT_FUNC(func, ...) _EXT_METHOD(cl, m) (__VA_ARGS__)
 #endif
 
 #ifdef __cplusplus

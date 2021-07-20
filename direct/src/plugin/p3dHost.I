@@ -14,30 +14,14 @@
 
 
 ////////////////////////////////////////////////////////////////////
-//     Function: P3DHost::has_host_dir
-//       Access: Public
-//  Description: Returns true if the host_dir has already been set,
-//               false if not.  If this returns true it is safe to
-//               call get_host_dir().
-////////////////////////////////////////////////////////////////////
-inline bool P3DHost::
-has_host_dir() const {
-  return (!_host_dir.empty());
-}
-
-////////////////////////////////////////////////////////////////////
 //     Function: P3DHost::get_host_dir
 //       Access: Public
 //  Description: Returns the local directory into which files
-//               downloaded from this host will be installed.  It may
-//               not be safe to call this before the host has fully
-//               bootstrapped; if there is some danger of calling this
-//               early in the initialization process, you should check
-//               has_host_dir() first.
+//               downloaded from this host will be installed.
 ////////////////////////////////////////////////////////////////////
 inline const string &P3DHost::
 get_host_dir() const {
-  assert(has_host_dir());
+  assert(!_host_dir.empty());
   return _host_dir;
 }
 
@@ -107,28 +91,23 @@ has_contents_file() const {
 }
 
 ////////////////////////////////////////////////////////////////////
-//     Function: P3DHost::get_contents_iseq
+//     Function: P3DHost::get_contents_seq
 //       Access: Public
 //  Description: Returns a number that increments whenever a new
 //               version of the contents.xml file has been read.  This
-//               number is local to the session only; it has nothing
-//               to do with the "seq" value written into the
-//               contents.xml file itself.  
-//
-//               This can be used by packages to determine whether
-//               they need to redownload from scratch.
+//               can be used by packages to determine whether they
+//               need to redownload from scratch.
 ////////////////////////////////////////////////////////////////////
 inline int P3DHost::
-get_contents_iseq() const {
-  return _contents_iseq;
+get_contents_seq() const {
+  return _contents_seq;
 }
 
 ////////////////////////////////////////////////////////////////////
 //     Function: P3DHost::check_contents_hash
 //       Access: Public
 //  Description: Returns true if the indicated pathname has the same
-//               md5 hash as the contents.xml file (as provided by the
-//               server), false otherwise.
+//               md5 hash as the contents.xml file, false otherwise.
 ////////////////////////////////////////////////////////////////////
 inline bool P3DHost::
 check_contents_hash(const string &pathname) const {

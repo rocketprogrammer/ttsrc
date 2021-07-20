@@ -60,7 +60,7 @@ operator = (const DatagramIterator &copy) {
 ////////////////////////////////////////////////////////////////////
 //     Function: DatagramIterator::assign
 //       Access: Public
-//  Description: direct Assignment to a Datagram
+//  Description: direct Assigment to a Datagram
 ////////////////////////////////////////////////////////////////////
 INLINE void DatagramIterator::assign(Datagram &datagram, size_t offset)
 {

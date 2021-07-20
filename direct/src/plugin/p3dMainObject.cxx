@@ -223,19 +223,6 @@ call(const string &method_name, bool needs_response,
      P3D_object *params[], int num_params) {
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
 
-  nout << "main." << method_name << "(";
-  for (int i = 0; i < num_params; ++i) {
-    if (i != 0) {
-      nout << ", ";
-    }
-    int buffer_size = P3D_OBJECT_GET_REPR(params[i], NULL, 0);
-    char *buffer = new char[buffer_size];
-    P3D_OBJECT_GET_REPR(params[i], buffer, buffer_size);
-    nout.write(buffer, buffer_size);
-    delete[] buffer;
-  }
-  nout << ")\n";
-
   if (method_name == "play") {
     return call_play(params, num_params);
   } else if (method_name == "read_game_log") {
@@ -281,22 +268,6 @@ output(ostream &out) {
 ////////////////////////////////////////////////////////////////////
 void P3DMainObject::
 set_pyobj(P3D_object *pyobj) {
-  if (pyobj == this) {
-    // We are setting a reference directly to ourselves.  This happens
-    // when the application has accepted the main object we gave it in
-    // set_instance_info().  This means the application is directly
-    // manipulating this object as its appRunner.main.  In this case,
-    // we don't actually need to set the reference; instead, we clear
-    // anything we had set.
-    nout << "application shares main object\n";
-    pyobj = NULL;
-
-  } else if (pyobj != NULL) {
-    // In the alternate case, the application has its own, separate
-    // appRunner.main object.  Thus, we do need to set the pointer.
-    nout << "application has its own main object\n";
-  }
-    
   if (_pyobj != pyobj) {
     P3D_OBJECT_XDECREF(_pyobj);
     _pyobj = pyobj;
@@ -305,7 +276,12 @@ set_pyobj(P3D_object *pyobj) {
 
       // Now that we have a pyobj, we have to transfer down all of the
       // properties we'd set locally.
-      apply_properties(_pyobj);
+      Properties::const_iterator pi;
+      for (pi = _properties.begin(); pi != _properties.end(); ++pi) {
+        const string &property_name = (*pi).first;
+        P3D_object *value = (*pi).second;
+        P3D_OBJECT_SET_PROPERTY(_pyobj, property_name.c_str(), false, value);
+      }
     }
   }
 }
@@ -319,41 +295,6 @@ set_pyobj(P3D_object *pyobj) {
 P3D_object *P3DMainObject::
 get_pyobj() const {
   return _pyobj;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: P3DMainObject::apply_properties
-//       Access: Public
-//  Description: Applies the locally-set properties onto the indicated
-//               Python object, but does not store the object.  This
-//               is a one-time copy of the locally-set properties
-//               (like "coreapiHostUrl" and the like) onto the
-//               indicated Python object.
-////////////////////////////////////////////////////////////////////
-void P3DMainObject::
-apply_properties(P3D_object *pyobj) {
-  P3DPythonObject *p3dpyobj = NULL;
-  if (pyobj->_class == &P3DObject::_object_class) {
-    p3dpyobj = ((P3DObject *)pyobj)->as_python_object();
-  }
-
-  Properties::const_iterator pi;
-  for (pi = _properties.begin(); pi != _properties.end(); ++pi) {
-    const string &property_name = (*pi).first;
-    P3D_object *value = (*pi).second;
-    if (p3dpyobj != NULL && P3D_OBJECT_GET_TYPE(value) != P3D_OT_object) {
-      // If we know we have an actual P3DPythonObject (we really
-      // expect this), then we can call set_property_insecure()
-      // directly, because we want to allow setting the initial
-      // properties even if Javascript has no permissions to write
-      // into Python.  But we don't allow setting objects this way in
-      // any event.
-      p3dpyobj->set_property_insecure(property_name, false, value);
-    } else {
-      // Otherwise, we go through the generic interface.
-      P3D_OBJECT_SET_PROPERTY(pyobj, property_name.c_str(), false, value);
-    }
-  }
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -500,21 +441,23 @@ call_read_log(P3D_object *params[], int num_params) {
   }
 
   string log_pathname = inst_mgr->get_log_directory() + log_filename;
-  P3D_object *result = read_log(log_pathname, params + 1, num_params - 1);
-  return result;
+  return read_log(log_pathname, params + 1, num_params - 1);
 }
 
 ////////////////////////////////////////////////////////////////////
 //     Function: P3DMainObject::read_log
 //       Access: Private
-//  Description: log-reader meta function that handles reading
-//               previous log files in addition to the present one
+//  Description: The generic log-reader function.
 ////////////////////////////////////////////////////////////////////
 P3D_object *P3DMainObject::
 read_log(const string &log_pathname, P3D_object *params[], int num_params) {
   P3DInstanceManager *inst_mgr = P3DInstanceManager::get_global_ptr();
   string log_directory = inst_mgr->get_log_directory();
-  ostringstream log_data;
+
+  ifstream log(log_pathname.c_str(), ios::in);
+  if (!log) {
+    return inst_mgr->new_undefined_object();
+  }
 
   // Check the first parameter, if any--if given, it specifies the
   // last n bytes to retrieve.
@@ -522,92 +465,57 @@ read_log(const string &log_pathname, P3D_object *params[], int num_params) {
   if (num_params > 0) {
     tail_bytes = (size_t)max(P3D_OBJECT_GET_INT(params[0]), 0);
   }
+
   // Check the second parameter, if any--if given, it specifies the
   // first n bytes to retrieve.
   size_t head_bytes = 0;
   if (num_params > 1) {
     head_bytes = (size_t)max(P3D_OBJECT_GET_INT(params[1]), 0);
   }
-  // Check the third parameter, if any--if given, it specifies the
-  // last n bytes to retrieve from previous copies of this file.
+
+  // Check if we want data from previous logs
+  const char log_sep_line_char = '-';
+  const int log_sep_line_chars = 80;
+  const int log_sep_filename_chars = 256;
+  const int log_sep_bytes = log_sep_line_chars + log_sep_filename_chars + 16;
   size_t tail_bytes_prev = 0;
+  vector<string> log_basenames_prev;
   if (num_params > 2) {
-    tail_bytes_prev = (size_t)max(P3D_OBJECT_GET_INT(params[2]), 0);
-  }
-  // Read the log data from the primary file
-  read_log_file(log_pathname, tail_bytes, head_bytes, log_data);
-
-  // Read data from previous logs if requested
-  if (tail_bytes_prev > 0) {
     // Determine the base of the log file names
-    string log_basename = log_pathname;
-    size_t slash = log_basename.rfind('/');
-    if (slash != string::npos) {
-      log_basename = log_basename.substr(slash + 1);
-    }
+    tail_bytes_prev = (size_t)max(P3D_OBJECT_GET_INT(params[2]), 0);
+    if (tail_bytes_prev > 0) {
+      string log_basename = log_pathname;
+      size_t slash = log_basename.rfind('/');
+      if (slash != string::npos) {
+        log_basename = log_basename.substr(slash + 1);
+      }
 #ifdef _WIN32
-    slash = log_basename.rfind('\\');
-    if (slash != string::npos) {
-      log_basename = log_basename.substr(slash + 1);
-    }
+      slash = log_basename.rfind('\\');
+      if (slash != string::npos) {
+        log_basename = log_basename.substr(slash + 1);
+      }
 #endif  // _WIN32
-    string log_basename_primary = log_basename;
-    int dash = log_basename.rfind("-");
-    if (dash != string::npos) {
-      log_basename = log_basename.substr(0, dash+1);
-    } else {
-      int dotLog = log_basename.rfind(".log");
-      if (dotLog != string::npos) {
-        log_basename = log_basename.substr(0, dotLog);
-        log_basename += "-";
+      string log_basename_curr = log_basename;
+      int dash = log_basename.rfind("-");
+      if (dash != string::npos) {
+        log_basename = log_basename.substr(0, dash+1);
+
+        // Find matching files
+        vector<string> all_logs;
+        inst_mgr->scan_directory(log_directory, all_logs);
+        for (int i=0; i<(int)all_logs.size(); ++i) {
+          if ((all_logs[i].size() > 4) &&
+              (all_logs[i].find(log_basename) == 0) &&
+              (all_logs[i].substr(all_logs[i].size() - 4) == string(".log"))) {
+            if (all_logs[i] != log_basename_curr) {
+              //log_basenames_prev.push_back(all_logs[i]);
+              //reverse order
+              log_basenames_prev.insert(log_basenames_prev.begin(), all_logs[i]);
+            }
+          }
+        }
       }
     }
-
-    // Find matching files
-    vector<string> all_logs;
-    inst_mgr->scan_directory(log_directory, all_logs);
-    for (int i=(int)all_logs.size()-1; i>=0; --i) {
-      if ((all_logs[i].find(log_basename) == 0) &&
-          (all_logs[i] != log_basename_primary) && 
-          (all_logs[i].size() > 4) &&
-          (all_logs[i].substr(all_logs[i].size() - 4) == string(".log"))) {
-        read_log_file((log_directory+all_logs[i]), tail_bytes_prev, 0, log_data);
-      }
-    }
-  }
-
-  string log_data_str = log_data.str();
-  P3D_object *result = new P3DStringObject(log_data_str);
-  return result;
-}
-
-////////////////////////////////////////////////////////////////////
-//     Function: P3DMainObject::read_log_file
-//       Access: Private
-//  Description: The generic log-reader function.
-////////////////////////////////////////////////////////////////////
-void P3DMainObject::
-read_log_file(const string &log_pathname, 
-              size_t tail_bytes, size_t head_bytes, 
-              ostringstream &log_data) {
-  
-  // Get leaf name
-  string log_leafname = log_pathname;
-  size_t slash = log_leafname.rfind('/');
-  if (slash != string::npos) {
-    log_leafname = log_leafname.substr(slash + 1);
-  }
-#ifdef _WIN32
-  slash = log_leafname.rfind('\\');
-  if (slash != string::npos) {
-    log_leafname = log_leafname.substr(slash + 1);
-  }
-#endif  // _WIN32
-
-  // load file
-  ifstream log(log_pathname.c_str(), ios::in);
-  if (!log) {
-    return;
   }
 
   // Get the size of the file.
@@ -617,83 +525,94 @@ read_log_file(const string &log_pathname,
        << " bytes, tail_bytes = " << tail_bytes << ", head_bytes = "
        << head_bytes << "\n";
 
-  // Check if we are getting the full file
-  size_t full_bytes = 0;
+  size_t return_size = file_size;
+  string separator;
+
   if (file_size <= head_bytes + tail_bytes) {
     // We will return the entire log.
-    full_bytes = file_size;
-    head_bytes = 0;
+    head_bytes = file_size;
     tail_bytes = 0;
+    return_size = file_size;
+
+  } else if (head_bytes == 0) {
+    // We will be returning the tail of the log only.
+    return_size = tail_bytes;
+
+  } else if (tail_bytes == 0) {
+    // We will be returning the head of the log only.
+    return_size = head_bytes;
+
+  } else {
+    // We will be excising the middle part of the log.
+    separator = "\n\n**** truncated ****\n\n";
+    return_size = head_bytes + separator.size() + tail_bytes;
   }
 
-  // Allocate a temp buffer to hold file data
-  size_t buffer_bytes = max(max(full_bytes, head_bytes), tail_bytes) + 1;
-  nout << "allocating " << buffer_bytes << " bytes to read from file.\n";
-  char *buffer = new char[buffer_bytes];
+  // We will need additional space for data from previous logs
+  if ((tail_bytes_prev > 0) && (log_basenames_prev.size() > 0)) {
+      int extra_bytes_per_prev_log = tail_bytes_prev + log_sep_bytes;
+      return_size += log_basenames_prev.size() * extra_bytes_per_prev_log;
+  }
+
+  nout << "allocating " << return_size << " bytes to return.\n";
+  char *buffer = new char[return_size];
   if (buffer == NULL) {
-    return;
+    return NULL;
   }
 
-  // Render log file header to log_data
-  log_data << "=======================================";
-  log_data << "=======================================" << "\n";
-  log_data << "== PandaLog-" << log_pathname << "\n";
-
-  // Render log data if full file is to be fetched
-  if (full_bytes > 0) {
-    log.seekg(0, ios::beg);
-    log.read(buffer, full_bytes);
-    size_t read_bytes = log.gcount();
-    assert(read_bytes < buffer_bytes);
-    buffer[read_bytes] = '\0';
-    log_data << "== PandaLog-" << "Full Start";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
-    log_data << buffer;
-    log_data << "== PandaLog-" << "Full End";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
-  }
-
-  // Render log data if head bytes are to be fetched
+  char *bp = buffer;
   if (head_bytes > 0) {
     log.seekg(0, ios::beg);
-    log.read(buffer, head_bytes);
-    size_t read_bytes = log.gcount();
-    assert(read_bytes < buffer_bytes);
-    buffer[read_bytes] = '\0';
-    log_data << "== PandaLog-" << "Head Start";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
-    log_data << buffer << "\n";
-    log_data << "== PandaLog-" << "Head End";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
+    log.read(bp, head_bytes);
+    bp += log.gcount();
   }
 
-  // Render separator if head & tail bytes are to be fetched
-  if ((head_bytes > 0) && (tail_bytes > 0)) {
-    log_data << "== PandaLog-" << "truncated";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
+  if (!separator.empty()) {
+    memcpy(bp, separator.data(), separator.length());
+    bp += separator.length();
   }
 
-  // Render log data if tail bytes are to be fetched
   if (tail_bytes > 0) {
     log.seekg(file_size - tail_bytes, ios::beg);
-    log.read(buffer, tail_bytes);
-    size_t read_bytes = log.gcount();
-    assert(read_bytes < buffer_bytes);
-    buffer[read_bytes] = '\0';
-    log_data << "== PandaLog-" << "Tail Start";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
-    log_data << buffer;
-    log_data << "== PandaLog-" << "Tail End";
-    log_data << " " << "(" << log_leafname << ")" << "\n";
+    log.read(bp, tail_bytes);
+    bp += log.gcount();
   }
 
-  // Render log file footer to log_data
-  //log_data << "=======================================";
-  //log_data << "=======================================" << "\n";
+  // add data for previous logs
+  if ((tail_bytes_prev > 0) && (log_basenames_prev.size() > 0)) {
+    string log_sep_line = "\n";
+    for (int c=0; c<log_sep_line_chars; ++c) {
+        log_sep_line += log_sep_line_char;
+    }
+    log_sep_line += "\n";
+    for (int i=0; i<(int)log_basenames_prev.size(); ++i) {
+      ifstream log_prev((log_directory+log_basenames_prev[i]).c_str(), ios::in);
+      if (log_prev) {
+        // Insert file separator
+        string log_sep = "\n"+log_sep_line+log_basenames_prev[i]+log_sep_line+"\n";
+        assert(log_sep.length() <= (unsigned)log_sep_bytes); 
+        memcpy(bp, log_sep.data(), log_sep.length());
+        bp += log_sep.length();
+        // Insert prev file data
+        log_prev.seekg(0, ios::end);
+        size_t file_size = (size_t)log_prev.tellg();
+        size_t data_size = tail_bytes_prev;
+        if (data_size > file_size) {
+          data_size = file_size;
+        }
+        log_prev.seekg(file_size - data_size, ios::beg);
+        log_prev.read(bp, data_size);
+        bp += log_prev.gcount();
+      }
+    }
+  }
 
-  // cleanup
+  assert(bp <= buffer + return_size);
+
+  P3D_object *result = new P3DStringObject(buffer, bp - buffer);
   delete[] buffer;
-  buffer = NULL;
+  
+  return result;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -725,13 +644,12 @@ call_uninstall(P3D_object *params[], int num_params) {
 
   if (_inst != NULL) {
     nout << "uninstall " << mode << " for " << _inst << "\n";
-    bool success = false;
     if (mode == "host") {
-      success = _inst->uninstall_host();
+      _inst->uninstall_host();
     } else {
-      success = _inst->uninstall_packages();
+      _inst->uninstall_packages();
     }
-    return inst_mgr->new_bool_object(success);
+    return inst_mgr->new_bool_object(true);
   }
 
   nout << "couldn't uninstall; no instance.\n";

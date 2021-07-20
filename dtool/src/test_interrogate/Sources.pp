@@ -1,4 +1,3 @@
-#define BUILD_DIRECTORY $[HAVE_INTERROGATE]
 #define LOCAL_LIBS interrogatedb dconfig dtoolutil dtoolbase pystub
 #define USE_PACKAGES openssl
 

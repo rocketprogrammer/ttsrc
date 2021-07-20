@@ -68,7 +68,7 @@ protected:
     int DownloadFile( const std::string& from, const std::string& to );
     int CopyFile( const std::string& from, const std::string& to );
 
-    bool read_contents_file(const std::string &contents_filename, bool fresh_download);
+    bool read_contents_file(const std::string &contents_filename);
     void find_host(TiXmlElement *xcontents);
     void read_xhost(TiXmlElement *xhost);
     void add_mirror(std::string mirror_url);
@@ -76,10 +76,6 @@ protected:
 
     bool HandleRequest( P3D_request *request );
     static void HandleRequestGetUrl( void *data );
-
-    string lookup_token(const string &keyword) const;
-    static int compare_seq(const string &seq_a, const string &seq_b);
-    static int compare_seq_int(const char *&num_a, const char *&num_b);
 
     void set_failed();
 
@@ -94,9 +90,7 @@ protected:
     std::string _download_url_prefix;
     typedef std::vector<std::string> Mirrors;
     Mirrors _mirrors;
-    string _coreapi_set_ver;
-    FileSpec _coreapi_dll;
-    time_t _contents_expiration;
+    FileSpec _core_api_dll;
     bool _failed;
 
     std::string m_rootDir;

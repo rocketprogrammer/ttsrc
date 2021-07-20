@@ -48,12 +48,8 @@ class PhysxRay;
 class PhysxRaycastHit;
 class PhysxRaycastReport;
 class PhysxSceneStats2;
-class PhysxVehicle;
-class PhysxVehicleDesc;
-class PhysxCloth;
-class PhysxClothDesc;
-class PhysxSoftBody;
-class PhysxSoftBodyDesc;
+//class PhysxVehicle;
+//class PhysxVehicleDesc;
 
 ////////////////////////////////////////////////////////////////////
 //       Class : PhysxScene
@@ -135,23 +131,11 @@ PUBLISHED:
   PhysxForceFieldShapeGroup *get_force_field_shape_group(unsigned int idx) const;
   MAKE_SEQ(get_force_field_shape_groups, get_num_force_field_shape_groups, get_force_field_shape_group);
 
-  // Cloths
-  unsigned int get_num_cloths() const;
-  PhysxCloth *create_cloth(PhysxClothDesc &desc);
-  PhysxCloth *get_cloth(unsigned int idx) const;
-  MAKE_SEQ(get_cloths, get_num_cloths, get_cloth);
-
-  // Soft bodies
-  unsigned int get_num_soft_bodies() const;
-  PhysxSoftBody *create_soft_body(PhysxSoftBodyDesc &desc);
-  PhysxSoftBody *get_soft_body(unsigned int idx) const;
-  MAKE_SEQ(get_soft_bodies, get_num_soft_bodies, get_soft_body);
-
   // Vehicles
-  unsigned int get_num_vehicles() const;
-  PhysxVehicle *create_vehicle(PhysxVehicleDesc &desc);
-  PhysxVehicle *get_vehicle(unsigned int idx) const;
-  MAKE_SEQ(get_vehicles, get_num_vehicles, get_vehicle);
+  //unsigned int get_num_vehicles() const;
+  //PhysxVehicle *create_vehicle(PhysxVehicleDesc &desc);
+  //PhysxVehicle *get_vehicle(unsigned int idx) const;
+  //MAKE_SEQ(get_vehicles, get_num_vehicles, get_vehicle);
 
   // Raycast queries
   bool raycast_any_shape(const PhysxRay &ray,
@@ -236,9 +220,7 @@ public:
   PhysxObjectCollection<PhysxForceField> _forcefields;
   PhysxObjectCollection<PhysxForceFieldShapeGroup> _ffgroups;
   PhysxObjectCollection<PhysxController> _controllers;
-  PhysxObjectCollection<PhysxVehicle> _vehicles;
-  PhysxObjectCollection<PhysxCloth> _cloths;
-  PhysxObjectCollection<PhysxSoftBody> _softbodies;
+  //PhysxObjectCollection<PhysxVehicle> _vehicles;
 
   PhysxMaterial *get_wheel_shape_material();
 
@@ -256,8 +238,6 @@ private:
   static PStatCollector _pcollector_update_transforms;
   static PStatCollector _pcollector_debug_renderer;
   static PStatCollector _pcollector_simulate;
-  static PStatCollector _pcollector_cloth;
-  static PStatCollector _pcollector_softbody;
 
 ////////////////////////////////////////////////////////////////////
 public:

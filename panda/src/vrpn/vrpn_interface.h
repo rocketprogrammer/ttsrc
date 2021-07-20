@@ -19,7 +19,7 @@
 
 #ifdef CPPPARSER
   // For correct interrogate parsing of UNC's vrpn library.
-  #if defined(WIN32_VC) || defined(WIN64_VC)
+  #ifdef WIN32_VC
     #define _WIN32
     #define SOCKET int
   #else

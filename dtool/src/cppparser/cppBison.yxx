@@ -250,7 +250,6 @@ pop_struct() {
 %token KW_ELSE
 %token KW_END_PUBLISH 
 %token KW_ENUM 
-%token KW_EXTENSION
 %token KW_EXTERN
 %token KW_EXPLICIT
 %token KW_PUBLISHED
@@ -548,10 +547,6 @@ storage_class:
         | storage_class KW_BLOCKING
 {
   $$ = $1 | (int)CPPInstance::SC_blocking;
-}
-        | storage_class KW_EXTENSION
-{
-  $$ = $1 | (int)CPPInstance::SC_extension;
 }
         ;
 
@@ -2197,10 +2192,6 @@ no_angle_bracket_const_expr:
 {
   $$ = new CPPExpression('|', $1, $3);
 }
-        | no_angle_bracket_const_expr '^' no_angle_bracket_const_expr
-{
-  $$ = new CPPExpression('^', $1, $3);
-}
         | no_angle_bracket_const_expr '&' no_angle_bracket_const_expr
 {
   $$ = new CPPExpression('&', $1, $3);
@@ -2420,10 +2411,6 @@ const_expr:
 {
   $$ = new CPPExpression('|', $1, $3);
 }
-        | const_expr '^' const_expr
-{
-  $$ = new CPPExpression('^', $1, $3);
-}
         | const_expr '&' const_expr
 {
   $$ = new CPPExpression('&', $1, $3);
@@ -2612,10 +2599,6 @@ formal_const_expr:
         | formal_const_expr '|' const_expr
 {
   $$ = new CPPExpression('|', $1, $3);
-}
-        | formal_const_expr '^' const_expr
-{
-  $$ = new CPPExpression('^', $1, $3);
 }
         | formal_const_expr '&' const_expr
 {

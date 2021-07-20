@@ -21,7 +21,7 @@
 #include "lightMutexHolder.h"
 #include "trueClock.h"
 
-#if defined(WIN32_VC) || defined(WIN64_VC)
+#ifdef WIN32_VC
 #include <winsock2.h>  // For gethostname()
 #endif
 

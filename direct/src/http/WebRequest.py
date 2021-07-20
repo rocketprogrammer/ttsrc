@@ -34,15 +34,15 @@ class WebRequest(object):
 
     def respondHTTP(self,status,body):
         status = str(status)
-        msg = u"HTTP/1.0 %s\r\nContent-Type: text/html\r\n\r\n%s" % (status,body)
-        self.connection.SendThisResponse(encodedUtf8(msg))
+        msg = "HTTP/1.0 %s\r\nContent-Type: text/html\r\n\r\n%s" % (status,body)
+        self.connection.SendThisResponse(msg)
 
     def respond(self,body):
         self.respondHTTP("200 OK",body)
 
     def respondXML(self,body):
-        msg = u"HTTP/1.0 200 OK\r\nContent-Type: text/xml\r\n\r\n%s" % body
-        self.connection.SendThisResponse(encodedUtf8(msg))
+        msg = "HTTP/1.0 200 OK\r\nContent-Type: text/xml\r\n\r\n%s" % body
+        self.connection.SendThisResponse(msg)
 
     def respondCustom(self,contentType,body):
         msg = "HTTP/1.0 200 OK\r\nContent-Type: %s" % contentType

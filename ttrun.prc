@@ -52,8 +52,8 @@ collect-tcp-interval 0.2
 respect-prev-transform 1
 
 # notify settings
-notify-level warning
-default-directnotify-level warning
+notify-level info
+default-directnotify-level info
 notify-level-collide warning
 notify-level-chan warning
 notify-level-gobj warning
@@ -67,7 +67,7 @@ extractor-step-time 0.5
 # Server version
 server-version dev
 server-version-suffix 
-required-login playToken
+required-login blue
 server-failover 80 443
 want-fog #t
 dx-use-rangebased-fog #t
@@ -79,7 +79,7 @@ ime-hide 1
 vertex-buffers 0
 dx-broken-max-index 1
 dx-management 1
-tt-specific-login 1
+tt-specific-login 0
 vfs-case-sensitive 0
 inactivity-timeout 180
 early-event-sphere 1
@@ -137,6 +137,11 @@ server-type prod
 color-bits 8 8 8
 alpha-bits 8
 default-server-constants 1
-fake-playtoken test
+fake-blue test
 game-server 127.0.0.1
 want-magic-words 1
+
+
+want-cogdominiums 1
+want-game-tables 1
+show-scientists 1

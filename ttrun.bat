@@ -1,0 +1,1 @@
+"built\python\ppython" -u ttrun.py %*

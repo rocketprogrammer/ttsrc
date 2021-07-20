@@ -5,5 +5,9 @@ builtTT
 toontownD-dev.log
 readlog.txt
 *.buildings
+*.jackpot
+*.trackRecords
 news/*
 .cvsignore
+.latestissue
+useropt

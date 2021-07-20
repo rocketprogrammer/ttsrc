@@ -197,8 +197,9 @@ PyObject* TTImportLoadModule(PyObject* self, PyObject* args) {
     PyDict_SetItemString(modules, name, module);
     
     // set values
+    // todo: change these to PyModule_ stuff (AddObject, AddStringConstant, etc.)
     PyDict_SetItemString(dict, "__builtins__", PyEval_GetBuiltins());
-    PyDict_SetItemString(dict, "__file__", PyString_FromString("<lambda>"));
+    PyDict_SetItemString(dict, "__file__", PyString_FromString("<frozen>"));
     PyDict_SetItemString(dict, "__name__", PyString_FromString(name));
     PyDict_SetItemString(dict, "__path__", PyList_New(0));
     PyDict_SetItemString(dict, "__loader__", self);

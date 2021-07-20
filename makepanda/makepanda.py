@@ -2009,6 +2009,7 @@ if (PkgSkip("DIRECT")==0):
     CopyAllHeaders('direct/src/dcparse')
     CopyAllHeaders('direct/src/heapq')
     
+    CopyAllHeaders('direct/src/motiontrail') # TTSRC
     CopyAllHeaders('direct/src/http') # TTSRC
 
 if (RUNTIME or RTDIST):
@@ -3609,6 +3610,19 @@ if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   TargetAdd('libhttp.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libhttp.in', opts=['IMOD:p3direct', 'ILIB:libhttp', 'SRCDIR:direct/src/http'])
   TargetAdd('libhttp_igate.obj', input='libhttp.in', opts=["DEPENDENCYONLY"])
+
+#
+# DIRECTORY: direct/src/motiontrail/   TTSRC
+#
+
+if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
+  OPTS=['DIR:direct/src/motiontrail', 'BUILDING:DIRECT']
+  TargetAdd('cMotionTrail.obj', opts=OPTS, input='cMotionTrail.cxx')
+  TargetAdd('config_motiontrail.obj', opts=OPTS, input='config_motiontrail.cxx')
+  IGATEFILES=GetDirectoryContents('direct/src/motiontrail', ["*.h", "*.cxx"])
+  TargetAdd('libmotiontrail.in', opts=OPTS, input=IGATEFILES)
+  TargetAdd('libmotiontrail.in', opts=['IMOD:p3direct', 'ILIB:libmotiontrail', 'SRCDIR:direct/src/motiontrail'])
+  TargetAdd('libmotiontrail_igate.obj', input='libmotiontrail.in', opts=["DEPENDENCYONLY"])
   
 #
 # DIRECTORY: direct/src/showbase/
@@ -3637,6 +3651,7 @@ if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   TargetAdd('libp3direct_module.obj', input='libdeadrec.in')
   TargetAdd('libp3direct_module.obj', input='libinterval.in')
   TargetAdd('libp3direct_module.obj', input='libhttp.in')
+  TargetAdd('libp3direct_module.obj', input='libmotiontrail.in')
   TargetAdd('libp3direct_module.obj', input='libdistributed.in')
   TargetAdd('libp3direct_module.obj', opts=OPTS)
   TargetAdd('libp3direct_module.obj', opts=['IMOD:p3direct', 'ILIB:libp3direct'])
@@ -3658,6 +3673,9 @@ if (PkgSkip("PYTHON")==0 and PkgSkip("DIRECT")==0):
   TargetAdd('libp3direct.dll', input='libinterval_igate.obj')
   TargetAdd('libp3direct.dll', input='http_composite1.obj')
   TargetAdd('libp3direct.dll', input='libhttp_igate.obj')
+  TargetAdd('libp3direct.dll', input='cMotionTrail.obj')
+  TargetAdd('libp3direct.dll', input='config_motiontrail.obj')
+  TargetAdd('libp3direct.dll', input='libmotiontrail_igate.obj')
   TargetAdd('libp3direct.dll', input='distributed_config_distributed.obj')
   TargetAdd('libp3direct.dll', input='distributed_cConnectionRepository.obj')
   TargetAdd('libp3direct.dll', input='distributed_cDistributedSmoothNodeBase.obj')

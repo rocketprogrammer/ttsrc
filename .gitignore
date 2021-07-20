@@ -1,7 +1,9 @@
 built
 builtTT
 *.pyc
+*.pyo
 toontownD-dev.log
 readlog.txt
 *.buildings
 news/*
+.cvsignore

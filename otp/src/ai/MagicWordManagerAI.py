@@ -28,7 +28,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
     def __init__(self, air):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
 
-    def setMagicWord(self, word, avId, zoneId, signature):
+    def setMagicWord(self, word, avId, zoneId):
         senderId = self.air.getAvatarIdFromSender()
 
         sender = self.air.doId2do.get(senderId, None)
@@ -40,8 +40,8 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
         else:
             sender = "Unknown avatar %d" % (senderId)
 
-        self.notify.info("%s (%s) just said the magic word: %s" % (sender, signature, word))
-        self.air.writeServerEvent('magic-word', senderId, "%s|%s|%s" % (sender, signature, word))
+        self.notify.info("%s just said the magic word: %s" % (sender, word))
+        self.air.writeServerEvent('magic-word', senderId, "%s|%s" % (sender, word))
         if self.air.doId2do.has_key(avId):
             av = self.air.doId2do[avId]
 
@@ -73,7 +73,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
                     response = "No name."
                 else:
                     av.d_setName(name)
-            
+
         elif wordIs("~badname"):
             self.notify.warning("Renaming inappropriately named toon %s (doId %d)." % (av.name, av.doId))
             name = "toon%d" % (av.doId % 1000000)
@@ -131,7 +131,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.notify.debug("Only 1 hp for " + av.name)
         elif wordIs("~sad"):
             av.b_setHp(0)
-            self.notify.debug("Only 0 hp for " + av.name)            
+            self.notify.debug("Only 0 hp for " + av.name)
         elif wordIs("~dead"):
             av.takeDamage(av.hp)
             self.notify.debug(av.name + " is dead")
@@ -511,7 +511,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
         response = "%s" % (dna.asTuple(),)
 
         self.down_setMagicWordResponse(senderId, response)
-    """    
+    """
 
     def _handleGPTCfinished(self, senderId, ct, gptcJob):
         self.down_setMagicWordResponse(senderId, 'aigptc(%s) finished' % ct)
@@ -571,7 +571,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
                 str += '%s %s\n' % (obj.accountName, obj.name)
         if not str:
             str = "No avatars."
-                
+
         senderId = self.air.getAvatarIdFromSender()
         self.down_setMagicWordResponse(senderId, str)
 

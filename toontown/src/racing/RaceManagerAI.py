@@ -1094,7 +1094,6 @@ class CircuitRaceHolidayMgr(HolidayBaseAI.HolidayBaseAI):
 
         if bboard.get(CircuitRaceHolidayMgr.PostName) == 1:
             # tell everyone race night is starting
-            simbase.air.newsManager.circuitRaceStart()
             messenger.send(CircuitRaceHolidayMgr.StartStopMsg)
 
     def stop(self):

@@ -499,6 +499,13 @@ class ToontownAIRepository(AIDistrict):
         # mark district as avaliable
         self.district.b_setAvailable(1)
 
+        # Register our AI with the StateServer.
+        dg = PyDatagram()
+        dg.addServerHeader(self.serverId, self.ourChannel, STATESERVER_ADD_SHARD)
+        dg.addUint32(self.districtId)
+        dg.addString(self.districtName)
+        self.send(dg)
+
         # Now that everything's created, start checking the leader
         # boards for correctness.  We only need to check every 30
         # seconds or so.

@@ -9,4 +9,6 @@ DBSERVER_GET_ESTATE_RESP =                              1041
 PARTY_MANAGER_UD_TO_ALL_AI =                            1042
 IN_GAME_NEWS_MANAGER_UD_TO_ALL_AI =                     1043
 
+STATESERVER_ADD_SHARD = 2090
+
 DBSERVER_PET_OBJECT_TYPE = 5

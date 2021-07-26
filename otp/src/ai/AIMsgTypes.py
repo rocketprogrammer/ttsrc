@@ -116,3 +116,5 @@ del name, value
 # transactions are sent to this ID.
 DBSERVER_ID = 4003
 
+# District
+STATESERVER_UPDATE_SHARD = 2091

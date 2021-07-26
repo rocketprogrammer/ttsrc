@@ -150,7 +150,6 @@ def getToonUberStatus(toons, numToons):
     #print(fieldList)
     return fieldList
 
-
 def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulToons=None):
     # First, build a list of active toons for the quest manager
     if helpfulToons == None:

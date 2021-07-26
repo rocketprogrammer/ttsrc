@@ -26,12 +26,12 @@ class AIDistrict(AIRepository):
             districtId, districtName, districtType, serverId,
             minChannel, maxChannel, dcSuffix = 'AI'):
         assert self.notify.debugStateCall(self)
-        
+
         # Save the district Id (needed for calculations in AIRepository code)
         self.districtId = districtId
         self.districtName = districtName
         self.districtType = districtType
-        
+
         AIRepository.__init__(
             self, mdip, mdport, esip, esport, dcFileNames,
             serverId,
@@ -98,12 +98,21 @@ class AIDistrict(AIRepository):
     def getGameDoId(self):
         self.notify.error('derived must override')
 
+    def sendShardInfo(self):
+        dg = PyDatagram()
+        dg.addServerHeader(self.serverId, self.ourChannel, STATESERVER_UPDATE_SHARD)
+        dg.addString(self.districtName)
+        dg.addUint32(self._population)
+        self.send(dg)
+
     def incrementPopulation(self):
         self._population += 1
+
     def decrementPopulation(self):
         if __dev__:
             assert self._population > 0
         self._population = max(0, self._population - 1)
+        self.sendShardInfo()
 
     def getPopulation(self):
         if simbase.fakeDistrictPopulations:
@@ -157,7 +166,7 @@ class AIDistrict(AIRepository):
             from otp.distributed import DistributedTestObjectAI
             self.testObject = DistributedTestObjectAI.DistributedTestObjectAI(self)
             self.testObject.generateOtpObject(self.getGameDoId(), 3)
-        
+
         taskMgr.doMethodLater(300, self.printPopulationToLog, self.uniqueName("printPopulationTask"))
 
 
@@ -386,11 +395,11 @@ class AIDistrict(AIRepository):
         datagram.addChannel(self.ourChannel)
         # schedule for execution on socket close
         self.addPostSocketClose(datagram)
-            
+
     def sendSetZone(self, distobj, zoneId):
         datagram = PyDatagram()
         datagram.addServerHeader(
-            distobj.doId, self.ourChannel, STATESERVER_OBJECT_SET_ZONE)        
+            distobj.doId, self.ourChannel, STATESERVER_OBJECT_SET_ZONE)
         # Add the zone parent id
         # HACK:
         parentId = oldParentId = self.districtId
@@ -427,8 +436,8 @@ class AIDistrict(AIRepository):
         """
         datagram = PyDatagram()
         datagram.addServerHeader(
-            DBSERVER_ID, self.ourChannel, DBSERVER_MAKE_FRIENDS)        
-        
+            DBSERVER_ID, self.ourChannel, DBSERVER_MAKE_FRIENDS)
+
         # Indicate the two avatars who are making friends
         datagram.addUint32(avatarAId)
         datagram.addUint32(avatarBId)
@@ -450,8 +459,8 @@ class AIDistrict(AIRepository):
         """
         datagram = PyDatagram()
         datagram.addServerHeader(
-            DBSERVER_ID,self.ourChannel,DBSERVER_REQUEST_SECRET)        
-        
+            DBSERVER_ID,self.ourChannel,DBSERVER_REQUEST_SECRET)
+
         # Indicate the number we want to associate with the new secret.
         datagram.addUint32(requesterId)
         # Send it off!

@@ -176,11 +176,11 @@ dclass DistributedToon : DistributedPlayer {
   setHp(int16 = 15) required broadcast db;
   toonUp(uint16) broadcast;
   takeDamage(uint16) broadcast;
-  setExperience(blob = {0*14}) required p2p db;
-  setMaxCarry(uint8 = 20) required p2p db;
-  setTrackAccess(uint16array = {0,0,0,0,1,1,0}) required broadcast db;
-  setTrackProgress(int8 = -1, uint32 = 0) required p2p db;
-  setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required p2p db;
+  setExperience(blob = {0*14}) required ownrecv db;
+  setMaxCarry(uint8 = 20) required ownrecv db;
+  setTrackAccess(uint16array = {0,0,0,0,1,1,0}) required broadcast ownrecv db;
+  setTrackProgress(int8 = -1, uint32 = 0) required ownrecv db;
+  setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required ownrecv db;
   setMaxNPCFriends(uint16 = 16) required p2p db;
   setNPCFriendsDict(uint32uint8array = {}) required p2p db;
   setDefaultShard(uint32 = 201000000) required p2p db;
@@ -436,7 +436,7 @@ dclass DistributedBattleBase : DistributedObject {
   adjust(int16) broadcast;
   setMovie(int8, uint32array, uint32array, int8, int8, int8, int32, int16array, int16, int16, int16array, int8, int8, int8, int8, int32, int16array, int16, int16, int16array, int8, int8, int8, int8, int32, int16array, int16, int16, int16array, int8, int8, int8, int8, int32, int16array, int16, int16, int16array, int8, int8, int8, int8, int16array, int8, int8, int8, int8, int8, int8, int16array, int8, int8, int8, int8, int8, int8, int16array, int8, int8, int8, int8, int8, int8, int16array, int8, int8, int8) required broadcast ram;
   setChosenToonAttacks(uint32array, int16array, int16array, int32array) broadcast ram;
-  setBattleExperience(int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, uint32array, int16array, int16array, int16array, int16array, uint32array, uint8array) required broadcast ram;
+  setBattleExperience(int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, uint8array) required broadcast ram;
   denyLocalToonJoin() p2p;
   setBossBattle(uint8) required broadcast ram;
   setState(string, int16) required broadcast ram;
@@ -858,8 +858,8 @@ dclass DistributedNPCToonBase : DistributedNode {
   setPositionIndex(uint8) required broadcast ram;
   setAnimState(string, int16/1000, int16) broadcast ram;
   setPageNumber(int16, int8, int16) broadcast ram clsend;
-  avatarEnter() p2p clsend;
-  freeAvatar() p2p;
+  avatarEnter() airecv clsend;
+  freeAvatar();
 };
 
 dclass DistributedNPCToon : DistributedNPCToonBase {

@@ -28,10 +28,10 @@ OTP_NET_MSGR_CHANNEL_ID_ALL_AI =  4605
 OTP_NET_MSGR_CHANNEL_ID_UBER_DOG =4606
 OTP_NET_MSGR_CHANNEL_ID_AI_ONLY = 4607
 
-OTP_DO_ID_COMMON =                4615 # Global objects shared across toontwon, pirates, et al.
+OTP_DO_ID_COMMON =                4610 # Global objects shared across toontwon, pirates, et al.
 OTP_DO_ID_GATEWAY =               4616 # Root of Gateway
 OTP_DO_ID_PIRATES =               4617 # Root of Pirates
-OTP_DO_ID_TOONTOWN =              4618 # Root of Toontown
+OTP_DO_ID_TOONTOWN =              4615 # Root of Toontown
 OTP_DO_ID_FAIRIES =               4619 # Root of Fairies
 OTP_DO_ID_CARS =                  4620 # Root of Cars
 

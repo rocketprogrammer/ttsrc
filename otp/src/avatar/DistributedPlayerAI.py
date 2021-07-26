@@ -21,13 +21,6 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
         DistributedAvatarAI.DistributedAvatarAI.announceGenerate(self)
         self._doPlayerEnter()
 
-    def _announceArrival(self):
-        self.sendUpdate('arrivedOnDistrict', [self.air.districtId])
-
-    def _announceExit(self):
-        # clear out the 'arrivedOnDistrict' field
-        self.sendUpdate('arrivedOnDistrict', [0])
-
     def _sendExitServerEvent(self):
         """call this in your delete() function. This would be an
         override of delete(), but player classes typically use
@@ -54,7 +47,7 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
 
     def isPlayerControlled(self):
         return True
-    
+
     def setLocation(self, parentId, zoneId, teleport=0):
         DistributedAvatarAI.DistributedAvatarAI.setLocation(self, parentId, zoneId, teleport)
         if self.isPlayerControlled():
@@ -65,13 +58,11 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
                 self.air.writeServerEvent('suspicious', self.doId,
                                           'invalid setLocation: (%s, %s)' % (parentId, zoneId))
                 self.requestDelete()
-            
+
     def _doPlayerEnter(self):
         self.incrementPopulation()
-        self._announceArrival()
 
     def _doPlayerExit(self):
-        self._announceExit()
         self.decrementPopulation()
 
     # override if you don't want to affect the population count for a
@@ -121,7 +112,7 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
         return self.accountName
 
     def setDISLid(self, id):
-        self.DISLid = id        
+        self.DISLid = id
 
     def d_setFriendsList(self, friendsList):
         self.sendUpdate("setFriendsList", [friendsList])

@@ -1,1 +1,1 @@
-"built\python\ppython" build.py %*
+"built\python\ppython" build.py -x -y -ai %*

@@ -4,7 +4,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.safezone import DistributedTrolleyAI
 from toontown.safezone import DGTreasurePlannerAI
 from toontown.classicchars import DistributedGoofyAI
-from toontown.classicchars import DistributedDaisyAI
 from toontown.safezone import DistributedDGFlowerAI
 from toontown.safezone import ButterflyGlobals
 
@@ -28,7 +27,7 @@ class DGHoodDataAI(HoodDataAI.HoodDataAI):
         self.treasurePlanner = DGTreasurePlannerAI.DGTreasurePlannerAI(self.zoneId)
         self.treasurePlanner.start()
 
-        self.classicChar = DistributedDaisyAI.DistributedDaisyAI(self.air)
+        self.classicChar = DistributedGoofyAI.DistributedGoofyAI(self.air)
         self.classicChar.generateWithRequired(self.zoneId)
         self.classicChar.start()
         self.addDistObj(self.classicChar)

@@ -7,7 +7,6 @@ from toontown.building import DoorTypes
 from toontown.coghq import LobbyManagerAI
 from toontown.building import DistributedBossElevatorAI
 from toontown.suit import DistributedSellbotBossAI
-from toontown.building import DistributedBoardingPartyAI
 
 class CSHoodDataAI(HoodDataAI.HoodDataAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("CSHoodDataAI")
@@ -22,33 +21,24 @@ class CSHoodDataAI(HoodDataAI.HoodDataAI):
         HoodDataAI.HoodDataAI.startup(self)
 
         mins = ToontownGlobals.FactoryLaffMinimums[0]
-        
+
         # TODO: define these in a more modular way
         self.testElev0 = DistributedFactoryElevatorExtAI.DistributedFactoryElevatorExtAI(self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, 0, antiShuffle = 0, minLaff = mins[0]) # antiShufflePOI
         self.testElev0.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
         self.addDistObj(self.testElev0)
-        
+
         self.testElev1 = DistributedFactoryElevatorExtAI.DistributedFactoryElevatorExtAI(self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, 1, antiShuffle = 0, minLaff = mins[1]) # antiShufflePOI
         self.testElev1.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
         self.addDistObj(self.testElev1)
-        
+
         # Lobby elevator
         self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, DistributedSellbotBossAI.DistributedSellbotBossAI)
         self.lobbyMgr.generateWithRequired(ToontownGlobals.SellbotLobby)
         self.addDistObj(self.lobbyMgr)
-        
+
         self.lobbyElevator = DistributedBossElevatorAI.DistributedBossElevatorAI(self.air, self.lobbyMgr, ToontownGlobals.SellbotLobby, antiShuffle = 1)#antiShufflePOI
         self.lobbyElevator.generateWithRequired(ToontownGlobals.SellbotLobby)
         self.addDistObj(self.lobbyElevator)
-        
-        if simbase.config.GetBool('want-boarding-groups', 1):
-            self.boardingParty = DistributedBoardingPartyAI.DistributedBoardingPartyAI(self.air, [self.lobbyElevator.doId], 8)
-            self.boardingParty.generateWithRequired(ToontownGlobals.SellbotLobby)
-        
-        factoryIdList = [self.testElev0.doId, self.testElev1.doId]
-        if simbase.config.GetBool('want-boarding-groups', 1):
-            self.factoryBoardingParty = DistributedBoardingPartyAI.DistributedBoardingPartyAI(self.air, factoryIdList, 4)
-            self.factoryBoardingParty.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
 
         # CogHQ Main building -> Lobby doors
         destinationZone = ToontownGlobals.SellbotLobby
@@ -56,13 +46,13 @@ class CSHoodDataAI(HoodDataAI.HoodDataAI):
             self.air, 0, DoorTypes.EXT_COGHQ,
             destinationZone, doorIndex=0)
         extDoor1=DistributedCogHQDoorAI.DistributedCogHQDoorAI(
-            self.air, 1, DoorTypes.EXT_COGHQ, 
+            self.air, 1, DoorTypes.EXT_COGHQ,
             destinationZone, doorIndex=1)
         extDoor2=DistributedCogHQDoorAI.DistributedCogHQDoorAI(
-            self.air, 2, DoorTypes.EXT_COGHQ, 
+            self.air, 2, DoorTypes.EXT_COGHQ,
             destinationZone, doorIndex=2)
         extDoor3=DistributedCogHQDoorAI.DistributedCogHQDoorAI(
-            self.air, 3, DoorTypes.EXT_COGHQ, 
+            self.air, 3, DoorTypes.EXT_COGHQ,
             destinationZone, doorIndex=3)
         extDoorList = [extDoor0, extDoor1, extDoor2, extDoor3]
 
@@ -82,7 +72,7 @@ class CSHoodDataAI(HoodDataAI.HoodDataAI):
         # Setup the doors and generate them
         for extDoor in extDoorList:
             # Tell them about each other
-            extDoor.setOtherDoor(intDoor0)                
+            extDoor.setOtherDoor(intDoor0)
             # Put them in the right zones
             extDoor.zoneId = ToontownGlobals.SellbotHQ
             # Now that they both now about each other, generate them:

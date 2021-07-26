@@ -166,11 +166,6 @@ class AIRepository(ConnectionRepository):
         # use this for time yields without sleeps        
         #taskMgr.doYield = self.taskManagerDoYield
 
-        # Used for moderation of report-a-player feature
-        self.centralLogger = self.generateGlobalObject(
-            OtpDoGlobals.OTP_DO_ID_CENTRAL_LOGGER,
-            "CentralLogger")
-
         self.garbageLeakLogger = GarbageLeakServerEventAggregatorAI(self)
 
         taskMgr.add(self._checkBundledMsgs, 'checkBundledMsgs', priority=-100)

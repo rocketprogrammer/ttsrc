@@ -956,27 +956,6 @@ class HolidayManagerAI:
                                 ToontownGlobals.BIG_CHEESE_INVASION : [590, 599],
                                  },
         ),
-
-        ToontownGlobals.HYDRANTS_BUFF_BATTLES: HolidayInfo_Oncely(
-        HydrantBuffHolidayAI.HydrantBuffHolidayAI,
-        AdjustedHolidays[ToontownGlobals.HYDRANTS_BUFF_BATTLES]['startAndEndPairs'], 
-        displayOnCalendar = False,
-        phaseDates = AdjustedHolidays[ToontownGlobals.HYDRANTS_BUFF_BATTLES]['phaseDates'],        
-        ),
-
-        ToontownGlobals.MAILBOXES_BUFF_BATTLES: HolidayInfo_Oncely(
-        MailboxBuffHolidayAI.MailboxBuffHolidayAI,
-        AdjustedHolidays[ToontownGlobals.MAILBOXES_BUFF_BATTLES]['startAndEndPairs'], 
-        displayOnCalendar = False,
-        phaseDates = AdjustedHolidays[ToontownGlobals.MAILBOXES_BUFF_BATTLES]['phaseDates'],        
-        ),
-
-        ToontownGlobals.TRASHCANS_BUFF_BATTLES: HolidayInfo_Oncely(
-        TrashcanBuffHolidayAI.TrashcanBuffHolidayAI,
-        AdjustedHolidays[ToontownGlobals.TRASHCANS_BUFF_BATTLES]['startAndEndPairs'], 
-        displayOnCalendar = False,
-        phaseDates = AdjustedHolidays[ToontownGlobals.TRASHCANS_BUFF_BATTLES]['phaseDates'],        
-        ),
     }
     
     if not simbase.config.GetBool('want-silly-test', False):
@@ -1014,13 +993,6 @@ class HolidayManagerAI:
         displayOnCalendar = False,
         ),
 
-        ToontownGlobals.POLAR_PLACE_EVENT: HolidayInfo_Yearly(
-        PolarPlaceEventMgrAI.PolarPlaceEventMgrAI,
-        # HACK! TODO: make this last indefinately
-        [(Month.JANUARY, 1, 0, 0, 1),
-          (Month.DECEMBER, 31, 23, 59, 59)],
-        displayOnCalendar = False,
-        ),
 
         ToontownGlobals.ELECTION_PROMOTION: HolidayInfo_Oncely(
         None,
@@ -2102,8 +2074,3 @@ class HolidayManagerAI:
                     firstStartTime = holidayInfo.tupleList[0][0]
                     lastEndTime = holidayInfo.tupleList[-1][-1]
                     self.air.newsManager.addRelativelyCalendarHoliday(key, firstStartTime, lastEndTime)
-
-        self.air.newsManager.sendWeeklyCalendarHolidays()
-        self.air.newsManager.sendYearlyCalendarHolidays()
-        self.air.newsManager.sendOncelyCalendarHolidays()
-        self.air.newsManager.sendMultipleStartHolidays()

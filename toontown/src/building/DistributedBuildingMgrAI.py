@@ -177,10 +177,6 @@ class DistributedBuildingMgrAI:
                 gagshopBlocks.append(blockNumber)
             elif (buildingType == 'petshop'):
                 petshopBlocks.append(blockNumber)
-            elif( buildingType == 'kartshop' ):
-                kartshopBlocks.append( blockNumber )
-            elif( buildingType == 'animbldg' ):
-                animBldgBlocks.append( blockNumber )
             else:
                 blocks.append(blockNumber)
         return blocks, hqBlocks, gagshopBlocks, petshopBlocks, kartshopBlocks, animBldgBlocks
@@ -194,9 +190,6 @@ class DistributedBuildingMgrAI:
         for block in blocks:
             # Used saved data, if appropriate:
             self.newBuilding(block, buildings.get(block, None))
-        for block in animBldgBlocks:
-            # Used saved data, if appropriate:
-            self.newAnimBuilding(block, buildings.get(block, None))
         for block in hqBlocks:
             self.newHQBuilding(block)
         for block in gagshopBlocks:
@@ -205,10 +198,6 @@ class DistributedBuildingMgrAI:
         if simbase.wantPets:
             for block in petshopBlocks:
                 self.newPetshopBuilding(block)
-
-        if( simbase.wantKarts ):
-            for block in kartshopBlocks:
-                self.newKartShopBuilding( block )
 
     def newBuilding(self, blockNumber, blockData=None):
         """Create a new building and keep track of it."""

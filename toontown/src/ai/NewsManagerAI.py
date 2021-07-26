@@ -15,7 +15,7 @@ class NewsManagerAI(DistributedObjectAI.DistributedObjectAI):
         self.oncelyCalendarHolidays = []
         self.relativelyCalendarHolidays = []
         self.multipleStartHolidays = []
-        
+
     def generate(self):
         DistributedObjectAI.DistributedObjectAI.generate(self)
         self.accept("avatarEntered", self.__handleAvatarEntered)
@@ -29,10 +29,6 @@ class NewsManagerAI(DistributedObjectAI.DistributedObjectAI):
             numRemaining = self.air.suitInvasionManager.getNumCogsRemaining()
             self.sendAvatarInvasionStatus(avatar.getDoId(), cogType, numRemaining, skeleton)
 
-        
-        # let them know about all holidays actually...
-        self.sendUpdateToAvatarId(avatar.getDoId(), "holidayNotify", [])
-        
         if self.everyoneChats:
             avatar.d_setCommonChatFlags(ToontownGlobals.CommonChat)
 
@@ -56,7 +52,7 @@ class NewsManagerAI(DistributedObjectAI.DistributedObjectAI):
         # Send an invasion update to only one avatar
         self.sendUpdateToAvatarId(avId, "setInvasionStatus",
                                   [ToontownGlobals.SuitInvasionBulletin, cogType, numRemaining, skeleton])
-    
+
     def sendSystemMessage(self, message, style = 0):
         # Use news manager to broadcast a system message to all the clients
         self.sendUpdate("sendSystemMessage", [message, style])
@@ -84,7 +80,7 @@ class NewsManagerAI(DistributedObjectAI.DistributedObjectAI):
 
     def trolleyHolidayEnd(self):
         self.sendUpdate("setTrolleyHolidayEnd", [])
-        
+
     def trolleyWeekendStart(self):
         self.sendUpdate("setTrolleyWeekendStart", [])
 
@@ -152,7 +148,7 @@ class NewsManagerAI(DistributedObjectAI.DistributedObjectAI):
     def sendOncelyCalendarHolidays(self):
         """Force a send of the oncely calendar holidays."""
         self.sendUpdate("setOncelyCalendarHolidays", [self.oncelyCalendarHolidays])
-        
+
     def addRelativelyCalendarHoliday(self, holidayId, firstStartTime, lastEndTime):
         """Add a new oncely holiday."""
         # Note the holiday can have breaks in it.  e.g. no bloodsucker invasion

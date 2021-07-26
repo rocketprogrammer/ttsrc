@@ -25,9 +25,11 @@ class DistributedHouse(DistributedObject.DistributedObject):
     This is the house object on the client
     """
     notify = directNotify.newCategory("DistributedHouse")
+    notify.setDebug(True)
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
+        print('yeah', cr)
 
         self.houseType = None
         self.avId = -1

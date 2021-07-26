@@ -473,6 +473,8 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                         house.initFromServerResponse(houseVal[i])
                         self.house[avId][i] = house
 
+                        print('yoooooo', self.house[avId][i])
+
                         # Now that we have all the data loaded, officially
                         # generate the distributed object
 
@@ -482,6 +484,8 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                         house.generateWithRequiredAndId(houseId[i],
                                                         self.air.districtId,
                                                         estateZoneId)
+
+                        print('yoooooo', house.doId)
 
                         house.setupEnvirons()
 

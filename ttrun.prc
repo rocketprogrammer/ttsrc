@@ -95,7 +95,7 @@ audio-library-name p3miles_audio
 
 cursor-filename resources/toonmono.cur
 
-show-frame-rate-meter #t
+show-frame-rate-meter #f
 
 load-display pandagl
 
@@ -137,10 +137,9 @@ server-type prod
 color-bits 8 8 8
 alpha-bits 8
 default-server-constants 1
-fake-blue test
+fake-blue test2
 game-server 127.0.0.1
 want-magic-words 1
-
 
 want-cogdominiums 1
 want-game-tables 1

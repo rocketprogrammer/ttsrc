@@ -41,6 +41,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
     """
 
     notify = directNotify.newCategory("DistributedHouseAI")
+    notify.setDebug(True)
 
     HouseModel = None
 
@@ -756,6 +757,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
                     self.mailbox.b_setFullIndicator(1)
             
         # Now tell the client that the house is ready.
+        print('chip the ripper')
         self.d_setHouseReady()
 
     def b_setCannonEnabled(self, index):

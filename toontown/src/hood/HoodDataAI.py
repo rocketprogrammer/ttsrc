@@ -35,7 +35,6 @@ class HoodDataAI:
 
     def startup(self):
         self.createFishingPonds()
-        self.createPartyPeople()
         self.createBuildingManagers()
         self.createSuitPlanners()
 

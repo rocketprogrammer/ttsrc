@@ -272,11 +272,6 @@ NPCToonDict = {
     2013 : (2522, lnames[2013], ("rls" ,"ms" ,"l" ,"m" ,9 ,0 ,9 ,9 ,0 ,7 ,0 ,7 ,1 ,19), "m", 1, NPC_PETCLERK),
     2014 : (2522, lnames[2014], ("mls" ,"ms" ,"m" ,"f" ,2 ,0 ,2 ,2 ,0 ,12 ,0 ,12 ,1 ,0 ,), "f", 1, NPC_PETCLERK),
     2015 : (2522, lnames[2015], ("hsl" ,"ls" ,"m" ,"m" ,17 ,0 ,17 ,17 ,0 ,8 ,0 ,8 ,1 ,13 ,), "m", 1, NPC_PETCLERK),
-    2016 : (2000, lnames[2016], ("sls", "ls", "m", "m", 10, 0, 9, 9, 0, 3, 0, 3, 0, 18), "m", 1, NPC_PARTYPERSON),
-    2017 : (2000, lnames[2017], ("sss", "ld", "m", "f", 10, 0, 9, 9, 0, 23, 0, 23, 0, 5), "f", 1, NPC_PARTYPERSON),    
-    2018 : (2513, lnames[2019], ("fll" ,"ss" ,"s" ,"m" ,15 ,0 ,15 ,15 ,99 ,27 ,86 ,27 ,39 ,27), "m", 1, NPC_SCIENTIST),
-    2019 : (2513, lnames[2018], ("pls" ,"ls" ,"l" ,"m" ,9 ,0 ,9 ,9 ,98 ,27 ,86 ,27 ,38 ,27), "m", 1, NPC_SCIENTIST),
-    2020 : (2513, lnames[2020], ("hss" ,"ms" ,"m" ,"m" ,20 ,0 ,20 ,20 ,97 ,27 ,86 ,27 ,37 ,27 ,), "m", 1, NPC_SCIENTIST),
     #2018 : (2000, lnames[2018], ('dss', 'ld', 'l', "f", 15,0,5,7,3,5,3,5,0,3), "m", 1, NPC_SPECIALQUESTGIVER),
 
     2101 : (2601, lnames[2101], ("rll" ,"ms" ,"l" ,"m" ,15 ,0 ,15 ,15 ,0 ,9 ,0 ,9 ,0 ,6 ,), "m", 0, NPC_REGULAR),
@@ -378,8 +373,6 @@ NPCToonDict = {
     1009 : (1510, lnames[1009],("dsl" ,"ss" ,"m" ,"m" ,17 ,0 ,17 ,17 ,0 ,0 ,0 ,0 ,0 ,14 ,), "m", 0, NPC_PETCLERK),
     1010 : (1510, lnames[1010],("dss" ,"ld" ,"m" ,"f" ,10 ,0 ,10 ,10 ,0 ,0 ,0 ,0 ,26 ,27 ,), "f", 0, NPC_PETCLERK),
     1011 : (1510, lnames[1011],("fll" ,"sd" ,"m" ,"f" ,1 ,0 ,1 ,1 ,0 ,1 ,0 ,1 ,4 ,25 ,), "f", 0, NPC_PETCLERK),
-    1012 : (1000, lnames[1012], ("fls", "ms", "l", "m", 14, 0, 3, 3, 0, 1, 0, 1, 0, 13), "m", 1, NPC_PARTYPERSON),
-    1013 : (1000, lnames[1013], ("fss", "ms", "m", "f", 2, 0, 3, 3, 1, 6, 1, 6, 5, 6), "f", 1, NPC_PARTYPERSON),
 
     1101 : (1627, lnames[1101],("fll" ,"ls" ,"m" ,"m" ,14 ,0 ,14 ,14 ,1 ,3 ,1 ,3 ,1 ,9 ,), "m", 0, NPC_REGULAR),
     1102 : (1612, lnames[1102],("fsl" ,"ms" ,"m" ,"m" ,7 ,0 ,7 ,7 ,1 ,3 ,1 ,3 ,1 ,2 ,), "m", 0, NPC_REGULAR),
@@ -481,8 +474,6 @@ NPCToonDict = {
     3010 : (3511, lnames[3010],("rls" ,"ss" ,"l" ,"m" ,10 ,0 ,10 ,10 ,0 ,12 ,0 ,12 ,0 ,11 ,), "m", 0, NPC_PETCLERK),
     3011 : (3511, lnames[3011],("mls" ,"md" ,"l" ,"f" ,3 ,0 ,3 ,3 ,1 ,26 ,1 ,26 ,26 ,27 ,), "f", 0, NPC_PETCLERK),
     3012 : (3511, lnames[3012],("hsl" ,"ms" ,"l" ,"m" ,18 ,0 ,18 ,18 ,1 ,12 ,1 ,12 ,0 ,1 ,), "m", 0, NPC_PETCLERK),
-    3013 : (3000, lnames[3013], ("cls", "ss", "m", "m", 18, 0, 17, 17, 1, 7, 1, 7, 1, 9), "m", 1, NPC_PARTYPERSON),
-    3014 : (3000, lnames[3014], ("css", "sd", "m", "f", 17, 0, 16, 16, 0, 24, 0, 24, 0, 9), "f", 1, NPC_PARTYPERSON),
 
     # Walrus Way
     3101 : (3611, lnames[3101],("mls" ,"ls" ,"l" ,"m" ,16 ,0 ,16 ,16 ,1 ,1 ,1 ,1 ,1 ,6 ,), "m", 0, NPC_REGULAR),
@@ -614,8 +605,6 @@ NPCToonDict = {
     4010 : (4508, lnames[4010],("hss" ,"ms" ,"m" ,"m" ,12 ,0 ,12 ,12 ,0 ,5 ,0 ,5 ,1 ,10 ,), "m", 0, NPC_PETCLERK),
     4011 : (4508, lnames[4011],("cll" ,"ss" ,"m" ,"m" ,4 ,0 ,4 ,4 ,0 ,5 ,0 ,5 ,1 ,4 ,), "m", 0, NPC_PETCLERK),
     4012 : (4508, lnames[4012],("csl" ,"ss" ,"m" ,"f" ,19 ,0 ,19 ,19 ,0 ,8 ,0 ,8 ,10 ,27 ,), "f", 0, NPC_PETCLERK),
-    4013 : (4000, lnames[4013], ("bll", "ls", "s", "m", 3, 0, 19, 19, 0, 8, 0, 8, 1, 12), "m", 1, NPC_PARTYPERSON),
-    4014 : (4000, lnames[4014], ("bss", "md", "m", "f", 24, 0, 19, 19, 0, 24, 0, 24, 0, 12), "f", 1, NPC_PARTYPERSON),
 
     4101 : (4603, lnames[4101],("cll" ,"ms" ,"m" ,"m" ,16 ,0 ,16 ,16 ,1 ,7 ,1 ,7 ,0 ,6 ,), "m", 0, NPC_REGULAR),
     4102 : (4605, lnames[4102],("csl" ,"ms" ,"m" ,"f" ,9 ,0 ,9 ,9 ,1 ,11 ,1 ,11 ,10 ,27 ,), "f", 0, NPC_REGULAR),
@@ -742,8 +731,6 @@ NPCToonDict = {
     5009 : (5505, lnames[5009],("csl" ,"ls" ,"m" ,"f" ,21 ,0 ,21 ,21 ,1 ,23 ,1 ,23 ,8 ,23 ,), "f", 0, NPC_PETCLERK),
     5010 : (5505, lnames[5010],("cls" ,"ss" ,"m" ,"m" ,13 ,0 ,13 ,13 ,1 ,10 ,1 ,10 ,0 ,10 ,), "m", 0, NPC_PETCLERK),
     5011 : (5505, lnames[5011],("dll" ,"ls" ,"m" ,"m" ,5 ,0 ,5 ,5 ,1 ,10 ,1 ,10 ,0 ,4 ,), "m", 0, NPC_PETCLERK),
-    5012 : (5000, lnames[5012], ("dls", "ms", "m", "m", 13, 0, 12, 12, 0, 1, 0, 1, 0, 6), "m", 1, NPC_PARTYPERSON),
-    5013 : (5000, lnames[5013], ("dss", "md", "m", "f", 1, 0, 3, 3, 1, 5, 1, 5, 0, 5), "f", 1, NPC_PARTYPERSON),
 
     # Elm Street
     5101 : (5602, lnames[5101],("dsl" ,"ms" ,"l" ,"m" ,10 ,0 ,10 ,10 ,1 ,4 ,1 ,4 ,0 ,11 ,), "m", 0, NPC_REGULAR),
@@ -838,12 +825,6 @@ NPCToonDict = {
     #          'Green', 'Light Blue', 'Aqua', 'Blue',
     #          'Periwinkle', 'Royal Blue', 'Slate Blue', 'Purple',
     #          'Lavender', 'Pink', 'Plum', 'Black']
-    
-    # Goofy's Speedway
-    8001 : (8501, lnames[8001], ("psl", "ms", "m", 'm', 13, 0, 13,  13,  0, 11, 0, 11, 2, 10), "m", 0, NPC_KARTCLERK),
-    8002 : (8501, lnames[8002], ("psl", "ld", "s", 'f', 23, 0, 23,  23,  0, 11, 0, 11, 2, 10), "f", 0, NPC_KARTCLERK),
-    8003 : (8501, lnames[8003], ("pll", "ss", "l", 'f', 1, 0, 1,  1,  0, 11, 0, 11, 2, 10), "f", 0, NPC_KARTCLERK),
-    8004 : (8501, lnames[8004], ("pls", "ms", "l", 'm', 16, 0, 16,  16,  0, 11, 0, 11, 2, 10), "m", 0, NPC_KARTCLERK),
 
     # Dreamland
     9001 : (9503, lnames[9001],("fll" ,"ss" ,"l" ,"f" ,16 ,0 ,16 ,16 ,0 ,6 ,0 ,6 ,26 ,27 ,), "f", 0, NPC_REGULAR),
@@ -860,8 +841,6 @@ NPCToonDict = {
     9012 : (9508, lnames[9012],("cls" ,"ld" ,"l" ,"f" ,23 ,0 ,23 ,23 ,0 ,21 ,0 ,21 ,10 ,27 ,), "f", 0, NPC_PETCLERK),
     9013 : (9508, lnames[9013],("dll" ,"sd" ,"l" ,"f" ,15 ,0 ,15 ,15 ,0 ,21 ,0 ,21 ,10 ,27 ,), "f", 0, NPC_PETCLERK),
     9014 : (9508, lnames[9014],("dss" ,"ss" ,"l" ,"m" ,7 ,0 ,7 ,7 ,0 ,9 ,0 ,9 ,1 ,15 ,), "m", 0, NPC_PETCLERK),
-    9015 : (9000, lnames[9015], ("rss", "ls", "l", "m", 21, 0, 20, 20, 0, 12, 0, 12, 0, 11), "m", 1, NPC_PARTYPERSON),
-    9016 : (9000, lnames[9016], ("rls", "md", "l", "f", 6, 0, 21, 21, 1, 11, 1, 11, 0, 11), "f", 1, NPC_PARTYPERSON),
 
     9101 : (9604, lnames[9101],("css" ,"ls" ,"l" ,"m" ,14 ,0 ,14 ,14 ,1 ,1 ,1 ,1 ,0 ,11 ,), "m", 0, NPC_REGULAR),
     9102 : (9607, lnames[9102], "r", "f", 0, NPC_REGULAR),
@@ -952,11 +931,7 @@ try:
 except:
     config = base.config
 
-if config.GetBool("want-new-toonhall",1):
-    NPCToonDict[2001] = (2513, lnames[2001], ('dss', 'ms', 'm', 'm', 17,0,17,17,3,3,3,3,7,2), "m", 1, NPC_FLIPPYTOONHALL)
-else:
-    NPCToonDict[2001] = (2513, lnames[2001], ('dss', 'ms', 'm', 'm', 17,0,17,17,3,3,3,3,7,2), "m", 1, NPC_REGULAR)
-
+NPCToonDict[2001] = (2513, lnames[2001], ('dss', 'ms', 'm', 'm', 17,0,17,17,3,3,3,3,7,2), "m", 1, NPC_REGULAR)
 
 # We are done with this now
 del lnames

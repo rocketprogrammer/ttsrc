@@ -49,7 +49,6 @@ def getBattleExperience(numToons, activeToons, toonExp,
             p.append(-1)
             p.append([0, 0, 0, 0, 0, 0, 0])
             p.append([0, 0, 0, 0, 0, 0, 0])
-            p.append([]) # orig quests
             p.append([]) # items
             p.append([]) # missed items
             p.append([0, 0, 0, 0]) # orig merits
@@ -64,8 +63,6 @@ def getBattleExperience(numToons, activeToons, toonExp,
                 earnedExp.append(getSkillGained(toonSkillPtsGained, toonId, i))
             p.append(origExp)
             p.append(earnedExp)
-            origQuests = toonOrigQuests.get(toonId, [])
-            p.append(origQuests)
             items = toonItems.get(toonId, ([], []))
             p.append(items[0])
             p.append(items[1])

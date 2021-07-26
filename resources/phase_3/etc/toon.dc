@@ -441,15 +441,15 @@ dclass DistributedBattleBase : DistributedObject {
   setBossBattle(uint8) required broadcast ram;
   setState(string, int16) required broadcast ram;
   faceOffDone() p2p clsend;
-  toonRequestJoin(int16/10, int16/10, int16/10) p2p clsend;
-  toonRequestRun() p2p clsend;
-  toonDied() p2p clsend;
-  adjustDone() p2p clsend;
-  timeout() p2p clsend;
-  movieDone() p2p clsend;
-  rewardDone() p2p clsend;
-  joinDone(uint32) p2p clsend;
-  requestAttack(int8, int8, int32) p2p clsend;
+  toonRequestJoin(int16/10, int16/10, int16/10) airecv clsend;
+  toonRequestRun() airecv clsend;
+  toonDied() airecv clsend;
+  adjustDone() airecv clsend;
+  timeout() airecv clsend;
+  movieDone() airecv clsend;
+  rewardDone() airecv clsend;
+  joinDone(uint32) airecv clsend;
+  requestAttack(int8, int8, int32) airecv clsend;
 };
 
 dclass DistributedBattle : DistributedBattleBase {

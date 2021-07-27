@@ -199,6 +199,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         self.partiesInvitedTo = []
         self.partyReplyInfoBases = []
 
+        self.gameAccess = OTPGlobals.AccessFull
+
     #def __del__(self):
         #if hasattr(simbase, 'trackDistributedToonAI'):
         #    self.notify.info('---- __del__ DistributedToonAI %d ' % self.doId)

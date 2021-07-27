@@ -27,7 +27,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
         self.zoneId = 0
         self.dna = None
         self.virtual = 0 #the red glowing effect
-        
+
         self.skeleRevives = 0 #number of times to reanimate into a skeleCog
         self.maxSkeleRevives = 0 #keep track of how many times we have reanimated
         self.reviveFlag = 0
@@ -142,26 +142,26 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
 
     def d_denyBattle(self, toonId):
         self.sendUpdateToAvatarId(toonId, 'denyBattle', [])
-        
+
     def b_setSkeleRevives(self, num):
         if num == None:
             num = 0
         self.setSkeleRevives(num)
         self.d_setSkeleRevives(self.getSkeleRevives())
-        
+
     def d_setSkeleRevives(self, num):
         self.sendUpdate("setSkeleRevives" , [num])
-        
+
     def getSkeleRevives(self):
         return self.skeleRevives
-        
+
     def setSkeleRevives(self, num):
         if num == None:
             num = 0
         self.skeleRevives = num
         if num > self.maxSkeleRevives:
             self.maxSkeleRevives = num
-            
+
     def getMaxSkeleRevives(self):
         return self.maxSkeleRevives
 
@@ -169,7 +169,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
         self.skeleRevives -= 1
         self.currHP = self.maxHP
         self.reviveFlag = 1
-        
+
     def reviveCheckAndClear(self):
         returnValue = 0
         if self.reviveFlag == 1:
@@ -194,11 +194,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
 
     def b_setHP(self, hp):
         self.setHP(hp)
-        self.d_setHP(hp)
 
-    def d_setHP(self, hp):
-        self.sendUpdate("setHP", [hp])
-        
     def releaseControl(self):
         # Do whatever needs to be done to turn control of the suit over to
         # another party (e.g. a battle) - should be redefined by child if
@@ -211,7 +207,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
     def resume(self):
         self.notify.debug('resume, hp=%s' % self.currHP)
 
-        # Do whatever needs to be done to restore control of the suit from 
+        # Do whatever needs to be done to restore control of the suit from
         # another party (e.g. a battle) - should be redefined by child if
         # any additional behavior is required
         if (self.currHP <= 0):
@@ -234,7 +230,7 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
 
     def setSkelecog(self, flag):
         SuitBase.SuitBase.setSkelecog(self, flag)
-        
+
     def d_setSkelecog(self, flag):
         # send update
         self.sendUpdate("setSkelecog", [flag])
@@ -242,14 +238,14 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
     def isForeman(self):
         """is this a factory foreman?"""
         return 0
-    
+
     def isSupervisor(self):
         """is this a mint floor supervisor?"""
         return 0
 
     def setVirtual(self, virtual):
         pass
-        
+
     def getVirtual(self):
         return 0
 
@@ -258,4 +254,4 @@ class DistributedSuitBaseAI(DistributedAvatarAI.DistributedAvatarAI,
         """is this a virtual laser cog?"""
         return self.getVirtual()
 
-    
+

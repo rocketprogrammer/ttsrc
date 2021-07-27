@@ -48,14 +48,14 @@ struct BarrierData {
 
 dclass DistributedObject {
   setBarrierData(BarrierData []) broadcast ram;
-  setBarrierReady(uint16) p2p clsend;
+  setBarrierReady(uint16) airecv clsend;
 };
 
 dclass TimeManager : DistributedObject {
-  requestServerTime(uint8) p2p clsend;
-  serverTime(uint8, int32, uint32) p2p;
-  setDisconnectReason(uint8) p2p clsend;
-  setExceptionInfo(string) p2p clsend;
+  requestServerTime(uint8) airecv clsend;
+  serverTime(uint8, int32, uint32);
+  setDisconnectReason(uint8) airecv clsend;
+  setExceptionInfo(string) airecv clsend;
 };
 
 dclass ObjectServer {

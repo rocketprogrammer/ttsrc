@@ -59,7 +59,7 @@ LogInterval = 300
 # are teleporting to a friend in a Removing hood do not request this
 # zone change via the AI, and so will not be redirected to a different
 # hood--they will still arrive in the same hood with their friend.)
-# For the purposes of balancing, we consider the replacement hood 
+# For the purposes of balancing, we consider the replacement hood
 # immediately contains its population plus that of the Removing
 # hood.
 
@@ -85,7 +85,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
 
     def __init__(self, air):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
-        
+
         self.welcomeValleyAllocator = UniqueIdAllocator(
             ToontownGlobals.WelcomeValleyBegin / 2000,
             ToontownGlobals.WelcomeValleyEnd / 2000 - 1)
@@ -135,7 +135,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
 ##                (zoneId < 61000 and zoneId != 11000 and zoneId != 12000 and zoneId != 13000):
 ##                 self.air.writeServerEvent('suspicious', avId, 'has cogIndex %s transitioning from zone %s to %s' % (avatar.cogIndex, lastZoneId, zoneId))
 ##                 avatar.b_setCogIndex(-1)
-        
+
     def toonSetZone(self, avId, zoneId):
         lastZoneId = self.avatarSetZone(avId, zoneId)
 
@@ -171,7 +171,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
             # this first so we don't risk momentarily bringing the
             # hood population to 0.
             hoodId = ZoneUtil.getHoodId(zoneId)
-            
+
             # if this is a GS hoodId, just grab the TT hood
             if (hoodId % 2000) < 1000:
                 hood = self.welcomeValleys.get(hoodId)
@@ -183,7 +183,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
                 if (hood == self.newHood) and hood[0].getPgPopulation() >= PGstable:
                     # This is now a stable hood.
                     self.__newToStable(hood)
-                    
+
             self.avatarZones[avId] = zoneId
 
         if lastZoneId == None:
@@ -319,8 +319,8 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         # have just emptied it too.
         if replacementHood and replacementHood[0].getHoodPopulation() == 0:
             self.__hoodIsEmpty(replacementHood)
-        
-            
+
+
 
     def avatarRequestZone(self, avId, origZoneId):
         # This services a redirect-zone request for a particular
@@ -328,17 +328,17 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         # zoneId, which should be a WelcomeValley zoneId; the AI
         # should choose which particular WelcomeValley to direct the
         # client to.
-        
+
         if not ZoneUtil.isWelcomeValley(origZoneId):
             # All requests for static zones are returned unchanged.
             return origZoneId
-        
+
         origHoodId = ZoneUtil.getHoodId(origZoneId)
         hood = self.welcomeValleys.get(origHoodId)
         if not hood:
             # If we don't know this hood, choose a new one.
             hood = self.chooseWelcomeValley()
-        
+
         if not hood:
             self.notify.warning("Could not create new WelcomeValley hood for avatar %s." % (avId))
             zoneId = ZoneUtil.getCanonicalZoneId(origZoneId)
@@ -355,7 +355,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         self.avatarSetZone(avId, zoneId)
 
         return zoneId
-        
+
 
     def requestZoneIdMessage(self, origZoneId, context):
         """
@@ -366,7 +366,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         """
         avId = self.air.getAvatarIdFromSender()
         zoneId = self.avatarRequestZone(avId, origZoneId)
-            
+
         self.sendUpdateToAvatarId(avId, "requestZoneIdResponse",
                                   [zoneId, context])
 
@@ -402,7 +402,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
     def createWelcomeValley(self):
         # Creates new copy of ToontownCentral and Goofy Speedway and returns
         # thier HoodDataAI.  Returns None if no new hoods can be created.
-        
+
         index = self.welcomeValleyAllocator.allocate()
         if index == -1:
             return None
@@ -412,20 +412,15 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         ttHood = TTHoodDataAI.TTHoodDataAI(self.air, ttHoodId)
         self.air.startupHood(ttHood)
 
-        # GS
-        gsHoodId = index * 2000 + 1000
-        gsHood = GSHoodDataAI.GSHoodDataAI(self.air, gsHoodId)
-        self.air.startupHood(gsHood)
-
         # both hoods are stored in a tuple and referenced by the TTC hoodId
-        self.welcomeValleys[ttHoodId] = (ttHood, gsHood)
-                
+        self.welcomeValleys[ttHoodId] = (ttHood)
+
         # create a pond bingo manager ai for the new WV
         if simbase.wantBingo:
             self.notify.info('creating bingo mgr for Welcome Valley %s' %  ttHoodId)
             self.air.createPondBingoMgrAI(ttHood)
 
-        return (ttHood, gsHood)
+        return (ttHood)
 
     def destroyWelcomeValley(self, hood):
         hoodId = hood[0].zoneId
@@ -485,4 +480,4 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.notify.info("%s %s %s/%s" % (
                 hood[0].zoneId, flag,
                 hood[0].getPgPopulation(), hood[0].getHoodPopulation()))
-            
+

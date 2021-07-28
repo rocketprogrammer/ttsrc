@@ -253,9 +253,9 @@ dclass DistributedToon : DistributedPlayer {
   setPetId(uint32 = 0) required broadcast db;
   setPetMovie(uint32, uint8) p2p ownsend airecv;
   setPetTutorialDone(uint8 = 0) required p2p db ownsend;
-  setFishBingoTutorialDone(uint8 = 0) required p2p db ownsend;
-  setFishBingoMarkTutorialDone(uint8 = 0) required p2p db ownsend;
-  squish(uint8) p2p ownsend airecv;
+  setFishBingoTutorialDone(uint8 = 0) required airecv db ownsend;
+  setFishBingoMarkTutorialDone(uint8 = 0) required airecv db ownsend;
+  squish(uint8) ownsend airecv;
   announceBingo() broadcast;
 };
 
@@ -525,13 +525,13 @@ dclass DistributedFishingSpot : DistributedObject {
 
 dclass DistributedPondBingoManager : DistributedObject {
   setPondDoId(uint32) required broadcast ram;
-  updateGameState(uint32, uint8) p2p;
-  setCardState(uint16, uint8, uint16, uint32) p2p;
-  setState(string, int16) p2p;
-  cardUpdate(uint16, uint8, uint8, uint8) p2p clsend;
-  enableBingo() p2p;
-  handleBingoCall(uint16) p2p clsend;
-  setJackpot(uint16) p2p;
+  updateGameState(uint32, uint8);
+  setCardState(uint16, uint8, uint16, uint32);
+  setState(string, int16);
+  cardUpdate(uint16, uint8, uint8, uint8) airecv clsend;
+  enableBingo();
+  handleBingoCall(uint16) airecv clsend;
+  setJackpot(uint16);
 };
 
 dclass DistributedCannon : DistributedObject {
@@ -739,7 +739,7 @@ dclass TutorialManager : DistributedObject {
 };
 
 dclass CatalogManager : DistributedObject {
-  startCatalog() p2p clsend;
+  startCatalog() airecv clsend;
 };
 
 dclass DistributedMyTest : DistributedObject {
@@ -748,7 +748,7 @@ dclass DistributedMyTest : DistributedObject {
 
 dclass DistributedTreasure : DistributedObject {
   setPosition(int16/10, int16/10, int16/10) required broadcast ram;
-  requestGrab() p2p clsend;
+  requestGrab() airecv clsend;
   setGrab(uint32) broadcast ram;
   setReject() broadcast;
 };

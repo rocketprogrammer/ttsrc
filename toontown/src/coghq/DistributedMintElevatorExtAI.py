@@ -34,7 +34,7 @@ class DistributedMintElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorE
         return True
         #parts = av.getCogParts()
         #return CogDisguiseGlobals.isSuitComplete(parts, self.cogDept)
-    
+
     def elevatorClosed(self):
         numPlayers = self.countFullSeats()
 
@@ -48,7 +48,7 @@ class DistributedMintElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorE
                 if i not in [None, 0]:
                     players.append(i)
             mintZone = self.bldg.createMint(self.mintId, players)
-            
+
             for seatIndex in range(len(self.seats)):
                 avId = self.seats[seatIndex]
                 if avId:
@@ -66,16 +66,16 @@ class DistributedMintElevatorExtAI(DistributedElevatorExtAI.DistributedElevatorE
         DistributedElevatorExtAI.DistributedElevatorExtAI.enterClosed(self)
         # Switch back into opening mode since we allow other Toons onboard
         self.fsm.request('opening')
-        
+
     def sendAvatarsToDestination(self, avIdList):
         if (len(avIdList) > 0):
             mintZone = self.bldg.createMint(self.mintId, avIdList)
             for avId in avIdList:
                 if avId:
-                    # Tell each player on the elevator that they should enter 
+                    # Tell each player on the elevator that they should enter
                     # the factory
                     # And which zone it is in
-                    self.sendUpdateToAvatarId(avId, 'setMintInteriorZoneForce', 
+                    self.sendUpdateToAvatarId(avId, 'setMintInteriorZoneForce',
                                         [mintZone])
 
 

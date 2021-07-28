@@ -18,7 +18,7 @@ class QuestRewardCounter:
     """
 
     notify = directNotify.newCategory("QuestRewardCounter")
-    
+
     # TODO: track progress
 
     def __init__(self):
@@ -68,7 +68,7 @@ class QuestRewardCounter:
             rewardIds.append(rewardId)
 
         self.notify.debug("Ignoring rewards: %s" % (rewardIds))
-        
+
         self.setRewardIndex(av.rewardTier, rewardIds, av.rewardHistory)
 
         # add maxHp for fishCollection
@@ -76,17 +76,12 @@ class QuestRewardCounter:
         self.notify.debug("Adding %s hp for fish collection" % (fishHp))
         self.maxHp += fishHp
 
-        # add maxHp for flowerCollection
-        flowerHp = int(len(av.flowerCollection) / GardenGlobals.FLOWERS_PER_BONUS)
-        self.notify.debug("Adding %s hp for fish collection" % (flowerHp))
-        self.maxHp += flowerHp        
-
         # add maxHp for HQ cog suit
         HQdepts = (
             # add depts as the HQs are released
             ToontownGlobals.cogHQZoneId2deptIndex(ToontownGlobals.SellbotHQ),
             #ToontownGlobals.cogHQZoneId2deptIndex(ToontownGlobals.BossbotHQ),
-            ToontownGlobals.cogHQZoneId2deptIndex(ToontownGlobals.LawbotHQ),
+            #ToontownGlobals.cogHQZoneId2deptIndex(ToontownGlobals.LawbotHQ),
             ToontownGlobals.cogHQZoneId2deptIndex(ToontownGlobals.CashbotHQ),
             )
         levels = av.getCogLevels()
@@ -104,16 +99,6 @@ class QuestRewardCounter:
                         break
         self.notify.debug("Adding %s hp for cog suits" % (suitHp))
         self.maxHp += suitHp
-
-        # add maxHp for karting trophies
-        kartingHp = int(av.kartingTrophies.count(1) / RaceGlobals.TrophiesPerCup)
-        self.notify.debug("Adding %s hp for karting trophies" % (kartingHp))
-        self.maxHp += kartingHp
-
-        # add maxHp for golf trophies
-        golfHp = int (av.golfTrophies.count(True) / GolfGlobals.TrophiesPerCup)
-        self.notify.debug("Adding %s hp for golf trophies" % (golfHp))
-        self.maxHp += golfHp
 
     def setRewardIndex(self, tier, rewardIds, rewardHistory):
         self.reset()
@@ -163,7 +148,7 @@ class QuestRewardCounter:
             reward = Quests.getReward(rewardId)
             reward.countReward(self)
             self.notify.debug("Assigning reward %d" % (rewardId))
-        
+
     def fixAvatar(self, av):
         """fixAvatar(self, DistributedAvatarAI av)
 
@@ -185,22 +170,22 @@ class QuestRewardCounter:
             self.notify.info("Changed avatar %d to have maxCarry %d instead of %d" % (av.doId, self.maxCarry, av.maxCarry))
             av.b_setMaxCarry(self.maxCarry)
             anyChanged = 1
-            
+
         if (self.maxMoney != av.maxMoney):
             self.notify.info("Changed avatar %d to have maxMoney %d instead of %d" % (av.doId, self.maxMoney, av.maxMoney))
             av.b_setMaxMoney(self.maxMoney)
             anyChanged = 1
-            
+
         if (self.questCarryLimit != av.questCarryLimit):
             self.notify.info("Changed avatar %d to have questCarryLimit %d instead of %d" % (av.doId, self.questCarryLimit, av.questCarryLimit))
             av.b_setQuestCarryLimit(self.questCarryLimit)
             anyChanged = 1
-            
+
         if (self.teleportAccess != av.teleportZoneArray):
             self.notify.info("Changed avatar %d to have teleportAccess %s instead of %s" % (av.doId, self.teleportAccess, av.teleportZoneArray))
             av.b_setTeleportAccess(self.teleportAccess)
             anyChanged = 1
-            
+
         if (self.trackAccess != av.trackArray):
             self.notify.info("Changed avatar %d to have trackAccess %s instead of %s" % (av.doId, self.trackAccess, av.trackArray))
             av.b_setTrackAccess(self.trackAccess)

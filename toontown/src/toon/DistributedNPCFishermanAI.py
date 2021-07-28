@@ -13,7 +13,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
         # Fishermen are not in the business of giving out quests
         self.givesQuests = 0
         self.busy = 0
-        
+
     def delete(self):
         taskMgr.remove(self.uniqueName('clearMovie'))
         self.ignoreAll()
@@ -23,7 +23,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
         avId = self.air.getAvatarIdFromSender()
         # this avatar has come within range
         assert self.notify.debug("avatar enter " + str(avId))
-        
+
         if (not self.air.doId2do.has_key(avId)):
             self.notify.warning("Avatar: %s not found" % (avId))
             return
@@ -50,7 +50,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
             flag = NPCToons.SELL_MOVIE_NOFISH
             self.d_setMovie(avId, flag)
             # Immediately send the clear movie - we are done with this Toon
-            self.sendClearMovie(None)        
+            self.sendClearMovie(None)
         DistributedNPCToonBaseAI.avatarEnter(self)
 
     def rejectAvatar(self, avId):
@@ -63,7 +63,7 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
                         [flag,
                          self.npcId, avId, extraArgs,
                          ClockDelta.globalClockDelta.getRealNetworkTime()])
-        
+
     def sendTimeoutMovie(self, task):
         assert self.notify.debug('sendTimeoutMovie()')
         # The timeout has expired.
@@ -88,14 +88,14 @@ class DistributedNPCFishermanAI(DistributedNPCToonBaseAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedNPCFishermanAI.completeSale busy with %s' % (self.busy))
             self.notify.warning("somebody called setMovieDone that I was not busy with! avId: %s" % avId)
             return
-            
+
         if sell:
             av = simbase.air.doId2do.get(avId)
             if av:
                 # this function sells the fish, clears the tank, and
                 # updates the collection, trophies, and maxhp. One stop shopping!
                 trophyResult = self.air.fishManager.creditFishTank(av)
-                
+
                 if trophyResult:
                     movieType = NPCToons.SELL_MOVIE_TROPHY
                     extraArgs = [len(av.fishCollection), FishGlobals.getTotalNumFish()]

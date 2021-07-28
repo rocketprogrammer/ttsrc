@@ -35,8 +35,8 @@ class DistributedElevatorIntAI(DistributedElevatorAI.DistributedElevatorAI):
             result = DistributedElevatorAI.DistributedElevatorAI.checkBoard(self,av)
         return result
 
-    def acceptBoarder(self, avId, seatIndex, wantBoardingShow = 0):
-        DistributedElevatorAI.DistributedElevatorAI.acceptBoarder(self, avId, seatIndex, wantBoardingShow)
+    def acceptBoarder(self, avId, x, y, z, h, p, r, seatIndex, wantBoardingShow = 0):
+        DistributedElevatorAI.DistributedElevatorAI.acceptBoarder(self, avId, x, y, z, h, p, r, seatIndex, wantBoardingShow)
         # If all the avatars we are waiting for are now aboard, then
         # close the doors
         self.__closeIfNecessary()

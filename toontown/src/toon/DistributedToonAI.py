@@ -200,6 +200,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         self.partyReplyInfoBases = []
 
         self.gameAccess = OTPGlobals.AccessFull
+        self.trackBonusLevel = [0] * 7
 
     #def __del__(self):
         #if hasattr(simbase, 'trackDistributedToonAI'):
@@ -207,14 +208,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         #    import pdb; pdb.set_trace()
         #pass
 
-
     def generate(self):
         # super spammy hack to track down ai crash
         # self.notify.info('Got generate for %d' % self.doId)
         # self.air.writeServerEvent('generate' , self.doId, '')
         DistributedPlayerAI.DistributedPlayerAI.generate(self)
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.generate(self)
-
 
     def announceGenerate(self):
         # super spammy hack to track down ai crash
@@ -224,6 +223,22 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.announceGenerate(self)
         if self.isPlayerControlled():
             messenger.send('avatarEntered', [self])
+
+    def setLocation(self, parentId, zoneId):
+        DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
+
+        if self.isPlayerControlled():
+            if 100 <= zoneId < ToontownGlobals.DynamicZonesBegin:
+                hood = ZoneUtil.getHoodId(zoneId)
+
+                self.b_setLastHood(hood)
+                self.b_setDefaultZone(hood)
+
+                hoodsVisited = list(self.getHoodsVisited())
+
+                if hood not in hoodsVisited:
+                    hoodsVisited.append(hood)
+                    self.b_setHoodsVisited(hoodsVisited)
 
     ### Field definitions
 
@@ -247,9 +262,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
                     self.cleanupEstateData()
 
         DistributedAvatarAI.DistributedAvatarAI.sendDeleteEvent(self)
-
-
-
 
     def delete(self):
         self.notify.debug('----Deleting DistributedToonAI %d ' % self.doId)
@@ -462,9 +474,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
                 #import pdb; pdb.set_trace()
             self.d_setInventory(self.getInventory())
 
-
-
-
     def getInventory(self):
         # This returns the inventory formatted for the net, not
         # directly usable.
@@ -485,6 +494,14 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
     def setDefaultZone(self, zone):
         self.defaultZone = zone
         self.notify.debug("setting default zone to %s" % zone)
+
+    def d_setDefaultZone(self, zone):
+        self.sendUpdate('setDefaultZone', [zone])
+
+    def b_setDefaultZone(self, zone):
+        if zone != self.defaultZone:
+            self.setDefaultZone(zone)
+            self.d_setDefaultZone(zone)
 
     def getDefaultZone(self):
         return self.defaultZone
@@ -865,6 +882,13 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
     def getLastHood(self):
         return self.lastHood
 
+    def d_setLastHood(self, hood):
+        self.sendUpdate('setLastHood', [hood])
+
+    def b_setLastHood(self, hood):
+        if hood != self.lastHood:
+            self.setLastHood(hood)
+            self.d_setLastHood(hood)
 
     def b_setAnimState(self, animName, animMultiplier):
         self.setAnimState(animName, animMultiplier)
@@ -1586,7 +1610,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         else:
             #RAU this case can happen if we are opening the closet of another toon
             return 0
-
 
     def fixTrackAccess(self):
         fixed = 0
@@ -2407,7 +2430,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
                 duration = max(10.0, nextTime * 60 - time.time())
                 duration += 30 #TOTAL HACK to keep __deliverGiftPurchase and __deliverPurchase from stomping each other
                 taskMgr.doMethodLater(duration, self.__deliverGiftPurchase, taskName) #change function
-
 
     def getGiftSchedule(self):
         #return self.onGiftOrder.getBlob(store = CatalogItem.Customization | CatalogItem.DeliveryDate | CatalogItem.GiftTag)
@@ -4552,7 +4574,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
     def d_setAccess(self, access):
         self.sendUpdate("setAccess", [access])
 
-
     def setAccess(self, access):
         print("Setting Access %s" % (access))
         if access == OTPGlobals.AccessInvalid:
@@ -4905,3 +4926,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
     def hasGMName(self):
         """ Returns True if this toon's name starts with '$', indicating they are special. """
         return self.getName().startswith('$')
+
+    def isNPC(self):
+        """ Used for the system message magic word. """
+        return False

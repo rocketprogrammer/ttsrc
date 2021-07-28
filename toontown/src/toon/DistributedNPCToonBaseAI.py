@@ -78,7 +78,10 @@ class DistributedNPCToonBaseAI(DistributedToonAI.DistributedToonAI):
 
     def setPositionIndex(self, posIndex):
         self.posIndex = posIndex
-        
+
     def getPositionIndex(self):
         return self.posIndex
-    
+
+    def isNPC(self):
+        """ Used for the system message magic word. """
+        return True

@@ -10,16 +10,16 @@ from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
-    
+
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedElevatorExtAI")
-    
+
     def __init__(self, air, bldg, numSeats = 4, antiShuffle = 0, minLaff = 0): #antiShufflePOI
         DistributedElevatorAI.DistributedElevatorAI.__init__(
             self, air, bldg, numSeats, antiShuffle = antiShuffle, minLaff = minLaff)
         # Do we need this?
         # self.zoneId, dummy = bldg.getExteriorAndInteriorZoneId()
         # Flag that tells if any Toon has jumped out of the elevator yet
-        # (this is used to prevent the griefers who jump off at the last 
+        # (this is used to prevent the griefers who jump off at the last
         # second)
         self.anyToonsBailed = 0
         self.boardingParty = None
@@ -33,14 +33,12 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
                 self.clearFullNow(seatIndex)
                 self.clearEmptyNow(seatIndex)
         DistributedElevatorAI.DistributedElevatorAI.delete(self)
-        
-
 
     def d_setFloor(self, floorNumber):
         self.sendUpdate('setFloor', [floorNumber])
 
-    def acceptBoarder(self, avId, seatIndex, wantBoardingShow = 0):
-        DistributedElevatorAI.DistributedElevatorAI.acceptBoarder(self, avId, seatIndex, wantBoardingShow)
+    def acceptBoarder(self, avId, x, y, z, h, p, r, seatIndex, wantBoardingShow = 0):
+        DistributedElevatorAI.DistributedElevatorAI.acceptBoarder(self, avId, x, y, z, h, p, r, seatIndex, wantBoardingShow)
         # Add a hook that handles the case where the avatar exits
         # the district unexpectedly
         self.acceptOnce(self.air.getAvatarExitEvent(avId),
@@ -79,7 +77,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
             # Empty that seat
             self.clearFullNow(seatIndex)
             # Make sure there's no griefing by jumping off the elevator
-            # at the last second  
+            # at the last second
             bailFlag = 0
             timeToSend = self.countdownTime
             if self.antiShuffle:
@@ -88,7 +86,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
                 #print myTask.runningTotal
                 #print myTask.dt
                 #print myTask.time
-                #print myTask.wakeTime - globalClock.getFrameTime() 
+                #print myTask.wakeTime - globalClock.getFrameTime()
                 #self.uniqueName('countdown-timer')
                 timeLeft = myTask.wakeTime - globalClock.getFrameTime()
                 # This fixes an AI crash with a huge negative timeLeft. AI crash on 04/20/10. timeLeft = -44002.155374000002.
@@ -110,7 +108,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
             else:
                 self.sendUpdate("emptySlot" + str(seatIndex),
                 [avId, bailFlag, globalClockDelta.getRealNetworkTime(), timeToSend])
-                
+
             # Tell the clients that the avatar is leaving that seat
 
             # If all the seats are empty, go back into waitEmpty state
@@ -156,18 +154,18 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
         else:
             self.fsm.request('waitEmpty')
         return Task.done
-    
+
     def resetCountdown(self):
         taskMgr.remove(self.uniqueName('countdown-timer'))
         taskMgr.doMethodLater(self.countdownTime, self.timeToGoTask,
                               self.uniqueName('countdown-timer'))
-                              
+
     def setCountdown(self, timeToSet):
-        
+
         taskMgr.remove(self.uniqueName('countdown-timer'))
         taskMgr.doMethodLater(timeToSet, self.timeToGoTask,
                           self.uniqueName('countdown-timer'))
-        
+
     def enterAllAboard(self):
         DistributedElevatorAI.DistributedElevatorAI.enterAllAboard(self)
         currentTime = globalClock.getRealTime()
@@ -185,17 +183,17 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
         # If we get a number that is not between 0 and GROUP_BOARDING_TIME return 0.
         currentTime = globalClock.getRealTime()
         timeLeft = 0.0
-                
+
         if hasattr(self, 'timeOfGroupBoarding') and self.timeOfGroupBoarding:
             elapsedTime = currentTime - self.timeOfGroupBoarding
             timeLeft = max(MAX_GROUP_BOARDING_TIME - elapsedTime, 0)
             # In case the timeLeft is more than the theoretical maximum
             if (timeLeft > MAX_GROUP_BOARDING_TIME):
                 timeLeft = 0.0
-        
+
         return timeLeft
-    
-    ##### Closing state #####    
+
+    ##### Closing state #####
     def closeTask(self, task):
         # It is possible that the players exited the district
         if self.countFullSeats() > 0:
@@ -239,8 +237,7 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
 
         # Switch back into opening mode.
         self.fsm.request("closed")
-        
-            
+
     def requestExit(self, *args):
         self.notify.debug("requestExit")
         avId = self.air.getAvatarIdFromSender()

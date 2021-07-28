@@ -179,8 +179,8 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
                 hood = self.welcomeValleys.get(hoodId - 1000)
 
             if hood:
-                hood[0].incrementPopulation(zoneId, 1)
-                if (hood == self.newHood) and hood[0].getPgPopulation() >= PGstable:
+                hood.incrementPopulation(zoneId, 1)
+                if (hood == self.newHood) and hood.getPgPopulation() >= PGstable:
                     # This is now a stable hood.
                     self.__newToStable(hood)
 
@@ -201,12 +201,12 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
                 hood = self.welcomeValleys.get(lastHoodId - 1000)
 
             if hood:
-                hood[0].incrementPopulation(lastZoneId, -1)
-                if hood[0].getHoodPopulation() == 0:
+                hood.incrementPopulation(lastZoneId, -1)
+                if hood.getHoodPopulation() == 0:
                     self.__hoodIsEmpty(hood)
 
-                elif (hood != self.newHood) and not hood[0].hasRedirect() and \
-                     hood[0].getPgPopulation() < PGminimum:
+                elif (hood != self.newHood) and not hood.hasRedirect() and \
+                     hood.getPgPopulation() < PGminimum:
                     self.__stableToRemoving(hood)
 
         return lastZoneId
@@ -227,7 +227,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         if hood in self.removingHoods:
             self.removingHoods.remove(hood)
-            hood[0].setRedirect(None)
+            hood.setRedirect(None)
         else:
             self.stableHoods.remove(hood)
 
@@ -248,7 +248,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.__newToStable(hood)
         else:
             self.removingHoods.remove(hood)
-            hood[0].setRedirect(None)
+            hood.setRedirect(None)
             self.stableHoods.append(hood)
 
         return "Hood %s is now Stable." % (hoodId)
@@ -287,7 +287,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
     def __newToStable(self, hood):
         # This New hood's population has reached the stable limit;
         # mark it as a Stable hood.
-        self.notify.info("Hood %s moved to Stable." % (hood[0].zoneId))
+        self.notify.info("Hood %s moved to Stable." % (hood.zoneId))
 
         assert(hood == self.newHood)
         self.newHood = None
@@ -296,7 +296,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
     def __stableToRemoving(self, hood):
         # This hood's population has dropped too low;
         # schedule it for removal.
-        self.notify.info("Hood %s moved to Removing." % (hood[0].zoneId))
+        self.notify.info("Hood %s moved to Removing." % (hood.zoneId))
 
         assert(hood in self.stableHoods)
         self.stableHoods.remove(hood)
@@ -306,18 +306,18 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
             # replacement, so just keep this one.
             self.stableHoods.append(hood)
         else:
-            hood[0].setRedirect(replacementHood)
+            hood.setRedirect(replacementHood)
             self.removingHoods.append(hood)
 
     def __hoodIsEmpty(self, hood):
-        self.notify.info("Hood %s is now empty." % (hood[0].zoneId))
+        self.notify.info("Hood %s is now empty." % (hood.zoneId))
 
-        replacementHood = hood[0].replacementHood
+        replacementHood = hood.replacementHood
         self.destroyWelcomeValley(hood)
 
         # Also check the hood this one is redirecting to; we might
         # have just emptied it too.
-        if replacementHood and replacementHood[0].getHoodPopulation() == 0:
+        if replacementHood and replacementhood.getHoodPopulation() == 0:
             self.__hoodIsEmpty(replacementHood)
 
 
@@ -344,7 +344,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
             zoneId = ZoneUtil.getCanonicalZoneId(origZoneId)
         else:
             # use TTC hoodId
-            hoodId = hood[0].getRedirect().zoneId
+            hoodId = hood.getRedirect().zoneId
             zoneId = ZoneUtil.getTrueZoneId(origZoneId, hoodId)
 
         # Even though the client might choose not to go to the
@@ -384,7 +384,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         bestHood = None
         bestPopulation = None
         for hood in self.stableHoods:
-            population = hood[0].getPgPopulation()
+            population = hood.getPgPopulation()
             if bestHood == None or population < bestPopulation:
                 bestHood = hood
                 bestPopulation = population
@@ -394,13 +394,13 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         if allowCreateNew and (bestHood == None or bestPopulation >= PGmaximum):
             self.newHood = self.createWelcomeValley()
             if self.newHood:
-                self.notify.info("Hood %s is New." % self.newHood[0].zoneId)
+                self.notify.info("Hood %s is New." % self.newHood.zoneId)
                 return self.newHood
 
         return bestHood
 
     def createWelcomeValley(self):
-        # Creates new copy of ToontownCentral and Goofy Speedway and returns
+        # Creates new copy of ToontownCentral and returns
         # thier HoodDataAI.  Returns None if no new hoods can be created.
 
         index = self.welcomeValleyAllocator.allocate()
@@ -423,13 +423,12 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         return (ttHood)
 
     def destroyWelcomeValley(self, hood):
-        hoodId = hood[0].zoneId
+        hoodId = hood.zoneId
         assert((hoodId % 2000) == 0)
 
         del self.welcomeValleys[hoodId]
         self.welcomeValleyAllocator.free(hoodId / 2000)
-        self.air.shutdownHood(hood[0])
-        self.air.shutdownHood(hood[1])
+        self.air.shutdownHood(hood)
 
         if self.newHood == hood:
             self.newHood = None
@@ -457,7 +456,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         hoodIds = self.welcomeValleys.keys()
         for hoodId in hoodIds:
             hood = self.welcomeValleys[hoodId]
-            answer += hood[0].getHoodPopulation()
+            answer += hood.getHoodPopulation()
 
         return answer
 
@@ -478,6 +477,6 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
                 flag = " "
 
             self.notify.info("%s %s %s/%s" % (
-                hood[0].zoneId, flag,
-                hood[0].getPgPopulation(), hood[0].getHoodPopulation()))
+                hood.zoneId, flag,
+                hood.getPgPopulation(), hood.getHoodPopulation()))
 

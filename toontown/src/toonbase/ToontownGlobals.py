@@ -108,7 +108,7 @@ P_OnAwardOrderListFull = -25 # unlikely, but just in case, he won 30 awards and 
 P_AwardMailboxFull = -24 # the award mailbox is full and can't take more
 P_ItemInPetTricks= -23 # trying to give a pet trick award but the toon has it in his pet tricks
 P_ItemInMyPhrases= -22 # trying to give a speed chat award but the toon has it in his My Phrases
-P_ItemOnAwardOrder = -21 # trying to give an award but the toon has it onAwardOrder, 
+P_ItemOnAwardOrder = -21 # trying to give an award but the toon has it onAwardOrder,
 P_ItemInAwardMailbox = -20 # trying to give an award but the toon has it in his award mailbox
 P_ItemAlreadyWorn = -19  # trying to give an award but the toon is already wearing the clothing item
 P_ItemInCloset = -18  # trying to give an award but the toon has it in his closet
@@ -215,7 +215,7 @@ CEVirtual = 14
 # Gardening  = 4
 # Golf       = 3
 # Bossbot HQ = 5
-MaxHpLimit = 137
+MaxHpLimit = 117
 # Cap on the max carry
 MaxCarryLimit = 80
 # Cap on the max carry
@@ -1559,12 +1559,12 @@ DL = 8
 DefaultWantNewsPageSetting = 1
 
 # GM magic words
-gmMagicWordList = [ 
-    "restock",  "restockUber",  "autoRestock", 
-    "resistanceRestock", "restockSummons", 
-    "uberDrop", "rich", "maxBankMoney", 
+gmMagicWordList = [
+    "restock",  "restockUber",  "autoRestock",
+    "resistanceRestock", "restockSummons",
+    "uberDrop", "rich", "maxBankMoney",
     "toonUp", "rod", "cogPageFull", "pinkSlips",
-    "Tickets",  "newSummons", "who",  "who all" 
+    "Tickets",  "newSummons", "who",  "who all"
  ]
 
 NewsPageScaleAdjust = 0.85

@@ -11,6 +11,7 @@ import string
 import time
 import re
 from direct.task import Task
+from otp.avatar.DistributedPlayerAI import DistributedPlayerAI
 
 class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("MagicWordManagerAI")
@@ -480,6 +481,17 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
                     '~aigptcn', args[1], Functor(self._handleGPTCNfinished, senderId, args[1]))
             else:
                 self.down_setMagicWordResponse(senderId, 'error')
+
+        elif wordIs('~system') or wordIs('smsg'):
+            args = word.split()
+            message = args[1]
+
+            for doId, do in list(simbase.air.doId2do.items()):
+                if isinstance(do, DistributedPlayerAI):
+                    if doId != simbase.air.districtId and not do.isNPC():
+                        do.d_setSystemMessage(0, 'Administrator: ' + message)
+
+            self.down_setMagicWordResponse(senderId, 'Broadcasted message to shard.')
 
         else:
             # The word is not an AI-side magic word.  If the sender is

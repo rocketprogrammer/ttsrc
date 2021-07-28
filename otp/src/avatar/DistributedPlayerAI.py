@@ -111,8 +111,11 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
     def getAccountName(self):
         return self.accountName
 
-    def setDISLid(self, id):
-        self.DISLid = id
+    def setOwningAccount(self, accountId):
+        self.accountId = accountId
+
+    def getOwningAccount(self, accountId):
+        return self.accountId
 
     def d_setFriendsList(self, friendsList):
         self.sendUpdate("setFriendsList", [friendsList])
@@ -135,7 +138,7 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
         for i in range(len(self.friendsList)):
             friendPair = self.friendsList[i]
             if friendPair[0] == friendId:
-                # We did.  Update the code.
+                # We did. Update the code.
                 self.friendsList[i] = (friendId, friendCode)
                 return
 
@@ -146,4 +149,3 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
         # hears about it.  So our friends list will not be 100%
         # up-to-date, but it will at least be good enough for the
         # quest manager.
-

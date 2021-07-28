@@ -30,7 +30,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
             simbase.air.elevatorTripId += 1
         else:
             self.elevatorTripId = 0
-            
+
         for seat in range(numSeats):
             self.seats.append(None)
         #self.seats = [None, None, None, None]
@@ -82,14 +82,14 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
         del self.bldg
         self.ignoreAll()
         DistributedObjectAI.DistributedObjectAI.delete(self)
-        
+
     def setBoardingParty(self, party):
         self.boardingParty = party
 
     def generate(self):
         self.start()
         DistributedObjectAI.DistributedObjectAI.generate(self)
-        
+
     def getBldgDoId(self):
         return self.bldgDoId
 
@@ -98,7 +98,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
             if self.seats[i] == None:
                 return i
         return None
-        
+
 
     def findAvatar(self, avId):
         for i in range(len(self.seats)):
@@ -112,7 +112,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
             if i:
                 avCounter += 1
         return avCounter
-        
+
     def countOpenSeats(self):
         openSeats = 0
         for i in range(len(self.seats)):
@@ -120,22 +120,22 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
                 openSeats += 1
         return openSeats
 
-    def rejectingBoardersHandler(self, avId, reason = 0, wantBoardingShow = 0):
-        self.rejectBoarder(avId, reason)
+    def rejectingBoardersHandler(self, avId, x, y, z, h, p, r, reason = 0, wantBoardingShow = 0):
+        self.rejectBoarder(avId)
 
-    def rejectBoarder(self, avId, reason = 0):
-        self.sendUpdateToAvatarId(avId, "rejectBoard", [avId, reason])
+    def rejectBoarder(self, avId):
+        self.sendUpdateToAvatarId(avId, "rejectBoard", [avId])
 
-    def acceptingBoardersHandler(self, avId, reason = 0, wantBoardingShow = 0):
+    def acceptingBoardersHandler(self, avId, x, y, z, h, p, r, reason = 0, wantBoardingShow = 0):
         self.notify.debug("acceptingBoardersHandler")
         seatIndex = self.findAvailableSeat()
         if seatIndex == None:
             self.rejectBoarder(avId, REJECT_NOSEAT)
         else:
-            self.acceptBoarder(avId, seatIndex, wantBoardingShow)
+            self.acceptBoarder(avId, x, y, z, h, p, r, seatIndex, wantBoardingShow)
         return None
 
-    def acceptBoarder(self, avId, seatIndex, wantBoardingShow = 0):
+    def acceptBoarder(self, avId, x, y, z, h, p, r, seatIndex, wantBoardingShow = 0):
         self.notify.debug("acceptBoarder")
         # Make sure we have a valid seat number
         #assert((seatIndex >= 0) and (seatIndex <=3))
@@ -144,17 +144,17 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
         assert(self.seats[seatIndex] == None)
         # Make sure this avatar isn't already seated
         if (self.findAvatar(avId) != None):
-            return        
+            return
         # Put the avatar in that seat
         self.seats[seatIndex] = avId
         # Record the time of boarding
         self.timeOfBoarding = globalClock.getRealTime()
-        
+
         if wantBoardingShow:
             self.timeOfGroupBoarding = globalClock.getRealTime()
-        
+
         # Tell the clients to put the avatar in that seat
-        self.sendUpdate("fillSlot" + str(seatIndex), [avId, wantBoardingShow])
+        self.sendUpdate("fillSlot" + str(seatIndex), [avId, x, y, z, h, p, r, self.timeOfBoarding])
 
     def rejectingExitersHandler(self, avId):
         self.rejectExiter(avId)
@@ -182,7 +182,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
             # Empty that seat
             self.seats[seatIndex] = None
             # Tell the clients that the avatar is no longer in that seat
-            self.sendUpdate("fillSlot" + str(seatIndex), [0, 0])
+            self.sendUpdate("fillSlot" + str(seatIndex), [0, 0, 0, 0, 0, 0, 0, 0])
             # If the avatar isn't in a seat, we don't care anymore, so
             # remove the hook to handle unexpected exits.
             self.ignore(self.air.getAvatarExitEvent(avId))
@@ -195,7 +195,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
 
     def avIsOKToBoard(self, av):
         return (av.hp > self.minLaff) and self.accepting
-        
+
     def checkBoard(self, av):
         if (av.hp < self.minLaff):
             return REJECT_MINLAFF
@@ -206,20 +206,20 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
         avId = self.air.getAvatarIdFromSender()
         if (self.findAvatar(avId) != None):
             self.notify.warning("Ignoring multiple requests from %s to board." % (avId))
-            return        
+            return
 
         av = self.air.doId2do.get(avId)
         if av:
             # Only toons with hp greater than the minLaff may board the elevator.
             boardResponse = self.checkBoard(av)
             newArgs = (avId,) + args + (boardResponse,)
-            
+
             # Check that player has full access
             if not ToontownAccessAI.canAccess(avId, self.zoneId):
                 self.notify.warning("Toon %s does not have access to theeleavtor. " % (avId))
                 self.rejectingBoardersHandler(*newArgs)
                 return
-            
+
             # Toons who have an active Boarding Group and
             # are not the leader will be rejected if they try to board the elevator.
             if self.boardingParty and self.boardingParty.hasActiveGroup(avId) and \
@@ -227,7 +227,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
                 self.notify.warning('Rejecting %s from boarding the elevator because he is already part of a Boarding Group.' %avId)
                 self.rejectingBoardersHandler(*newArgs)
                 return
-                
+
             if boardResponse == 0:
                 self.acceptingBoardersHandler(*newArgs)
             else:
@@ -238,16 +238,16 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
                 % avId
                 )
         return
-        
+
     def partyAvatarBoard(self, avatar, wantBoardingShow = 0):
         av = avatar
         avId = avatar.doId
-        
+
         if (self.findAvatar(avId) != None):
             self.notify.warning("Ignoring multiple requests from %s to board." % (avId))
             return
-        
-        if av: 
+
+        if av:
             # Only toons with hp greater than the minLaff may board the elevator.
             boardResponse = self.checkBoard(av)
             newArgs = (avId,)  + (boardResponse,) + (wantBoardingShow,)
@@ -356,34 +356,34 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
     def enterWaitEmpty(self):
         self.d_setState('waitEmpty')
         self.accepting = 1
-        
+
 
     def exitWaitEmpty(self):
         self.accepting = 0
-        
+
     def setElevatorTripId(self, id):
         self.elevatorTripId = id
-        
+
     def getElevatorTripId(self):
         return self.elevatorTripId
-        
-        
+
+
     def newTrip(self):
         if self.antiShuffle:
             self.elevatorTripId = simbase.air.elevatorTripId
             if simbase.air.elevatorTripId > 2100000000:
-               simbase.air.elevatorTripId = 1 
+               simbase.air.elevatorTripId = 1
             simbase.air.elevatorTripId += 1
             self.sendUpdate("setElevatorTripId", [self.elevatorTripId])
 
     def setAntiShuffle(self, antiShuffle):
         self.antiShuffle = antiShuffle
-        
+
     def getAntiShuffle(self):
         return self.antiShuffle
-        
+
     def setMinLaff(self, minLaff):
         self.minLaff = minLaff
-        
+
     def getMinLaff(self):
         return self.minLaff

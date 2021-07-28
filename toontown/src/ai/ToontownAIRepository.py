@@ -8,7 +8,7 @@ from toontown.safezone import DistributedBoatAI
 from toontown.safezone import DistributedMMPianoAI
 from toontown.safezone import DistributedDGFlowerAI
 from toontown.safezone import DistributedTrolleyAI
-#from otp.friends import FriendManagerAI
+from otp.friends import FriendManagerAI
 from toontown.shtiker import DeleteManagerAI
 from toontown.safezone import SafeZoneManagerAI
 import ToontownMagicWordManagerAI
@@ -392,8 +392,8 @@ class ToontownAIRepository(AIDistrict):
         self.bankMgr.generateWithRequired(OTPGlobals.UberZone)
 
         # The Friend Manager
-        #self.friendManager = FriendManagerAI.FriendManagerAI(self)
-        #self.friendManager.generateWithRequired(OTPGlobals.UberZone)
+        self.friendManager = FriendManagerAI.FriendManagerAI(self)
+        self.friendManager.generateWithRequired(OTPGlobals.UberZone)
 
         # The Delete Manager
         self.deleteManager = DeleteManagerAI.DeleteManagerAI(self)

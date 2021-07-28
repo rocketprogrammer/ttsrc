@@ -141,28 +141,28 @@ dclass DistributedSmoothNode : DistributedNode {
   setSmXYZH : setComponentX, setComponentY, setComponentZ, setComponentH, setComponentT;
   setSmPosHpr : setComponentX, setComponentY, setComponentZ, setComponentH, setComponentP, setComponentR, setComponentT;
   clearSmoothing(int8) broadcast clsend;
-  suggestResync(uint32, int16, int16, int32, uint16, uint16/100) p2p clsend;
-  returnResync(uint32, int16, int32, uint16, uint16/100) p2p clsend;
+  suggestResync(uint32, int16, int16, int32, uint16, uint16/100) ownrecv clsend;
+  returnResync(uint32, int16, int32, uint16, uint16/100) ownrecv clsend;
 };
 
 dclass DistributedAvatar : DistributedSmoothNode {
   setName(string = "[Name not set]") required broadcast db airecv;
-  friendsNotify(int32, int8) p2p clsend;
+  friendsNotify(int32, int8) ownrecv airecv clsend;
 };
 
 dclass DistributedPlayer : DistributedAvatar {
-  setAccountName(string = "") required p2p db;
+  setAccountName(string = "") required ownrecv db;
   setChat(string, uint8) broadcast ownsend;
-  setWhisperFrom(uint32, string) p2p clsend;
-  setWhisperSCFrom(uint32, uint16) p2p clsend;
-  setWhisperSCCustomFrom(uint32, uint16) p2p clsend;
-  setWhisperSCEmoteFrom(uint32, uint16) p2p clsend;
-  setWhisperIgnored(uint32) p2p clsend;
-  setSystemMessage(uint32, string) p2p;
-  setCommonChatFlags(uint8) broadcast p2p ram;
+  setWhisperFrom(uint32, string) ownrecv clsend;
+  setWhisperSCFrom(uint32, uint16) ownrecv clsend;
+  setWhisperSCCustomFrom(uint32, uint16) ownrecv clsend;
+  setWhisperSCEmoteFrom(uint32, uint16) ownrecv clsend;
+  setWhisperIgnored(uint32) ownrecv clsend;
+  setSystemMessage(uint32, string) ownrecv;
+  setCommonChatFlags(uint8) broadcast ownrecv ram airecv;
   setSC(uint16) broadcast ownsend airecv;
   setSCCustom(uint16) broadcast ownsend airecv;
-  setFriendsList(uint32uint8array = {}) required p2p db airecv;
+  setFriendsList(uint32uint8array = {}) ownrecv required db airecv;
   OwningAccount(uint32 accId = 0) ram db airecv;
   WishName(string = "") db ram;
   WishNameState(string = "OPEN") db ram;
@@ -181,17 +181,17 @@ dclass MagicWordManager : DistributedObject {
 };
 
 dclass FriendManager : DistributedObject {
-  friendQuery(int32) p2p clsend;
-  cancelFriendQuery(int32) p2p clsend;
-  inviteeFriendConsidering(int8, int32) p2p clsend;
-  inviteeFriendResponse(int8, int32) p2p clsend;
-  inviteeAcknowledgeCancel(int32) p2p clsend;
-  friendConsidering(int8, int32) p2p;
-  friendResponse(int8, int32) p2p;
-  inviteeFriendQuery(int32, string, blob, int32) p2p;
-  inviteeCancelFriendQuery(int32) p2p;
-  requestSecret() p2p clsend;
-  requestSecretResponse(int8, string) p2p;
-  submitSecret(string) p2p clsend;
-  submitSecretResponse(int8, int32) p2p;
+  friendQuery(int32) airecv clsend;
+  cancelFriendQuery(int32) airecv clsend;
+  inviteeFriendConsidering(int8, int32) airecv clsend;
+  inviteeFriendResponse(int8, int32) airecv clsend;
+  inviteeAcknowledgeCancel(int32) airecv clsend;
+  friendConsidering(int8, int32);
+  friendResponse(int8, int32);
+  inviteeFriendQuery(int32, string, blob, int32);
+  inviteeCancelFriendQuery(int32);
+  requestSecret() airecv clsend;
+  requestSecretResponse(int8, string);
+  submitSecret(string) airecv clsend;
+  submitSecretResponse(int8, int32);
 };

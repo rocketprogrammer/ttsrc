@@ -32,7 +32,7 @@ class DistributedTrolleyAI(DistributedObjectAI.DistributedObjectAI):
         self.trolleyCountdownTime = \
                           simbase.config.GetFloat("trolley-countdown-time",
                                                   TROLLEY_COUNTDOWN_TIME)
-        
+
         self.fsm = ClassicFSM.ClassicFSM('DistributedTrolleyAI',
                            [State.State('off',
                                         self.enterOff,
@@ -96,15 +96,15 @@ class DistributedTrolleyAI(DistributedObjectAI.DistributedObjectAI):
     def rejectBoarder(self, avId):
         self.sendUpdateToAvatarId(avId, "rejectBoard", [avId])
 
-    def acceptingBoardersHandler(self, avId):
+    def acceptingBoardersHandler(self, avId, x, y, z, h, p, r):
         self.notify.debug("acceptingBoardersHandler")
         seatIndex = self.findAvailableSeat()
         if seatIndex == None:
             self.rejectBoarder(avId)
         else:
-            self.acceptBoarder(avId, seatIndex)
+            self.acceptBoarder(avId, x, y, z, h, p, r, seatIndex)
 
-    def acceptBoarder(self, avId, seatIndex):
+    def acceptBoarder(self, avId, x, y, z, h, p, r, seatIndex):
         self.notify.debug("acceptBoarder")
         # Make sure we have a valid seat number
         assert((seatIndex >= 0) and (seatIndex <=3))
@@ -123,7 +123,7 @@ class DistributedTrolleyAI(DistributedObjectAI.DistributedObjectAI):
         self.timeOfBoarding = globalClock.getRealTime()
         # Tell the clients to put the avatar in that seat
         self.sendUpdate("fillSlot" + str(seatIndex),
-                        [avId])
+                        [avId, x, y, z, h, p, r, self.timeOfBoarding])
         # Put us into waitCountdown state... If we are already there,
         # this won't do anything.
         self.waitCountdown()
@@ -196,7 +196,7 @@ class DistributedTrolleyAI(DistributedObjectAI.DistributedObjectAI):
             self.seats[seatIndex] = None
             # Tell the clients that the avatar is no longer in that seat
             self.sendUpdate("fillSlot" + str(seatIndex),
-                            [0])
+                            [0, 0, 0, 0, 0, 0, 0, 0])
             # If the avatar isn't in a seat, we don't care anymore, so
             # remove the hook to handle unexpected exits.
             self.ignore(simbase.air.getAvatarExitEvent(avId))
@@ -212,17 +212,17 @@ class DistributedTrolleyAI(DistributedObjectAI.DistributedObjectAI):
         avId = self.air.getAvatarIdFromSender()
         if (self.findAvatar(avId) != None):
             self.notify.warning("Ignoring multiple requests from %s to board." % (avId))
-            return        
+            return
 
         av = self.air.doId2do.get(avId)
         if av:
             newArgs = (avId,) + args
-            
+
             if not ToontownAccessAI.canAccess(avId, self.zoneId):
                 self.notify.warning("Tooon %s does not have access to the trolley." % (avId))
                 self.rejectingBoardersHandler(*newArgs)
                 return
-                
+
             # Only toons with hp greater than 0 may board the trolley.
             if (av.hp > 0) and self.accepting:
                 self.acceptingBoardersHandler(*newArgs)
@@ -399,7 +399,7 @@ class DistributedTrolleyAI(DistributedObjectAI.DistributedObjectAI):
             toonRodeTrolley() was only being used for the single first-time
             trolley quest, so I renamed it to toonRodeTrolleyFirstTime() and
             only call it from the newbie PurchaseMgr.
-            
+
             # Update the quest manager in case any toon had a trolley quest
             for avId in self.seats:
                 if avId:

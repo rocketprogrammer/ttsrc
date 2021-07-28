@@ -91,7 +91,6 @@ if __name__ == "__main__":
             loadPrcFileData("", "mysql-user root")
             loadPrcFileData("", "mysql-passwd klnbZS9Jca4PLaWIMEED77zwQzL0EfaX")
             loadPrcFileData("", "want-code-redemption-init-db 1")
-            loadPrcFileData("", "want-dev 1")
             from toontown.uberdog import Start
 
         else:

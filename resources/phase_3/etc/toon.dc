@@ -181,8 +181,8 @@ dclass DistributedToon : DistributedPlayer {
   setTrackAccess(uint16array = {0,0,0,0,1,1,0}) required broadcast ownrecv db;
   setTrackProgress(int8 = -1, uint32 = 0) required ownrecv db;
   setInventory(blob = {0*7, 0*7, 0*7, 0*7, 1, 0*6, 1, 0*6, 0*7}) required ownrecv db;
-  setMaxNPCFriends(uint16 = 16) required p2p db;
-  setNPCFriendsDict(uint32uint8array = {}) required p2p db;
+  setMaxNPCFriends(uint16 = 16) required ownrecv db;
+  setNPCFriendsDict(uint32uint8array = {}) required ownrecv db;
   setDefaultShard(uint32 = 201000000) required p2p db;
   setDefaultZone(uint32 = 2000) required p2p db;
   setShtickerBook(blob = {}) required p2p db;
@@ -190,16 +190,16 @@ dclass DistributedToon : DistributedPlayer {
   setHoodsVisited(uint32array = { 2000 }) required p2p db;
   setInterface(blob = {}) required p2p db;
   setLastHood(uint32 = 2000) required p2p db;
-  setTutorialAck(uint8 = 0) required p2p db;
+  setTutorialAck(uint8 = 0) required ownrecv db;
   setMaxClothes(uint32 = 10) required ownrecv db;
   setClothesTopsList(uint8array = {}) required p2p db;
   setClothesBottomsList(uint8array = {}) required p2p db;
-  setEarnedExperience(uint16array) p2p;
+  setEarnedExperience(uint16array) ownrecv;
   setTunnelIn(int16, int16/10, int16/10, int16/10, int16/100, int32/100) broadcast ownsend;
   setTunnelOut(int16, int16/10, int16/10, int16/10, int16/10, int16/100, int32/100) broadcast ownsend;
   setAnimState(string, int16/1000, int16) broadcast ram ownsend;
   setEmoteState(int16, int16/1000, int16) broadcast ram ownsend;
-  setEmoteAccess(uint8array = {1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}) required p2p db;
+  setEmoteAccess(uint8array = {1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}) required ownrecv db;
   setCustomMessages(uint16array = {}) required ownrecv db;
   setResistanceMessages(pair16 [] = {}) required ownrecv db;
   setPetTrickPhrases(uint8array = [0]) required p2p db;
@@ -214,7 +214,7 @@ dclass DistributedToon : DistributedPlayer {
   reqSCResistance(uint16, uint32 []) p2p ownsend airecv;
   setSCResistance(uint16, uint32 []) broadcast;
   setSpeedChatStyleIndex(uint8 = 1) required broadcast db ownsend;
-  setTrophyScore(uint16) broadcast p2p ram;
+  setTrophyScore(uint16) broadcast ownrecv ram;
   setTeleportAccess(uint32array = {}) required p2p db;
   battleSOS(uint32) p2p clsend;
   teleportQuery(uint32) p2p clsend;
@@ -495,13 +495,13 @@ dclass DistributedMMPiano : DistributedObject {
 };
 
 dclass DistributedDGFlower : DistributedObject {
-  avatarEnter() p2p clsend;
-  avatarExit() p2p clsend;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
   setHeight(uint8/10) broadcast ram;
 };
 
 dclass DistributedFishingPond : DistributedObject {
-  hitTarget(uint32) p2p clsend;
+  hitTarget(uint32) airecv clsend;
   setArea(uint32) required broadcast ram;
 };
 
@@ -513,13 +513,13 @@ dclass DistributedFishingTarget : DistributedNode {
 dclass DistributedFishingSpot : DistributedObject {
   setPondDoId(uint32) required broadcast ram;
   setPosHpr(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) required broadcast ram;
-  requestEnter() p2p clsend;
-  rejectEnter() p2p;
-  requestExit() p2p clsend;
+  requestEnter() airecv clsend;
+  rejectEnter();
+  requestExit() airecv clsend;
   setOccupied(uint32) broadcast ram;
-  doCast(uint8/255, int16/100) p2p clsend;
-  sellFish() p2p clsend;
-  sellFishComplete(uint8, uint16) p2p;
+  doCast(uint8/255, int16/100) airecv clsend;
+  sellFish() airecv clsend;
+  sellFishComplete(uint8, uint16);
   setMovie(uint8, uint8, uint16, uint16, uint16, uint8/100, int16/100) broadcast ram;
 };
 
@@ -562,10 +562,10 @@ dclass DistributedMinigame : DistributedObject {
   setParticipants(uint32array) required broadcast ram;
   setTrolleyZone(uint32) required broadcast ram;
   setDifficultyOverrides(int32, int32) required broadcast ram;
-  setAvatarJoined() p2p clsend;
-  setAvatarReady() p2p clsend;
-  setAvatarExited() p2p clsend;
-  requestExit() p2p clsend;
+  setAvatarJoined() airecv clsend;
+  setAvatarReady() airecv clsend;
+  setAvatarExited() airecv clsend;
+  requestExit() airecv clsend;
   setGameReady() broadcast;
   setGameStart(int16) broadcast;
   setGameExit() broadcast;
@@ -604,7 +604,7 @@ dclass DistributedPatternGame : DistributedMinigame {
 dclass DistributedRingGame : DistributedMinigame {
   setTimeBase(int16) required broadcast ram;
   setColorIndices(int8, int8, int8, int8) required broadcast ram;
-  setToonGotRing(uint8) p2p clsend;
+  setToonGotRing(uint8) airecv clsend;
   setRingGroupResults(uint8) broadcast;
 };
 
@@ -653,12 +653,12 @@ dclass EstateManager : DistributedObject {
 
 dclass DistributedEstate : DistributedObject {
   setEstateReady() broadcast;
-  setClientReady() p2p clsend;
+  setClientReady() airecv clsend;
   setEstateType(uint8) required broadcast db;
-  setClosestHouse(uint8) p2p clsend;
+  setClosestHouse(uint8) airecv clsend;
   setTreasureIds(uint32array) broadcast ram;
-  requestServerTime() p2p clsend;
-  setServerTime(uint32) p2p;
+  requestServerTime() airecv clsend;
+  setServerTime(uint32);
   setDawnTime(uint32) required broadcast ram;
 };
 
@@ -692,7 +692,7 @@ dclass DistributedGarden : DistributedObject {
 };
 
 dclass DeleteManager : DistributedObject {
-  setInventory(blob) p2p clsend;
+  setInventory(blob) airecv clsend;
 };
 
 dclass ToontownMagicWordManager : MagicWordManager {
@@ -787,7 +787,7 @@ dclass DistributedCashbotBossTreasure : DistributedTreasure {
 };
 
 dclass DistributedTrophyMgr : DistributedObject {
-  requestTrophyScore() p2p clsend;
+  requestTrophyScore() airecv clsend;
 };
 
 dclass DistributedBuilding : DistributedObject {
@@ -795,7 +795,7 @@ dclass DistributedBuilding : DistributedObject {
   setSuitData(int8, int8, int8) required broadcast ram;
   setVictorList(uint32array) broadcast ram;
   setState(string, int16) broadcast ram;
-  setVictorReady() p2p clsend;
+  setVictorReady() airecv clsend;
 };
 
 dclass DistributedToonInterior : DistributedObject {
@@ -812,9 +812,9 @@ dclass DistributedSuitInterior : DistributedObject {
   setToons(uint32array, uint16) broadcast ram;
   setSuits(uint32array, uint32array, uint16array) broadcast ram;
   setState(string, int16) required broadcast ram;
-  setAvatarJoined() p2p clsend;
-  elevatorDone() p2p clsend;
-  reserveJoinDone() p2p clsend;
+  setAvatarJoined() airecv clsend;
+  elevatorDone() airecv clsend;
+  reserveJoinDone() airecv clsend;
 };
 
 dclass DistributedHQInterior : DistributedObject {
@@ -886,7 +886,7 @@ dclass DistributedNPCBlocker : DistributedNPCToonBase {
 
 dclass DistributedNPCFisherman : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, uint32array, int16) broadcast ram;
-  completeSale(uint8) p2p clsend;
+  completeSale(uint8) airecv clsend;
 };
 
 dclass DistributedNPCPetclerk : DistributedNPCToonBase {
@@ -921,8 +921,8 @@ dclass DistributedElevator : DistributedObject {
   emptySlot6(uint32, int8, int16) broadcast ram;
   emptySlot7(uint32, int8, int16) broadcast ram;
   requestBoard(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) airecv clsend;
-  rejectBoard(uint32) p2p;
-  requestExit() p2p clsend;
+  rejectBoard(uint32);
+  requestExit() airecv clsend;
 };
 
 dclass DistributedElevatorExt : DistributedElevator {
@@ -930,18 +930,18 @@ dclass DistributedElevatorExt : DistributedElevator {
 };
 
 dclass DistributedElevatorInt : DistributedElevator {
-  requestBuildingExit() p2p clsend;
-  forcedExit(uint32) p2p;
+  requestBuildingExit() airecv clsend;
+  forcedExit(uint32);
 };
 
 dclass DistributedFactoryElevatorExt : DistributedElevatorExt {
   setEntranceId(uint8) required broadcast ram;
-  setFactoryInteriorZone(uint32) p2p;
+  setFactoryInteriorZone(uint32);
 };
 
 dclass DistributedMintElevatorExt : DistributedElevatorExt {
   setMintId(uint16) required broadcast ram;
-  setMintInteriorZone(uint32) p2p;
+  setMintInteriorZone(uint32);
 };
 
 dclass DistributedBossElevator : DistributedElevatorExt {
@@ -1285,10 +1285,9 @@ dclass DistributedPet : DistributedSmoothNode {
 
 dclass DistributedBlackCatMgr : DistributedObject {
   setAvId(uint32) required broadcast ram;
-  doBlackCatTransformation() p2p clsend;
+  doBlackCatTransformation() airecv clsend;
 };
 
 dclass DistributedResistanceEmoteMgr : DistributedObject {
-  addResistanceEmote() p2p clsend;
+  addResistanceEmote() airecv clsend;
 };
-

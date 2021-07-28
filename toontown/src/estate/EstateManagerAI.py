@@ -450,8 +450,6 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                                                    self.air.districtId,
                                                    estateZoneId)
 
-
-
                 estateAI.initEstateData(estateVal, numHouses, houseId, houseVal)
                 estateAI.setPetIds(petIds)
                 self.estate[avId] = estateAI
@@ -473,8 +471,6 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                         house.initFromServerResponse(houseVal[i])
                         self.house[avId][i] = house
 
-                        print('yoooooo', self.house[avId][i])
-
                         # Now that we have all the data loaded, officially
                         # generate the distributed object
 
@@ -485,8 +481,6 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                                                         self.air.districtId,
                                                         estateZoneId)
 
-                        print('yoooooo', house.doId)
-
                         house.setupEnvirons()
 
                         # Finally, make sure that the house has a good owner,
@@ -494,8 +488,6 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                         house.checkOwner()
 
                         estateAI.houseList.append(house)
-
-                estateAI.postHouseInit()
 
                 #get us a list of the owners of the houses
                 avIdList = []
@@ -516,8 +508,6 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
 
                 self.notify.info('finish estate %s init, owner=%s' %
                                  (estateId, ownerId))
-
-                estateAI.gardenInit(avIdList)
 
         # Now that the zone is set up, send the notification back to
         # the client.

@@ -169,7 +169,7 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
 
     def clearEmptyNow(self, seatIndex):
         self.sendUpdate("emptySlot" + str(seatIndex),
-                        [0, 0, globalClockDelta.getRealNetworkTime(), 0])
+                        [0, 0, globalClockDelta.getRealNetworkTime()])
 
     def clearFullNow(self, seatIndex):
         # Get the avatar id

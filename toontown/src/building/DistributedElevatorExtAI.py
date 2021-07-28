@@ -97,17 +97,17 @@ class DistributedElevatorExtAI(DistributedElevatorAI.DistributedElevatorAI):
                 self.setCountdown(timeToSet)
                 timeToSend = timeToSet
                 self.sendUpdate("emptySlot" + str(seatIndex),
-                [avId, 1, globalClockDelta.getRealNetworkTime(), timeToSend])
+                [avId, 1, globalClockDelta.getRealNetworkTime()])
             elif (self.anyToonsBailed == 0):
                 bailFlag = 1
                 # Reset the clock
                 self.resetCountdown()
                 self.anyToonsBailed = 1
                 self.sendUpdate("emptySlot" + str(seatIndex),
-                [avId, bailFlag, globalClockDelta.getRealNetworkTime(), timeToSend])
+                [avId, bailFlag, globalClockDelta.getRealNetworkTime()])
             else:
                 self.sendUpdate("emptySlot" + str(seatIndex),
-                [avId, bailFlag, globalClockDelta.getRealNetworkTime(), timeToSend])
+                [avId, bailFlag, globalClockDelta.getRealNetworkTime()])
 
             # Tell the clients that the avatar is leaving that seat
 

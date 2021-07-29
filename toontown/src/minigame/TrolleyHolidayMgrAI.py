@@ -17,9 +17,6 @@ class TrolleyHolidayMgrAI(HolidayBaseAI.HolidayBaseAI):
         # let the holiday system know we started
         bboard.post(TrolleyHolidayMgrAI.PostName, True)
 
-        # tell everyone race night is starting
-        simbase.air.newsManager.trolleyHolidayStart()
-
         messenger.send(TrolleyHolidayMgrAI.StartStopMsg)
 
     def stop(self):

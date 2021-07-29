@@ -62,13 +62,13 @@ MIN_TRACK_INDEX = 0
 MAX_TRACK_INDEX = 6
 
 MIN_LEVEL_INDEX = 0
-MAX_LEVEL_INDEX = 6
+MAX_LEVEL_INDEX = 5
 
 MAX_UNPAID_LEVEL_INDEX = 4
 
 LAST_REGULAR_GAG_LEVEL = 5
 
-UBER_GAG_LEVEL_INDEX = 6
+UBER_GAG_LEVEL_INDEX = 5
 
 NUM_GAG_TRACKS = 7
 
@@ -83,16 +83,16 @@ PropTypeToTrackBonus = {
 # avatar skill levels (totalled)
 #Levels = [0, 10, 50, 140, 300, 550]
 #Levels = [0, 10, 50, 250, 750, 2000]
-Levels = [[0, 20, 200, 800, 2000, 6000, 10000], # heal
-          [0, 20, 100, 800, 2000, 6000, 10000], # trap
-          [0, 20, 100, 800, 2000, 6000, 10000], # lure
-          [0, 40, 200, 1000, 2500, 7500, 10000], # sound
-          [0, 10, 50, 400, 2000, 6000, 10000], # throw
-          [0, 10, 50, 400, 2000, 6000, 10000], # squirt
-          [0, 20, 100, 500, 2000, 6000, 10000], # drop
+Levels = [[0, 20, 200, 800, 2000, 6000], # heal
+          [0, 20, 100, 800, 2000, 6000], # trap
+          [0, 20, 100, 800, 2000, 6000], # lure
+          [0, 40, 200, 1000, 2500, 7500], # sound
+          [0, 10, 50, 400, 2000, 6000], # throw
+          [0, 10, 50, 400, 2000, 6000], # squirt
+          [0, 20, 100, 500, 2000, 6000], # drop
           ]
 #MaxSkill = 5000
-regMaxSkill = 10000
+regMaxSkill = 9999
 UberSkill = 500
 MaxSkill = UberSkill + regMaxSkill
 UnpaidMaxSkill = 1999
@@ -254,16 +254,12 @@ AvPropDamage = (
      ((25,30),(Levels[0][2], Levels[0][3])),#kiss
      ((40,45),(Levels[0][3], Levels[0][4])),#group Dance
      ((60,70),(Levels[0][4], Levels[0][5])),#dust
-     ((90,120),(Levels[0][5], Levels[0][6])),#group Juggle
-     ((210,210),(Levels[0][6], MaxSkill))),#group Dive
     # Trap
     (((10, 12),(Levels[1][0], Levels[1][1])),
      ((18, 20),(Levels[1][1], Levels[1][2])),
      ((30, 35),(Levels[1][2], Levels[1][3])),
      ((45, 50),(Levels[1][3], Levels[1][4])),
-     ((60, 70),(Levels[1][4], Levels[1][5])),
-     ((90, 180),(Levels[1][5], Levels[1][6])),
-     ((195, 195),(Levels[1][6], MaxSkill))),
+     ((60, 70),(Levels[1][4], Levels[1][5]))),
     # Lure
     (((0,0),(0,0)),
      ((0,0),(0,0)),
@@ -277,33 +273,25 @@ AvPropDamage = (
      ((5, 7), (Levels[3][1], Levels[3][2])),
      ((9, 11), (Levels[3][2], Levels[3][3])),
      ((14, 16), (Levels[3][3], Levels[3][4])),
-     ((19, 21), (Levels[3][4], Levels[3][5])),
-     ((25, 50), (Levels[3][5], Levels[3][6])),
-     ((90, 90), (Levels[3][6], MaxSkill))),
+     ((19, 21), (Levels[3][4], Levels[3][5]))),
     # Throw
     (((4, 6), (Levels[4][0], Levels[4][1])),
      ((8, 10), (Levels[4][1], Levels[4][2])),
      ((14, 17), (Levels[4][2], Levels[4][3])),
      ((24, 27), (Levels[4][3], Levels[4][4])),
-     ((36, 40), (Levels[4][4], Levels[4][5])),
-     ((48, 100), (Levels[4][5], Levels[4][6])),
-     ((120, 120), (Levels[4][6], MaxSkill))),
+     ((36, 40), (Levels[4][4], Levels[4][5]))),
     # Squirt
     (((3, 4), (Levels[5][0], Levels[5][1])),
      ((6, 8), (Levels[5][1], Levels[5][2])),
      ((10, 12), (Levels[5][2], Levels[5][3])),
      ((18, 21), (Levels[5][3], Levels[5][4])),
-     ((27, 30), (Levels[5][4], Levels[5][5])),
-     ((36, 80), (Levels[5][5], Levels[5][6])),
-     ((105, 105), (Levels[5][6], MaxSkill))),
+     ((27, 30), (Levels[5][4], Levels[5][5]))),
     # Drop
     (((10, 10), (Levels[6][0], Levels[6][1])),
      ((18, 18), (Levels[6][1], Levels[6][2])),
      ((30, 30), (Levels[6][2], Levels[6][3])),
      ((45, 45), (Levels[6][3], Levels[6][4])),
-     ((60, 60), (Levels[6][4], Levels[6][5])),
-     ((85, 170), (Levels[6][5], Levels[6][6])),
-     ((180, 180), (Levels[6][6], MaxSkill))),
+     ((60, 60), (Levels[6][4], Levels[6][5])))),
     )
 
 # avatar prop target type (0 for single target,

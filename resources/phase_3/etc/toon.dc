@@ -216,10 +216,10 @@ dclass DistributedToon : DistributedPlayer {
   setSpeedChatStyleIndex(uint8 = 1) required broadcast db ownsend;
   setTrophyScore(uint16) broadcast ownrecv ram;
   setTeleportAccess(uint32array = {}) required p2p db;
-  battleSOS(uint32) p2p clsend;
-  teleportQuery(uint32) p2p clsend;
-  teleportResponse(uint32, int8, uint32, uint32, uint32) p2p clsend;
-  teleportGiveup(uint32) p2p clsend;
+  battleSOS(uint32) ownrecv clsend;
+  teleportQuery(uint32) ownrecv clsend;
+  teleportResponse(uint32, int8, uint32, uint32, uint32) ownrecv clsend;
+  teleportGiveup(uint32) ownrecv clsend;
   teleportGreeting(uint32) broadcast ownsend;
   setCogStatus(uint32array = {1 * 32}) required p2p db;
   setCogCount(uint32array = {0 * 32}) required p2p db;

@@ -224,6 +224,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         if self.isPlayerControlled():
             messenger.send('avatarEntered', [self])
 
+        from toontown.toon.DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+
+        if not isinstance(self, DistributedNPCToonBaseAI):
+            self.sendUpdate('setDefaultShard', [self.air.districtId])
+
     def setLocation(self, parentId, zoneId):
         DistributedPlayerAI.DistributedPlayerAI.setLocation(self, parentId, zoneId)
 

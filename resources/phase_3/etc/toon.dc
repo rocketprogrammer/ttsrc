@@ -945,7 +945,7 @@ dclass DistributedMintElevatorExt : DistributedElevatorExt {
 };
 
 dclass DistributedBossElevator : DistributedElevatorExt {
-  setBossOfficeZone(uint32) p2p;
+  setBossOfficeZone(uint32);
 };
 
 dclass DistributedCFOElevator : DistributedBossElevator {
@@ -957,7 +957,7 @@ dclass DistributedTutorialInterior : DistributedObject {
 };
 
 dclass DistributedBankMgr : DistributedObject {
-  transferMoney(int16) p2p clsend;
+  transferMoney(int16) airecv clsend;
 };
 
 dclass DistributedMailbox : DistributedObject {

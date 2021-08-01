@@ -334,10 +334,10 @@ dclass DistributedFactorySuit : DistributedSuitBase {
   setLevelDoId(uint32) required broadcast ram;
   setCogId(uint32) required broadcast ram;
   setReserve(uint8) required broadcast ram;
-  requestBattle(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) p2p clsend;
-  setAlert(uint32) p2p clsend;
+  requestBattle(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) airecv clsend;
+  setAlert(uint32) airecv clsend;
   setConfrontToon(uint32) broadcast;
-  setStrayed() p2p clsend;
+  setStrayed() airecv clsend;
   setReturn() broadcast;
 };
 
@@ -355,7 +355,7 @@ dclass DistributedBossCog : DistributedNode {
   avatarNearExit() airecv clsend;
   toonDied(uint32) broadcast;
   setBattleExperience(int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, uint8array) required broadcast ram;
-  zapToon(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, int8/100, int8/100, uint8, int16) p2p clsend;
+  zapToon(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, int8/100, int8/100, uint8, int16) airecv clsend;
   showZapToon(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, uint8, int16) broadcast;
   setAttackCode(uint8, uint32) broadcast;
 };

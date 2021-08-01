@@ -818,7 +818,7 @@ class QuestManagerAI:
                                         itemsNotRecovered.append(quest.getItem())
                                     #keeping track of missed items
                                     changed = 1
-                                    questDesc[4] = count
+                                    questDesc[4] += 1
                                 else:
                                     self.notify.debug("recoverItems: av %s made NO progress (wrong location)" % (avId))
                             else:

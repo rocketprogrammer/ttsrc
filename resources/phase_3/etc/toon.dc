@@ -365,11 +365,11 @@ dclass DistributedSellbotBoss : DistributedBossCog {
   setDooberIds(uint32array) broadcast ram;
   setBossDamage(uint16, uint8, int16) broadcast ram;
   setState(string) broadcast ram;
-  hitBoss(uint8) p2p clsend;
-  hitBossInsides() p2p clsend;
-  hitToon(uint32) p2p clsend;
-  finalPieSplat() p2p clsend;
-  touchCage() p2p clsend;
+  hitBoss(uint8) airecv clsend;
+  hitBossInsides() airecv clsend;
+  hitToon(uint32) airecv clsend;
+  finalPieSplat() airecv clsend;
+  touchCage() airecv clsend;
   doStrafe(uint8, uint8) broadcast;
   cagedToonBattleThree(uint16, uint32) broadcast;
 };
@@ -378,7 +378,7 @@ dclass DistributedCashbotBoss : DistributedBossCog {
   setState(string) broadcast ram;
   setBossDamage(uint16) broadcast ram;
   setRewardId(uint16) broadcast ram;
-  applyReward() p2p clsend;
+  applyReward() airecv clsend;
 };
 
 struct LinkPosition {
@@ -404,8 +404,8 @@ dclass DistributedCashbotBossObject : DistributedSmoothNode {
   rejectGrab();
   requestDrop() airecv clsend;
   hitFloor() clsend;
-  requestFree(int16/10, int16/10, int16/10, uint16%360/100) p2p clsend;
-  hitBoss(uint16/255) p2p clsend;
+  requestFree(int16/10, int16/10, int16/10, uint16%360/100) airecv clsend;
+  hitBoss(uint16/255) airecv clsend;
 };
 
 dclass DistributedCashbotBossSafe : DistributedCashbotBossObject {

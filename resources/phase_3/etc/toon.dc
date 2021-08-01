@@ -327,7 +327,7 @@ dclass DistributedSuit : DistributedSuitBase {
 };
 
 dclass DistributedTutorialSuit : DistributedSuitBase {
-  requestBattle(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) p2p clsend;
+  requestBattle(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) airecv clsend;
 };
 
 dclass DistributedFactorySuit : DistributedSuitBase {
@@ -715,9 +715,9 @@ dclass PurchaseManager : DistributedObject {
   setPlayerMoney(uint8, uint8, uint8, uint8) required broadcast ram;
   setPlayerStates(uint8, uint8, uint8, uint8) required broadcast ram;
   setCountdown(int16) required broadcast ram;
-  requestExit() p2p clsend;
-  requestPlayAgain() p2p clsend;
-  setInventory(blob, int16, uint8) p2p clsend;
+  requestExit() airecv clsend;
+  requestPlayAgain() airecv clsend;
+  setInventory(blob, int16, uint8) airecv clsend;
   setPurchaseExit() broadcast;
 };
 
@@ -864,14 +864,14 @@ dclass DistributedNPCToonBase : DistributedNode {
 
 dclass DistributedNPCToon : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, uint16array, int16) broadcast ram;
-  setMovieDone() p2p clsend;
-  chooseQuest(uint16) p2p clsend;
-  chooseTrack(int8) p2p clsend;
+  setMovieDone() airecv clsend;
+  chooseQuest(uint16) airecv clsend;
+  chooseTrack(int8) airecv clsend;
 };
 
 dclass DistributedNPCClerk : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, int16) broadcast ram;
-  setInventory(blob, int16, uint8) p2p clsend;
+  setInventory(blob, int16, uint8) airecv clsend;
 };
 
 dclass DistributedNPCTailor : DistributedNPCToonBase {

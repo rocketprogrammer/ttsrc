@@ -94,7 +94,7 @@ Levels = [[0, 20, 200, 800, 2000, 6000], # heal
 #MaxSkill = 5000
 regMaxSkill = 9999
 UberSkill = 500
-MaxSkill = UberSkill + regMaxSkill
+MaxSkill = 9999
 UnpaidMaxSkill = 1999
 # This is the maximum amount of experience per track that may be
 # earned in one battle (or in one building).
@@ -201,7 +201,7 @@ AvProps = ( ('feather', 'bullhorn', 'lipstick', 'bamboocane', 'pixiedust',
           ('flower', 'waterglass', 'waterballoon', 'bottle', 'firehose',
            'stormcloud', 'stormcloud'),
           ('flowerpot', 'sandbag', 'anvil', 'weight', 'safe', 'piano', 'piano')
-          ) 
+          )
 
 AvPropsNew = ( ('inventory_feather', 'inventory_megaphone', 'inventory_lipstick', 'inventory_bamboo_cane', 'inventory_pixiedust',
            'inventory_juggling_cubes',  'inventory_ladder'),
@@ -215,7 +215,7 @@ AvPropsNew = ( ('inventory_feather', 'inventory_megaphone', 'inventory_lipstick'
           ('inventory_squirt_flower', 'inventory_glass_of_water', 'inventory_water_gun', 'inventory_seltzer_bottle',
            'inventory_firehose', 'inventory_storm_cloud',  'inventory_geyser'),
           ('inventory_flower_pot', 'inventory_sandbag', 'inventory_anvil', 'inventory_weight', 'inventory_safe_box', 'inventory_piano', 'inventory_ship')
-          ) 
+          )
 
 
 # prettier on-screen versions of the prop names
@@ -254,15 +254,16 @@ AvPropDamage = (
      ((25,30),(Levels[0][2], Levels[0][3])),#kiss
      ((40,45),(Levels[0][3], Levels[0][4])),#group Dance
      ((60,70),(Levels[0][4], Levels[0][5])),#dust
+     ((90,120),(Levels[0][5], MaxSkill))),#group Juggle
     # Trap
     (((10, 12),(Levels[1][0], Levels[1][1])),
      ((18, 20),(Levels[1][1], Levels[1][2])),
      ((30, 35),(Levels[1][2], Levels[1][3])),
      ((45, 50),(Levels[1][3], Levels[1][4])),
-     ((60, 70),(Levels[1][4], Levels[1][5]))),
+     ((60, 70), (Levels[1][4], Levels[1][5])),
+     ((90, 180), (Levels[1][5], MaxSkill))),
     # Lure
     (((0,0),(0,0)),
-     ((0,0),(0,0)),
      ((0,0),(0,0)),
      ((0,0),(0,0)),
      ((0,0),(0,0)),
@@ -273,25 +274,29 @@ AvPropDamage = (
      ((5, 7), (Levels[3][1], Levels[3][2])),
      ((9, 11), (Levels[3][2], Levels[3][3])),
      ((14, 16), (Levels[3][3], Levels[3][4])),
-     ((19, 21), (Levels[3][4], Levels[3][5]))),
+     ((19, 21), (Levels[3][4], Levels[3][5])),
+     ((25, 50), (Levels[3][5], MaxSkill))),
     # Throw
     (((4, 6), (Levels[4][0], Levels[4][1])),
      ((8, 10), (Levels[4][1], Levels[4][2])),
      ((14, 17), (Levels[4][2], Levels[4][3])),
      ((24, 27), (Levels[4][3], Levels[4][4])),
-     ((36, 40), (Levels[4][4], Levels[4][5]))),
+     ((36, 40), (Levels[4][4], Levels[4][5])),
+     ((48, 100), (Levels[4][5], MaxSkill))),
     # Squirt
     (((3, 4), (Levels[5][0], Levels[5][1])),
      ((6, 8), (Levels[5][1], Levels[5][2])),
      ((10, 12), (Levels[5][2], Levels[5][3])),
      ((18, 21), (Levels[5][3], Levels[5][4])),
-     ((27, 30), (Levels[5][4], Levels[5][5]))),
+     ((27, 30), (Levels[5][4], Levels[5][5])),
+     ((36, 80), (Levels[5][5], MaxSkill))),
     # Drop
     (((10, 10), (Levels[6][0], Levels[6][1])),
      ((18, 18), (Levels[6][1], Levels[6][2])),
      ((30, 30), (Levels[6][2], Levels[6][3])),
      ((45, 45), (Levels[6][3], Levels[6][4])),
-     ((60, 60), (Levels[6][4], Levels[6][5])))),
+     ((60, 60), (Levels[6][4], Levels[6][5])),
+     ((85, 170), (Levels[6][5], MaxSkill))),
     )
 
 # avatar prop target type (0 for single target,
@@ -330,10 +335,10 @@ AvPropTargetCat = ( ( ATK_SINGLE_TARGET,
                       ATK_SINGLE_TARGET,
                       ATK_SINGLE_TARGET,
                       ATK_SINGLE_TARGET,
-                      ATK_GROUP_TARGET ),                    
-                    ) 
+                      ATK_GROUP_TARGET ),
+                    )
 
-AvPropTarget = ( 0, 3, 0, 2, 3, 3, 3)
+AvPropTarget = ( 0, 1, 0, 2, 1, 1, 1)
 
 
 def getAvPropDamage( attackTrack, attackLevel, exp, organicBonus=False, propBonus = False,
@@ -356,6 +361,7 @@ def getAvPropDamage( attackTrack, attackLevel, exp, organicBonus=False, propBonu
     # do 6 damage;  at more than 30 exp, the throw will max out at 6
     # damage
     #
+    print(attackTrack, attackLevel)
     minD = AvPropDamage[ attackTrack ][ attackLevel ][0][0]
     maxD = AvPropDamage[ attackTrack ][ attackLevel ][0][1]
     minE = AvPropDamage[ attackTrack ][ attackLevel ][1][0]
@@ -390,10 +396,10 @@ def getDamageBonus(normal):
 #        return 1
 #    else:
 #        return 0
-        
+
 def isGroup(track, level):
     return AvPropTargetCat[AvPropTarget[track]][level]
-    
+
 def getCreditMultiplier(floorIndex):
     """
     Returns the skill credit multiplier appropriate for a particular
@@ -402,7 +408,7 @@ def getCreditMultiplier(floorIndex):
     """
     # Currently, this is 1 for the first floor (floor 0), 1.5 for the
     # second floor (floor 1), etc.
-    return 1 + floorIndex * 0.5         
+    return 1 + floorIndex * 0.5
 
 def getFactoryCreditMultiplier(factoryId):
     """
@@ -417,7 +423,7 @@ def getFactoryMeritMultiplier(factoryId):
     Returns the skill merit multiplier for a particular factory.
     factoryId is the factory-interior zone defined in ToontownGlobals.py.
     """
-    # Many people complained about how many runs you must make now that 
+    # Many people complained about how many runs you must make now that
     # we lowered the cog levels so I have upped this by a factor of two.
     return 4.
 
@@ -431,7 +437,7 @@ def getMintCreditMultiplier(mintId):
         CashbotMintIntB : 2.5,
         CashbotMintIntC : 3.,
         }.get(mintId, 1.)
-         
+
 def getStageCreditMultiplier(floor):
     """
     Returns the skill credit multiplier for a particular mint.
@@ -474,7 +480,7 @@ def getMoreXpHolidayMultiplier():
     User must first check to see if there is an invasion.
     """
     return 2.0
-    
+
 def encodeUber(trackList):
     bitField = 0
     for trackIndex in range(len(trackList)):
@@ -494,7 +500,7 @@ def decodeUber(flagMask):
     while (workPower >= 0):
         if workNumber >= pow(2,workPower):
             workNumber -= pow(2,workPower)
-            trackList.insert(0, 1) 
+            trackList.insert(0, 1)
         else:
             trackList.insert(0, 0)
         #print("Number %s List %s" % (workNumber, trackList))
@@ -510,14 +516,14 @@ def decodeUber(flagMask):
         else:
             foundOne = 1
     return trackList
-    
+
 def getUberFlag(flagMask, index):
     decode = decodeUber(flagMask)
     if index >= len(decode):
         return 0
     else:
         return decode[index]
-        
+
 def getUberFlagSafe(flagMask, index):
     if (flagMask == "unknown") or (flagMask < 0):
         return -1

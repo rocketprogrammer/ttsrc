@@ -965,12 +965,12 @@ dclass DistributedMailbox : DistributedObject {
   setHousePos(uint8) required broadcast ram;
   setName(string) required broadcast ram;
   setFullIndicator(uint8) broadcast ram;
-  avatarEnter() p2p clsend;
-  avatarExit() p2p clsend;
-  freeAvatar() p2p;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  freeAvatar();
   setMovie(uint8, uint32) broadcast ram;
-  acceptItemMessage(uint16, blob, uint8, int32) p2p clsend;
-  acceptItemResponse(uint16, int8) p2p;
+  acceptItemMessage(uint16, blob, uint8, int32) airecv clsend;
+  acceptItemResponse(uint16, int8);
 };
 
 dclass DistributedFurnitureManager : DistributedObject {
@@ -983,52 +983,52 @@ dclass DistributedFurnitureManager : DistributedObject {
   setDeletedItems(blob) required broadcast ram;
   suggestDirector(uint32) p2p clsend;
   setDirector(uint32) broadcast ram;
-  avatarEnter() p2p clsend;
-  avatarExit() p2p clsend;
-  moveItemToAtticMessage(uint32, uint16) p2p clsend;
-  moveItemToAtticResponse(int8, uint16) p2p;
-  moveItemFromAtticMessage(uint16, int16/10, int16/10, int16/100, int16/10, int16/10, int16/10, uint16) p2p clsend;
-  moveItemFromAtticResponse(int8, uint32, uint16) p2p;
-  deleteItemFromAtticMessage(blob, uint16, uint16) p2p clsend;
-  deleteItemFromAtticResponse(int8, uint16) p2p;
-  deleteItemFromRoomMessage(blob, uint32, uint16) p2p clsend;
-  deleteItemFromRoomResponse(int8, uint16) p2p;
-  moveWallpaperFromAtticMessage(uint16, uint8, uint16) p2p clsend;
-  moveWallpaperFromAtticResponse(int8, uint16) p2p;
-  deleteWallpaperFromAtticMessage(blob, uint16, uint16) p2p clsend;
-  deleteWallpaperFromAtticResponse(int8, uint16) p2p;
-  moveWindowToAtticMessage(uint8, uint16) p2p clsend;
-  moveWindowToAtticResponse(int8, uint16) p2p;
-  moveWindowFromAtticMessage(uint16, uint8, uint16) p2p clsend;
-  moveWindowFromAtticResponse(int8, uint16) p2p;
-  moveWindowMessage(uint8, uint8, uint16) p2p clsend;
-  moveWindowResponse(int8, uint16) p2p;
-  deleteWindowFromAtticMessage(blob, uint16, uint16) p2p clsend;
-  deleteWindowFromAtticResponse(int8, uint16) p2p;
-  recoverDeletedItemMessage(blob, uint16, uint16) p2p clsend;
-  recoverDeletedItemResponse(int8, uint16) p2p;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  moveItemToAtticMessage(uint32, uint16) airecv clsend;
+  moveItemToAtticResponse(int8, uint16);
+  moveItemFromAtticMessage(uint16, int16/10, int16/10, int16/100, int16/10, int16/10, int16/10, uint16) airecv clsend;
+  moveItemFromAtticResponse(int8, uint32, uint16);
+  deleteItemFromAtticMessage(blob, uint16, uint16) airecv clsend;
+  deleteItemFromAtticResponse(int8, uint16);
+  deleteItemFromRoomMessage(blob, uint32, uint16) airecv clsend;
+  deleteItemFromRoomResponse(int8, uint16);
+  moveWallpaperFromAtticMessage(uint16, uint8, uint16) airecv clsend;
+  moveWallpaperFromAtticResponse(int8, uint16);
+  deleteWallpaperFromAtticMessage(blob, uint16, uint16) airecv clsend;
+  deleteWallpaperFromAtticResponse(int8, uint16);
+  moveWindowToAtticMessage(uint8, uint16) airecv clsend;
+  moveWindowToAtticResponse(int8, uint16);
+  moveWindowFromAtticMessage(uint16, uint8, uint16) airecv clsend;
+  moveWindowFromAtticResponse(int8, uint16);
+  moveWindowMessage(uint8, uint8, uint16) airecv clsend;
+  moveWindowResponse(int8, uint16);
+  deleteWindowFromAtticMessage(blob, uint16, uint16) airecv clsend;
+  deleteWindowFromAtticResponse(int8, uint16);
+  recoverDeletedItemMessage(blob, uint16, uint16) airecv clsend;
+  recoverDeletedItemResponse(int8, uint16);
 };
 
 dclass DistributedFurnitureItem : DistributedSmoothNode {
   setItem(uint32, blob) required broadcast ram;
-  requestPosHpr(uint8, int16/10, int16/10, int16/100, int16/10, int16/10, int16/10, int16) p2p clsend;
+  requestPosHpr(uint8, int16/10, int16/10, int16/100, int16/10, int16/10, int16/10, int16) airecv clsend;
   setMode(uint8, uint32) required broadcast ram;
 };
 
 dclass DistributedBank : DistributedFurnitureItem {
-  avatarEnter() p2p clsend;
-  freeAvatar() p2p;
+  avatarEnter() airecv clsend;
+  freeAvatar();
   setMovie(uint8, uint32, int16) broadcast ram;
-  transferMoney(int16) p2p clsend;
+  transferMoney(int16) airecv clsend;
 };
 
 dclass DistributedCloset : DistributedFurnitureItem {
   setOwnerId(uint32) required broadcast ram;
-  enterAvatar() p2p clsend;
-  freeAvatar() p2p;
-  deleteItem(blob, blob, uint8) p2p clsend;
-  removeItem(blob, uint8) p2p clsend;
-  setDNA(blob, int8, uint8) p2p clsend;
+  enterAvatar() airecv clsend;
+  freeAvatar();
+  deleteItem(blob, blob, uint8) airecv clsend;
+  removeItem(blob, uint8) airecv clsend;
+  setDNA(blob, int8, uint8) airecv clsend;
   setState(uint8, uint32, uint32, string, uint8array, uint8array) broadcast ram;
   setMovie(uint8, uint32, int16) broadcast ram;
   resetItemLists() broadcast ram;
@@ -1037,14 +1037,14 @@ dclass DistributedCloset : DistributedFurnitureItem {
 
 dclass DistributedPhone : DistributedFurnitureItem {
   setInitialScale(uint8/255, uint8/255, uint8/255) required broadcast ram;
-  setNewScale(uint8/255, uint8/255, uint8/255) p2p clsend;
-  avatarEnter() p2p clsend;
-  avatarExit() p2p clsend;
-  freeAvatar() p2p;
-  setLimits(uint16) p2p;
+  setNewScale(uint8/255, uint8/255, uint8/255) airecv clsend;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  freeAvatar();
+  setLimits(uint16) airecv;
   setMovie(uint8, uint32, int32) broadcast ram;
-  requestPurchaseMessage(uint16, blob, int32) p2p clsend;
-  requestPurchaseResponse(uint16, int8) p2p;
+  requestPurchaseMessage(uint16, blob, int32) airecv clsend;
+  requestPurchaseResponse(uint16, int8);
 };
 
 dclass DistributedFireworkShow : DistributedObject {

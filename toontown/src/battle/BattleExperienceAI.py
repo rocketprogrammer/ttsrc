@@ -167,25 +167,21 @@ def assignRewards(activeToons, toonSkillPtsGained, suitsKilled, zoneId, helpfulT
 
             uberIndex = ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1
             exp = getSkillGained(toonSkillPtsGained, toon.doId, i)
-            needed = ToontownBattleGlobals.Levels[i][ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1] + ToontownBattleGlobals.UberSkill
+            needed = ToontownBattleGlobals.Levels[i][ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1]
             #print("Track %s Needed %s Current %s" % (ToontownBattleGlobals.Tracks[i], needed, exp + toon.experience.getExp(i)))
             assert(exp >= 0)
-            hasUber = 0
             totalExp = exp + toon.experience.getExp(i)
-            if (toon.inventory.numItem(i, uberIndex) > 0):
-                hasUber = 1
             if (totalExp >= (needed)) or (totalExp >= ToontownBattleGlobals.MaxSkill):
             #the toon has exceeded the uberGag tredmill threshold
             #and needs to be awarded the USE of an ubergag
             #then the toon should have their exp level reduced to the amount needed to have the uber gag
                 #print("uber threshold met")
-                if toon.inventory.totalProps < toon.getMaxCarry() and not hasUber:
+                if toon.inventory.totalProps < toon.getMaxCarry():
                 #make sure the toon has room for the uber gag
                     #print("adding uber gag")
                     uberLevel = ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1
                     #need to hang this and assign it after the toons play their movies
                     #taskMgr.doMethodLater(3.0, toon.inventory.addItem, 'ToT-phrase-reset', extraArgs=[i, uberLevel])
-                    toon.inventory.addItem(i, uberLevel)
                     toon.experience.setExp(i, ToontownBattleGlobals.Levels[i][ToontownBattleGlobals.LAST_REGULAR_GAG_LEVEL + 1])
                 else:
                     toon.experience.setExp(i, ToontownBattleGlobals.MaxSkill)

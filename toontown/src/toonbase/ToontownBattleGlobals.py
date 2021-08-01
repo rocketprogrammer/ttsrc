@@ -361,7 +361,6 @@ def getAvPropDamage( attackTrack, attackLevel, exp, organicBonus=False, propBonu
     # do 6 damage;  at more than 30 exp, the throw will max out at 6
     # damage
     #
-    print(attackTrack, attackLevel)
     minD = AvPropDamage[ attackTrack ][ attackLevel ][0][0]
     maxD = AvPropDamage[ attackTrack ][ attackLevel ][0][1]
     minE = AvPropDamage[ attackTrack ][ attackLevel ][1][0]

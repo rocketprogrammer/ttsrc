@@ -367,14 +367,12 @@ class DistributedElevatorAI(DistributedObjectAI.DistributedObjectAI):
     def getElevatorTripId(self):
         return self.elevatorTripId
 
-
     def newTrip(self):
         if self.antiShuffle:
             self.elevatorTripId = simbase.air.elevatorTripId
             if simbase.air.elevatorTripId > 2100000000:
                simbase.air.elevatorTripId = 1
             simbase.air.elevatorTripId += 1
-            self.sendUpdate("setElevatorTripId", [self.elevatorTripId])
 
     def setAntiShuffle(self, antiShuffle):
         self.antiShuffle = antiShuffle

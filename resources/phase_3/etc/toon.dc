@@ -143,8 +143,8 @@ from toontown.safezone import DistributedTagTreasure/AI
 
 dclass ToontownDistrict : DistributedDistrict {
   setParentingRules(string, string) broadcast ram;
-  setAvatarCount(uint32) required broadcast;
-  setNewAvatarCount(uint32) required broadcast;
+  setAvatarCount(uint32) required broadcast ram;
+  setNewAvatarCount(uint32) required broadcast ram;
   setStats : setAvatarCount, setNewAvatarCount;
 };
 
@@ -209,13 +209,13 @@ dclass DistributedToon : DistributedPlayer {
   setDeliverySchedule(blob = {}) required p2p db;
   setCatalogNotify(uint8 = 0, uint8 = 0) required p2p db;
   playSplashEffect(int16/10, int16/10, int16/10) broadcast ownsend;
-  setWhisperSCToontaskFrom(uint32, uint32, uint32, uint32, uint8) p2p clsend;
+  setWhisperSCToontaskFrom(uint32, uint32, uint32, uint32, uint8) ownrecv clsend;
   setSCToontask(uint32, uint32, uint32, uint8) broadcast ownsend;
-  reqSCResistance(uint16, uint32 []) p2p ownsend airecv;
+  reqSCResistance(uint16, uint32 []) ownsend airecv;
   setSCResistance(uint16, uint32 []) broadcast;
   setSpeedChatStyleIndex(uint8 = 1) required broadcast db ownsend;
   setTrophyScore(uint16) broadcast ownrecv ram;
-  setTeleportAccess(uint32array = {}) required p2p db;
+  setTeleportAccess(uint32array = {}) required ownrecv db;
   battleSOS(uint32) ownrecv clsend;
   teleportQuery(uint32) ownrecv clsend;
   teleportResponse(uint32, int8, uint32, uint32, uint32) ownrecv clsend;
@@ -225,23 +225,23 @@ dclass DistributedToon : DistributedPlayer {
   setCogCount(uint32array = {0 * 32}) required ownrecv db;
   setCogRadar(uint8array = {0 * 4}) required ownrecv db;
   setBuildingRadar(uint8array = {0 * 4}) required ownrecv db;
-  setCogLevels(uint8array = {0 * 4}) required broadcast db;
-  setCogTypes(uint8array = {0 * 4}) required broadcast db;
-  setCogParts(uint32array = {0 * 4}) required broadcast db;
+  setCogLevels(uint8array = {0 * 4}) required broadcast ownrecv db;
+  setCogTypes(uint8array = {0 * 4}) required broadcast ownrecv db;
+  setCogParts(uint32array = {0 * 4}) required broadcast ownrecv db;
   setCogMerits(uint16array = {0 * 4}) required ownrecv db;
   setCogIndex(int8) broadcast ram;
   setDisguisePageFlag(int8) ownrecv;
   setHouseId(uint32 = 0) required ownrecv db;
   setQuests(uint32array = {}) required broadcast db;
   setQuestHistory(uint16array = {}) required ownrecv db;
-  setRewardHistory(uint8 = 0, uint16array = {}) required p2p db;
+  setRewardHistory(uint8 = 0, uint16array = {}) required ownrecv db;
   setQuestCarryLimit(uint8 = 1) required p2p db;
   setCheesyEffect(int16 = 0, uint32 = 0, uint32 = 0) required broadcast db;
   setGhostMode(uint8) broadcast ram;
-  setPosIndex(uint8 = 0) required p2p db;
-  setFishCollection(uint8array = {}, uint8array = {}, uint16array = {}) required p2p db;
+  setPosIndex(uint8 = 0) required ownrecv db;
+  setFishCollection(uint8array = {}, uint8array = {}, uint16array = {}) required ownrecv db;
   setMaxFishTank(uint8 = 20) required p2p db;
-  setFishTank(uint8array = {}, uint8array = {}, uint16array = {}) required p2p db;
+  setFishTank(uint8array = {}, uint8array = {}, uint16array = {}) required ownrecv db;
   setFishingRod(uint8 = 0) required broadcast db;
   setFishingTrophies(uint8array = {}) required p2p db;
   presentPie(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, int32) broadcast ownsend;
@@ -251,8 +251,8 @@ dclass DistributedToon : DistributedPlayer {
   setNumPies(uint16) broadcast ram;
   catalogGenClothes(uint32) broadcast;
   setPetId(uint32 = 0) required broadcast db;
-  setPetMovie(uint32, uint8) p2p ownsend airecv;
-  setPetTutorialDone(uint8 = 0) required p2p db ownsend;
+  setPetMovie(uint32, uint8) ownsend airecv;
+  setPetTutorialDone(uint8 = 0) required ownsend airecv db;
   setFishBingoTutorialDone(uint8 = 0) required airecv db ownsend;
   setFishBingoMarkTutorialDone(uint8 = 0) required airecv db ownsend;
   squish(uint8) ownsend airecv;
@@ -349,10 +349,10 @@ dclass DistributedBossCog : DistributedNode {
   setToonIds(uint32array, uint32array, uint32array) broadcast ram;
   setBattleIds(uint8, uint32, uint32) broadcast ram;
   setArenaSide(uint8) broadcast ram;
-  avatarEnter() p2p clsend;
-  avatarExit() p2p clsend;
-  avatarNearEnter() p2p clsend;
-  avatarNearExit() p2p clsend;
+  avatarEnter() airecv clsend;
+  avatarExit() airecv clsend;
+  avatarNearEnter() airecv clsend;
+  avatarNearExit() airecv clsend;
   toonDied(uint32) broadcast;
   setBattleExperience(int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, int32, int16array, int16array, int16array, int16array, int16array, int16array, uint32array, uint8array) required broadcast ram;
   zapToon(int16/10, int16/10, int16/10, int16/10, int16/10, int16/10, int8/100, int8/100, uint8, int16) p2p clsend;
@@ -1078,10 +1078,10 @@ dclass DistributedLevel : DistributedObject {
   setEntranceId(uint8) required broadcast ram;
   setZoneIds(uint32array) broadcast ram;
   setStartTimestamp(int32) broadcast ram;
-  setOuch(uint8) p2p clsend;
-  requestCurrentLevelSpec(int32, string) p2p clsend;
-  setSpecDeny(blob) p2p;
-  setSpecSenderDoId(uint32) p2p;
+  setOuch(uint8) airecv clsend;
+  requestCurrentLevelSpec(int32, string) airecv clsend;
+  setSpecDeny(blob);
+  setSpecSenderDoId(uint32);
   setAttribChange(uint32, blob, blob, blob) broadcast;
 };
 
@@ -1142,7 +1142,7 @@ dclass DistributedLift : DistributedEntity {
 dclass DistributedDoorEntity : DistributedEntity {
   setLocksState(uint16) required broadcast ram;
   setDoorState(uint8, int32) required broadcast ram;
-  requestOpen() p2p clsend;
+  requestOpen() airecv clsend;
 };
 
 dclass DistributedSwitch : DistributedInteractiveEntity {
@@ -1168,11 +1168,11 @@ dclass DistributedStomper : DistributedCrusherEntity {
 
 dclass DistributedStomperPair : DistributedEntity {
   setChildren(uint32array) broadcast ram;
-  setSquash() p2p clsend;
+  setSquash() airecv clsend;
 };
 
 dclass DistributedBarrelBase : DistributedEntity {
-  requestGrab() p2p clsend;
+  requestGrab() airecv clsend;
   setGrab(uint32) broadcast ram;
   setReject() broadcast;
 };

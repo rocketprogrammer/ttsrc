@@ -808,17 +808,14 @@ class QuestManagerAI:
                                     rand = random.random() * 100
                                     if rand <= quest.getPercentChance():
                                         # FOUND IT! Increment progress by one item
-                                        #questDesc[4] += 1
+                                        questDesc[4] += 1
                                         # Keep track of all the items recovered
                                         itemsRecovered.append(quest.getItem())
-                                        #changed = 1
+                                        changed = 1
                                         self.notify.debug("recoverItems: av %s made progress: %s" % (avId, questDesc[4]))
                                     else:
                                         self.notify.debug("recoverItems: av %s made NO progress (item not found) [%s > %s])" % (avId, check, quest.getPercentChance()))
                                         itemsNotRecovered.append(quest.getItem())
-                                    #keeping track of missed items
-                                    changed = 1
-                                    questDesc[4] += 1
                                 else:
                                     self.notify.debug("recoverItems: av %s made NO progress (wrong location)" % (avId))
                             else:

@@ -541,10 +541,10 @@ dclass DistributedCannon : DistributedObject {
   setActiveState(uint8) broadcast ram;
   requestEnter() p2p clsend;
   setMovie(uint8, uint32) broadcast ram;
-  setCannonPosition(int32/100, uint32/100) p2p clsend;
-  setCannonLit(int32/100, uint32/100) p2p clsend;
-  setFired() p2p clsend;
-  setLanded() p2p clsend;
+  setCannonPosition(int32/100, uint32/100) airecv clsend;
+  setCannonLit(int32/100, uint32/100) airecv clsend;
+  setFired() airecv clsend;
+  setLanded() airecv clsend;
   updateCannonPosition(uint32, int32/100, uint32/100) broadcast ram;
   setCannonWillFire(uint32, int32/100, int32/100, uint32/100, int16) broadcast;
   setCannonExit(uint32) broadcast;
@@ -554,8 +554,8 @@ dclass DistributedTarget : DistributedObject {
   setPosition(int16/10, int16/10, int16/10) required broadcast ram;
   setState(uint8, uint32/10, uint8) broadcast;
   setReward(uint32) broadcast;
-  setResult(uint32) p2p clsend;
-  setBonus(int16/10) p2p clsend;
+  setResult(uint32) airecv clsend;
+  setBonus(int16/10) airecv clsend;
 };
 
 dclass DistributedMinigame : DistributedObject {
@@ -584,20 +584,20 @@ dclass DistributedRaceGame : DistributedMinigame {
 };
 
 dclass DistributedCannonGame : DistributedMinigame {
-  setCannonPosition(int32/100, uint32/100) p2p clsend;
-  setCannonLit(int32/100, uint32/100) p2p clsend;
+  setCannonPosition(int32/100, uint32/100) airecv clsend;
+  setCannonLit(int32/100, uint32/100) airecv clsend;
   updateCannonPosition(uint32, int32/100, uint32/100) broadcast;
   setCannonWillFire(uint32, int32/100, int32/100, uint32/100) broadcast;
-  setToonWillLandInWater(int32/100) p2p clsend;
+  setToonWillLandInWater(int32/100) airecv clsend;
   announceToonWillLandInWater(uint32, int32/100) broadcast;
 };
 
 dclass DistributedPatternGame : DistributedMinigame {
-  reportPlayerReady() p2p clsend;
+  reportPlayerReady() airecv clsend;
   setPattern(uint8array) broadcast;
-  reportPlayerPattern(uint8array, uint16/1000) p2p clsend;
+  reportPlayerPattern(uint8array, uint16/1000) airecv clsend;
   setPlayerPatterns(uint8array, uint8array, uint8array, uint8array, uint32) broadcast;
-  reportButtonPress(uint8, uint8) p2p clsend;
+  reportButtonPress(uint8, uint8) airecv clsend;
   remoteButtonPressed(uint32, uint8, uint8) broadcast;
 };
 
@@ -609,36 +609,36 @@ dclass DistributedRingGame : DistributedMinigame {
 };
 
 dclass DistributedTagGame : DistributedMinigame {
-  tag(uint32) p2p clsend;
+  tag(uint32) airecv clsend;
   setIt(uint32) broadcast;
   setTreasureScore(uint16array) broadcast;
 };
 
 dclass DistributedMazeGame : DistributedMinigame {
-  claimTreasure(uint32) p2p clsend;
+  claimTreasure(uint32) airecv clsend;
   setTreasureGrabbed(uint32, uint32) broadcast;
   allTreasuresTaken() broadcast;
   hitBySuit(uint32, int16) broadcast clsend;
 };
 
 dclass DistributedTugOfWarGame : DistributedMinigame {
-  reportPlayerReady(uint8) p2p clsend;
+  reportPlayerReady(uint8) airecv clsend;
   sendGoSignal(uint8array) broadcast;
   sendStopSignal(uint32array, uint32array, uint32array) broadcast;
   sendGameType(uint8, uint8) broadcast;
-  reportEndOfContest(uint8) p2p clsend;
-  sendNewAvIdList(uint32array) p2p clsend;
-  reportCurrentKeyRate(uint32, int16/100) p2p clsend;
+  reportEndOfContest(uint8) airecv clsend;
+  sendNewAvIdList(uint32array) airecv clsend;
+  reportCurrentKeyRate(uint32, int16/100) airecv clsend;
   sendCurrentPosition(uint32array, int16array/1000) broadcast;
   sendSuitPosition(int16/1000) broadcast;
   remoteKeyRateUpdate(uint32, uint32) broadcast;
 };
 
 dclass DistributedCatchGame : DistributedMinigame {
-  claimCatch(uint32, uint32) p2p clsend;
+  claimCatch(uint32, uint32) airecv clsend;
   setObjectCaught(uint32, uint32) broadcast;
   hitBySuit(uint32, int16) broadcast clsend;
-  reportDone() p2p clsend;
+  reportDone() airecv clsend;
   setEveryoneDone() broadcast;
 };
 
@@ -876,7 +876,7 @@ dclass DistributedNPCClerk : DistributedNPCToonBase {
 
 dclass DistributedNPCTailor : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, int16) broadcast ram;
-  setDNA(blob, int8, uint8) p2p clsend;
+  setDNA(blob, int8, uint8) airecv clsend;
   setCustomerDNA(uint32, blob) broadcast ram;
 };
 

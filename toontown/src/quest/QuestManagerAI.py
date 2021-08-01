@@ -805,10 +805,8 @@ class QuestManagerAI:
                         if avId in cogDict['activeToons']:
                             if questDesc[4] < quest.getNumItems():
                                 if quest.isLocationMatch(zoneId):
-                                    #rand = random.random() * 100
-                                    #if rand <= quest.getPercentChance():
-                                    check, count = quest.testRecover(questDesc[4])
-                                    if check:
+                                    rand = random.random() * 100
+                                    if rand <= quest.getPercentChance():
                                         # FOUND IT! Increment progress by one item
                                         #questDesc[4] += 1
                                         # Keep track of all the items recovered

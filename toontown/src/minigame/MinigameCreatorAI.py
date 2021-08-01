@@ -125,16 +125,6 @@ def createMinigame(air, playerArray, trolleyZone,
         ToontownGlobals.MazeGameId: DistributedMazeGameAI.DistributedMazeGameAI,
         ToontownGlobals.TugOfWarGameId: DistributedTugOfWarGameAI.DistributedTugOfWarGameAI,
         ToontownGlobals.CatchGameId: DistributedCatchGameAI.DistributedCatchGameAI,
-        ToontownGlobals.DivingGameId: DistributedDivingGameAI.DistributedDivingGameAI,
-        ToontownGlobals.TargetGameId: DistributedTargetGameAI.DistributedTargetGameAI,
-        ToontownGlobals.MinigameTemplateId: DistributedMinigameTemplateAI.DistributedMinigameTemplateAI,
-        ToontownGlobals.PairingGameId : DistributedPairingGameAI.DistributedPairingGameAI,
-        ToontownGlobals.VineGameId: DistributedVineGameAI.DistributedVineGameAI,
-        ToontownGlobals.IceGameId : DistributedIceGameAI.DistributedIceGameAI,
-        ToontownGlobals.CogThiefGameId : DistributedCogThiefGameAI.DistributedCogThiefGameAI,
-        ToontownGlobals.TwoDGameId : DistributedTwoDGameAI.DistributedTwoDGameAI,
-        ToontownGlobals.TravelGameId : DistributedTravelGameAI.DistributedTravelGameAI,
-        ToontownGlobals.PhotoGameId: DistributedPhotoGameAI.DistributedPhotoGameAI,
         }
 
 

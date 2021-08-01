@@ -631,44 +631,29 @@ MinigameNames = {
     "ring" : RingGameId,
     "maze" : MazeGameId,
     "tug" : TugOfWarGameId,
-    "catch" : CatchGameId,
-    "diving" : DivingGameId,
-    "target" : TargetGameId,
-    "pairing" : PairingGameId,
-    "vine" : VineGameId,
-    "ice" : IceGameId,
-    "thief" : CogThiefGameId,
-    "2d" : TwoDGameId,
-    "photo" : PhotoGameId,
-    "travel" : TravelGameId,
+    "catch" : CatchGameId
     }
 
 # the minigame template; not used in final game
 MinigameTemplateId = -1
 
 
-MinigameIDs = ( RaceGameId, CannonGameId, TagGameId, PatternGameId, RingGameId, MazeGameId, TugOfWarGameId, CatchGameId, DivingGameId, TargetGameId, PairingGameId, VineGameId, IceGameId, CogThiefGameId, TwoDGameId, PhotoGameId, TravelGameId,)
+MinigameIDs = ( RaceGameId, CannonGameId, TagGameId, PatternGameId, RingGameId, MazeGameId, TugOfWarGameId, CatchGameId,)
 
 
 # Minigame Id list
 MinigamePlayerMatrix = {
     # If you only have one player, choose from these games
     # Technically pattern game can be single player, but it is not nearly as fun, especially for demos
-    1 : (CannonGameId, RingGameId, MazeGameId, TugOfWarGameId, CatchGameId,
-         DivingGameId, TargetGameId, PairingGameId, VineGameId,
-         CogThiefGameId, PhotoGameId, TwoDGameId),
+    1 : (CannonGameId, RingGameId, MazeGameId, TugOfWarGameId, CatchGameId),
     # If you have exactly two players, choose from these games
-    2 : (CannonGameId, PatternGameId, RingGameId, TagGameId, MazeGameId, TugOfWarGameId, CatchGameId,
-         DivingGameId, TargetGameId, PairingGameId, VineGameId,
-         IceGameId, CogThiefGameId, PhotoGameId, TwoDGameId),
+    2 : (CannonGameId, PatternGameId, RingGameId, TagGameId, MazeGameId, TugOfWarGameId, CatchGameId),
     # If you have exactly three players, choose from these games
     3 : (CannonGameId, PatternGameId, RingGameId, TagGameId, RaceGameId, MazeGameId, TugOfWarGameId, CatchGameId,
-         DivingGameId, TargetGameId, PairingGameId, VineGameId,
+         DivingGameId, PairingGameId, VineGameId,
          IceGameId, CogThiefGameId, PhotoGameId, TwoDGameId),
     # If you have exactly four players, choose from these games
-    4 : (CannonGameId, PatternGameId, RingGameId, TagGameId, RaceGameId, MazeGameId, TugOfWarGameId, CatchGameId,
-         DivingGameId, TargetGameId, PairingGameId, VineGameId,
-         IceGameId, CogThiefGameId, PhotoGameId, TwoDGameId),
+    4 : (CannonGameId, PatternGameId, RingGameId, TagGameId, RaceGameId, MazeGameId, TugOfWarGameId, CatchGameId),
     }
 
 # we are releasing one minigame a week for the new minigames

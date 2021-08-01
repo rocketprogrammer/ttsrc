@@ -391,8 +391,8 @@ dclass DistributedCashbotBossCrane : DistributedObject {
   setBossCogId(uint32) required broadcast ram;
   setIndex(uint8) required broadcast ram;
   setState(char, uint32) broadcast ram;
-  requestControl() p2p clsend;
-  requestFree() p2p clsend;
+  requestControl() airecv clsend;
+  requestFree() airecv clsend;
   clearSmoothing(int8) broadcast clsend;
   setCablePos(uint8, int16/100, uint16%360/100, LinkPosition [3], int16) broadcast clsend;
 };
@@ -400,22 +400,22 @@ dclass DistributedCashbotBossCrane : DistributedObject {
 dclass DistributedCashbotBossObject : DistributedSmoothNode {
   setBossCogId(uint32) required broadcast ram;
   setObjectState(char, uint32, uint32) broadcast ram;
-  requestGrab() p2p clsend;
-  rejectGrab() p2p;
-  requestDrop() p2p clsend;
-  hitFloor() p2p clsend;
+  requestGrab() airecv clsend;
+  rejectGrab();
+  requestDrop() airecv clsend;
+  hitFloor() clsend;
   requestFree(int16/10, int16/10, int16/10, uint16%360/100) p2p clsend;
   hitBoss(uint16/255) p2p clsend;
 };
 
 dclass DistributedCashbotBossSafe : DistributedCashbotBossObject {
   setIndex(uint8) required broadcast ram;
-  requestInitial() p2p clsend;
+  requestInitial() airecv clsend;
 };
 
 dclass DistributedCashbotBossGoon : DistributedCashbotBossObject {
-  requestBattle(int16/10) p2p clsend;
-  requestStunned(int16/10) p2p clsend;
+  requestBattle(int16/10) airecv clsend;
+  requestStunned(int16/10) airecv clsend;
   setVelocity(uint8/10) broadcast ram;
   setHFov(uint8) broadcast ram;
   setAttackRadius(uint8) broadcast ram;

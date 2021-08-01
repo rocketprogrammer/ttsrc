@@ -20,7 +20,6 @@ CatalogTypeBackorder = 2
 CatalogTypeMonthly = 3
 
 class CatalogItem:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CatalogItem')
 
     def __init__(self, *args, **kw):

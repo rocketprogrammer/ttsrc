@@ -18,7 +18,6 @@ AShorts = 6
 ClothingTypes = {101: (ABoysShirt, 'bss1', 40), 102: (ABoysShirt, 'bss2', 40), 103: (ABoysShirt, 'bss3', 40), 105: (ABoysShirt, 'bss4', 40), 104: (ABoysShirt, 'bss5', 40), 106: (ABoysShirt, 'bss6', 40), 107: (ABoysShirt, 'bss7', 40), 108: (ABoysShirt, 'bss8', 40), 109: (ABoysShirt, 'bss9', 40), 111: (ABoysShirt, 'bss11', 40), 115: (ABoysShirt, 'bss15', 40), 116: (ABoysShirt, 'c_ss1', 80), 117: (ABoysShirt, 'c_ss2', 80), 118: (ABoysShirt, 'c_bss1', 80), 119: (ABoysShirt, 'c_bss2', 80), 120: (ABoysShirt, 'c_ss3', 80), 121: (ABoysShirt, 'c_bss3', 80), 122: (ABoysShirt, 'c_bss4', 80), 123: (ABoysShirt, 'c_ss4', 120), 124: (ABoysShirt, 'c_ss5', 120), 125: (AShirt, 'c_ss6', 120), 126: (AShirt, 'c_ss7', 120), 127: (AShirt, 'c_ss8', 120), 128: (AShirt, 'c_ss9', 120), 129: (AShirt, 'c_ss10', 120), 130: (AShirt, 'c_ss11', 120), 131: (ABoysShirt, 'c_ss12', 160), 201: (AGirlsShirt, 'gss1', 40), 202: (AGirlsShirt, 'gss2', 40), 203: (AGirlsShirt, 'gss3', 40), 205: (AGirlsShirt, 'gss4', 40), 204: (AGirlsShirt, 'gss5', 40), 206: (AGirlsShirt, 'gss6', 40), 207: (AGirlsShirt, 'gss7', 40), 208: (AGirlsShirt, 'gss8', 40), 209: (AGirlsShirt, 'gss9', 40), 211: (AGirlsShirt, 'gss11', 40), 215: (AGirlsShirt, 'gss15', 40), 216: (AGirlsShirt, 'c_ss1', 80), 217: (AGirlsShirt, 'c_ss2', 80), 218: (AGirlsShirt, 'c_gss1', 80), 219: (AGirlsShirt, 'c_gss2', 80), 220: (AGirlsShirt, 'c_ss3', 80), 221: (AGirlsShirt, 'c_gss3', 80), 222: (AGirlsShirt, 'c_gss4', 80), 223: (AGirlsShirt, 'c_gss5', 80), 224: (AGirlsShirt, 'c_ss4', 120), 225: (AGirlsShirt, 'c_ss13', 160), 301: (ABoysShorts, 'bbs1', 50), 302: (ABoysShorts, 'bbs2', 50), 303: (ABoysShorts, 'bbs3', 50), 304: (ABoysShorts, 'bbs4', 50), 305: (ABoysShorts, 'bbs5', 50), 308: (ABoysShorts, 'bbs8', 50), 310: (ABoysShorts, 'c_bs1', 120), 311: (ABoysShorts, 'c_bs2', 120), 312: (ABoysShorts, 'c_bs3', 120), 313: (ABoysShorts, 'c_bs4', 120), 314: (ABoysShorts, 'c_bs5', 160), 401: (AGirlsSkirt, 'gsk1', 50), 403: (AGirlsSkirt, 'gsk3', 50), 404: (AGirlsSkirt, 'gsk4', 50), 405: (AGirlsSkirt, 'gsk5', 50), 407: (AGirlsSkirt, 'gsk7', 50), 408: (AGirlsSkirt, 'c_gsk1', 100), 409: (AGirlsSkirt, 'c_gsk2', 100), 410: (AGirlsSkirt, 'c_gsk3', 100), 411: (AGirlsSkirt, 'c_gsk4', 120), 412: (AGirlsSkirt, 'c_gsk5', 120), 413: (AGirlsSkirt, 'c_gsk6', 120), 414: (AGirlsSkirt, 'c_gsk7', 160), 451: (AGirlsShorts, 'gsh1', 50), 452: (AGirlsShorts, 'gsh2', 50), 453: (AGirlsShorts, 'gsh3', 50), 1001: (AShirt, 'hw_ss1', 200), 1002: (AShirt, 'hw_ss2', 200), 1100: (AShirt, 'wh_ss1', 200), 1101: (AShirt, 'wh_ss2', 200), 1102: (AShirt, 'wh_ss3', 200), 1103: (AShirt, 'wh_ss4', 200), 1200: (AGirlsShirt, 'vd_ss1', 200), 1201: (AShirt, 'vd_ss2', 200), 1202: (ABoysShirt, 'vd_ss3', 200), 1203: (AGirlsShirt, 'vd_ss4', 200), 1204: (AGirlsSkirt, 'vd_gs1', 200), 1205: (ABoysShorts, 'vd_bs1', 200), 1300: (AShirt, 'sd_ss1', 200), 1301: (AShirt, 'sd_ss2', 225), 1302: (AGirlsShorts, 'sd_gs1', 200), 1303: (ABoysShorts, 'sd_bs1', 200), 1400: (AShirt, 'tc_ss1', 200), 1401: (AShirt, 'tc_ss2', 200), 1402: (AShirt, 'tc_ss3', 200), 1500: (AShirt, 'j4_ss1', 200), 1501: (AShirt, 'j4_ss2', 200), 1502: (ABoysShorts, 'j4_bs1', 200), 1503: (AGirlsSkirt, 'j4_gs1', 200)}
 
 class CatalogClothingItem(CatalogItem.CatalogItem):
-    __module__ = __name__
 
     def makeNewItem(self, clothingType, colorIndex):
         self.clothingType = clothingType
@@ -44,26 +43,31 @@ class CatalogClothingItem(CatalogItem.CatalogItem):
     def reachedPurchaseLimit(self, avatar):
         if avatar.onOrder.count(self) != 0:
             return 1
+
         if avatar.mailboxContents.count(self) != 0:
             return 1
+
         str = ClothingTypes[self.clothingType][CTString]
         dna = avatar.getStyle()
         if self.isShirt():
             defn = ToonDNA.ShirtStyles[str]
             if dna.topTex == defn[0] and dna.topTexColor == defn[2][self.colorIndex][0] and dna.sleeveTex == defn[1] and dna.sleeveTexColor == defn[2][self.colorIndex][1]:
                 return 1
+
             l = avatar.clothesTopsList
             for i in range(0, len(l), 4):
-                if l[i] == defn[0] and l[(i + 1)] == defn[2][self.colorIndex][0] and l[(i + 2)] == defn[1] and l[(i + 3)] == defn[2][self.colorIndex][1]:
+                if l[i] == defn[0] and l[i + 1] == defn[2][self.colorIndex][0] and l[i + 2] == defn[1] and l[i + 3] == defn[2][self.colorIndex][1]:
                     return 1
 
-        defn = ToonDNA.BottomStyles[str]
-        if dna.botTex == defn[0] and dna.botTexColor == defn[1][self.colorIndex]:
-            return 1
-        l = avatar.clothesBottomsList
-        for i in range(0, len(l), 2):
-            if l[i] == defn[0] and l[(i + 1)] == defn[1][self.colorIndex]:
+        else:
+            defn = ToonDNA.BottomStyles[str]
+            if dna.botTex == defn[0] and dna.botTexColor == defn[1][self.colorIndex]:
                 return 1
+
+            l = avatar.clothesBottomsList
+            for i in range(0, len(l), 2):
+                if l[i] == defn[0] and l[i + 1] == defn[1][self.colorIndex]:
+                    return 1
 
         return 0
 

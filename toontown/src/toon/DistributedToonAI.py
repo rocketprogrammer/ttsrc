@@ -2225,9 +2225,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
     def d_setDeliverySchedule(self, onOrder):
         self.sendUpdate("setDeliverySchedule", [onOrder.getBlob(store = CatalogItem.Customization | CatalogItem.DeliveryDate)])
 
-
-
-
     def setDeliverySchedule(self, onOrder, doUpdateLater = True):
         self.setBothSchedules(onOrder, None)
         return
@@ -2304,7 +2301,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
             nextGiftTime = None
             if self.onOrder:
                 nextTime = self.onOrder.getNextDeliveryDate()
-                nextItem = self.onOrder.getNextDeliveryItem()
+                nextItem = 0
             if self.onGiftOrder:
                 nextGiftTime = self.onGiftOrder.getNextDeliveryDate()
                 nextGiftItem = self.onGiftOrder.getNextDeliveryItem()

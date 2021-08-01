@@ -202,8 +202,6 @@ class ToontownAIRepository(AIDistrict):
                     if npcId in NPCToons.NPCToonDict:
                         del NPCToons.NPCToonDict[npcId]
 
-        NPCToons.generateZone2NpcDict()
-
         if not simbase.config.GetBool('want-suits-everywhere', 1):
             # This is a special mode for development: we don't want
             # suits walking around all over the world.  Turn off all

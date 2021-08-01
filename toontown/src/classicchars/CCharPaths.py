@@ -309,7 +309,7 @@ __donaldPaths = {
            ('d','g')
            ),
     'd' : (Point3(68.745,91.227,0.025), # across bed from trolley
-           ('k','i')
+           ('c','i')
            ),
     'e' : (Point3(4.047,94.260,0.025), # front of cog hq. entrance
            ('i','j')

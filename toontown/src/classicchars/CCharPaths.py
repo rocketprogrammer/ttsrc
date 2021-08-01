@@ -1,4 +1,4 @@
-from pandac.PandaModules import Point3 
+from pandac.PandaModules import Point3
 from pandac.PandaModules import Vec3
 import copy
 from toontown.toonbase import TTLocalizer
@@ -52,14 +52,14 @@ __mickeyWaypoints = (
     ('a','e',1,[]),
     ('b','e',1,[]),
     ('e','f',1,[Point3(-76.87, -7.85, -1.85),
-                Point3(-80.57, -4.0, -1.85),                
+                Point3(-80.57, -4.0, -1.85),
                 ]),
     ('f','g',1,[Point3(-106.62, 28.65, -1.5),]),
     ('g','h',1,[Point3(-128.38, 60.27, 0.5),]),
     #('g','h',1,[Point3(-134.96, 60.34, 0.5),]),
-    ('h','f',1,[]),    
+    ('h','f',1,[]),
     ('h','i',1,[Point3(-137.13, -42.79, 0.5),]),
-    ('i','f',1,[]),        
+    ('i','f',1,[]),
     )
 
 __minniePaths = {
@@ -166,7 +166,7 @@ __minnieWaypoints = (
     ('h','j',1,[]),
     ('s','b',1,[]),
     ('t','u',1,[]), # curb down
-    ('x','y',1,[]), # curb up 
+    ('x','y',1,[]), # curb up
     )
 
 __goofyPaths = {
@@ -248,37 +248,37 @@ __goofySpeedwayPaths = {
     #    ...
     #   )
     # )
-    'a' : (Point3(-9.0,-19.517,-0.323), # near store rear entrance 
+    'a' : (Point3(-9.0,-19.517,-0.323), # near store rear entrance
            ('b','k')
            ),
     'b' : (Point3(-30.047,-1.578,-0.373), # by giant wrenches
            ('a','c')
            ),
-    'c' : (Point3(-10.367,49.042,-0.373), # in front of TTC entrance 
+    'c' : (Point3(-10.367,49.042,-0.373), # in front of TTC entrance
            ('b','d')
            ),
-    'd' : (Point3(38.439,44.348,-0.373), # near car showoff platform 
+    'd' : (Point3(38.439,44.348,-0.373), # near car showoff platform
            ('c','e')
            ),
-    'e' : (Point3(25.527,-2.395,-0.373), # near giant tires 
+    'e' : (Point3(25.527,-2.395,-0.373), # near giant tires
            ('d','f')
            ),
     'f' : (Point3(-4.043,-59.865,-0.003), # in tunnel to track area
            ('e','g')
            ),
-    'g' : (Point3(0.390,-99.475,-0.009), # in front of leaderboard 
+    'g' : (Point3(0.390,-99.475,-0.009), # in front of leaderboard
            ('f','h')
            ),
-    'h' : (Point3(21.147,-109.127,-0.013), # near city race track 
+    'h' : (Point3(21.147,-109.127,-0.013), # near city race track
            ('g','i')
            ),
-    'i' : (Point3(5.981,-147.606,-0.013), # near stadium race track 
+    'i' : (Point3(5.981,-147.606,-0.013), # near stadium race track
            ('h','j')
            ),
-    'j' : (Point3(-24.898,-120.618,-0.013), # near rural race track 
+    'j' : (Point3(-24.898,-120.618,-0.013), # near rural race track
            ('i','k')
            ),
-    'k' : (Point3(-2.710,-90.315,-0.011), # near tunnel to kart shop 
+    'k' : (Point3(-2.710,-90.315,-0.011), # near tunnel to kart shop
            ('j','a')
            ),
     }
@@ -306,7 +306,7 @@ __donaldPaths = {
            ('a','h')
            ),
     'c' : (Point3(68.417,-91.929,0.025), # by trolley
-           ('m','g')
+           ('d','g')
            ),
     'd' : (Point3(68.745,91.227,0.025), # across bed from trolley
            ('k','i')
@@ -329,24 +329,12 @@ __donaldPaths = {
     'j' : (Point3(-48.960,88.565,0.025), # near cog hq. entrance
            ('e','f')
            ),
-    'k' : (Point3(75.118,  52.840,  -16.620), # north of party gate
-           ('d','l')
-           ),
-    'l' : (Point3(44.677,  27.091,  -15.385 ), # west of party gate
-           ('k','m')
-           ),
-    'm' : (Point3(77.009,  -16.022,  -14.975 ), # south of party gate
-           ('l','c')
-           ),
     }
 
 __donaldWaypoints = (
     # from, to, waypoints
-    ('d','k',1,[]),
-    ('k','l',1,[]),
-    ('l','m',1,[]),
-    ('m', 'c', 1, []),
-    ('b','a',1,[Point3(-55.883,-89.0,0.025),]),    
+    ('d','c',1,[]),
+    ('b','a',1,[Point3(-55.883,-89.0,0.025),]),
     )
 
 __plutoPaths = {
@@ -389,10 +377,10 @@ __plutoWaypoints = (
     ('e','a',1,[Point3(-77.2,28.5,6.2),
                 Point3(-76.4,12.0,3.0),
                 Point3(-93.2,-21.2,3.0),]),
-                
+
     )
-    
-    
+
+
 __daisyPaths = {
     # for each node:
     # (
@@ -498,25 +486,25 @@ __chipPaths = {
 
 __chipWaypoints = (
     ('a','b',1,[]),
-    ('a','k',1,[]),    
+    ('a','k',1,[]),
     ('b','c',1,[]),
     ('b','j',1,[]),
     ('c','d',1,[]),
     ('d','e',1,[]),
     ('e','f',1,[]),
-    ('e','i',1,[]),    
+    ('e','i',1,[]),
     ('f','g',1,[]),
-    ('f','j',1,[]),    
+    ('f','j',1,[]),
     ('g','h',1,[]),
     ('g','j',1,[]),
     ('h','i',1,[]),
-    ('j','k',1,[]),             
+    ('j','k',1,[]),
     )
 
 # when Dale is going over a bridge, have him orbit closer
 DaleOrbitDistanceOverride = {
     ('b','c') : 2.5,
-    ('e','f') : 2.5,  
+    ('e','f') : 2.5,
     }
 
 startNode = 'a'
@@ -548,7 +536,7 @@ def getPaths(charName, location = 0):
     elif charName==TTLocalizer.Chip:
         return __chipPaths
     elif charName==TTLocalizer.Dale:
-        return __chipPaths    
+        return __chipPaths
     elif charName==TTLocalizer.DonaldDock:
         return {'a':(Point3(0,0,0),'a')}
     else:
@@ -572,7 +560,7 @@ def __getWaypointList(paths):
     elif paths==__chipPaths:
         return __chipWaypoints
     elif paths==__dalePaths:
-        return __chipWaypoints      
+        return __chipWaypoints
     else:
         assert 0, "Unknown waypoint information"
 
@@ -617,14 +605,14 @@ def getRaycastFlag(fromNode, toNode, paths):
                     result = 1
                     break
     return result
-    
+
 def getPointsFromTo(fromNode, toNode, paths):
     startPoint = Point3(getNodePos(fromNode,paths))
     endPoint = Point3(getNodePos(toNode,paths))
     return [startPoint] + getWayPoints(fromNode, toNode, paths) + [endPoint]
 
 def getWalkDuration(fromNode, toNode, velocity, paths):
-    
+
     posPoints = getPointsFromTo(fromNode, toNode, paths)
 
     duration = 0
@@ -635,7 +623,7 @@ def getWalkDuration(fromNode, toNode, velocity, paths):
         # Calculate the amount of time it will take to walk
         distance = Vec3(endPoint - startPoint).length()
         duration += distance / velocity
-        
+
     return duration
 
 
@@ -650,7 +638,7 @@ def getWalkDistance(fromNode, toNode, velocity, paths):
         # Calculate the amount of time it will take to walk
         distance = Vec3(endPoint - startPoint).length()
         retval += distance
-        
+
     return retval
-                    
+
 

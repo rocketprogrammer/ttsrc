@@ -891,11 +891,11 @@ dclass DistributedNPCFisherman : DistributedNPCToonBase {
 
 dclass DistributedNPCPetclerk : DistributedNPCToonBase {
   setMovie(uint8, uint32, uint32, uint32array, int16) broadcast ram;
-  setPetSeeds(uint32array) p2p;
-  petAdopted(uint8, uint32) p2p clsend;
-  petReturned() p2p clsend;
-  fishSold() p2p clsend;
-  transactionDone() p2p clsend;
+  setPetSeeds(uint32array);
+  petAdopted(uint8, uint32) airecv clsend;
+  petReturned() airecv clsend;
+  fishSold() airecv clsend;
+  transactionDone() airecv clsend;
 };
 
 dclass DistributedKnockKnockDoor : DistributedAnimatedProp {

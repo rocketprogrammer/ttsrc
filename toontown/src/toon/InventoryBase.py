@@ -300,10 +300,6 @@ class InventoryBase(DirectObject.DirectObject):
                     #print("invalid norm %s" % (tempInv[track][level] ))
                     #import pdb; pdb.set_trace()
                     return 0
-                #UBER no buying of the ubergags
-                if (level > LAST_REGULAR_GAG_LEVEL) and (tempInv[track][level] > self.inventory[track][level]) or allowUber:
-                    #print("invalid uber")
-                    return 0
         return 1
 
     def getMinCostOfPurchase(self, newInventory):

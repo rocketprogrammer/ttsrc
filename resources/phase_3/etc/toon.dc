@@ -157,9 +157,9 @@ dclass WelcomeValleyManager : DistributedObject {
 dclass DistributedAnimatedProp : DistributedObject {
   setPropId(uint16) required broadcast ram;
   setAvatarInteract(uint32) required broadcast ram;
-  requestInteract() p2p clsend;
-  rejectInteract() p2p;
-  requestExit() p2p clsend;
+  requestInteract() airecv clsend;
+  rejectInteract();
+  requestExit() airecv clsend;
   avatarExit(uint32) broadcast;
   setState(string, int16) required broadcast ram;
 };
@@ -577,7 +577,7 @@ dclass DistributedMinigameTemplate : DistributedMinigame {
 
 dclass DistributedRaceGame : DistributedMinigame {
   setTimerStartTime(int16) broadcast;
-  setAvatarChoice(uint8) p2p clsend;
+  setAvatarChoice(uint8) airecv clsend;
   setAvatarChose(uint32) broadcast;
   setChancePositions(uint8array) broadcast;
   setServerChoices(int8array, uint8array, int8array) broadcast;
@@ -981,7 +981,7 @@ dclass DistributedFurnitureManager : DistributedObject {
   setAtticWallpaper(blob) required broadcast ram;
   setAtticWindows(blob) required broadcast ram;
   setDeletedItems(blob) required broadcast ram;
-  suggestDirector(uint32) p2p clsend;
+  suggestDirector(uint32) airecv clsend;
   setDirector(uint32) broadcast ram;
   avatarEnter() airecv clsend;
   avatarExit() airecv clsend;
@@ -1067,9 +1067,9 @@ dclass LobbyManager : DistributedObject {
 dclass DistributedLargeBlobSender : DistributedObject {
   setMode(uint8) required broadcast ram;
   setTargetAvId(uint32) required broadcast ram;
-  setChunk(blob) p2p;
-  setFilename(string) p2p;
-  setAck() p2p clsend;
+  setChunk(blob);
+  setFilename(string);
+  setAck() airecv clsend;
 };
 
 dclass DistributedLevel : DistributedObject {
@@ -1092,9 +1092,9 @@ dclass DistributedEntity : DistributedObject {
 
 dclass DistributedInteractiveEntity : DistributedEntity {
   setAvatarInteract(uint32) required broadcast ram;
-  requestInteract() p2p clsend;
-  rejectInteract() p2p;
-  requestExit() p2p clsend;
+  requestInteract() airecv clsend;
+  rejectInteract();
+  requestExit() airecv clsend;
   avatarExit(uint32) broadcast;
   setState(string, int32) required broadcast ram;
 };
@@ -1126,17 +1126,17 @@ dclass DistributedInGameEditor : DistributedObject {
   setEditorAvId(uint32) required broadcast ram;
   setEditUsername(blob) required broadcast ram;
   setLevelDoId(uint32) required broadcast ram;
-  requestCurrentLevelSpec() p2p clsend;
-  setSpecSenderDoId(uint32) p2p;
-  setEdit(uint32, blob, blob, blob) p2p clsend;
-  setAttribChange(uint32, blob, blob, blob) p2p;
-  setFinished() p2p clsend;
+  requestCurrentLevelSpec() airecv clsend;
+  setSpecSenderDoId(uint32);
+  setEdit(uint32, blob, blob, blob) airecv clsend;
+  setAttribChange(uint32, blob, blob, blob);
+  setFinished() airecv clsend;
 };
 
 dclass DistributedLift : DistributedEntity {
   setStateTransition(uint8, uint8, uint32) required broadcast ram;
-  setAvatarEnter() p2p clsend;
-  setAvatarLeave() p2p clsend;
+  setAvatarEnter() airecv clsend;
+  setAvatarLeave() airecv clsend;
 };
 
 dclass DistributedDoorEntity : DistributedEntity {
@@ -1200,23 +1200,23 @@ dclass CrusherCell : ActiveCell {
 };
 
 dclass DistributedCrate : DistributedCrushableEntity {
-  requestPush(uint8) p2p clsend;
-  setReject() p2p;
+  requestPush(uint8) airecv clsend;
+  setReject();
   setAccept() broadcast;
   setMoveTo(uint32, int16/10, int16/10, int16/10, int16/10, int16/10, int16/10) broadcast ram;
-  setDone() p2p clsend;
+  setDone() airecv clsend;
 };
 
 dclass DistributedSinkingPlatform : DistributedEntity {
-  setOnOff(uint8, uint32) p2p clsend;
+  setOnOff(uint8, uint32) airecv clsend;
   setSinkMode(uint32, uint8, uint32) broadcast ram;
 };
 
 dclass DistributedGoon : DistributedCrushableEntity {
-  requestBattle(int16/10) p2p clsend;
-  requestStunned(int16/10) p2p clsend;
-  requestResync() p2p clsend;
-  setParameterize(int16/10, int16/10, int16/10, uint32) p2p clsend;
+  requestBattle(int16/10) airecv clsend;
+  requestStunned(int16/10) airecv clsend;
+  requestResync() airecv clsend;
+  setParameterize(int16/10, int16/10, int16/10, uint32) airecv clsend;
   setMovie(uint8, uint32, int32/10, int16) broadcast ram;
 };
 

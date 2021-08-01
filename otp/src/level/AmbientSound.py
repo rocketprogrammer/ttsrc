@@ -1,8 +1,9 @@
 from direct.interval.IntervalGlobal import *
-import BasicEntities
-import random
+import BasicEntities, random
 
 class AmbientSound(BasicEntities.NodePathEntity):
+    __module__ = __name__
+
     def __init__(self, level, entId):
         BasicEntities.NodePathEntity.__init__(self, level, entId)
         self.initSound()
@@ -19,10 +20,10 @@ class AmbientSound(BasicEntities.NodePathEntity):
         self.sound = base.loadSfx(self.soundPath)
         if self.sound is None:
             return
-        self.soundIval = SoundInterval(self.sound, node=self,
-                                       volume=self.volume)
+        self.soundIval = SoundInterval(self.sound, node=self, volume=self.volume)
         self.soundIval.loop()
         self.soundIval.setT(random.random() * self.sound.length())
+        return
 
     def destroySound(self):
         if hasattr(self, 'soundIval'):
@@ -32,6 +33,7 @@ class AmbientSound(BasicEntities.NodePathEntity):
             del self.sound
 
     if __dev__:
+
         def attribChanged(self, *args):
             self.destroySound()
             self.initSound()

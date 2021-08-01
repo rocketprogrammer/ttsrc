@@ -1,4 +1,4 @@
-from pandac.PandaModules import *
+from direct.showbase.ShowBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
@@ -9,8 +9,8 @@ from toontown.toonbase import TTLocalizer
 from toontown.coghq import DistributedMintRoom, MintLayout, MintRoom
 
 class DistributedMint(DistributedObject.DistributedObject):
+    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedMint')
-
     ReadyPost = 'MintReady'
     WinEvent = 'MintWinEvent'
 
@@ -20,29 +20,22 @@ class DistributedMint(DistributedObject.DistributedObject):
     def generate(self):
         self.notify.debug('generate: %s' % self.doId)
         DistributedObject.DistributedObject.generate(self)
-
         bboard.post('mint', self)
-
         self.roomWatcher = None
         self.geom = None
         self.rooms = []
         self.hallways = []
         self.allRooms = []
         self.curToonRoomNum = None
-
         base.localAvatar.setCameraCollisionsCanMove(1)
-
-        # place local toon here just in case we don't have an entrancePoint
-        # entity set up
         base.localAvatar.reparentTo(render)
-        base.localAvatar.setPosHpr(0,0,0,0,0,0)
-
+        base.localAvatar.setPosHpr(0, 0, 0, 0, 0, 0)
         self.accept('SOSPanelEnter', self.handleSOSPanel)
+        return
 
-    # required fields
     def setZoneId(self, zoneId):
         self.zoneId = zoneId
-        
+
     def setMintId(self, id):
         DistributedMint.notify.debug('setMintId: %s' % id)
         self.mintId = id
@@ -54,215 +47,176 @@ class DistributedMint(DistributedObject.DistributedObject):
 
     def setRoomDoIds(self, roomDoIds):
         self.roomDoIds = roomDoIds
-        self.roomWatcher = BulletinBoardWatcher.BulletinBoardWatcher(
-            'roomWatcher-%s' % self.doId,
-            [DistributedMintRoom.getMintRoomReadyPostName(doId)
-             for doId in self.roomDoIds], self.gotAllRooms)
+        self.roomWatcher = BulletinBoardWatcher.BulletinBoardWatcher('roomWatcher-%s' % self.doId, [ DistributedMintRoom.getMintRoomReadyPostName(doId) for doId in self.roomDoIds ], self.gotAllRooms)
 
     def gotAllRooms(self):
         self.notify.debug('mint %s: got all rooms' % self.doId)
         self.roomWatcher.destroy()
         self.roomWatcher = None
-
         self.geom = render.attachNewNode('mint%s' % self.doId)
-
-        # fill out our table of rooms
         for doId in self.roomDoIds:
             self.rooms.append(base.cr.doId2do[doId])
-            self.rooms[-1].setMint(self)
+            self.rooms[(-1)].setMint(self)
 
-        self.notify.info('mintId %s, floor %s, %s' % (
-            self.mintId, self.floorNum, self.rooms[0].avIdList))
-
+        self.notify.info('mintId %s, floor %s, %s' % (self.mintId, self.floorNum, self.rooms[0].avIdList))
         rng = self.layout.getRng()
         numRooms = self.layout.getNumRooms()
-
-        for i, room in enumerate(self.rooms):
-            # there's a hallway between each pair of rooms
+        for (i, room) in enumerate(self.rooms):
             if i == 0:
                 room.getGeom().reparentTo(self.geom)
             else:
-                # attach the room to the preceding hallway
-                room.attachTo(self.hallways[i-1], rng)
+                room.attachTo(self.hallways[(i - 1)], rng)
             self.allRooms.append(room)
             self.listenForFloorEvents(room)
-            
-            if i < (numRooms-1):
-                # add a hallway leading out of the room
+            if i < numRooms - 1:
                 hallway = MintRoom.MintRoom(self.layout.getHallwayModel(i))
                 hallway.attachTo(room, rng)
-                hallway.setRoomNum((i*2)+1)
+                hallway.setRoomNum(i * 2 + 1)
                 hallway.initFloorCollisions()
                 hallway.enter()
                 self.hallways.append(hallway)
                 self.allRooms.append(hallway)
                 self.listenForFloorEvents(hallway)
 
-        # listen for camera-ray/floor collision events
         def handleCameraRayFloorCollision(collEntry, self=self):
             name = collEntry.getIntoNode().getName()
             self.notify.debug('camera floor ray collided with: %s' % name)
             prefix = MintRoom.MintRoom.FloorCollPrefix
             prefixLen = len(prefix)
-            if (name[:prefixLen] == prefix):
+            if name[:prefixLen] == prefix:
                 try:
                     roomNum = int(name[prefixLen:])
                 except:
-                    DistributedLevel.notify.warning(
-                        'Invalid zone floor collision node: %s'
-                        % name)
+                    DistributedLevel.notify.warning('Invalid zone floor collision node: %s' % name)
                 else:
                     self.camEnterRoom(roomNum)
-        self.accept('on-floor', handleCameraRayFloorCollision)
 
+        self.accept('on-floor', handleCameraRayFloorCollision)
         if bboard.has('mintRoom'):
             self.warpToRoom(bboard.get('mintRoom'))
-
-        # get this event name before we send out our first setZone
         firstSetZoneDoneEvent = self.cr.getNextSetZoneDoneEvent()
-        # wait until the first viz setZone completes before announcing
-        # that we're ready to go
+
         def handleFirstSetZoneDone():
             self.notify.debug('mintHandleFirstSetZoneDone')
-            # NOW we're ready.
             bboard.post(DistributedMint.ReadyPost, self)
-        self.acceptOnce(firstSetZoneDoneEvent, handleFirstSetZoneDone)
 
-        # listen to all of the network zones; no network visibility for now
-        zoneList = [OTPGlobals.UberZone, self.zoneId]
+        self.acceptOnce(firstSetZoneDoneEvent, handleFirstSetZoneDone)
+        zoneList = [
+         OTPGlobals.UberZone, self.zoneId]
         for room in self.rooms:
             zoneList.extend(room.zoneIds)
-        base.cr.sendSetZoneMsg(self.zoneId, zoneList)
 
+        base.cr.sendSetZoneMsg(self.zoneId, zoneList)
         self.accept('takingScreenshot', self.handleScreenshot)
+        return
 
     def listenForFloorEvents(self, room):
         roomNum = room.getRoomNum()
         floorCollName = room.getFloorCollName()
 
-        # listen for zone enter events from floor collisions
-        def handleZoneEnter(collisionEntry,
-                            self=self, roomNum=roomNum):
+        def handleZoneEnter(collisionEntry, self=self, roomNum=roomNum):
             self.toonEnterRoom(roomNum)
             floorNode = collisionEntry.getIntoNode()
             if floorNode.hasTag('ouch'):
                 room = self.allRooms[roomNum]
                 ouchLevel = room.getFloorOuchLevel()
                 room.startOuch(ouchLevel)
+
         self.accept('enter%s' % floorCollName, handleZoneEnter)
 
-        # also listen for zone exit events for the sake of the
-        # ouch system
-        def handleZoneExit(collisionEntry,
-                           self=self, roomNum=roomNum):
+        def handleZoneExit(collisionEntry, self=self, roomNum=roomNum):
             floorNode = collisionEntry.getIntoNode()
             if floorNode.hasTag('ouch'):
                 self.allRooms[roomNum].stopOuch()
+
         self.accept('exit%s' % floorCollName, handleZoneExit)
 
     def getAllRoomsTimeout(self):
-        self.notify.warning('mint %s: timed out waiting for room objs' %
-                            self.doId)
-        # TODO: abandon going to the mint, go back
+        self.notify.warning('mint %s: timed out waiting for room objs' % self.doId)
 
     def toonEnterRoom(self, roomNum):
         self.notify.debug('toonEnterRoom: %s' % roomNum)
         if roomNum != self.curToonRoomNum:
             if self.curToonRoomNum is not None:
-                self.allRooms[self.curToonRoomNum].localToonFSM.request(
-                    'notPresent')
+                self.allRooms[self.curToonRoomNum].localToonFSM.request('notPresent')
             self.allRooms[roomNum].localToonFSM.request('present')
             self.curToonRoomNum = roomNum
+        return
 
     def camEnterRoom(self, roomNum):
         self.notify.debug('camEnterRoom: %s' % roomNum)
-        if (roomNum % 2) == 1:
-            # this is a hallway; we should see the rooms on either side
-            # and the hallways leading out of them
-            minVis = roomNum-2
-            maxVis = roomNum+2
+        if roomNum % 2 == 1:
+            minVis = roomNum - 2
+            maxVis = roomNum + 2
         else:
-            # we're in a room, we only need to see the adjacent hallways
-            minVis = roomNum-1
-            maxVis = roomNum+1
-        for i, room in enumerate(self.allRooms):
+            minVis = roomNum - 1
+            maxVis = roomNum + 1
+        for (i, room) in enumerate(self.allRooms):
             if i < minVis or i > maxVis:
                 room.getGeom().stash()
             else:
                 room.getGeom().unstash()
 
     def setBossConfronted(self, avId):
-        # the avId has already been vetted by the room that received the msg
         if avId == base.localAvatar.doId:
             return
         av = base.cr.identifyFriend(avId)
         if av is None:
             return
-        base.localAvatar.setSystemMessage(
-            avId, TTLocalizer.MintBossConfrontedMsg % av.getName())
+        base.localAvatar.setSystemMessage(avId, TTLocalizer.MintBossConfrontedMsg % av.getName())
+        return
 
     def warpToRoom(self, roomId):
-        # returns False if invalid roomId
-        # find a room with the right id
         for i in xrange(len(self.rooms)):
             room = self.rooms[i]
             if room.roomId == roomId:
                 break
         else:
             return False
-        base.localAvatar.setPosHpr(room.getGeom(), 0,0,0, 0,0,0)
-        # account for the hallways
-        self.camEnterRoom(i*2)
+
+        base.localAvatar.setPosHpr(room.getGeom(), 0, 0, 0, 0, 0, 0)
+        self.camEnterRoom(i * 2)
         return True
 
     def disable(self):
         self.notify.debug('disable')
-
         self.ignoreAll()
-
         for hallway in self.hallways:
             hallway.exit()
 
         self.rooms = []
         for hallway in self.hallways:
             hallway.delete()
+
         self.hallways = []
         self.allRooms = []
-
         if self.roomWatcher:
             self.roomWatcher.destroy()
             self.roomWatcher = None
-
         if self.geom is not None:
             self.geom.removeNode()
             self.geom = None
-
         base.localAvatar.setCameraCollisionsCanMove(0)
-
-        if (hasattr(self, 'relatedObjectMgrRequest')
-                and self.relatedObjectMgrRequest):
+        if hasattr(self, 'relatedObjectMgrRequest') and self.relatedObjectMgrRequest:
             self.cr.relatedObjectMgr.abortRequest(self.relatedObjectMgrRequest)
             del self.relatedObjectMgrRequest
-
         DistributedObject.DistributedObject.disable(self)
+        return
 
     def delete(self):
         DistributedObject.DistributedObject.delete(self)
         self.ignore('SOSPanelEnter')
         bboard.remove('mint')
-        
+
     def handleSOSPanel(self, panel):
-        # make a list of toons that are still in the mint
         avIds = []
         for avId in self.rooms[0].avIdList:
-            # if a toon dropped and came back into the game, they won't
-            # be in the factory, so they won't be in the doId2do.
             if base.cr.doId2do.get(avId):
                 avIds.append(avId)
+
         panel.setFactoryToonIdList(avIds)
 
     def handleScreenshot(self):
-        base.addScreenshotString('mintId: %s, floor (from 1): %s' % (
-            self.mintId, self.floorNum+1))
+        base.addScreenshotString('mintId: %s, floor (from 1): %s' % (self.mintId, self.floorNum + 1))
         if hasattr(self, 'currentRoomName'):
             base.addScreenshotString('%s' % self.currentRoomName)

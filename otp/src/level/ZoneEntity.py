@@ -1,31 +1,22 @@
-"""ZoneEntity module: contains the ZoneEntity class"""
-
-import ZoneEntityBase
-import BasicEntities
+import ZoneEntityBase, BasicEntities
 
 class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
+    __module__ = __name__
+
     def __init__(self, level, entId):
         ZoneEntityBase.ZoneEntityBase.__init__(self, level, entId)
-
         self.nodePath = self.level.getZoneNode(self.entId)
         if self.nodePath is None:
             if __dev__:
-                self.level.reportModelSpecSyncError(
-                    'unknown zoneNum %s; zone was removed from model?' %
-                    self.entId)
+                self.level.reportModelSpecSyncError('unknown zoneNum %s; zone was removed from model?' % self.entId)
             else:
-                self.notify.error('zone %s not found in level model' %
-                                  self.entId)
+                self.notify.error('zone %s not found in level model' % self.entId)
         BasicEntities.NodePathAttribs.initNodePathAttribs(self, doReparent=0)
-
-        # dict of zoneNum to 'visible' reference count
         self.visibleZoneNums = {}
-
-        # inc ref counts for the zones that are always visible from this zone
         self.incrementRefCounts(self.visibility)
+        return
 
     def destroy(self):
-        # no need to dec our visibility reference counts
         BasicEntities.NodePathAttribs.destroy(self)
         ZoneEntityBase.ZoneEntityBase.destroy(self)
 
@@ -35,13 +26,11 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
     def getVisibleZoneNums(self):
         return self.visibleZoneNums.keys()
 
-    # call these with lists of zoneNums to increment or decrement their
-    # 'visible' reference counts
-    # zone is visible as long as its ref count is nonzero
     def incrementRefCounts(self, zoneNumList):
         for zoneNum in zoneNumList:
             self.visibleZoneNums.setdefault(zoneNum, 0)
             self.visibleZoneNums[zoneNum] += 1
+
     def decrementRefCounts(self, zoneNumList):
         for zoneNum in zoneNumList:
             self.visibleZoneNums[zoneNum] -= 1
@@ -49,9 +38,9 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
                 del self.visibleZoneNums[zoneNum]
 
     if __dev__:
+
         def setVisibility(self, visibility):
             self.decrementRefCounts(self.visibility)
             self.visibility = visibility
             self.incrementRefCounts(self.visibility)
-
             self.level.handleVisChange()

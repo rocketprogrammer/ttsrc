@@ -1,12 +1,12 @@
-
-from pandac.PandaModules import *
+from direct.showbase.ShowBaseGlobal import *
+from direct.showbase.PandaObject import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
-
 from direct.directnotify import DirectNotifyGlobal
 import DistributedBarrelBase
 
 class DistributedBeanBarrel(DistributedBarrelBase.DistributedBarrelBase):
+    __module__ = __name__
 
     def __init__(self, cr):
         DistributedBarrelBase.DistributedBarrelBase.__init__(self, cr)
@@ -21,15 +21,14 @@ class DistributedBeanBarrel(DistributedBarrelBase.DistributedBarrelBase):
         self.gagModel.removeNode()
         del self.gagModel
         DistributedBarrelBase.DistributedBarrelBase.delete(self)
-    
+
     def applyLabel(self):
-        purchaseModels = loader.loadModel("phase_4/models/gui/purchase_gui")
-        self.gagModel = purchaseModels.find("**/Jar")
+        purchaseModels = loader.loadModelCopy('phase_4/models/gui/purchase_gui')
+        self.gagModel = purchaseModels.find('**/Jar')
         self.gagModel.reparentTo(self.gagNode)
         self.gagModel.setScale(self.gagScale)
-        self.gagModel.setPos(0,-0.1,0)
+        self.gagModel.setPos(0, -0.1, 0)
         purchaseModels.removeNode()
-        
+
     def setGrab(self, avId):
-        DistributedBarrelBase.DistributedBarrelBase.setGrab(self,avId)
-    
+        DistributedBarrelBase.DistributedBarrelBase.setGrab(self, avId)

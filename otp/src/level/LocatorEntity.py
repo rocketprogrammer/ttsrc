@@ -1,12 +1,14 @@
 import Entity, BasicEntities
-from pandac.PandaModules import NodePath
+from pandac import NodePath
 from direct.directnotify import DirectNotifyGlobal
 
-class LocatorEntity(Entity.Entity, NodePath):
+class LocatorEntity(Entity.Entity, NodePath.NodePath):
+    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LocatorEntity')
+
     def __init__(self, level, entId):
         node = hidden.attachNewNode('LocatorEntity-%s' % entId)
-        NodePath.__init__(self, node)
+        NodePath.NodePath.__init__(self, node)
         Entity.Entity.__init__(self, level, entId)
         self.doReparent()
 
@@ -15,19 +17,18 @@ class LocatorEntity(Entity.Entity, NodePath):
         self.removeNode()
 
     def getNodePath(self):
-        # this allows other entities to be parented to us
         return self
 
     def doReparent(self):
         if self.searchPath != '':
             parent = self.level.geom.find(self.searchPath)
             if parent.isEmpty():
-                LocatorEntity.notify.warning(
-                    "could not find '%s'" % self.searchPath)
+                LocatorEntity.notify.warning("could not find '%s'" % self.searchPath)
                 self.reparentTo(hidden)
             else:
                 self.reparentTo(parent)
 
     if __dev__:
+
         def attribChanged(self, attrib, value):
             self.doReparent()

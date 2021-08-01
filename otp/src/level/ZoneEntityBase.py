@@ -1,12 +1,12 @@
-"""ZoneEntityBase module: contains the ZoneEntityBase class"""
-
-import Entity
-import LevelConstants
+import Entity, LevelConstants
 
 class ZoneEntityBase(Entity.Entity):
+    __module__ = __name__
+
     def __init__(self, level, entId):
         Entity.Entity.__init__(self, level, entId)
         self.zoneId = None
+        return
 
     def destroy(self):
         del self.zoneId
@@ -16,13 +16,10 @@ class ZoneEntityBase(Entity.Entity):
         return self.entId == LevelConstants.UberZoneEntId
 
     def setZoneId(self, zoneId):
-        """set the network zoneId that this zone entity corresponds to"""
         self.zoneId = zoneId
 
     def getZoneId(self):
-        """network zoneId"""
         return self.zoneId
 
     def getZoneNum(self):
-        """zoneNum from model / entityId"""
         return self.entId

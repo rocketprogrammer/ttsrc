@@ -4,13 +4,15 @@ from direct.directnotify import DirectNotifyGlobal
 import BasicEntities
 
 class CollisionSolidEntity(BasicEntities.NodePathEntity):
+    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('CollisionSolidEntity')
 
     def __init__(self, level, entId):
         self.collNodePath = None
         BasicEntities.NodePathEntity.__init__(self, level, entId)
         self.initSolid()
-        
+        return
+
     def destroy(self):
         self.destroySolid()
         BasicEntities.NodePathEntity.destroy(self)
@@ -35,9 +37,10 @@ class CollisionSolidEntity(BasicEntities.NodePathEntity):
         if self.collNodePath is not None:
             self.collNodePath.removeNode()
             self.collNodePath = None
+        return
 
     if __dev__:
+
         def attribChanged(self, attrib, value):
             print 'attribChanged'
             self.initSolid()
-            

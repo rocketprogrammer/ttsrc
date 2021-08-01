@@ -1,20 +1,14 @@
 from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import CogHQExterior
 
-# aka "The Pit"
-
 class SellbotHQExterior(CogHQExterior.CogHQExterior):
-    notify = DirectNotifyGlobal.directNotify.newCategory("SellbotHQExterior")
+    __module__ = __name__
+    notify = DirectNotifyGlobal.directNotify.newCategory('SellbotHQExterior')
 
     def enter(self, requestStatus):
         CogHQExterior.CogHQExterior.enter(self, requestStatus)
-
-        # Turn the sky on
         self.loader.hood.startSky()
 
     def exit(self):
-        # Turn the sky off
         self.loader.hood.stopSky()
-
         CogHQExterior.CogHQExterior.exit(self)
-

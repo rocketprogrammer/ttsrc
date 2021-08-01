@@ -5,12 +5,14 @@ import BasicEntities
 from toontown.suit import GoonPathData
 
 class PathEntity(BasicEntities.NodePathEntity):
+    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('PathEntity')
+
     def __init__(self, level, entId):
-        self.pathScale = 1.
+        self.pathScale = 1.0
         BasicEntities.NodePathEntity.__init__(self, level, entId)
         self.setPathIndex(self.pathIndex)
-            
+
     def destroy(self):
         BasicEntities.NodePathEntity.destroy(self)
 
@@ -24,47 +26,31 @@ class PathEntity(BasicEntities.NodePathEntity):
         else:
             PathEntity.notify.warning('invalid pathIndex: %s' % pathIndex)
             self.path = None
-    
-    def makePathTrack(self, node, velocity, name, turnTime=1,
-                      lookAroundNode=None):
-        track = Sequence(name = name)
-        if self.path is None:
-            track.append(WaitInterval(1.))
-            return track
-        assert len(self.path) > 1
+        return
 
-        # end with the starting point at the end, so we have a continuous loop
+    def makePathTrack(self, node, velocity, name, turnTime=1, lookAroundNode=None):
+        track = Sequence(name=name)
+        if self.path is None:
+            track.append(WaitInterval(1.0))
+            return track
         path = self.path + [self.path[0]]
         for pointIndex in range(len(path) - 1):
             startPoint = Point3(path[pointIndex]) * self.pathScale
-            endPoint = Point3(path[pointIndex + 1]) * self.pathScale
-            # Face the endpoint
+            endPoint = Point3(path[(pointIndex + 1)]) * self.pathScale
             v = startPoint - endPoint
-
-            # figure out the angle we have to turn to look at the next point
-            # Note: this will only look right for paths that are defined in a
-            # counterclockwise order.  Otherwise the goon will always turn the
-            # "long" way to look at the next point
-            node.setPos(startPoint[0], startPoint[1],startPoint[2])
+            node.setPos(startPoint[0], startPoint[1], startPoint[2])
             node.headsUp(endPoint[0], endPoint[1], endPoint[2])
             theta = node.getH() % 360
-                              
-            track.append(
-                LerpHprInterval(node, # stop and look around
-                                turnTime,
-                                Vec3(theta,0,0)))
-            
-            # Calculate the amount of time we should spend walking
+            track.append(LerpHprInterval(node, turnTime, Vec3(theta, 0, 0)))
             distance = Vec3(v).length()
             duration = distance / velocity
-            
-            # Walk to the end point
-            track.append(
-                LerpPosInterval(node, duration=duration,
-                                pos=endPoint, startPos=startPoint))
+            track.append(LerpPosInterval(node, duration=duration, pos=endPoint, startPos=startPoint))
+
         return track
+        return
 
     if __dev__:
+
         def getChangeEvent(self):
             return self.getUniqueName('pathChanged')
 

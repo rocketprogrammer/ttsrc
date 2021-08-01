@@ -1,8 +1,8 @@
-"""VisibilityExtender module: contains the VisibilityExtender class"""
-
 import Entity
 
 class VisibilityExtender(Entity.Entity):
+    __module__ = __name__
+
     def __init__(self, level, entId):
         Entity.Entity.__init__(self, level, entId)
         self.initVisExt()
@@ -14,32 +14,29 @@ class VisibilityExtender(Entity.Entity):
         if self.event is not None:
             self.eventName = self.getOutputEventName(self.event)
             self.accept(self.eventName, self.handleEvent)
+        return
 
     def destroyVisExt(self):
         if self.eventName is not None:
             self.ignore(self.eventName)
         if self.extended:
             self.retract()
+        return
 
     def handleEvent(self, doExtend):
         if doExtend:
             if not self.extended:
                 self.extend()
-        else:
-            if self.extended:
-                self.retract()
+        elif self.extended:
+            self.retract()
 
     def extend(self):
-        """extend the visibility list"""
-        assert not self.extended
         zoneEnt = self.level.getEntity(self.getZoneEntId())
         zoneEnt.incrementRefCounts(self.newZones)
         self.extended = 1
         self.level.handleVisChange()
-        
+
     def retract(self):
-        """un-extend the visibility list"""
-        assert self.extended
         zoneEnt = self.level.getEntity(self.getZoneEntId())
         zoneEnt.decrementRefCounts(self.newZones)
         self.extended = 0
@@ -50,15 +47,15 @@ class VisibilityExtender(Entity.Entity):
         Entity.Entity.destroy(self)
 
     if __dev__:
+
         def setNewZones(self, newZones):
-            # we need to call destroyVisExt before accepting the new zone set
             extended = self.extended
             self.destroyVisExt()
             self.newZones = newZones
             self.initVisExt()
             if extended:
                 self.extend()
-            
+
         def attribChanged(self, *args):
             extended = self.extended
             self.destroyVisExt()

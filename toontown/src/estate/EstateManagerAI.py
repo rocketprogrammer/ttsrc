@@ -445,7 +445,6 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                 estateAI = DistributedEstateAI.DistributedEstateAI(self.air, avId,
                                                                    estateZoneId, ts, dawn, valDict)
                 # MPG - We should make sure this works across districts
-                estateAI.dbObject = 1
                 estateAI.generateWithRequiredAndId(estateId,
                                                    self.air.districtId,
                                                    estateZoneId)
@@ -474,7 +473,8 @@ class EstateManagerAI(DistributedObjectAI.DistributedObjectAI):
                         # Now that we have all the data loaded, officially
                         # generate the distributed object
 
-                        house.dbObject = 1
+                        house.name = self.air.doId2do.get(avId).getName()
+                        house.ownerId = avId
 
                         # MPG - We should make sure this works across districts
                         house.generateWithRequiredAndId(houseId[i],

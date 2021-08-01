@@ -247,7 +247,6 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         self.interior.b_setWallpaper(self.interiorWallpaper)
         self.interior.b_setWindows(self.interiorWindows)
 
-
     def setInitialFurniture(self):
         # Resets the furniture to the initial default furniture for an
         # avatar.  Normally this is called only when the house is

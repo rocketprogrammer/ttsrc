@@ -482,9 +482,9 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             else:
                 self.down_setMagicWordResponse(senderId, 'error')
 
-        elif wordIs('~system') or wordIs('smsg'):
+        elif wordIs('~system') or wordIs('~smsg'):
             args = word.split()
-            message = ' '.join(x for x in args)
+            message = ' '.join(x for x in args[1:])
 
             for doId, do in list(simbase.air.doId2do.items()):
                 if isinstance(do, DistributedPlayerAI):

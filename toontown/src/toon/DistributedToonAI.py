@@ -2377,7 +2377,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         #print("Gift Delivery for %s" % (self.getName()))
         #print("Delivered %s." % (deliveredGifts))
         #print("Remaining %s." % (remainingGifts))
-        simbase.air.deliveryManager.sendDeliverGifts(self.getDoId(), now)
 
         #b_setMailboxContents must come before b_setCatalogNotify
         #because b_setMailboxContents resets the notification data
@@ -2390,7 +2389,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
 
         #print ("End __deliverBothPurchases")
         return Task.done
-
 
     def setGiftSchedule(self, onGiftOrder, doUpdateLater = True):
         self.setBothSchedules(None, onGiftOrder)

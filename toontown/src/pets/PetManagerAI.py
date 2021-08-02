@@ -12,8 +12,8 @@ from toontown.pets import PetNameGenerator
 class PetManagerAI(DirectObject.DirectObject):
 
     notify = DirectNotifyGlobal.directNotify.newCategory("PetManagerAI")
-    #notify.setDebug(1)
-    
+    notify.setDebug(1)
+
     def __init__(self, air):
         self.air = air
         self.serialNum = 0
@@ -48,7 +48,7 @@ class PetManagerAI(DirectObject.DirectObject):
         assert(PetManagerAI.notify.debug('toon going to estate: %s %s %s' % (
             avId, ownerId, zoneId)))
         toon = simbase.air.doId2do[avId]
-        # is the toon already in the estate zone?       
+        # is the toon already in the estate zone?
         if toon.zoneId == zoneId:
             self._onToonArriveInEstate(avId, ownerId, zoneId)
         else:
@@ -173,7 +173,6 @@ class PetManagerAI(DirectObject.DirectObject):
                 def doGenPet(pet, petId, zoneId):
                     # create pet in the quiet zone so that it gets a
                     # zone change msg when entering its destination
-                    pet.dbObject = 1
                     pet.generateWithRequiredAndId(petId, self.air.districtId, zoneId)
                     simbase.air.setAIReceiver(petId)
                 if petId not in simbase.air.doId2do:
@@ -200,7 +199,7 @@ class PetManagerAI(DirectObject.DirectObject):
         - the pet has requested deletion and is awaiting a delete
         """
         def doGenPetInZone(self, petId, zoneId):
-            self.generatePetInZone(petId, zoneId)            
+            self.generatePetInZone(petId, zoneId)
         if petId not in simbase.air.doId2do:
             simbase.air.requestDeleteDoId(petId)
             doGenPetInZone(self, petId, zoneId)
@@ -335,8 +334,7 @@ class PetManagerAI(DirectObject.DirectObject):
                         # DB fields
                         pet.setInactive()
                         pet._beingCreatedInDB = True
-                        pet.dbObject = 1
-                        pet.generateWithRequiredAndId(petId, 
+                        pet.generateWithRequiredAndId(petId,
                                                   self.air.districtId,
                                                   ToontownGlobals.QuietZone)
                         simbase.air.setAIReceiver(petId)
@@ -371,7 +369,7 @@ class PetManagerAI(DirectObject.DirectObject):
             else:
                 PetManagerAI.notify.warning('error creating pet for %s' % toonId)
         self.createNewPetObject(handleCreate)
-    
+
     def deleteToonsPet(self, toonId):
         """ delete the toon's current pet. Pet objects (like all DB objects)
         are written to a separate XML file upon deletion. """
@@ -420,6 +418,6 @@ class PetManagerAI(DirectObject.DirectObject):
                 seeds.append( random.randrange(seedMax) )
 
         return seeds
-                
+
         random.setstate(S)
-        
+

@@ -118,6 +118,7 @@ class DatabaseObject:
         count = di.getUint16()
         fields = []
         for i in range(count):
+            print(count)
             name = di.getString()
             fields.append(name)
 
@@ -129,6 +130,7 @@ class DatabaseObject:
             values = []
             for i in range(count):
                 value = di.getString()
+                print(value)
                 values.append(value)
 
             for i in range(count):

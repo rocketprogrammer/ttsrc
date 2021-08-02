@@ -1263,7 +1263,7 @@ dclass DistributedPet : DistributedSmoothNode {
   setLastSeenTimestamp(uint32 timestamp = 0) required broadcast db;
   setBoredom(uint16(0-1) boredom / 1000 = 0) required broadcast db;
   setRestlessness(uint16(0-1) restlessness / 1000 = 0) required broadcast db;
-  setPlayfulness(uint16(0-1) playfulness / 1000 = 0) required broadcast db;
+  setPlayfulness(uint16 playfulness / 1000 = 0) required broadcast db;
   setLoneliness(uint16(0-1) loneliness / 1000 = 0) required broadcast db;
   setSadness(uint16(0-1) sadness / 1000 = 0) required broadcast db;
   setAffection(uint16(0-1) affection / 1000 = 0) required broadcast db;
@@ -1276,7 +1276,7 @@ dclass DistributedPet : DistributedSmoothNode {
   setMood : setBoredom, setRestlessness, setPlayfulness, setLoneliness, setSadness, setAffection, setHunger, setConfusion, setExcitement, setFatigue, setAnger, setSurprise;
   teleportIn(int16) broadcast ownsend;
   teleportOut(int16) broadcast ownsend;
-  setTrickAptitudes(uint16(0-1) / 10000 aptitudes[] = {}) required broadcast db;
+  setTrickAptitudes(uint16 / 10000 aptitudes[] = {}) required broadcast db;
   doTrick(uint8, int16) broadcast ram;
   avatarInteract(uint32);
   setMovie(uint8, uint32, int16) broadcast ram;

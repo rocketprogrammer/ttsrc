@@ -26,7 +26,6 @@ import string
 import copy
 from direct.showbase.PythonUtil import StackTrace
 
-
 class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                        PetLookerAI.PetLookerAI, PetBase.PetBase):
     """AI-side implementation of Toon pet"""
@@ -41,7 +40,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
 
     movieDistSwitch = { PetConstants.PET_MOVIE_FEED: PetConstants.FEED_DIST.get,
                         PetConstants.PET_MOVIE_SCRATCH: PetConstants.SCRATCH_DIST.get }
-    
+
     def __init__(self, air, dna = None):
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.__init__(self, air)
         PetLookerAI.PetLookerAI.__init__(self)
@@ -85,7 +84,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         # cache required mood components until we have a self.mood to give
         # them to
         self.requiredMoodComponents = {}
-        
+
         # create our distributed trait and mood funcs
         # Keep track of all the funcs that we stuff into our dict
         self.__funcsToDelete = []
@@ -152,7 +151,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 min, max = distrib.getMinMax(szId)
                 setterName = self.getSetterName(traitName, 'b_set')
                 self.__dict__[setterName]((min + max) / 2.)
-                
+
         def _setLowTraits(self, szId):
             # call this on an existing pet to set all his traits to the
             # lowest values for a particular safe zone. For gameplay balancing.
@@ -163,7 +162,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 min, max = distrib.getMinMax(szId)
                 setterName = self.getSetterName(traitName, 'b_set')
                 self.__dict__[setterName](min)
-                
+
         def _setHighTraits(self, szId):
             # call this on an existing pet to set all his traits to the
             # highest values for a particular safe zone. For gameplay
@@ -175,7 +174,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 min, max = distrib.getMinMax(szId)
                 setterName = self.getSetterName(traitName, 'b_set')
                 self.__dict__[setterName](max)
-                
+
         def _setTypicalTraits(self, szId):
             # call this on an existing pet to set all his traits to typical
             # random values for a particular safezone. For gameplay balancing.
@@ -186,7 +185,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 value = distrib.getRandValue(szId)
                 setterName = self.getSetterName(traitName, 'b_set')
                 self.__dict__[setterName](value)
-            
+
     def _initDBVals(self, ownerId, name=None, traitSeed=0, dna=None,
                     safeZone=ToontownGlobals.ToontownCentral):
         # Initializes the DB fields for a new, generated pet object to
@@ -216,7 +215,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             dna = PetDNA.getRandomPetDNA()
 
         self.setDNA(dna)
-        
+
         self.b_setLastSeenTimestamp(self.getCurEpochTimestamp())
         for component in PetMood.PetMood.Components:
             self.setMoodComponent(component, 0.)
@@ -236,7 +235,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         self.b_setColorScale(colorScale)
         self.b_setEyeColor(eyes)
         self.b_setGender(gender)
-        
+
     def handleZoneChange(self, newZoneId, oldZoneId):
         DistributedSmoothNodeAI.DistributedSmoothNodeAI.handleZoneChange(
             self, newZoneId, oldZoneId)
@@ -346,7 +345,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         """
     def setTraits(self, traitList):
         self.traitList = traitList
-            
+
     # get, b_set, d_set, and set funcs are generated for each trait
     def __generateDistTraitFuncs(self):
         for i in xrange(PetTraits.PetTraits.NumTraits):
@@ -479,7 +478,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         self.notify.debug("DPAI: sending update @ ts = %s" % timestamp)
         self.sendUpdate("teleportOut", [timestamp])
         return None
-        
+
     def getLastSeenTimestamp(self):
         return self.lastSeenTimestamp
     def b_setLastSeenTimestamp(self, timestamp):
@@ -554,7 +553,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             self.__funcsToDelete.append('d_%s' % setterName)
             self.__funcsToDelete.append(setterName)
 
-            
+
     def getTrickAptitudes(self):
         return self.trickAptitudes
     def b_setTrickAptitudes(self, aptitudes):
@@ -685,7 +684,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         # if a dna was passed on instantiation, set it now
         if self.initialDNA:
             self.setDNA(self.initialDNA)
-        
+
         # pass in the cached required mood component values
         for mood, value in self.requiredMoodComponents.items():
             self.mood.setComponent(mood, value, announce=0)
@@ -699,7 +698,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
 
         # The mover that will push us around for the trick
         self.lockMover = Mover.Mover(self)
-        
+
         # cache some impulse objects
         self.createImpulses()
 
@@ -767,7 +766,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         del self.trickFailLogger
         del self.feedLogger
         del self.scratchLogger
-        
+
         # remove any hooks
         taskMgr.remove(self.uniqueName("clearMovie"))
         taskMgr.remove(self.uniqueName("PetMovieWait"))
@@ -785,19 +784,19 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             myTaskName = "No task name"
             myStackTrace = StackTrace().trace
             myOldStackTrace = "No Trace"
-            
+
             if hasattr(self, "doId"):
                 myDoId = self.doId
             if task:
                 myTaskName = task.name
             if hasattr(self, "destroyDoStackTrace"):
                 myOldStackTrace = self.destroyDoStackTrace.trace
-            
+
 
             simbase.air.writeServerEvent("Pet RequestDelete duplicate", myDoId, "from task %s" % (myTaskName))
             simbase.air.writeServerEvent("Pet RequestDelete duplicate StackTrace", myDoId, "%s" % myStackTrace)
             simbase.air.writeServerEvent("Pet RequestDelete duplicate OldStackTrace", myDoId, "%s" % myOldStackTrace)
-            
+
             DistributedPetAI.notify.warning("double requestDelete from task %s" % (myTaskName))
         self.setParent(hidden)
 
@@ -822,13 +821,13 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 # DistributedSmoothNodeBase makes sure the task is stopped
                 # on deletion.
                 self.stopPosHprBroadcast()
-            
+
         if hasattr(self, "mood"):
             self.mood.destroy()
             del self.mood
         if hasattr(self, "traits"):
             del self.traits
-        
+
         try:
             for funcName in self.__funcsToDelete:
                 del self.__dict__[funcName]
@@ -945,7 +944,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         return 'petLockMove-%s' % (self.doId)
 
     def move(self, task=None):
-        
+
         if self.isEmpty():
             try:
                 self.air.writeServerEvent("Late Pet Move Call", self.doId, " ")
@@ -953,8 +952,8 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 pass
             taskMgr.remove(task.name)
             return Task.done
-            
-        
+
+
         if not self.isLockMoverEnabled():
             self.mover.move()
 
@@ -982,7 +981,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             self.requestDelete()
             # in this case make sure we don't schedule another run of this task
             return Task.done
-            
+
         # schedule the next move
         if __dev__:
             self.pscMoveResc.start()
@@ -1078,7 +1077,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         self.brain.observe(PetObserve.PetPhraseObserve(
             PetObserve.Phrases.COME, avatar.doId))
         self.__petMovieStart(avatar.doId)
-        
+
     def feed(self, avatar):
         if avatar.takeMoney(PetConstants.FEED_AMOUNT):
             self.startLockPetMove(avatar.doId)
@@ -1136,7 +1135,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         pass
     def gaitExitOff(self):
         pass
-    
+
     def gaitEnterNeutral(self):
         self.mover.setFwdSpeed(PetConstants.FwdSpeed)
         self.mover.setRotSpeed(PetConstants.RotSpeed)
@@ -1263,7 +1262,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         assert(self.notify.debug("avatar enter avId: %s busy: %s " % (avId, self.busy)))
 
         av = self.air.doId2do.get(avId)
-        
+
         if av is None:
             self.notify.warning("Avatar: %s not found" % (avId))
             return 0
@@ -1277,7 +1276,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
 
         self.notify.debug("sending update")
         self.sendUpdateToAvatarId(avId, "avatarInteract", [avId])
-        
+
         # handle unexpected exit
         self.acceptOnce(self.air.getAvatarExitEvent(avId),
                         self.__handleUnexpectedExit, extraArgs=[avId])
@@ -1301,7 +1300,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         self.busy = 0
         self.d_setMovie(0, PetConstants.PET_MOVIE_CLEAR)
         return Task.done
-        
+
     def __handleUnexpectedExit(self, avId):
         self.notify.warning('avatar:' + str(avId) + ' has exited unexpectedly')
         self.notify.warning('not busy with avId: %s, busy: %s ' % (avId, self.busy))
@@ -1394,7 +1393,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         dist_Callable = self.movieDistSwitch.get(self.movieMode)
         dist = dist_Callable(
             self.air.doId2do.get(avId).getStyle().getLegSize())
-        
+
         self.lockChaseImpulse.setMinDist(dist)
 
         # Dist list is used to store the last three distance checks. It is
@@ -1404,7 +1403,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         self.distList = [0,0,0]
 
         # Start the movement task
-        self.__lockPetMoveTask(avId) 
+        self.__lockPetMoveTask(avId)
 
     ######################################################################
     # Method: getAverageDist
@@ -1466,7 +1465,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                                   self.getLockMoveTaskName(), [avId])
         else:
             # Distance check has been met, thus we continue on with the
-            # movie. 
+            # movie.
             self.endLockPetMove(avId)
 
         return Task.done
@@ -1501,7 +1500,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             self.lockMoverEnabled -= 1
             if self.lockMoverEnabled == 0:
                 self.brain._endMovie()
-            
+
     # TRICK APTITUDE LOGIC
     def _willDoTrick(self, trickId):
         # Use this to determine whether or not the pet will do a particular
@@ -1548,7 +1547,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             trickId,
             self.getTrickAptitude(trickId) +
             (PetTricks.MaxAptitudeIncrementGotPraise * magnitude))
-        
+
     # LEASH MAGIC WORD
     def toggleLeash(self, avId):
         # FOR DEBUGGING
@@ -1567,4 +1566,4 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             response = 'leash ON'
         # magic word response
         return response
-            
+

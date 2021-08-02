@@ -484,7 +484,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         elif wordIs('~system') or wordIs('smsg'):
             args = word.split()
-            message = ' '.join(str(x) for x in args)
+            message = ' '.join(x for x in args)
 
             for doId, do in list(simbase.air.doId2do.items()):
                 if isinstance(do, DistributedPlayerAI):

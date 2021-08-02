@@ -1276,11 +1276,11 @@ dclass DistributedPet : DistributedSmoothNode {
   setMood : setBoredom, setRestlessness, setPlayfulness, setLoneliness, setSadness, setAffection, setHunger, setConfusion, setExcitement, setFatigue, setAnger, setSurprise;
   teleportIn(int16) broadcast ownsend;
   teleportOut(int16) broadcast ownsend;
-  setTrickAptitudes(uint16/10000 []) required p2p db;
+  setTrickAptitudes(uint16/10000 []) required broadcast db;
   doTrick(uint8, int16) broadcast ram;
-  avatarInteract(uint32) p2p;
+  avatarInteract(uint32);
   setMovie(uint8, uint32, int16) broadcast ram;
-  freeAvatar() p2p;
+  freeAvatar();
 };
 
 dclass DistributedBlackCatMgr : DistributedObject {

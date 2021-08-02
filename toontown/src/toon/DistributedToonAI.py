@@ -4922,7 +4922,3 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
     def hasGMName(self):
         """ Returns True if this toon's name starts with '$', indicating they are special. """
         return self.getName().startswith('$')
-
-    def isNPC(self):
-        """ Used for the system message magic word. """
-        return False

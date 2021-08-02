@@ -58,7 +58,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
         if self.busy > 0:
             self.freeAvatar(avId)
             return
-        
+
         # Store the original customer DNA so we can revert if a disconnect
         # happens
         av = self.air.doId2do.get(avId)
@@ -70,12 +70,12 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
         self.busy = avId
         print ("av %s: entering closet with shirt(%s,%s,%s,%s) and shorts(%s,%s)" % (avId,
                                                                                      self.customerDNA.topTex,
-                                                                                     self.customerDNA.topTexColor, 
-                                                                                     self.customerDNA.sleeveTex, 
+                                                                                     self.customerDNA.topTexColor,
+                                                                                     self.customerDNA.sleeveTex,
                                                                                      self.customerDNA.sleeveTexColor,
                                                                                      self.customerDNA.botTex,
                                                                                      self.customerDNA.botTexColor))
-        
+
         # Handle unexpected exit
         self.acceptOnce(self.air.getAvatarExitEvent(avId),
                         self.__handleUnexpectedExit, extraArgs=[avId])
@@ -100,22 +100,22 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
             # send a reset message to the client.  same as a completed purchase
             self.completePurchase(avId)
 
-        
+
     def __openCloset(self):
         self.notify.debug("__openCloset")
         topList = self.ownerAv.getClothesTopsList()
         botList = self.ownerAv.getClothesBottomsList()
-        
+
         self.sendUpdate("setState", [ClosetGlobals.OPEN,
                                      self.customerId, self.ownerAv.doId,
                                      self.ownerAv.dna.getGender(),
                                      topList, botList])
 
         # Start the timer
-        taskMgr.doMethodLater(ClosetGlobals.TIMEOUT_TIME, 
+        taskMgr.doMethodLater(ClosetGlobals.TIMEOUT_TIME,
                               self.sendTimeoutMovie,
                               self.uniqueName('clearMovie'))
-        
+
     def __gotOwnerAv(self, db, retCode):
         print ("gotOwnerAv information")
         if retCode == 0 and db.values.has_key('setDNAString'):
@@ -125,7 +125,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
             print ("owner doId = %d" % db.doId)
             self.ownerAv.inventory = InventoryBase.InventoryBase(self.ownerAv)
             self.ownerAv.teleportZoneArray = []
-            
+
             try:
                 db.fillin(self.ownerAv, aidc)
             except Exception, theException:
@@ -134,17 +134,12 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
                 self.air.writeServerEvent('suspicious', self.customerId, 'DistributedClosetAI.__gotOwnerAv: invalid db. ownerId %s' % (db.doId))
                 self.air.writeServerEvent('FIXME', db.doId, "DistributedClosetAI.__gotOwnerAv: This toon's DB is so broken: look at setClothesBottomsList.")
                 return
-            
+
             self.__openCloset()
             self.dummyToonAI = self.ownerAv
 
     def removeItem(self, trashBlob, which):
         trashedDNA = ToonDNA.ToonDNA()
-       
-        # AI side verify trashBlob
-        if not trashedDNA.isValidNetString(trashBlob):
-            self.air.writeServerEvent('suspicious', avId, 'DistributedClosetAI.removeItem: invalid dna: %s' % trashBlob)
-            return
 
         trashedDNA.makeFromNetString(trashBlob)
         # make a list of things to be deleted later, when user is "finished"
@@ -186,7 +181,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
 
         av.b_setDNAString(updatedDNA.makeNetString())
         return updatedDNA
-        
+
     def setDNA(self, blob, finished, which):
         assert(self.notify.debug('setDNA(): %s, finished=%s' % (self.timedOut, finished)))
         avId = self.air.getAvatarIdFromSender()
@@ -200,10 +195,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
 
             # make sure the DNA is valid
             testDNA = ToonDNA.ToonDNA()
-            if not testDNA.isValidNetString(blob):
-                self.air.writeServerEvent('suspicious', avId, 'DistributedClosetAI.setDNA: invalid dna: %s' % blob)
-                return
-            
+
             if (finished == 2):
                 # Set the DNA string now, since we haven't done it yet
                 newDNA = self.updateToonClothes(av, blob)
@@ -215,8 +207,8 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
                                                                                                                         newDNA.sleeveTex,
                                                                                                                         newDNA.sleeveTexColor,
                                                                                                                         self.customerDNA.topTex,
-                                                                                                                        self.customerDNA.topTexColor, 
-                                                                                                                        self.customerDNA.sleeveTex, 
+                                                                                                                        self.customerDNA.topTexColor,
+                                                                                                                        self.customerDNA.sleeveTex,
                                                                                                                         self.customerDNA.sleeveTexColor))
                     # replace newDNA in closet with customerDNA (since we are now wearing newDNA)
                     if av.replaceItemInClothesTopsList(newDNA.topTex,
@@ -224,8 +216,8 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
                                                        newDNA.sleeveTex,
                                                        newDNA.sleeveTexColor,
                                                        self.customerDNA.topTex,
-                                                       self.customerDNA.topTexColor, 
-                                                       self.customerDNA.sleeveTex, 
+                                                       self.customerDNA.topTexColor,
+                                                       self.customerDNA.sleeveTex,
                                                        self.customerDNA.sleeveTexColor) == 1:
                         av.b_setClothesTopsList(av.getClothesTopsList())
                     else:
@@ -261,7 +253,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
                     # are exiting the closet.  the lists will be reset automatically
                     # on re-enter
                     # self.sendUpdate("resetItemLists")
-                
+
             else:
                 # Warning - we are trusting the client to set their DNA here
                 # This is a big security hole. Either the client should just send
@@ -320,8 +312,8 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
                 if toon:
                     toon.b_setDNAString(self.customerDNA.makeNetString())
         self.sendClearMovie(None)
-        
-        
+
+
     def completePurchase(self, avId):
         assert(self.notify.debug('completePurchase()'))
         self.busy = avId
@@ -337,7 +329,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
         # The timeout has expired.  Restore the client back to his
         # original DNA automatically (instead of waiting for the
         # client to request this).
-        
+
         toon = self.air.doId2do.get(self.customerId)
         # On second thought, we're better off not asserting this.
         if (toon != None and self.customerDNA):
@@ -350,7 +342,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
         self.sendUpdate("setMovie", [ClosetGlobals.CLOSET_MOVIE_TIMEOUT,
                                      self.busy,
                                      ClockDelta.globalClockDelta.getRealNetworkTime()])
-        
+
         self.sendClearMovie(None)
         return Task.done
 
@@ -382,7 +374,7 @@ class DistributedClosetAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI)
     def getOwnerId(self):
         return self.ownerId
 
-    
+
     if __debug__:
         def debugPrint(self, message):
             """for debugging"""

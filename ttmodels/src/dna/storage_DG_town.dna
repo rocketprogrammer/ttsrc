@@ -1,0 +1,27 @@
+
+place_model "phase_8/models/props/window_flowerbox_woven" [
+	store_node [ "prop" "prop_window_flowerbox_woven" "" ]
+	]
+
+place_model "phase_8/models/modules/neighborhood_tunnel_DG" [
+	store_node [ "prop" "prop_neighborhood_tunnel" ]
+        ]
+
+
+place_model "phase_8/models/modules/safe_zone_entrance_tunnel_DG" [
+	store_node [ "prop" "prop_safe_zone_entrance_tunnel" ]
+        ]
+
+place_model "phase_8/models/props/daisys_flower_bed" [
+	store_node [ "prop" "prop_DG_flower_bed" "" ]
+        ]
+
+place_model "phase_8/models/props/DG_flats" [
+	store_node [ "prop" "prop_DG_flat_trashcan" "prop_trashcan" ]
+        ]
+
+
+place_model "phase_5/models/props/trashcan_TT" [
+	store_node [ "prop" "prop_trashcan_metal" ]
+	]
+

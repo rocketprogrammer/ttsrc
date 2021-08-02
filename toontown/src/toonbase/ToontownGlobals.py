@@ -321,7 +321,7 @@ ToonHall = 2513
 HoodHierarchy = {
     ToontownCentral : (SillyStreet, LoopyLane, PunchlinePlace),
     DonaldsDock : (BarnacleBoulevard, SeaweedStreet, LighthouseLane),
-    TheBrrrgh : (WalrusWay, SleetStreet, PolarPlace),
+    TheBrrrgh : (WalrusWay, SleetStreet),
     MinniesMelodyland : (AltoAvenue, BaritoneBoulevard, TenorTerrace),
     DaisyGardens : (ElmStreet, MapleStreet, OakStreet),
     DonaldsDreamland : (LullabyLane, PajamaPlace),

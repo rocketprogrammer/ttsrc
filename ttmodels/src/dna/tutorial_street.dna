@@ -1,7 +1,7 @@
-store_suit_point [ 0, STREET_POINT, 25 25 -0.5 ]
-store_suit_point [ 1, STREET_POINT, 25 15 -0.5 ]
-store_suit_point [ 2, STREET_POINT, 55 15 -0.5 ]
-store_suit_point [ 3, STREET_POINT, 55 25 -0.5 ]
+store_suit_point [ 0, STREET_POINT, 25 25 0 ]
+store_suit_point [ 1, STREET_POINT, 25 15 0 ]
+store_suit_point [ 2, STREET_POINT, 55 15 0 ]
+store_suit_point [ 3, STREET_POINT, 55 25 0 ]
 group "toontownCentralTutorial" [
  visgroup "20001" [
   vis [   "20001"   ]
@@ -9,9 +9,9 @@ group "toontownCentralTutorial" [
   suit_edge [ 1 2 ]
   suit_edge [ 2 3 ]
   suit_edge [ 3 0 ]
-  battle_cell [ 20 20 75 20 -0.5 ]
+  battle_cell [ 20 20 75 20 0 ]
   group "tutorial" [
-   prop "linktunnel_tt_0_DNARoot" [
+   prop "linktunnel_tt_2000_DNARoot" [
     code [ "prop_safe_zone_entrance_tunnel" ]
     pos [ 210 40 0 ]
     hpr [ -90 0 0 ]
@@ -1969,7 +1969,7 @@ group "toontownCentralTutorial" [
    ]
    prop "prop_cellar_door_DNARoot" [
     code [ "prop_cellar_door" ]
-    pos [ 110 85 0 ]
+    pos [ -4.11543 -109.145 0 ]
     hpr [ -90 0 0 ]
    ]
    prop "prop_tree_large_ul_DNARoot" [

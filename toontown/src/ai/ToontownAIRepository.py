@@ -11,14 +11,10 @@ from toontown.safezone import DistributedTrolleyAI
 from otp.friends import FriendManagerAI
 from toontown.shtiker import DeleteManagerAI
 from toontown.safezone import SafeZoneManagerAI
-import ToontownMagicWordManagerAI
 from toontown.tutorial import TutorialManagerAI
-from toontown.catalog import CatalogManagerAI
 from otp.ai import TimeManagerAI
-import WelcomeValleyManagerAI
 from toontown.building import DistributedBuildingMgrAI
 from toontown.building import DistributedTrophyMgrAI
-from toontown.estate import DistributedBankMgrAI
 from toontown.hood import TTHoodDataAI
 from toontown.hood import DDHoodDataAI
 from toontown.hood import MMHoodDataAI
@@ -40,8 +36,7 @@ from toontown.coghq import LawOfficeManagerAI
 from toontown.coghq import CountryClubManagerAI
 import NewsManagerAI
 from toontown.hood import ZoneUtil
-from toontown.fishing import DistributedFishingPondAI
-from toontown.safezone import DistributedFishingSpotAI
+from toontown.safezone.DistributedFishingSpotAI import DistributedFishingSpotAI
 from toontown.safezone import DistributedButterflyAI
 from toontown.safezone import DistributedPartyGateAI
 from toontown.toon import NPCDialogueManagerAI
@@ -89,6 +84,8 @@ from toontown.coderedemption.TTCodeRedemptionMgrAI import TTCodeRedemptionMgrAI
 from toontown.distributed.NonRepeatableRandomSourceAI import NonRepeatableRandomSourceAI
 
 import ToontownGroupManager
+from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from otp.ai import MagicWordManagerAI
 
 if __debug__:
     import pdb
@@ -359,10 +356,10 @@ class ToontownAIRepository(AIDistrict):
         self.loadDNA()
 
         # Create a new district (aka shard) for this AI:
-        self.district = ToontownDistrictAI(self, self.districtName)
-        self.district.generateOtpObject(
-                OTP_DO_ID_TOONTOWN, OTP_ZONE_ID_DISTRICTS,
-                doId=self.districtId)
+        self.districtId = self.allocateChannel()
+
+        self.rootObj = DistributedObjectAI(self)
+        self.rootObj.generateWithRequiredAndId(self.districtId, 0, 0)
 
         # The Time manager.  This negotiates a timestamp exchange for
         # the purposes of synchronizing clocks between client and
@@ -375,27 +372,16 @@ class ToontownAIRepository(AIDistrict):
         # in) will get a chance to synchronize.
         self.timeManager = TimeManagerAI.TimeManagerAI(self)
         self.timeManager.generateOtpObject(
-            self.district.getDoId(), OTPGlobals.UberZone)
-
-        self.welcomeValleyManager = WelcomeValleyManagerAI.WelcomeValleyManagerAI(self)
-        self.welcomeValleyManager.generateWithRequired(OTPGlobals.UberZone)
+            self.rootObj.getDoId(), OTPGlobals.UberZone)
 
         # The trophy manager should be created before the building
         # managers.
         self.trophyMgr = DistributedTrophyMgrAI.DistributedTrophyMgrAI(self)
         self.trophyMgr.generateWithRequired(OTPGlobals.UberZone)
 
-        # The bank manager handles banking transactions
-        self.bankMgr = DistributedBankMgrAI.DistributedBankMgrAI(self)
-        self.bankMgr.generateWithRequired(OTPGlobals.UberZone)
-
         # The Friend Manager
         self.friendManager = FriendManagerAI.FriendManagerAI(self)
         self.friendManager.generateWithRequired(OTPGlobals.UberZone)
-
-        # The Delete Manager
-        self.deleteManager = DeleteManagerAI.DeleteManagerAI(self)
-        self.deleteManager.generateWithRequired(OTPGlobals.UberZone)
 
         # The Safe Zone manager
         self.safeZoneManager = SafeZoneManagerAI.SafeZoneManagerAI(self)
@@ -404,16 +390,12 @@ class ToontownAIRepository(AIDistrict):
         # The Magic Word Manager
         magicWordString = simbase.config.GetString('want-magic-words', '1')
         if magicWordString not in ('', '0', '#f'):
-            self.magicWordManager = ToontownMagicWordManagerAI.ToontownMagicWordManagerAI(self)
+            self.magicWordManager = MagicWordManagerAI.MagicWordManagerAI(self)
             self.magicWordManager.generateWithRequired(OTPGlobals.UberZone)
 
         # The Tutorial manager
         self.tutorialManager = TutorialManagerAI.TutorialManagerAI(self)
         self.tutorialManager.generateWithRequired(OTPGlobals.UberZone)
-
-        # The Catalog Manager
-        self.catalogManager = CatalogManagerAI.CatalogManagerAI(self)
-        self.catalogManager.generateWithRequired(OTPGlobals.UberZone)
 
         # The Quest manager
         self.questManager = QuestManagerAI.QuestManagerAI(self)
@@ -619,65 +601,20 @@ class ToontownAIRepository(AIDistrict):
 
         return partyHats
 
-    def findFishingPonds(self, dnaGroup, zoneId, area, overrideDNAZone = 0):
-        """
-        Recursively scans the given DNA tree for fishing ponds.  These
-        are defined as all the groups whose code includes the string
-        "fishing_pond".  For each such group, creates a
-        DistributedFishingPondAI.  Returns the list of distributed
-        objects and a list of the DNAGroups so we can search them for
-        spots and targets.
-        """
-        fishingPonds = []
-        fishingPondGroups = []
-
-        if ((isinstance(dnaGroup, DNAGroup)) and
-            # If it is a DNAGroup, and the name starts with fishing_pond, count it
-            (string.find(dnaGroup.getName(), 'fishing_pond') >= 0)):
-            # Here's a fishing pond!
-            fishingPondGroups.append(dnaGroup)
-            fp = DistributedFishingPondAI.DistributedFishingPondAI(self, area)
-            fp.generateWithRequired(zoneId)
-            fishingPonds.append(fp)
-        else:
-            # Now look in the children
-            # Fishing ponds cannot have other ponds in them,
-            # so do not search the one we just found:
-            # If we come across a visgroup, note the zoneId and then recurse
-            if (isinstance(dnaGroup, DNAVisGroup) and not overrideDNAZone):
-                # Make sure we get the real zone id, in case we are in welcome valley
-                zoneId = ZoneUtil.getTrueZoneId(
-                        int(dnaGroup.getName().split(':')[0]), zoneId)
-            for i in range(dnaGroup.getNumChildren()):
-                childFishingPonds, childFishingPondGroups = self.findFishingPonds(
-                        dnaGroup.at(i), zoneId, area, overrideDNAZone)
-                fishingPonds += childFishingPonds
-                fishingPondGroups += childFishingPondGroups
-        return fishingPonds, fishingPondGroups
-
-    def findFishingSpots(self, dnaPondGroup, distPond):
-        """
-        Scans the given DNAGroup pond for fishing spots.  These
-        are defined as all the props whose code includes the string
-        "fishing_spot".  Fishing spots should be the only thing under a pond
-        node. For each such prop, creates a DistributedFishingSpotAI.
-        Returns the list of distributed objects created.
-        """
+    def findFishingSpots(self, dnaGroup, zoneId):
         fishingSpots = []
-        # Search the children of the pond
-        for i in range(dnaPondGroup.getNumChildren()):
-            dnaGroup = dnaPondGroup.at(i)
-            if ((isinstance(dnaGroup, DNAProp)) and
-                (string.find(dnaGroup.getCode(), 'fishing_spot') >= 0)):
-                # Here's a fishing spot!
-                pos = dnaGroup.getPos()
-                hpr = dnaGroup.getHpr()
-                fs = DistributedFishingSpotAI.DistributedFishingSpotAI(
-                     self, distPond, pos[0], pos[1], pos[2], hpr[0], hpr[1], hpr[2])
-                fs.generateWithRequired(distPond.zoneId)
-                fishingSpots.append(fs)
-            else:
-                self.notify.debug("Found dnaGroup that is not a fishing_spot under a pond group")
+
+        if isinstance(dnaGroup, DNAGroup) and dnaGroup.getName()[:13] == 'fishing_spot_':
+            x, y, z = dnaGroup.getPos()
+            h, p, r = dnaGroup.getHpr()
+            fishingSpot = DistributedFishingSpotAI(self, zoneId, x, y, z, h, p, r)
+            fishingSpot.generateWithRequired(zoneId)
+            fishingSpots.append(fishingSpot)
+
+        for i in range(dnaGroup.getNumChildren()):
+            foundFishingSpots = self.findFishingSpots(dnaGroup.at(i), zoneId)
+            fishingSpots.extend(foundFishingSpots)
+
         return fishingSpots
 
     def findRacingPads(self, dnaGroup, zoneId, area, overrideDNAZone = 0, type = 'racing_pad'):

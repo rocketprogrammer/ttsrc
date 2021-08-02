@@ -30,7 +30,6 @@ textures-power-2 down
 # loader settings
 load-file-type toontown
 dc-file phase_3/etc/toon.dc
-dc-file phase_3/etc/otp.dc
 aux-display pandadx9
 aux-display pandadx8
 aux-display pandagl

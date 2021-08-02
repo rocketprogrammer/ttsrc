@@ -6,7 +6,7 @@ group "minniesMelodyLand" [
   group "buildings" [
    flat_building "sz0:random_DNARoot" [
     pos [ 40 80 6.5 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
     width [ 15 ]
     wall [
      height [ 10 ]
@@ -34,8 +34,33 @@ group "minniesMelodyLand" [
     ]
    ]
    flat_building "sz0:random_DNARoot" [
+    pos [ -72.78 -76.97 6.5 ]
+    hpr [ 135 0 0 ]
+    width [ 10 ]
+    wall [
+     height [ 10 ]
+     code [ "wall_sm_brick_pink_ur" ]
+     color [ 1 1 1 1 ]
+     windows [
+      code [ "window_sm_curved_ur" ]
+      color [ 0.49 0.79 1 1 ]
+      count [ 1 ]
+     ]
+    ]
+    wall [
+     height [ 10 ]
+     code [ "wall_sm_brick_pink_ur" ]
+     color [ 1 1 1 1 ]
+     windows [
+      code [ "window_sm_curved_ur" ]
+      color [ 0.49 0.79 1 1 ]
+      count [ 1 ]
+     ]
+    ]
+   ]
+   flat_building "sz0:random_DNARoot" [
     pos [ -79.9 15 6.5 ]
-    nhpr [ 90 0 0 ]
+    hpr [ 90 0 0 ]
     width [ 15 ]
     wall [
      height [ 20 ]
@@ -49,8 +74,8 @@ group "minniesMelodyLand" [
     ]
    ]
    flat_building "sz0:random_DNARoot" [
-    pos [ -108.236 -55 6.5 ]
-    nhpr [ 90 0 0 ]
+    pos [ -79.8 -55 6.5 ]
+    hpr [ 90 0 0 ]
     width [ 20 ]
     wall [
      height [ 20 ]
@@ -64,8 +89,37 @@ group "minniesMelodyLand" [
     ]
    ]
    flat_building "sz0:random_DNARoot" [
+    pos [ -79.8 -70 6.5 ]
+    hpr [ 90 0 0 ]
+    width [ 15 ]
+    wall [
+     height [ 10 ]
+     code [ "wall_lg_brick_ur" ]
+     color [ 0.96 0.96 0.73 1 ]
+     windows [
+      code [ "window_sm_round_ur" ]
+      color [ 0.42 0.42 0.85 1 ]
+      count [ 0 ]
+     ]
+    ]
+    wall [
+     height [ 10 ]
+     code [ "wall_lg_brick_ur" ]
+     color [ 0.96 0.96 0.73 1 ]
+     windows [
+      code [ "window_sm_round_ur" ]
+      color [ 0.42 0.42 0.85 1 ]
+      count [ 1 ]
+     ]
+     cornice [
+      code [ "cornice_marble_ur" ]
+      color [ 0.68 0.22 0.8 1 ]
+     ]
+    ]
+   ]
+   flat_building "sz0:random_DNARoot" [
     pos [ 55 80 6.5 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
     width [ 15.6 ]
     wall [
      height [ 20 ]
@@ -84,7 +138,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "sz0:random_DNARoot" [
     pos [ 0.6 -119.9 6.5 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
     width [ 15.6 ]
     wall [
      height [ 10 ]
@@ -108,8 +162,37 @@ group "minniesMelodyLand" [
     ]
    ]
    flat_building "sz0:random_DNARoot" [
+    pos [ -15 -119.9 6.5 ]
+    hpr [ -180 0 0 ]
+    width [ 15 ]
+    wall [
+     height [ 10 ]
+     code [ "wall_lg_rock_ur" ]
+     color [ 1 1 1 1 ]
+     windows [
+      code [ "window_sm_square_ul" ]
+      color [ 0.56 0.8 0.65 1 ]
+      count [ 2 ]
+     ]
+    ]
+    wall [
+     height [ 10 ]
+     code [ "wall_lg_rock_ur" ]
+     color [ 1 0.67 1 1 ]
+     windows [
+      code [ "window_sm_square_ul" ]
+      color [ 0.56 0.8 0.65 1 ]
+      count [ 2 ]
+     ]
+     cornice [
+      code [ "cornice_marble_ur" ]
+      color [ 1 1 0.58 1 ]
+     ]
+    ]
+   ]
+   flat_building "sz0:random_DNARoot" [
     pos [ -29.65 -120.1 6.5 ]
-    nhpr [ 135 0 0 ]
+    hpr [ 135 0 0 ]
     width [ 20 ]
     wall [
      height [ 10 ]
@@ -138,7 +221,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "sz0:random_DNARoot" [
     pos [ -10 80 6.5 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
     width [ 15 ]
     wall [
      height [ 20 ]
@@ -151,10 +234,39 @@ group "minniesMelodyLand" [
      ]
     ]
    ]
+   flat_building "sz0:random_DNARoot" [
+    pos [ -79.9 -0.6 6.5 ]
+    hpr [ 90 0 0 ]
+    width [ 15.6 ]
+    wall [
+     height [ 10 ]
+     code [ "wall_lg_brick_ur" ]
+     color [ 1 0.62 0.85 1 ]
+     windows [
+      code [ "window_sm_round_ur" ]
+      color [ 0.42 0.42 0.85 1 ]
+      count [ 1 ]
+     ]
+    ]
+    wall [
+     height [ 10 ]
+     code [ "wall_lg_brick_ur" ]
+     color [ 1 0.62 0.85 1 ]
+     windows [
+      code [ "window_sm_round_ur" ]
+      color [ 0.42 0.42 0.85 1 ]
+      count [ 1 ]
+     ]
+     cornice [
+      code [ "cornice_marble_ur" ]
+      color [ 0.68 0.22 0.8 1 ]
+     ]
+    ]
+   ]
    prop "prop_trolley_station_DNARoot" [
     code [ "prop_trolley_station" ]
     pos [ -54.0463 55.8937 6.5 ]
-    nhpr [ 45 0 0 ]
+    hpr [ 45 0 0 ]
     sign [
      color [ 0.25 0.25 0.25 1 ]
      baseline [
@@ -213,7 +325,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "tb0:random_DNARoot" [
     pos [ 70.37 -119.76 6.5 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
     width [ 15.6 ]
     wall [
      height [ 10 ]
@@ -241,8 +353,8 @@ group "minniesMelodyLand" [
     ]
    ]
    flat_building "tb0:random_DNARoot" [
-    pos [ 14.82 -119.74 6.5 ]
-    nhpr [ 180 0 0 ]
+    pos [ 54.82 -119.74 6.5 ]
+    hpr [ 180 0 0 ]
     width [ 15 ]
     wall [
      height [ 10 ]
@@ -271,8 +383,8 @@ group "minniesMelodyLand" [
    ]
    prop "linktunnel_mm_4340_DNARoot" [
     code [ "prop_safe_zone_tunnel" ]
-    pos [ -25 -209.95 -0.17 ]
-    nhpr [ 0 0 0 ]
+    pos [ -40 -209.95 -0.17 ]
+    hpr [ 0 0 0 ]
     sign [
      code [ "tunnel_sign_magenta" ]
      scale [ 1.5 1 1.5 ]
@@ -327,7 +439,7 @@ group "minniesMelodyLand" [
       code [ "mickey" ]
       color [ 0 0.501961 1 1 ]
       pos [ 0 0 -2 ]
-      nhpr [ 0 0 1 ]
+      hpr [ 0 0 -1 ]
       scale [ 0.8 1 0.8 ]
       width [ 43.3426 ]
       height [ 43.3426 ]
@@ -401,7 +513,7 @@ group "minniesMelodyLand" [
    prop "linktunnel_mm_4222_DNARoot" [
     code [ "prop_safe_zone_tunnel" ]
     pos [ -170.012 44.58 -0.5 ]
-    nhpr [ -90 0 0 ]
+    hpr [ -90 0 0 ]
     sign [
      code [ "tunnel_sign_magenta" ]
      scale [ 1.5 1 1.5 ]
@@ -552,7 +664,7 @@ group "minniesMelodyLand" [
    prop "linktunnel_mm_4127_DNARoot" [
     code [ "prop_safe_zone_tunnel" ]
     pos [ 80 169.99 -0.17 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
     sign [
      code [ "tunnel_sign_magenta" ]
      scale [ 1.5 1 1.5 ]
@@ -601,7 +713,7 @@ group "minniesMelodyLand" [
       code [ "mickey" ]
       color [ 0.501961 0.501961 1 1 ]
       pos [ 0 0 -1.78 ]
-      nhpr [ 0 0 1 ]
+      hpr [ 0 0 -1 ]
       scale [ 0.8 1 0.8 ]
       width [ 33.2978 ]
       height [ 33.2978 ]
@@ -674,7 +786,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "sz0:random_DNARoot" [
     pos [ -43.79 -105.96 6.5 ]
-    nhpr [ 135 0 0 ]
+    hpr [ 135 0 0 ]
     width [ 10 ]
     wall [
      height [ 10 ]
@@ -692,7 +804,7 @@ group "minniesMelodyLand" [
     building_type [ "gagshop" ]
     title [ "Gag Shop" ]
     pos [ -65.36 38.9231 6.5 ]
-    nhpr [ -135 0 0 ]
+    hpr [ -135 0 0 ]
     door [
      code [ "door_double_curved_ur" ]
      color [ 1 0.79 0.49 1 ]
@@ -702,12 +814,12 @@ group "minniesMelodyLand" [
     code [ "toon_landmark_hqMM" ]
     building_type [ "hq" ]
     title [ "Toon Headquarters" ]
-    pos [ 76.8912 -13.6265 -13.4784 ]
-    nhpr [ 0 0 0 ]
+    pos [ -0.753601 -11.824 -12.5 ]
+    hpr [ 0 0 0 ]
    ]
    flat_building "tb0:random_DNARoot" [
     pos [ -79.9 30 6.5 ]
-    nhpr [ 45 0 0 ]
+    hpr [ 45 0 0 ]
     width [ 10 ]
     wall [
      height [ 20 ]
@@ -720,12 +832,22 @@ group "minniesMelodyLand" [
      ]
     ]
    ]
+   flat_building "tb0:random_DNARoot" [
+    pos [ -62.1733 -87.5767 6.5 ]
+    hpr [ 135 0 0 ]
+    width [ 15 ]
+    wall [
+     height [ 20 ]
+     code [ "wall_md_blank_ur" ]
+     color [ 0.7 0.76 1 1 ]
+    ]
+   ]
    landmark_building "tb6:toon_landmark_MM_clothes_shop_DNARoot" [
     code [ "toon_landmark_MM_clothes_shop" ]
     building_type [ "clotheshop" ]
     title [ "Clothing Shop" ]
     pos [ -54.9522 -88.7614 6.5 ]
-    nhpr [ 131 0 0 ]
+    hpr [ 131 0 0 ]
     door [
      code [ "door_double_clothesshop_ur" ]
      color [ 1 0.64 0.74 1 ]
@@ -783,7 +905,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "sz0:random_DNARoot" [
     pos [ -30 80 6.5 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
     width [ 20 ]
     wall [
      height [ 20 ]
@@ -802,7 +924,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "sz0:random_DNARoot" [
     pos [ -32.8263 77.1134 6.5 ]
-    nhpr [ 45 0 0 ]
+    hpr [ 45 0 0 ]
     width [ 5 ]
     wall [
      height [ 10 ]
@@ -827,7 +949,7 @@ group "minniesMelodyLand" [
    ]
    flat_building "sz0:random_DNARoot" [
     pos [ -61.1174 48.8226 6.5 ]
-    nhpr [ 45 0 0 ]
+    hpr [ 45 0 0 ]
     width [ 10 ]
     wall [
      height [ 10 ]
@@ -850,386 +972,293 @@ group "minniesMelodyLand" [
      ]
     ]
    ]
-   flat_building "sz0:random_DNARoot" [
-    pos [ -15 -119.9 6.5 ]
-    nhpr [ 180 0 0 ]
-    width [ 15 ]
-    wall [
-     height [ 10 ]
-     code [ "wall_lg_rock_ur" ]
-     color [ 1 1 1 1 ]
-    ]
-    wall [
-     height [ 10 ]
-     code [ "wall_lg_rock_ur" ]
-     color [ 1 0.7 0.7 1 ]
-     cornice [
-      code [ "cornice_marble_ur" ]
-      color [ 1 1 0.58 1 ]
-     ]
-     windows [
-      code [ "window_sm_round_ul" ]
-      color [ 0.97 0.87 0.47 1 ]
-      count [ 2 ]
-     ]
-    ]
-   ]
-   flat_building "sz0:random_DNARoot" [
-    pos [ -79.9 -0.6 6.5 ]
-    nhpr [ 90 0 0 ]
-    width [ 15.6 ]
-    wall [
-     height [ 20 ]
-     code [ "wall_lg_rock_ur" ]
-     color [ 1 1 1 1 ]
-     windows [
-      code [ "window_md_curved_ur" ]
-      color [ 0.8 0.56 0.65 1 ]
-      count [ 3 ]
-     ]
-     cornice [
-      code [ "cornice_marble_ur" ]
-      color [ 0.8 0.22 0.68 1 ]
-     ]
-    ]
-   ]
   ]
   group "props" [
    prop "minnies_melody_land" [
     code [ "minnies_melody_land" ]
     pos [ 20 -20 0 ]
-    nhpr [ -90 0 0 ]
+    hpr [ -90 0 0 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 61.65 63.07 6.53 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -62.64 20.43 6.54 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -21.22 -102.71 6.52 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -62.6 -60.56 6.53 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -21.09 62.97 6.55 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 61.97 -103.26 6.53 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
+/*
+   these are scaled and positioned right, but
+   have flashing coincident polys on sides
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_keyboard_small" ]
+    pos [ 52.05 -120 13 ]
+    hpr [ -180 0 0 ]
+    scale [ 0.4 0.4 0.4 ]
+   ]
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_keyboard_small" ]
+    pos [ 47.05 -120 13 ]
+    hpr [ -180 0 0 ]
+    scale [ 0.4 0.4 0.4 ]
+   ]
+*/   
+/*
+   need to be properly scaled and positioned
+   
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_awning_small_purple" ]
+    pos [ 62.85 -119.87 22.99 ]
+    hpr [ 180 0 0 ]
+    scale [ 1 1 1 ]
+    color [ 1 0 0 1 ]
+   ]
+
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_keyboard_small" ]
+    pos [ -32 -115.51 22 ]
+    hpr [ 135 0 0 ]
+    scale [ 0.3 0.4 0.4 ]
+    color [ 1 1 0 1 ]
+   ]
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_keyboard_small" ]
+    pos [ -36.9 -110.38 22 ]
+    hpr [ 135 0 0 ]
+    scale [ 0.3 0.4 0.4 ]
+   ]
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_awning_small_purple" ]
+    pos [ -80.19 7.36 21.75 ]
+    hpr [ 90 0 0 ]
+   ]
+   prop "prop_awning_small_purple_DNARoot" [
+    code [ "prop_awning_small_purple" ]
+    pos [ -80.19 7.36 12.25 ]
+    hpr [ 90 0 0 ]
+   ]
+   prop "prop_awning_small_pinkblue_DNARoot" [
+    code [ "prop_awning_small_purple" ]
+    pos [ -23.5 80 20.5 ]
+    hpr [ 0 0 0 ]
+   ]
+   prop "prop_awning_small_pinkblue_DNARoot" [
+    code [ "prop_awning_small_purple" ]
+    pos [ -17.12 79.98 20.25 ]
+    hpr [ 0 0 0 ]
+   ]
+*/   
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -28.9883 75.2548 6.5 ]
-    nhpr [ -180 0 0 ]
+    hpr [ 180 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -53.3392 53.7724 6.5 ]
-    nhpr [ 90 0 0 ]
+    hpr [ 90 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -41.5358 -102.53 6.5 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
-    pos [ -78.2092 -88.138 6.51 ]
-    nhpr [ 270 0 0 ]
+    pos [ -66.2429 -76.8229 6.5 ]
+    hpr [ -90 0 0 ]
    ]
    prop "prop_trumpet_flat_DNARoot" [
     code [ "prop_trumpet_flat" ]
     pos [ -1.41116 77.3762 6.5 ]
-    nhpr [ -45 0 0 ]
+    hpr [ -45 0 0 ]
     scale [ 0.6 0.6 0.6 ]
    ]
    prop "prop_cello_flat_DNARoot" [
     code [ "prop_cello_flat" ]
-    pos [ -24.7673 -116.716 6.5 ]
-    nhpr [ -165 0 0 ]
+    pos [ -31.26 -118.21 6.5 ]
+    hpr [ 150 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 65.66 -117.52 6.5 ]
+    hpr [ -45 0 0 ]
+   ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 65.69 77.41 6.5 ]
+    hpr [ 60 0 0 ]
+   ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ -9.79 62.53 6.5 ]
+    hpr [ 180 0 0 ]
+   ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -75.6574 10.201 6.5 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
     scale [ 0.6 0.6 0.6 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 6.76 62.54 6.5 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 8.74617 -103.038 6.50001 ]
-    nhpr [ -180 0 0 ]
+    code [ "prop_tree_small_ur" ]
+    pos [ 43.39 -103.87 6.5 ]
+    hpr [ 180 0 0 ]
+    scale [ 0.7 0.7 0.7 ]
+   ]
+   prop "prop_tree_small_ur_DNARoot" [
+    code [ "prop_tree_small_ur" ]
+    pos [ -22.73 -114.61 6.5 ]
+    hpr [ -180 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 84.01 -61.13 -13.5 ]
-    nhpr [ -135 0 0 ]
+    hpr [ -135 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 83.31 21.62 -13.5 ]
-    nhpr [ 135 0 0 ]
+    hpr [ 135 0 0 ]
+   ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 98.78 -76.72 -13.5 ]
+    hpr [ 60 0 0 ]
+   ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 98.85 38.11 -13.5 ]
+    hpr [ -30 0 0 ]
+   ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ -12.28 -103.18 6.5 ]
+    hpr [ 15 0 0 ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ -42.59 -113.94 24.19 ]
-    nhpr [ 135 0 0 ]
+    hpr [ 135 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 59.8 -123.49 24.42 ]
-    nhpr [ -180 0 0 ]
+    hpr [ 180 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ -82.94 15.82 24.46 ]
-    nhpr [ 90 0 0 ]
+    hpr [ 90 0 0 ]
     color [ 0.7 0.76 1 1 ]
    ]
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ -24.54 85.1 25.76 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 50.5 80.92 26.28 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ -44.11 68.08 26.88 ]
-    nhpr [ 45 0 0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ -9.2 -121.55 24.91 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
-    pos [ -106.052 -62.6765 25.5799 ]
-    nhpr [ 90 0 0 ]
+    pos [ -80.67 -59.16 27.25 ]
+    hpr [ 90 0 0 ]
    ]
    prop "prop_tree_small_ul_DNARoot" [
-    code [ "prop_tree_small_ul_MM" ]
-    pos [ -100.97 -42.1847 6.5 ]
-    nhpr [ 270 0 0 ]
+    code [ "prop_tree_small_ul" ]
+    pos [ -74.77 -66.22 6.65 ]
+    hpr [ -90 0 0 ]
     scale [ 0.6 0.6 0.6 ]
    ]
    prop "prop_tree_small_ul_DNARoot" [
-    code [ "prop_tree_small_ul_MM" ]
+    code [ "prop_tree_small_ul" ]
     pos [ 80 -90 -13.5 ]
-    nhpr [ -90 0 0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
-    pos [ 51.2461 -112.704 6.76006 ]
-    nhpr [ -180 0 0 ]
+    pos [ 35.31 -113.72 6.76 ]
+    hpr [ 180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
     color [ 0.75 0.75 0.75 1 ]
    ]
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
-    pos [ 18.42 -113.71 6.59 ]
-    nhpr [ 0 0 0 ]
+    pos [ 3.42 -113.71 6.59 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
     color [ 0.75 0.75 0.75 1 ]
    ]
    prop "neighborhood_sign_BR_DNARoot" [
     code [ "neighborhood_sign_BR" ]
     pos [ -73.6 -35.66 6.47 ]
-    nhpr [ 90 0 0 ]
+    hpr [ 90 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
    prop "neighborhood_sign_BR_DNARoot" [
     code [ "neighborhood_sign_BR" ]
     pos [ -73.67 -4.15 6.48 ]
-    nhpr [ -90 0 0 ]
+    hpr [ -90 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
    prop "neighborhood_sign_TT_DNARoot" [
     code [ "neighborhood_sign_TT" ]
     pos [ 35.79 73.75 6.5 ]
-    nhpr [ 180 0 0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
    prop "neighborhood_sign_TT_DNARoot" [
     code [ "neighborhood_sign_TT" ]
     pos [ 4.49 73.77 6.5 ]
-    nhpr [ 0 0 0 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
-   ]
-  ]
-  group "fishing_pond_1" [
-   prop "npc_fisherman_origin_0" [
-    code [ "DCS" ]
-    pos [ -58.2 -59.2 -14.49 ]
-    nhpr [ -61 0 0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ 0.116032 -36.0211 -12.0961 ]
-    nhpr [ 0 0 0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ 15.0129 -19.8358 -12.0911 ]
-    nhpr [ 90 0 0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ -0.159901 -5.94525 -12.0341 ]
-    nhpr [ 180 0 0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ -15.5633 -19.8867 -12.1373 ]
-    nhpr [ -90 0 0 ]
-   ]
-  ]
-  landmark_building "tb8:toon_landmark_MM_pet_shop_DNARoot" [
-   code [ "toon_landmark_MM_pet_shop" ]
-   building_type [ "petshop" ]
-   title [ "" ]
-   pos [ -11.6789 -118.281 6.5 ]
-   nhpr [ -178 0 0 ]
-   door [
-    code [ "door_double_curved_ul" ]
-    color [ 0.7 0.78 1 1 ]
-   ]
-   prop "animated_prop_PetShopFishAnimatedProp_DNARoot" [
-    code [ "animated_prop_PetShopFishAnimatedProp" ]
-    pos [ 0 0 0 ]
-    nhpr [ 0 0 0 ]
-   ]
-   sign [
-    color [ 1 1 0.501961 1 ]
-    baseline [
-     code [ "mickey" ]
-     color [ 1 1 0.501961 1 ]
-     pos [ 0 0 0.256555 ]
-     scale [ 1.49894 1 2.85691 ]
-     width [ 14.3268 ]
-     height [ 14.3268 ]
-     text [
-      letters [ "P" ]
-     ]
-     text [
-      letters [ "e" ]
-     ]
-     text [
-      letters [ "t" ]
-     ]
-     text [
-      letters [ " " ]
-     ]
-     text [
-      letters [ "S" ]
-     ]
-     text [
-      letters [ "h" ]
-     ]
-     text [
-      letters [ "o" ]
-     ]
-     text [
-      letters [ "p" ]
-     ]
-    ]
-   ]
-  ]
-  prop "prop_party_gate_DNARoot" [
-   code [ "prop_party_gate" ]
-   pos [ -89.4911 -67.2785 6.51 ]
-   nhpr [ 120 1.10607e-006 0 ]
-  ]
-  prop "minnies_melody_land_ext_DNARoot" [
-   code [ "minnies_melody_land_ext" ]
-   pos [ -81.9737 -72.8169 6.5 ]
-   nhpr [ 90 0 0 ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ -88.3944 -88.2447 6.51 ]
-   nhpr [ 120 0 0 ]
-   width [ 20 ]
-   wall [
-    height [ 20 ]
-    code [ "wall_lg_brick_ur" ]
-    color [ 1 0.62 0.85 1 ]
-    windows [
-     code [ "window_sm_round_ur" ]
-     color [ 0.69 0.58 0.96 1 ]
-     count [ 4 ]
-    ]
-    cornice [
-     code [ "cornice_marble_ur" ]
-     color [ 0.84 0.55 0.98 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ -76.4628 -95.1527 6.5 ]
-   nhpr [ 150 0 0 ]
-   width [ 15 ]
-   wall [
-    height [ 20 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.7 0.76 1 1 ]
-    windows [
-     code [ "window_porthole_ul" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 2 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ -98.3008 -72.285 6.5 ]
-   nhpr [ 120 0 0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_sm_brick_pink_ur" ]
-    color [ 1 1 1 1 ]
-    windows [
-     code [ "window_sm_curved_ul" ]
-     color [ 0.49 0.79 1 1 ]
-     count [ 2 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_sm_brick_pink_ur" ]
-    color [ 1 1 1 1 ]
-    windows [
-     code [ "window_sm_curved_ul" ]
-     color [ 0.49 0.79 1 1 ]
-     count [ 2 ]
-    ]
    ]
   ]
  ]

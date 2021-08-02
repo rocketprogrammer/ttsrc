@@ -2,28 +2,6 @@ group "Estate" [
  visgroup "30000:estate" [
   vis [   "30000:estate"   ]
   node "level" [
-   group "fishing_pond_1" [
-    prop "fishing_spot_DNARoot" [
-     code [ "fishing_spot" ]
-     pos [ 49.1029 -124.805 0.344704 ]
-     hpr [ 90 0 0 ]
-    ]
-    prop "fishing_spot_DNARoot" [
-     code [ "fishing_spot" ]
-     pos [ 46.5222 -134.739 0.390713 ]
-     hpr [ 75 0 0 ]
-    ]
-    prop "fishing_spot_DNARoot" [
-     code [ "fishing_spot" ]
-     pos [ 41.31 -144.559 0.375978 ]
-     hpr [ 45 0 0 ]
-    ]
-    prop "fishing_spot_DNARoot" [
-     code [ "fishing_spot" ]
-     pos [ 46.8254 -113.682 0.46015 ]
-     hpr [ 135 0 0 ]
-    ]
-   ]
    prop "terrain_DNARoot" [
     code [ "terrain" ]
     pos [ -4.99989 -0.000152588 2.28882e-005 ]
@@ -199,6 +177,26 @@ group "Estate" [
     code [ "prop_tree_small_ur" ]
     pos [ 42.2373 9.56175 8.36716 ]
     hpr [ 0 0 0 ]
+   ]
+   prop "fishing_spot_DNARoot" [
+    code [ "fishing_spot" ]
+    pos [ 49.1029 -124.805 0.344704 ]
+    hpr [ 90 0 0 ]
+   ]
+   prop "fishing_spot_DNARoot" [
+    code [ "fishing_spot" ]
+    pos [ 46.5222 -134.739 0.390713 ]
+    hpr [ 75 0 0 ]
+   ]
+   prop "fishing_spot_DNARoot" [
+    code [ "fishing_spot" ]
+    pos [ 41.31 -144.559 0.375978 ]
+    hpr [ 45 0 0 ]
+   ]
+   prop "fishing_spot_DNARoot" [
+    code [ "fishing_spot" ]
+    pos [ 46.8254 -113.682 0.46015 ]
+    hpr [ 135 0 0 ]
    ]
   ]
  ]

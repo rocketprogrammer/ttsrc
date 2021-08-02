@@ -24,7 +24,7 @@ import types
 from toontown.fishing import FishGlobals
 from toontown.fishing import FishCollection
 from toontown.fishing import FishTank
-from NPCToons import npcFriends,isZoneProtected
+from NPCToons import isZoneProtected
 from toontown.coghq import CogDisguiseGlobals
 import random
 from toontown.chat import ResistanceChat

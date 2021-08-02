@@ -1,0 +1,23 @@
+place_model "phase_6/models/modules/safe_zone_tunnel_DD" [
+	store_node [ "prop" "prop_safe_zone_tunnel" ]
+        ]
+
+place_model "phase_6/models/modules/trolley_station_DD" [
+	store_node [ "prop" "prop_trolley_station" ]
+	]
+
+place_model "phase_6/models/neighborhoods/donalds_dock" [
+ 	store_node [ "prop" "donalds_dock" ]
+	]
+
+place_model "phase_6/models/modules/gagShop_DD" [
+	store_node [ "toon_landmark" "toon_landmark_DD_gag_shop" "" ]
+        ]
+
+place_model "phase_6/models/modules/clothshopDD" [
+	store_node [ "toon_landmark" "toon_landmark_DD_clothes_shop" "" ]
+        ]
+
+place_model "phase_6/models/modules/hqDD_SZ" [
+	store_node [ "toon_landmark" "toon_landmark_hqDD_SZ" "" ]
+	]

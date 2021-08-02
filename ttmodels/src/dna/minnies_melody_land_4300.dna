@@ -1,189 +1,189 @@
-store_suit_point [ 0, STREET_POINT, 65 30 -0.5 ]
-store_suit_point [ 1, STREET_POINT, 65 40 -0.5 ]
-store_suit_point [ 2, STREET_POINT, 55 30 -0.5 ]
-store_suit_point [ 3, STREET_POINT, 55 40 -0.5 ]
-store_suit_point [ 4, STREET_POINT, 65 62 -0.5 ]
-store_suit_point [ 5, STREET_POINT, 65 80 -0.5 ]
-store_suit_point [ 6, STREET_POINT, 55 80 -0.5 ]
-store_suit_point [ 7, STREET_POINT, 55 62 -0.5 ]
+store_suit_point [ 0, STREET_POINT, 65 30 0 ]
+store_suit_point [ 1, STREET_POINT, 65 40 0 ]
+store_suit_point [ 2, STREET_POINT, 55 30 0 ]
+store_suit_point [ 3, STREET_POINT, 55 40 0 ]
+store_suit_point [ 4, STREET_POINT, 65 62 0 ]
+store_suit_point [ 5, STREET_POINT, 65 80 0 ]
+store_suit_point [ 6, STREET_POINT, 55 80 0 ]
+store_suit_point [ 7, STREET_POINT, 55 62 0 ]
 store_suit_point [ 8, FRONT_DOOR_POINT, 44 62 0, 1 ]
-store_suit_point [ 9, STREET_POINT, 65 95 -0.5 ]
-store_suit_point [ 10, STREET_POINT, 80 95 -0.5 ]
-store_suit_point [ 11, STREET_POINT, 80 105 -0.5 ]
-store_suit_point [ 12, STREET_POINT, 55 105 -0.5 ]
+store_suit_point [ 9, STREET_POINT, 65 95 0 ]
+store_suit_point [ 10, STREET_POINT, 80 95 0 ]
+store_suit_point [ 11, STREET_POINT, 80 105 0 ]
+store_suit_point [ 12, STREET_POINT, 55 105 0 ]
 store_suit_point [ 13, FRONT_DOOR_POINT, 63 116 0, 3 ]
-store_suit_point [ 14, STREET_POINT, 120 95 -0.5 ]
-store_suit_point [ 15, STREET_POINT, 120 105 -0.5 ]
-store_suit_point [ 16, STREET_POINT, 137 104 -0.5 ]
-store_suit_point [ 17, STREET_POINT, 145 120 -0.5 ]
-store_suit_point [ 18, STREET_POINT, 135 120 -0.5 ]
-store_suit_point [ 19, STREET_POINT, 131 109 -0.5 ]
+store_suit_point [ 14, STREET_POINT, 120 95 0 ]
+store_suit_point [ 15, STREET_POINT, 120 105 0 ]
+store_suit_point [ 16, STREET_POINT, 137 104 0 ]
+store_suit_point [ 17, STREET_POINT, 145 120 0 ]
+store_suit_point [ 18, STREET_POINT, 135 120 0 ]
+store_suit_point [ 19, STREET_POINT, 131 109 0 ]
 store_suit_point [ 20, FRONT_DOOR_POINT, 138 84 0, 20 ]
-store_suit_point [ 21, STREET_POINT, 145 142 -0.5 ]
-store_suit_point [ 22, STREET_POINT, 145 160 -0.5 ]
-store_suit_point [ 23, STREET_POINT, 135 160 -0.5 ]
-store_suit_point [ 24, STREET_POINT, 135 142 -0.5 ]
+store_suit_point [ 21, STREET_POINT, 145 142 0 ]
+store_suit_point [ 22, STREET_POINT, 145 160 0 ]
+store_suit_point [ 23, STREET_POINT, 135 160 0 ]
+store_suit_point [ 24, STREET_POINT, 135 142 0 ]
 store_suit_point [ 25, FRONT_DOOR_POINT, 156 142 0, 4 ]
-store_suit_point [ 26, STREET_POINT, 145 177 -0.5 ]
-store_suit_point [ 27, STREET_POINT, 145 200 -0.5 ]
-store_suit_point [ 28, STREET_POINT, 135 200 -0.5 ]
-store_suit_point [ 29, STREET_POINT, 135 177 -0.5 ]
+store_suit_point [ 26, STREET_POINT, 145 177 0 ]
+store_suit_point [ 27, STREET_POINT, 145 200 0 ]
+store_suit_point [ 28, STREET_POINT, 135 200 0 ]
+store_suit_point [ 29, STREET_POINT, 135 177 0 ]
 store_suit_point [ 30, FRONT_DOOR_POINT, 124 177 0, 7 ]
-store_suit_point [ 31, STREET_POINT, 149 210 -0.5 ]
-store_suit_point [ 32, STREET_POINT, 160 215 -0.5 ]
-store_suit_point [ 33, STREET_POINT, 160 225 -0.5 ]
-store_suit_point [ 34, STREET_POINT, 142 216 -0.5 ]
+store_suit_point [ 31, STREET_POINT, 149 210 0 ]
+store_suit_point [ 32, STREET_POINT, 160 215 0 ]
+store_suit_point [ 33, STREET_POINT, 160 225 0 ]
+store_suit_point [ 34, STREET_POINT, 142 216 0 ]
 store_suit_point [ 35, FRONT_DOOR_POINT, 137.5 236 0, 21 ]
-store_suit_point [ 37, STREET_POINT, 200 215 -0.5 ]
-store_suit_point [ 38, STREET_POINT, 200 225 -0.5 ]
-store_suit_point [ 41, STREET_POINT, 210 210 -0.5 ]
-store_suit_point [ 42, STREET_POINT, 215 200 -0.5 ]
-store_suit_point [ 43, STREET_POINT, 225 200 -0.5 ]
-store_suit_point [ 44, STREET_POINT, 217 218 -0.5 ]
+store_suit_point [ 37, STREET_POINT, 200 215 0 ]
+store_suit_point [ 38, STREET_POINT, 200 225 0 ]
+store_suit_point [ 41, STREET_POINT, 210 210 0 ]
+store_suit_point [ 42, STREET_POINT, 215 200 0 ]
+store_suit_point [ 43, STREET_POINT, 225 200 0 ]
+store_suit_point [ 44, STREET_POINT, 217 218 0 ]
 store_suit_point [ 45, FRONT_DOOR_POINT, 236 218 0, 28 ]
 store_suit_point [ 46, FRONT_DOOR_POINT, 223 236 0, 27 ]
-store_suit_point [ 47, STREET_POINT, 225 180 -0.5 ]
-store_suit_point [ 48, STREET_POINT, 225 160 -0.5 ]
-store_suit_point [ 49, STREET_POINT, 215 180 -0.5 ]
-store_suit_point [ 50, STREET_POINT, 215 160 -0.5 ]
+store_suit_point [ 47, STREET_POINT, 225 180 0 ]
+store_suit_point [ 48, STREET_POINT, 225 160 0 ]
+store_suit_point [ 49, STREET_POINT, 215 180 0 ]
+store_suit_point [ 50, STREET_POINT, 215 160 0 ]
 store_suit_point [ 51, FRONT_DOOR_POINT, 235 180 0, 9 ]
-store_suit_point [ 52, STREET_POINT, 215 142 -0.5 ]
-store_suit_point [ 53, STREET_POINT, 215 120 -0.5 ]
-store_suit_point [ 54, STREET_POINT, 225 120 -0.5 ]
-store_suit_point [ 55, STREET_POINT, 225 142 -0.5 ]
+store_suit_point [ 52, STREET_POINT, 215 142 0 ]
+store_suit_point [ 53, STREET_POINT, 215 120 0 ]
+store_suit_point [ 54, STREET_POINT, 225 120 0 ]
+store_suit_point [ 55, STREET_POINT, 225 142 0 ]
 store_suit_point [ 56, FRONT_DOOR_POINT, 204 142 0, 12 ]
-store_suit_point [ 57, STREET_POINT, 215 103 -0.5 ]
-store_suit_point [ 58, STREET_POINT, 215 95 -0.5 ]
-store_suit_point [ 59, STREET_POINT, 222 95 -0.5 ]
-store_suit_point [ 60, STREET_POINT, 240 95 -0.5 ]
-store_suit_point [ 61, STREET_POINT, 225 105 -0.5 ]
-store_suit_point [ 62, STREET_POINT, 240 105 -0.5 ]
+store_suit_point [ 57, STREET_POINT, 215 103 0 ]
+store_suit_point [ 58, STREET_POINT, 215 95 0 ]
+store_suit_point [ 59, STREET_POINT, 222 95 0 ]
+store_suit_point [ 60, STREET_POINT, 240 95 0 ]
+store_suit_point [ 61, STREET_POINT, 225 105 0 ]
+store_suit_point [ 62, STREET_POINT, 240 105 0 ]
 store_suit_point [ 63, FRONT_DOOR_POINT, 204 103 0, 17 ]
 store_suit_point [ 64, FRONT_DOOR_POINT, 222 84 0, 19 ]
-store_suit_point [ 65, STREET_POINT, 261 95 -0.5 ]
-store_suit_point [ 66, STREET_POINT, 280 95 -0.5 ]
-store_suit_point [ 67, STREET_POINT, 261 105 -0.5 ]
-store_suit_point [ 68, STREET_POINT, 280 105 -0.5 ]
+store_suit_point [ 65, STREET_POINT, 261 95 0 ]
+store_suit_point [ 66, STREET_POINT, 280 95 0 ]
+store_suit_point [ 67, STREET_POINT, 261 105 0 ]
+store_suit_point [ 68, STREET_POINT, 280 105 0 ]
 store_suit_point [ 69, FRONT_DOOR_POINT, 261 116 0, 29 ]
-store_suit_point [ 70, STREET_POINT, 320 95 -0.5 ]
-store_suit_point [ 71, STREET_POINT, 320 55 -0.5 ]
-store_suit_point [ 72, STREET_POINT, 370 105 -0.5 ]
-store_suit_point [ 73, STREET_POINT, 320 32 -0.5 ]
-store_suit_point [ 74, STREET_POINT, 320 15 -0.5 ]
+store_suit_point [ 70, STREET_POINT, 320 95 0 ]
+store_suit_point [ 71, STREET_POINT, 320 55 0 ]
+store_suit_point [ 72, STREET_POINT, 370 105 0 ]
+store_suit_point [ 73, STREET_POINT, 320 32 0 ]
+store_suit_point [ 74, STREET_POINT, 320 15 0 ]
 store_suit_point [ 75, FRONT_DOOR_POINT, 309 32 0, 35 ]
-store_suit_point [ 76, STREET_POINT, 320 -10 -0.5 ]
-store_suit_point [ 77, STREET_POINT, 330 -10 -0.5 ]
-store_suit_point [ 78, STREET_POINT, 345 -10 -0.5 ]
+store_suit_point [ 76, STREET_POINT, 320 -10 0 ]
+store_suit_point [ 77, STREET_POINT, 330 -10 0 ]
+store_suit_point [ 78, STREET_POINT, 345 -10 0 ]
 store_suit_point [ 79, FRONT_DOOR_POINT, 309 -7 0, 36 ]
 store_suit_point [ 80, FRONT_DOOR_POINT, 330 -20 0, 41 ]
-store_suit_point [ 81, STREET_POINT, 385 -10 -0.5 ]
-store_suit_point [ 82, STREET_POINT, 400 -10 -0.5 ]
-store_suit_point [ 83, STREET_POINT, 400 -25 -0.5 ]
-store_suit_point [ 84, STREET_POINT, 410 -25 -0.5 ]
-store_suit_point [ 85, STREET_POINT, 410 -10 -0.5 ]
-store_suit_point [ 86, STREET_POINT, 425 -10 -0.5 ]
-store_suit_point [ 87, STREET_POINT, 410 105 -0.5 ]
-store_suit_point [ 88, STREET_POINT, 410 80 -0.5 ]
+store_suit_point [ 81, STREET_POINT, 385 -10 0 ]
+store_suit_point [ 82, STREET_POINT, 400 -10 0 ]
+store_suit_point [ 83, STREET_POINT, 400 -25 0 ]
+store_suit_point [ 84, STREET_POINT, 410 -25 0 ]
+store_suit_point [ 85, STREET_POINT, 410 -10 0 ]
+store_suit_point [ 86, STREET_POINT, 425 -10 0 ]
+store_suit_point [ 87, STREET_POINT, 410 105 0 ]
+store_suit_point [ 88, STREET_POINT, 410 80 0 ]
 store_suit_point [ 89, FRONT_DOOR_POINT, 408 116 0, 38 ]
 store_suit_point [ 90, FRONT_DOOR_POINT, 421 83 0, 68 ]
-store_suit_point [ 91, STREET_POINT, 410 40 -0.5 ]
-store_suit_point [ 92, STREET_POINT, 410 47 -0.5 ]
+store_suit_point [ 91, STREET_POINT, 410 40 0 ]
+store_suit_point [ 92, STREET_POINT, 410 47 0 ]
 store_suit_point [ 93, FRONT_DOOR_POINT, 421 47 0, 40 ]
-store_suit_point [ 94, STREET_POINT, 410 15 -0.5 ]
-store_suit_point [ 95, STREET_POINT, 410 0 -0.5 ]
-store_suit_point [ 96, STREET_POINT, 425 0 -0.5 ]
-store_suit_point [ 97, STREET_POINT, 400 -75 -0.5 ]
-store_suit_point [ 98, STREET_POINT, 410 -75 -0.5 ]
-store_suit_point [ 99, STREET_POINT, 400 -90 -0.5 ]
-store_suit_point [ 100, STREET_POINT, 385 -90 -0.5 ]
-store_suit_point [ 101, STREET_POINT, 385 -112 -0.5 ]
-store_suit_point [ 102, STREET_POINT, 385 -130 -0.5 ]
-store_suit_point [ 103, STREET_POINT, 403 -130 -0.5 ]
-store_suit_point [ 104, STREET_POINT, 425 -130 -0.5 ]
-store_suit_point [ 105, STREET_POINT, 425 -108 -0.5 ]
-store_suit_point [ 106, STREET_POINT, 425 -90 -0.5 ]
-store_suit_point [ 107, STREET_POINT, 410 -90 -0.5 ]
+store_suit_point [ 94, STREET_POINT, 410 15 0 ]
+store_suit_point [ 95, STREET_POINT, 410 0 0 ]
+store_suit_point [ 96, STREET_POINT, 425 0 0 ]
+store_suit_point [ 97, STREET_POINT, 400 -75 0 ]
+store_suit_point [ 98, STREET_POINT, 410 -75 0 ]
+store_suit_point [ 99, STREET_POINT, 400 -90 0 ]
+store_suit_point [ 100, STREET_POINT, 385 -90 0 ]
+store_suit_point [ 101, STREET_POINT, 385 -112 0 ]
+store_suit_point [ 102, STREET_POINT, 385 -130 0 ]
+store_suit_point [ 103, STREET_POINT, 403 -130 0 ]
+store_suit_point [ 104, STREET_POINT, 425 -130 0 ]
+store_suit_point [ 105, STREET_POINT, 425 -108 0 ]
+store_suit_point [ 106, STREET_POINT, 425 -90 0 ]
+store_suit_point [ 107, STREET_POINT, 410 -90 0 ]
 store_suit_point [ 108, FRONT_DOOR_POINT, 374 -112 0, 44 ]
 store_suit_point [ 109, FRONT_DOOR_POINT, 403 -141 0, 43 ]
 store_suit_point [ 110, FRONT_DOOR_POINT, 436 -108 0, 45 ]
-store_suit_point [ 111, STREET_POINT, 458 -10 -0.5 ]
-store_suit_point [ 112, STREET_POINT, 465 -10 -0.5 ]
-store_suit_point [ 113, STREET_POINT, 465 0 -0.5 ]
-store_suit_point [ 114, STREET_POINT, 458 0 -0.5 ]
+store_suit_point [ 111, STREET_POINT, 458 -10 0 ]
+store_suit_point [ 112, STREET_POINT, 465 -10 0 ]
+store_suit_point [ 113, STREET_POINT, 465 0 0 ]
+store_suit_point [ 114, STREET_POINT, 458 0 0 ]
 store_suit_point [ 115, FRONT_DOOR_POINT, 458 11 0, 42 ]
-store_suit_point [ 116, STREET_POINT, 475 -15 -0.5 ]
-store_suit_point [ 117, STREET_POINT, 480 -25 -0.5 ]
-store_suit_point [ 118, STREET_POINT, 490 -25 -0.5 ]
-store_suit_point [ 119, STREET_POINT, 483 -7 -0.5 ]
+store_suit_point [ 116, STREET_POINT, 475 -15 0 ]
+store_suit_point [ 117, STREET_POINT, 480 -25 0 ]
+store_suit_point [ 118, STREET_POINT, 490 -25 0 ]
+store_suit_point [ 119, STREET_POINT, 483 -7 0 ]
 store_suit_point [ 120, FRONT_DOOR_POINT, 501 -12 0, 49 ]
 store_suit_point [ 121, FRONT_DOOR_POINT, 488 11 0, 48 ]
-store_suit_point [ 122, STREET_POINT, 480 -65 -0.5 ]
-store_suit_point [ 123, STREET_POINT, 490 -65 -0.5 ]
-store_suit_point [ 124, STREET_POINT, 480 -77 -0.5 ]
-store_suit_point [ 125, STREET_POINT, 480 -105 -0.5 ]
-store_suit_point [ 126, STREET_POINT, 490 -105 -0.5 ]
-store_suit_point [ 127, STREET_POINT, 490 -77 -0.5 ]
+store_suit_point [ 122, STREET_POINT, 480 -65 0 ]
+store_suit_point [ 123, STREET_POINT, 490 -65 0 ]
+store_suit_point [ 124, STREET_POINT, 480 -77 0 ]
+store_suit_point [ 125, STREET_POINT, 480 -105 0 ]
+store_suit_point [ 126, STREET_POINT, 490 -105 0 ]
+store_suit_point [ 127, STREET_POINT, 490 -77 0 ]
 store_suit_point [ 128, FRONT_DOOR_POINT, 469 -72 0, 50 ]
 store_suit_point [ 129, FRONT_DOOR_POINT, 501 -77 0, 53 ]
-store_suit_point [ 130, STREET_POINT, 495 -115 -0.5 ]
-store_suit_point [ 131, STREET_POINT, 505 -120 -0.5 ]
-store_suit_point [ 132, STREET_POINT, 488 -124 -0.5 ]
-store_suit_point [ 133, STREET_POINT, 505 -130 -0.5 ]
+store_suit_point [ 130, STREET_POINT, 495 -115 0 ]
+store_suit_point [ 131, STREET_POINT, 505 -120 0 ]
+store_suit_point [ 132, STREET_POINT, 488 -124 0 ]
+store_suit_point [ 133, STREET_POINT, 505 -130 0 ]
 store_suit_point [ 134, FRONT_DOOR_POINT, 487 -141 0, 54 ]
 store_suit_point [ 135, FRONT_DOOR_POINT, 470 -125 0, 52 ]
-store_suit_point [ 136, STREET_POINT, 523 -130 -0.5 ]
-store_suit_point [ 137, STREET_POINT, 545 -130 -0.5 ]
-store_suit_point [ 138, STREET_POINT, 545 -120 -0.5 ]
-store_suit_point [ 139, STREET_POINT, 523 -120 -0.5 ]
+store_suit_point [ 136, STREET_POINT, 523 -130 0 ]
+store_suit_point [ 137, STREET_POINT, 545 -130 0 ]
+store_suit_point [ 138, STREET_POINT, 545 -120 0 ]
+store_suit_point [ 139, STREET_POINT, 523 -120 0 ]
 store_suit_point [ 140, FRONT_DOOR_POINT, 523 -141 0, 55 ]
-store_suit_point [ 141, STREET_POINT, 570 -130 -0.5 ]
-store_suit_point [ 142, STREET_POINT, 570 -105 -0.5 ]
-store_suit_point [ 143, STREET_POINT, 560 -105 -0.5 ]
-store_suit_point [ 144, STREET_POINT, 560 -120 -0.5 ]
-store_suit_point [ 145, STREET_POINT, 570 -60 -0.5 ]
-store_suit_point [ 146, STREET_POINT, 585 -60 -0.5 ]
-store_suit_point [ 147, STREET_POINT, 585 -45 -0.5 ]
-store_suit_point [ 148, STREET_POINT, 545 -45 -0.5 ]
-store_suit_point [ 149, STREET_POINT, 545 -60 -0.5 ]
-store_suit_point [ 150, STREET_POINT, 560 -60 -0.5 ]
-store_suit_point [ 151, STREET_POINT, 585 -33 -0.5 ]
-store_suit_point [ 152, STREET_POINT, 585 -5 -0.5 ]
-store_suit_point [ 153, STREET_POINT, 545 -28 -0.5 ]
-store_suit_point [ 154, STREET_POINT, 545 -5 -0.5 ]
+store_suit_point [ 141, STREET_POINT, 570 -130 0 ]
+store_suit_point [ 142, STREET_POINT, 570 -105 0 ]
+store_suit_point [ 143, STREET_POINT, 560 -105 0 ]
+store_suit_point [ 144, STREET_POINT, 560 -120 0 ]
+store_suit_point [ 145, STREET_POINT, 570 -60 0 ]
+store_suit_point [ 146, STREET_POINT, 585 -60 0 ]
+store_suit_point [ 147, STREET_POINT, 585 -45 0 ]
+store_suit_point [ 148, STREET_POINT, 545 -45 0 ]
+store_suit_point [ 149, STREET_POINT, 545 -60 0 ]
+store_suit_point [ 150, STREET_POINT, 560 -60 0 ]
+store_suit_point [ 151, STREET_POINT, 585 -33 0 ]
+store_suit_point [ 152, STREET_POINT, 585 -5 0 ]
+store_suit_point [ 153, STREET_POINT, 545 -28 0 ]
+store_suit_point [ 154, STREET_POINT, 545 -5 0 ]
 store_suit_point [ 155, FRONT_DOOR_POINT, 534 -28 0, 56 ]
 store_suit_point [ 156, FRONT_DOOR_POINT, 596 -44 0, 72 ]
-store_suit_point [ 157, STREET_POINT, 585 10 -0.5 ]
-store_suit_point [ 158, STREET_POINT, 570 10 -0.5 ]
-store_suit_point [ 159, STREET_POINT, 570 35 -0.5 ]
-store_suit_point [ 160, STREET_POINT, 560 35 -0.5 ]
-store_suit_point [ 161, STREET_POINT, 560 10 -0.5 ]
-store_suit_point [ 162, STREET_POINT, 545 10 -0.5 ]
-store_suit_point [ 163, STREET_POINT, 570 57 -0.5 ]
-store_suit_point [ 164, STREET_POINT, 570 70 -0.5 ]
-store_suit_point [ 165, STREET_POINT, 605 70 -0.5 ]
-store_suit_point [ 166, STREET_POINT, 560 57 -0.5 ]
-store_suit_point [ 167, STREET_POINT, 560 80 -0.5 ]
-store_suit_point [ 168, STREET_POINT, 605 80 -0.5 ]
+store_suit_point [ 157, STREET_POINT, 585 10 0 ]
+store_suit_point [ 158, STREET_POINT, 570 10 0 ]
+store_suit_point [ 159, STREET_POINT, 570 35 0 ]
+store_suit_point [ 160, STREET_POINT, 560 35 0 ]
+store_suit_point [ 161, STREET_POINT, 560 10 0 ]
+store_suit_point [ 162, STREET_POINT, 545 10 0 ]
+store_suit_point [ 163, STREET_POINT, 570 57 0 ]
+store_suit_point [ 164, STREET_POINT, 570 70 0 ]
+store_suit_point [ 165, STREET_POINT, 605 70 0 ]
+store_suit_point [ 166, STREET_POINT, 560 57 0 ]
+store_suit_point [ 167, STREET_POINT, 560 80 0 ]
+store_suit_point [ 168, STREET_POINT, 605 80 0 ]
 store_suit_point [ 169, FRONT_DOOR_POINT, 549 57 0, 70 ]
-store_suit_point [ 170, STREET_POINT, 623 79 -0.5 ]
-store_suit_point [ 171, STREET_POINT, 630 95 -0.5 ]
-store_suit_point [ 172, STREET_POINT, 620 95 -0.5 ]
-store_suit_point [ 173, STREET_POINT, 616 86 -0.5 ]
-store_suit_point [ 175, STREET_POINT, 630 102 -0.5 ]
-store_suit_point [ 176, STREET_POINT, 630 135 -0.5 ]
-store_suit_point [ 177, STREET_POINT, 620 135 -0.5 ]
-store_suit_point [ 178, STREET_POINT, 620 102 -0.5 ]
+store_suit_point [ 170, STREET_POINT, 623 79 0 ]
+store_suit_point [ 171, STREET_POINT, 630 95 0 ]
+store_suit_point [ 172, STREET_POINT, 620 95 0 ]
+store_suit_point [ 173, STREET_POINT, 616 86 0 ]
+store_suit_point [ 175, STREET_POINT, 630 102 0 ]
+store_suit_point [ 176, STREET_POINT, 630 135 0 ]
+store_suit_point [ 177, STREET_POINT, 620 135 0 ]
+store_suit_point [ 178, STREET_POINT, 620 102 0 ]
 store_suit_point [ 179, FRONT_DOOR_POINT, 641 102 0, 62 ]
-store_suit_point [ 180, STREET_POINT, 630 175 -0.5 ]
-store_suit_point [ 181, STREET_POINT, 620 175 -0.5 ]
-store_suit_point [ 182, STREET_POINT, 634 184 -0.5 ]
-store_suit_point [ 183, STREET_POINT, 645 190 -0.5 ]
-store_suit_point [ 184, STREET_POINT, 645 200 -0.5 ]
-store_suit_point [ 185, STREET_POINT, 626 191 -0.5 ]
+store_suit_point [ 180, STREET_POINT, 630 175 0 ]
+store_suit_point [ 181, STREET_POINT, 620 175 0 ]
+store_suit_point [ 182, STREET_POINT, 634 184 0 ]
+store_suit_point [ 183, STREET_POINT, 645 190 0 ]
+store_suit_point [ 184, STREET_POINT, 645 200 0 ]
+store_suit_point [ 185, STREET_POINT, 626 191 0 ]
 store_suit_point [ 186, FRONT_DOOR_POINT, 609 177 0, 71 ]
 store_suit_point [ 187, FRONT_DOOR_POINT, 623 210 0, 67 ]
-store_suit_point [ 188, STREET_POINT, 655 190 -0.5 ]
-store_suit_point [ 189, STREET_POINT, 655 200 -0.5 ]
+store_suit_point [ 188, STREET_POINT, 655 190 0 ]
+store_suit_point [ 189, STREET_POINT, 655 200 0 ]
 store_suit_point [ 190, SIDE_DOOR_POINT, 40 87 0, 1 ]
 store_suit_point [ 191, SIDE_DOOR_POINT, 100 33 0, 20 ]
 store_suit_point [ 192, SIDE_DOOR_POINT, 87 120 0, 3 ]
@@ -228,11 +228,11 @@ group "minniesMelodyLand" [
   suit_edge [ 3 2 ]
   suit_edge [ 191 0 ]
   suit_edge [ 0 191 ]
-  battle_cell [ 20 20 60 30 -0.5 ]
+  battle_cell [ 20 20 60 30 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
    pos [ 80 0 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -240,7 +240,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 80 20 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -248,7 +248,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 20 20 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -256,7 +256,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 80 40 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -264,14 +264,14 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 20 40 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 20 15 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -296,7 +296,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 20 25 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -315,7 +315,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 20 40 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -328,25 +328,25 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 8.9 -8.06 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 17.03 -1.78 0 ]
-    nhpr [ 120 0 -0 ]
+    hpr [ 120 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 2.67 1.83 18.68 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 40 0 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -371,12 +371,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 2.61 -2.1 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 100 0 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -405,12 +405,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 16.97 -1.91 0 ]
-    nhpr [ 120 0 -0 ]
+    hpr [ 120 0 0 ]
    ]
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 100 15 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -425,7 +425,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 100 25 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -454,7 +454,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 20 0 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -474,7 +474,7 @@ group "minniesMelodyLand" [
   prop "linktunnel_dl_9150_DNARoot" [
    code [ "prop_neighborhood_tunnel" ]
    pos [ 60 0 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    sign [
     code [ "tunnel_sign_red" ]
     color [ 0.533333 0.435294 0.823529 1 ]
@@ -483,7 +483,7 @@ group "minniesMelodyLand" [
      code [ "mickey" ]
      color [ 0.984314 0.992157 0.596078 1 ]
      pos [ 0 0 -1 ]
-     nhpr [ -0 0 1 ]
+     hpr [ 0 0 -1 ]
      scale [ 1.4 1 1.5 ]
      width [ 50 ]
      height [ 50 ]
@@ -597,7 +597,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 100 40 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -623,10 +623,15 @@ group "minniesMelodyLand" [
      count [ 2 ]
     ]
    ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 15.52 -26.5 0 ]
+    hpr [ -180 0 0 ]
+   ]
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 80 40 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -653,34 +658,22 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 11.23 -18.57 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 3.15 -1.95 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 17.12 3.67 16.26 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_idle0" ]
-   cell_id [ 0 ]
-   pos [ 76.4128 24.8235 2.28882e-005 ]
-   nhpr [ -90 0 0 ]
-  ]
-  prop "prop_tt_m_ara_gen_tunnelAheadSign_DNARoot" [
-   code [ "prop_tt_m_ara_gen_tunnelAheadSign" ]
-   pos [ 51.4409 4.68143 -0.500046 ]
-   nhpr [ 180 0 0 ]
   ]
  ]
  visgroup "4302" [
@@ -693,18 +686,18 @@ group "minniesMelodyLand" [
   suit_edge [ 8 4 ]
   suit_edge [ 7 8 ]
   suit_edge [ 8 7 ]
-  battle_cell [ 20 20 60 60 -0.5 ]
+  battle_cell [ 20 20 60 60 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
    pos [ 80 40 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 40 70 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -723,7 +716,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 40 40 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -754,7 +747,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A1" ]
    title [ "Marshall's Stacks" ]
    pos [ 40 50 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 0.79 0.49 1 ]
@@ -762,7 +755,7 @@ group "minniesMelodyLand" [
    sign [
     code [ "MM_sign3" ]
     pos [ -0.79 0 -1.1 ]
-    nhpr [ -0 0 2 ]
+    hpr [ 0 0 -2 ]
     baseline [
      code [ "humanist" ]
      color [ 0.501961 0 0.25098 1 ]
@@ -873,7 +866,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 80 65 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -902,7 +895,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 80 80 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -917,7 +910,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 80 50 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -959,18 +952,18 @@ group "minniesMelodyLand" [
   suit_edge [ 6 190 ]
   suit_edge [ 190 5 ]
   suit_edge [ 5 190 ]
-  battle_cell [ 20 20 60 100 -0.5 ]
+  battle_cell [ 20 20 60 100 0 ]
   street "street_full_corner_DNARoot" [
    code [ "street_full_corner" ]
    pos [ 40 80 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb3:random_DNARoot" [
    pos [ 40 110 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -999,7 +992,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb3:random_DNARoot" [
    pos [ 40 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1019,12 +1012,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 6.28 -3.55 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
   ]
   flat_building "tb3:random_DNARoot" [
    pos [ 65 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -1037,15 +1030,15 @@ group "minniesMelodyLand" [
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
-    pos [ 10.71 -1.84 -7.62939e-006 ]
-    nhpr [ 135 0 -0 ]
+    pos [ 10.71 -1.84 0 ]
+    hpr [ 135 0 0 ]
    ]
   ]
   landmark_building "tb3:toon_landmark_MM_D1_DNARoot" [
    code [ "toon_landmark_MM_D1" ]
    title [ "What a Mezzo! Maid Service" ]
    pos [ 50 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.69 0.33 0.69 1 ]
@@ -1146,7 +1139,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb1:random_DNARoot" [
    pos [ 40 80 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1175,7 +1168,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb3:random_DNARoot" [
    pos [ 40 95 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1202,28 +1195,21 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ul_DNARoot" [
-    code [ "prop_tree_small_ul_MM" ]
+    code [ "prop_tree_small_ul" ]
     pos [ 9.51 -7.54 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -9.51 -33.51 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
    ]
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ 2.72 5.49 19.61 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_idle0" ]
-   cell_id [ 0 ]
-   pos [ 45.0305 94.3479 -7.62939e-006 ]
-   nhpr [ 105 0 0 ]
   ]
  ]
  visgroup "4304" [
@@ -1238,10 +1224,10 @@ group "minniesMelodyLand" [
   suit_edge [ 14 193 ]
   suit_edge [ 193 15 ]
   suit_edge [ 15 193 ]
-  battle_cell [ 20 20 100 100 -0.5 ]
+  battle_cell [ 20 20 100 100 0 ]
   flat_building "tb20:random_DNARoot" [
    pos [ 95 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -1257,14 +1243,14 @@ group "minniesMelodyLand" [
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
    pos [ 80 80 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 125 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -1292,13 +1278,13 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 13.96 3.27 19.37 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb3:random_DNARoot" [
    pos [ 80 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1327,7 +1313,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 105 80 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -1346,7 +1332,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb3:random_DNARoot" [
    pos [ 95 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 25 ]
    wall [
     height [ 10 ]
@@ -1375,7 +1361,7 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 6.12 6.06 19.68 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
@@ -1390,11 +1376,11 @@ group "minniesMelodyLand" [
   suit_edge [ 20 16 ]
   suit_edge [ 19 20 ]
   suit_edge [ 20 19 ]
-  battle_cell [ 20 20 133.5 105.5 -0.5 ]
+  battle_cell [ 20 20 133.5 105.5 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
-   pos [ 160 120 7.62939e-005 ]
-   nhpr [ 180 0 -0 ]
+   pos [ 160 120 0 ]
+   hpr [ 180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -1403,7 +1389,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_E1" ]
    title [ "" ]
    pos [ 150 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -1411,7 +1397,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 95 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -1426,12 +1412,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -21.63 -35.54 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 110 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -1450,19 +1436,19 @@ group "minniesMelodyLand" [
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ 2.51 3.65 20.46 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
    prop "neighborhood_sign_MM_DNARoot" [
     code [ "neighborhood_sign_MM" ]
     pos [ 8.5 -1.5 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 120 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -1489,15 +1475,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 6.15 -4.93 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
   ]
   flat_building "tb20:random_DNARoot" [
    pos [ 160 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -1513,13 +1499,6 @@ group "minniesMelodyLand" [
      count [ 1 ]
     ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   cell_id [ 0 ]
-   pos [ 147.697 95.2085 7.62939e-005 ]
-   nhpr [ -135 0 0 ]
   ]
  ]
  visgroup "4306" [
@@ -1540,10 +1519,10 @@ group "minniesMelodyLand" [
   suit_edge [ 23 195 ]
   suit_edge [ 195 22 ]
   suit_edge [ 22 195 ]
-  battle_cell [ 20 20 140 140 -0.5 ]
+  battle_cell [ 20 20 140 140 0 ]
   flat_building "tb4:random_DNARoot" [
    pos [ 159.94 160.04 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -1562,7 +1541,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb7:random_DNARoot" [
    pos [ 120 120 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -1591,7 +1570,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb7:random_DNARoot" [
    pos [ 120 130 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1617,7 +1596,7 @@ group "minniesMelodyLand" [
   street "street_keyboard_20x40_DNARoot" [
    code [ "street_keyboard_20x40" ]
    pos [ 160 140 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
@@ -1625,14 +1604,14 @@ group "minniesMelodyLand" [
   street "street_20x40_DNARoot" [
    code [ "street_20x40" ]
    pos [ 160 120 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 135 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1660,7 +1639,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb7:random_DNARoot" [
    pos [ 120 145 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1688,15 +1667,15 @@ group "minniesMelodyLand" [
    prop "prop_smokestack_DNARoot" [
     code [ "prop_smokestack" ]
     pos [ 3.23 6.17 13.15 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   landmark_building "tb4:toon_landmark_MM_B2_DNARoot" [
    code [ "toon_landmark_MM_B2" ]
-   title [ "Mixolydian Scales" ]
+   title [ "The Mixolydian School of Bartending" ]
    pos [ 159.94 150.04 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 0.79 0.49 1 ]
@@ -1707,11 +1686,22 @@ group "minniesMelodyLand" [
     baseline [
      code [ "MM_Musicals" ]
      color [ 0 0.501961 1 1 ]
-     pos [ 0 0 0.3 ]
-     scale [ 0.8 0 1.2 ]       
-     kern [ 0.039 ]
-     width [ 37 ]
-     height [ 37 ]
+     pos [ 0 0 0.67 ]
+     scale [ 1 1 1.2 ]
+     width [ 37.0083 ]
+     height [ 37.0083 ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
+      letters [ "H" ]
+     ]
+     text [
+      letters [ "E" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
      text [
       letters [ "M" ]
      ]
@@ -1742,9 +1732,14 @@ group "minniesMelodyLand" [
      text [
       letters [ "N" ]
      ]
-     text [
-      letters [ " " ]
-     ]
+    ]
+    baseline [
+     code [ "MM_Musicals" ]
+     color [ 0 0.25098 0.501961 1 ]
+     pos [ 0 0 -0.18 ]
+     scale [ 0.7 1 0.7 ]
+     width [ 29.4334 ]
+     height [ 29.4334 ]
      text [
       letters [ "S" ]
      ]
@@ -1752,16 +1747,58 @@ group "minniesMelodyLand" [
       letters [ "C" ]
      ]
      text [
-      letters [ "A" ]
+      letters [ "H" ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "O" ]
      ]
      text [
       letters [ "L" ]
      ]
      text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "O" ]
+     ]
+     text [
+      letters [ "F" ]
+     ]
+     text [
+      letters [ " " ]
+     ]
+     text [
+      letters [ "B" ]
+     ]
+     text [
+      letters [ "A" ]
+     ]
+     text [
+      letters [ "R" ]
+     ]
+     text [
+      letters [ "T" ]
+     ]
+     text [
       letters [ "E" ]
      ]
      text [
-      letters [ "S" ]
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "D" ]
+     ]
+     text [
+      letters [ "I" ]
+     ]
+     text [
+      letters [ "N" ]
+     ]
+     text [
+      letters [ "G" ]
      ]
     ]
    ]
@@ -1777,10 +1814,10 @@ group "minniesMelodyLand" [
   suit_edge [ 30 29 ]
   suit_edge [ 26 30 ]
   suit_edge [ 30 26 ]
-  battle_cell [ 20 20 140 180 -0.5 ]
+  battle_cell [ 20 20 140 180 0 ]
   flat_building "tb7:random_DNARoot" [
    pos [ 120 160 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -1794,7 +1831,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb7:random_DNARoot" [
    pos [ 120 190 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -1813,7 +1850,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 175 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1838,12 +1875,17 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 3.47 2.25 18.69 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
+   ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 12.23 -4.95 0 ]
+    hpr [ 180 0 0 ]
    ]
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 185 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -1866,15 +1908,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 3.76 -6.72 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
   ]
   flat_building "tb4:random_DNARoot" [
    pos [ 160 200 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -1899,8 +1941,8 @@ group "minniesMelodyLand" [
   ]
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
-   pos [ 160 160 -0.000152588 ]
-   nhpr [ 90 0 -0 ]
+   pos [ 160 160 0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
@@ -1909,7 +1951,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A2" ]
    title [ "Relax the Bach" ]
    pos [ 120 165 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.97 0.87 0.47 1 ]
@@ -1917,12 +1959,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 0 -5 0 ]
-    nhpr [ 60 0 -0 ]
+    hpr [ 60 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 25.23 -5.12 0 ]
-    nhpr [ 150 0 -0 ]
+    hpr [ 150 0 0 ]
    ]
    sign [
     code [ "MM_sign1" ]
@@ -2027,13 +2069,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_idle0" ]
-   cell_id [ 0 ]
-   pos [ 155.681 164.127 -0.000152588 ]
-   nhpr [ -105 0 0 ]
-  ]
  ]
  visgroup "4308" [
   vis [   "4308"   "4307"   "4306"   "4305"   "4304"   "4309"   "4310"   "4311"   "4344"   ]
@@ -2049,18 +2084,18 @@ group "minniesMelodyLand" [
   suit_edge [ 33 196 ]
   suit_edge [ 196 32 ]
   suit_edge [ 32 196 ]
-  battle_cell [ 20 20 145.5 213.5 -0.5 ]
+  battle_cell [ 20 20 145.5 213.5 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
    pos [ 120 200 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 120 215 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -2077,20 +2112,20 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 9.31 -9.61 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -11.34 -36.41 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
    ]
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 120 230 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2119,7 +2154,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 120 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -2129,7 +2164,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 150 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2160,7 +2195,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A1" ]
    title [ "Anna's Cruises" ]
    pos [ 125 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.8 0.56 0.65 1 ]
@@ -2173,7 +2208,7 @@ group "minniesMelodyLand" [
      code [ "MM_Musicals" ]
      color [ 0.501961 0 0.25098 1 ]
      pos [ 0 0 0.87 ]
-     nhpr [ -0 0 -1 ]
+     hpr [ 0 0 1 ]
      scale [ 1 1 0.9 ]
      kern [ 0.039 ]
      width [ 25.5931 ]
@@ -2224,7 +2259,7 @@ group "minniesMelodyLand" [
     baseline [
      code [ "MM_Musicals" ]
      color [ 0 0.25098 0.501961 1 ]
-     nhpr [ -0 0 -3 ]
+     hpr [ 0 0 3 ]
      scale [ 1 1 0.7 ]
      kern [ 0.087201 ]
      width [ 22.2563 ]
@@ -2273,7 +2308,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb7:random_DNARoot" [
    pos [ 120 200 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -2302,7 +2337,7 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 13.23 5.02 17.61 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
@@ -2311,11 +2346,11 @@ group "minniesMelodyLand" [
   vis [   "4309"   "4308"   "4307"   "4306"   "4305"   "4304"   "4310"   "4311"   "4312"   "4313"   "4314"   "4344"   ]
   suit_edge [ 32 37 ]
   suit_edge [ 38 33 ]
-  battle_cell [ 20 20 180 220 -0.5 ]
+  battle_cell [ 20 20 180 220 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
-   pos [ 160 200 -1.52588e-005 ]
-   nhpr [ -0 0 -0 ]
+   pos [ 160 200 0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -2323,14 +2358,14 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 170 200 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 170 200 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2355,12 +2390,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 5.01 -2.05 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 170 190 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2385,7 +2420,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 190 180 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -2397,20 +2432,25 @@ group "minniesMelodyLand" [
      count [ 2 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 2.1 -2.33 0 ]
+    hpr [ 150 0 0 ]
+   ]
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ 3.6 6.48 17.61 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
    ]
    prop "prop_cello_flat_DNARoot" [
     code [ "prop_cello_flat" ]
     pos [ 19.01 -3.3 -0.14 ]
-    nhpr [ -30.18 -11.4986 -0.883753 ]
+    hpr [ -30 -12 1 ]
    ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 190 190 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2439,7 +2479,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 200 200 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2464,12 +2504,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 5.3 -1.93 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 190 200 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2494,12 +2534,12 @@ group "minniesMelodyLand" [
    prop "prop_piano_DNARoot" [
     code [ "prop_piano" ]
     pos [ 7.6 -5.75 0 ]
-    nhpr [ -45 0 -0 ]
+    hpr [ -45 0 0 ]
    ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 170 180 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2526,19 +2566,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_idle0" ]
-   cell_id [ 0 ]
-   pos [ 192.694 234.44 -1.52588e-005 ]
-   nhpr [ -30 0 0 ]
-  ]
-  anim_prop "animated_prop_generic_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "animated_prop_generic_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   pos [ 187.391 183.121 -0.000152588 ]
-   nhpr [ -135 0 -0 ]
-  ]
  ]
  visgroup "4310" [
   vis [   "4310"   "4309"   "4308"   "4307"   "4311"   "4312"   "4313"   "4314"   "4344"   ]
@@ -2558,18 +2585,18 @@ group "minniesMelodyLand" [
   suit_edge [ 44 197 ]
   suit_edge [ 197 41 ]
   suit_edge [ 41 197 ]
-  battle_cell [ 20 20 214 214 -0.5 ]
+  battle_cell [ 20 20 214 214 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
    pos [ 200 240 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 200 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -2594,18 +2621,18 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ 3.35 -36.59 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_smokestack_DNARoot" [
     code [ "prop_smokestack" ]
     pos [ 3.8 5.03 11.43 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 10.96 -1.3 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
@@ -2613,7 +2640,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_B1" ]
    title [ "Common Time Watches" ]
    pos [ 215 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -2694,7 +2721,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 230 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -2709,7 +2736,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 240 240 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -2727,7 +2754,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb28:random_DNARoot" [
    pos [ 240 215 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -2747,7 +2774,7 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_MM_DNARoot" [
     code [ "neighborhood_sign_MM" ]
     pos [ 11 -1.3 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
@@ -2755,7 +2782,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_D1" ]
    title [ "Schumann's Shoes for Men" ]
    pos [ 240 230 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 1 1 1 ]
@@ -2868,18 +2895,18 @@ group "minniesMelodyLand" [
   suit_edge [ 50 200 ]
   suit_edge [ 200 48 ]
   suit_edge [ 48 200 ]
-  battle_cell [ 20 20 220 180 -0.5 ]
+  battle_cell [ 20 20 220 180 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
    pos [ 200 200 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 200 185 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -2904,7 +2931,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 200 170 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -2921,15 +2948,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 10.67 -6.85 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
   ]
   flat_building "tb9:random_DNARoot" [
    pos [ 240 170 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -2948,7 +2975,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb28:random_DNARoot" [
    pos [ 240 200 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -2974,7 +3001,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_C1" ]
    title [ "I Can't Understanza!" ]
    pos [ 240 190 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_pillars_ur" ]
     color [ 0.75 0.75 0.75 1 ]
@@ -2982,12 +3009,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 0 -6 0 ]
-    nhpr [ 60 0 -0 ]
+    hpr [ 60 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 21 -5 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
    sign [
     code [ "MM_sign1" ]
@@ -3163,7 +3190,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 200 155 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -3181,7 +3208,7 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 12.49 5.69 17.88 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 0.91 0.91 0.54 1 ]
    ]
   ]
@@ -3200,10 +3227,10 @@ group "minniesMelodyLand" [
   suit_edge [ 48 198 ]
   suit_edge [ 198 50 ]
   suit_edge [ 50 198 ]
-  battle_cell [ 20 20 220 140 -0.5 ]
+  battle_cell [ 20 20 220 140 0 ]
   flat_building "tb9:random_DNARoot" [
    pos [ 240 135 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -3230,7 +3257,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_E1" ]
    title [ "" ]
    pos [ 200 128.8 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 1 1 1 ]
@@ -3239,14 +3266,14 @@ group "minniesMelodyLand" [
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
    pos [ 240 120 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb9:random_DNARoot" [
    pos [ 240 160 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -3274,12 +3301,12 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 11.44 1.51 19.59 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
    ]
   ]
   flat_building "tb12:random_DNARoot" [
    pos [ 200 120 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -3289,13 +3316,13 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 2 -2 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb9:random_DNARoot" [
    pos [ 240 145 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -3321,13 +3348,11 @@ group "minniesMelodyLand" [
      color [ 1 1 0.58 1 ]
     ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_idle0" ]
-   cell_id [ 0 ]
-   pos [ 236.333 137.096 0 ]
-   nhpr [ -90 0 0 ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 6.54 -7.32 0 ]
+    hpr [ 180 0 0 ]
+   ]
   ]
  ]
  visgroup "4313" [
@@ -3350,18 +3375,18 @@ group "minniesMelodyLand" [
   suit_edge [ 53 203 ]
   suit_edge [ 203 54 ]
   suit_edge [ 54 203 ]
-  battle_cell [ 20 20 220 100 -0.5 ]
+  battle_cell [ 20 20 220 100 0 ]
   street "street_full_corner_DNARoot" [
    code [ "street_full_corner" ]
    pos [ 240 80 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb17:random_DNARoot" [
    pos [ 200 80 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -3390,12 +3415,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ 34.68 -35.38 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
    ]
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 240 80 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -3407,14 +3432,14 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 32.39 -11.16 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
    ]
   ]
   flat_building "tb17:random_DNARoot" [
    pos [ 200 110 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -3442,7 +3467,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 220 80 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -3458,7 +3483,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_B1" ]
    title [ "The Ternary Pet Shop" ]
    pos [ 200 95 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 1 0.42 0.85 1 ]
@@ -3559,7 +3584,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_D1" ]
    title [ "Yuki's Ukeleles" ]
    pos [ 235 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.97 0.87 0.47 1 ]
@@ -3567,12 +3592,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 27.18 -2.2 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -2.42 -3.84 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    sign [
     baseline [
@@ -3655,10 +3680,10 @@ group "minniesMelodyLand" [
   suit_edge [ 62 202 ]
   suit_edge [ 202 60 ]
   suit_edge [ 60 202 ]
-  battle_cell [ 20 20 260 100 -0.5 ]
+  battle_cell [ 20 20 260 100 0 ]
   flat_building "tb29:random_DNARoot" [
    pos [ 270 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -3672,7 +3697,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 255 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -3687,7 +3712,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 280 80 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -3702,21 +3727,21 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 5 -1 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
-   pos [ 240 80 -3.8147e-005 ]
-   nhpr [ -0 0 -0 ]
+   pos [ 240 80 0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 270 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -3745,13 +3770,13 @@ group "minniesMelodyLand" [
    prop "prop_smokestack_DNARoot" [
     code [ "prop_smokestack" ]
     pos [ 5.61 4.59 11.33 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 0.7 0.76 1 1 ]
    ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 240 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -3777,7 +3802,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A2" ]
    title [ "Pachelbel's Canonballs" ]
    pos [ 250 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 1 0.79 0.49 1 ]
@@ -3862,15 +3887,8 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 23 -4 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_idle0" ]
-   cell_id [ 0 ]
-   pos [ 249.117 85.2878 -3.8147e-005 ]
-   nhpr [ 165 0 0 ]
   ]
  ]
  visgroup "4315" [
@@ -3878,27 +3896,27 @@ group "minniesMelodyLand" [
   suit_edge [ 66 70 ]
   suit_edge [ 70 71 ]
   suit_edge [ 72 68 ]
-  battle_cell [ 20 20 325 100 -0.5 ]
+  battle_cell [ 20 20 325 100 0 ]
   street "street_courtyard_90_exit_DNARoot" [
    code [ "street_courtyard_90_exit" ]
    pos [ 325 100 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   street "street_courtyard_90_exit_DNARoot" [
    code [ "street_courtyard_90_exit" ]
-   pos [ 325 100 -1.52588e-005 ]
-   nhpr [ -180 0 -0 ]
+   pos [ 325 100 0 ]
+   hpr [ -180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   street "street_courtyard_90_exit_DNARoot" [
    code [ "street_courtyard_90_exit" ]
-   pos [ 325 100 -3.8147e-005 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 325 100 0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -3906,14 +3924,14 @@ group "minniesMelodyLand" [
   street "street_courtyard_90_DNARoot" [
    code [ "street_courtyard_90" ]
    pos [ 325 100 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 280 130 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -3938,7 +3956,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 280 145 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -3967,18 +3985,18 @@ group "minniesMelodyLand" [
    prop "prop_cello_flat_DNARoot" [
     code [ "prop_cello_flat" ]
     pos [ 3.6 -0.97 -0.23 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 4.19 3.54 19.93 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 295 145 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4007,7 +4025,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 280 65 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -4020,25 +4038,25 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -1.26 -14.32 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 21.64 -6.41 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_tree_small_ul_DNARoot" [
-    code [ "prop_tree_small_ul_MM" ]
+    code [ "prop_tree_small_ul" ]
     pos [ 13 -12 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
   ]
   flat_building "tb19:random_DNARoot" [
    pos [ 280 55 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4067,7 +4085,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 345 145 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4096,7 +4114,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 355 145 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -4123,15 +4141,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -3.11 -10.74 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 370 145 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4160,7 +4178,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 370 135 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -4187,20 +4205,25 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 8.93 -8.41 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 21.62 -6.36 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
+   ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 10.35 -18.02 0 ]
+    hpr [ 45 0 0 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 370 80 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4229,18 +4252,18 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -6.69 -6.26 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 6.24 -10.45 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 370 70 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -4259,7 +4282,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 295 55 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -4288,7 +4311,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 305 55 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4317,12 +4340,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -6.74 -6.55 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 370 55 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -4337,22 +4360,22 @@ group "minniesMelodyLand" [
    prop "prop_drums_flat_DNARoot" [
     code [ "prop_drums_flat" ]
     pos [ 4.23 -1.47 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ -366.17 -1981.81 0 ]
-    nhpr [ 30 0 -0 ]
+    hpr [ 30 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 13.26 4.31 18.55 ]
-    nhpr [ 30 0 -0 ]
+    hpr [ 30 0 0 ]
    ]
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 360 55 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -4374,15 +4397,20 @@ group "minniesMelodyLand" [
      count [ 2 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 10.77 -2.35 0 ]
+    hpr [ 135 0 0 ]
+   ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 21.72 -6.1 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 280 120 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4411,33 +4439,14 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -6.56 -5.96 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 16 -11 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_idle0" ]
-   cell_id [ 0 ]
-   pos [ 354.656 127.934 -2.67029e-005 ]
-   nhpr [ -45 0 0 ]
-  ]
-  anim_prop "animated_prop_generic_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "animated_prop_generic_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_fightIdle" ]
-   pos [ 347.451 60.892 -3.05176e-005 ]
-   nhpr [ -150 0 0 ]
-  ]
-  anim_prop "animated_prop_generic_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "animated_prop_generic_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_fightIdle" ]
-   pos [ 288.594 159.673 5.00002 ]
-   nhpr [ 105 0 -0 ]
   ]
  ]
  visgroup "4318" [
@@ -4448,10 +4457,10 @@ group "minniesMelodyLand" [
   suit_edge [ 75 73 ]
   suit_edge [ 204 73 ]
   suit_edge [ 73 204 ]
-  battle_cell [ 20 20 325 35 -0.5 ]
+  battle_cell [ 20 20 325 35 0 ]
   flat_building "tb35:random_DNARoot" [
    pos [ 345 55 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4476,7 +4485,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 345 30 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -4491,7 +4500,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 305 10 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4510,14 +4519,14 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 2 -1 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
-   pos [ 305 55 -1.52588e-005 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 305 55 0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
@@ -4526,7 +4535,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A1" ]
    title [ "Ursatz for Kool Katz" ]
    pos [ 305 20 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 0.79 0.49 1 ]
@@ -4635,7 +4644,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 305 45 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -4663,7 +4672,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb35:random_DNARoot" [
    pos [ 345 45 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -4685,13 +4694,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_idleIntoFight" ]
-   cell_id [ 0 ]
-   pos [ 338.672 26.6456 -3.05176e-005 ]
-   nhpr [ -105 0 0 ]
-  ]
  ]
  visgroup "4319" [
   vis [   "4319"   "4318"   "4343"   "4315"   "4314"   "4322"   "4320"   "4321"   "4324"   "4325"   "4326"   "4327"   "4341"   "4323"   ]
@@ -4704,11 +4706,11 @@ group "minniesMelodyLand" [
   suit_edge [ 80 77 ]
   suit_edge [ 205 74 ]
   suit_edge [ 74 205 ]
-  battle_cell [ 20 20 325 -5 -0.5 ]
+  battle_cell [ 20 20 325 -5 0 ]
   street "street_full_corner_DNARoot" [
    code [ "street_full_corner" ]
    pos [ 345 -25 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -4717,7 +4719,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_B2" ]
    title [ "Reggae Regalia" ]
    pos [ 305 -15 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -4846,7 +4848,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_C1" ]
    title [ "Lyre, Lyre, Pants on Fire!" ]
    pos [ 340 -25 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    door [
     code [ "door_double_pillars_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -5007,11 +5009,11 @@ group "minniesMelodyLand" [
   prop "prop_cello_flat_DNARoot" [
    code [ "prop_cello_flat" ]
    pos [ 306 -21 0 ]
-   nhpr [ 135 0 -0 ]
+   hpr [ 135 0 0 ]
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 320 -25 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -5026,17 +5028,17 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -20.4 -35.21 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 3.47 -2.53 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
   ]
   flat_building "tb36:random_DNARoot" [
    pos [ 305 0 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5064,7 +5066,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb36:random_DNARoot" [
    pos [ 305 -25 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5083,18 +5085,18 @@ group "minniesMelodyLand" [
   suit_edge [ 78 81 ]
   suit_edge [ 206 81 ]
   suit_edge [ 81 206 ]
-  battle_cell [ 20 20 360 -5 -0.5 ]
+  battle_cell [ 20 20 360 -5 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
-   pos [ 345 -25 7.62939e-006 ]
-   nhpr [ -0 0 -0 ]
+   pos [ 345 -25 0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 355 -25 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15.6 ]
    wall [
     height [ 20 ]
@@ -5113,18 +5115,18 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 12.47 -2.01 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 3.56 3.74 17.56 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 345 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -5139,7 +5141,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 360 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -5150,10 +5152,15 @@ group "minniesMelodyLand" [
      color [ 0.8 0.22 0.68 1 ]
     ]
    ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 2.42 -8.26 0 ]
+    hpr [ 0 0 0 ]
+   ]
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 370 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -5182,12 +5189,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ 20.43 -4.99 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 385 -25 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -5215,12 +5222,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -5.5 -4.81 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb41:random_DNARoot" [
    pos [ 370 -25 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -5243,18 +5250,11 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 9 -8 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_fightIdle" ]
-   cell_id [ 0 ]
-   pos [ 361.525 10.3373 7.62939e-006 ]
-   nhpr [ -0 0 -0 ]
   ]
  ]
  visgroup "4321" [
@@ -5265,11 +5265,11 @@ group "minniesMelodyLand" [
   suit_edge [ 85 86 ]
   suit_edge [ 95 94 ]
   suit_edge [ 96 95 ]
-  battle_cell [ 20 20 405 -5 -0.5 ]
+  battle_cell [ 20 20 405 -5 0 ]
   street "street_4way_intersection_DNARoot" [
    code [ "street_4way_intersection" ]
    pos [ 385 -25 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -5291,11 +5291,11 @@ group "minniesMelodyLand" [
   suit_edge [ 119 215 ]
   suit_edge [ 215 116 ]
   suit_edge [ 116 215 ]
-  battle_cell [ 20 20 405 100 -0.5 ]
+  battle_cell [ 20 20 405 100 0 ]
   street "street_full_corner_DNARoot" [
    code [ "street_full_corner" ]
-   pos [ 385 120 7.62939e-006 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 385 120 0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -5303,7 +5303,7 @@ group "minniesMelodyLand" [
   street "street_5x40_DNARoot" [
    code [ "street_5x40" ]
    pos [ 380 80 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -5312,7 +5312,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_E1" ]
    title [ "" ]
    pos [ 425 95 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -5320,7 +5320,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 390 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5344,7 +5344,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 375 80 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 5 ]
    wall [
     height [ 10 ]
@@ -5373,7 +5373,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb68:random_DNARoot" [
    pos [ 425 120 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -5388,7 +5388,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 385 80 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5418,14 +5418,14 @@ group "minniesMelodyLand" [
   street "street_10x40_DNARoot" [
    code [ "street_10x40" ]
    pos [ 370 80 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb68:random_DNARoot" [
    pos [ 425 110 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -5453,13 +5453,18 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 2.78 3.61 18.17 ]
-    nhpr [ 30 0 -0 ]
+    hpr [ 30 0 0 ]
     color [ 0.91 0.91 0.54 1 ]
+   ]
+   prop "prop_minnie_planter_DNARoot" [
+    code [ "prop_minnie_planter" ]
+    pos [ 14 -6 0 ]
+    hpr [ 45 0 0 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 370 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5487,7 +5492,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 380 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5512,7 +5517,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 410 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -5524,7 +5529,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_D1" ]
    title [ "Kazoology School of Music" ]
    pos [ 395 120 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -5625,13 +5630,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_fightCheer" ]
-   cell_id [ 0 ]
-   pos [ 419.173 94.1617 7.62939e-006 ]
-   nhpr [ -105 0 0 ]
-  ]
  ]
  visgroup "4323" [
   vis [   "4323"   "4322"   "4315"   "4314"   "4312"   "4324"   "4325"   "4321"   "4320"   "4341"   "4342"   "4343"   "4313"   ]
@@ -5639,18 +5637,18 @@ group "minniesMelodyLand" [
   suit_edge [ 92 88 ]
   suit_edge [ 92 93 ]
   suit_edge [ 93 92 ]
-  battle_cell [ 20 20 405 60 -0.5 ]
+  battle_cell [ 20 20 405 60 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
    pos [ 385 80 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb68:random_DNARoot" [
    pos [ 425 75 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -5665,12 +5663,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 6 -6 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
   ]
   flat_building "tb68:random_DNARoot" [
    pos [ 385 55 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -5687,15 +5685,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -3.15 -7.3 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
   ]
   flat_building "tb68:random_DNARoot" [
    pos [ 385 70 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5724,7 +5722,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb68:random_DNARoot" [
    pos [ 385 40 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -5745,7 +5743,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A1" ]
    title [ "Coda Pop Musical Beverages" ]
    pos [ 425 60 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 1 0.79 0.49 1 ]
@@ -5850,18 +5848,18 @@ group "minniesMelodyLand" [
   suit_edge [ 94 91 ]
   suit_edge [ 209 91 ]
   suit_edge [ 91 209 ]
-  battle_cell [ 20 20 405 30 -0.5 ]
+  battle_cell [ 20 20 405 30 0 ]
   street "street_5x40_DNARoot" [
    code [ "street_5x40" ]
    pos [ 385 20 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb40:random_DNARoot" [
    pos [ 385 15 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -5891,14 +5889,14 @@ group "minniesMelodyLand" [
   street "street_keyboard_20x40_DNARoot" [
    code [ "street_keyboard_20x40" ]
    pos [ 385 40 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb40:random_DNARoot" [
    pos [ 385 25 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -5923,7 +5921,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb40:random_DNARoot" [
    pos [ 425 35 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -5949,13 +5947,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_fightIdle" ]
-   cell_id [ 0 ]
-   pos [ 392.253 25.0723 0 ]
-   nhpr [ 90 0 0 ]
-  ]
  ]
  visgroup "4325" [
   vis [   "4325"   "4341"   "4342"   "4324"   "4319"   "4320"   "4321"   "4318"   "4315"   "4322"   "4323"   "4326"   "4327"   "4328"   "4329"   "4330"   ]
@@ -5971,18 +5962,18 @@ group "minniesMelodyLand" [
   suit_edge [ 96 213 ]
   suit_edge [ 213 86 ]
   suit_edge [ 86 213 ]
-  battle_cell [ 20 20 445 -5 -0.5 ]
+  battle_cell [ 20 20 445 -5 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
    pos [ 425 -25 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb42:random_DNARoot" [
    pos [ 435 -25 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -5992,18 +5983,18 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ 15.58 -5.67 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
    ]
    prop "neighborhood_sign_MM_DNARoot" [
     code [ "neighborhood_sign_MM" ]
     pos [ 5.44 -1.33 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb42:random_DNARoot" [
    pos [ 455 -25 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -6030,15 +6021,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ul_DNARoot" [
-    code [ "prop_tree_small_ul_MM" ]
+    code [ "prop_tree_small_ul" ]
     pos [ 12 -8 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
   ]
   flat_building "tb42:random_DNARoot" [
    pos [ 465 -25 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -6054,7 +6045,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_D1" ]
    title [ "The Syncopation Corporation" ]
    pos [ 445 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -6161,7 +6152,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb42:random_DNARoot" [
    pos [ 435 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -6175,17 +6166,17 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 2.32 3.57 18.41 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "neighborhood_sign_MM_DNARoot" [
     code [ "neighborhood_sign_MM" ]
     pos [ 3 -1 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb42:random_DNARoot" [
    pos [ 425 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -6213,15 +6204,8 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -5.75 -5.49 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_idle0" ]
-   cell_id [ 0 ]
-   pos [ 451.696 -18.7725 0 ]
-   nhpr [ -180 0 0 ]
   ]
  ]
  visgroup "4326" [
@@ -6238,11 +6222,11 @@ group "minniesMelodyLand" [
   suit_edge [ 121 119 ]
   suit_edge [ 116 121 ]
   suit_edge [ 121 116 ]
-  battle_cell [ 20 20 480 -12 -0.5 ]
+  battle_cell [ 20 20 480 -12 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
-   pos [ 465 15 -7.62939e-006 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 465 15 0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -6251,7 +6235,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_E1" ]
    title [ "" ]
    pos [ 505 0 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -6259,7 +6243,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb49:random_DNARoot" [
    pos [ 505 15 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -6284,10 +6268,15 @@ group "minniesMelodyLand" [
      color [ 1 1 0.58 1 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 21 -6 0 ]
+    hpr [ 135 0 0 ]
+   ]
   ]
   flat_building "tb48:random_DNARoot" [
    pos [ 495 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -6316,7 +6305,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb48:random_DNARoot" [
    pos [ 460 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -6340,20 +6329,20 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 16.08 -1.28 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   prop "prop_trumpet_flat_DNARoot" [
    code [ "prop_trumpet_flat" ]
    pos [ 502 10 0 ]
-   nhpr [ -45 -16.2703 -0 ]
+   hpr [ -45 -16.2703 0 ]
   ]
   landmark_building "tb48:toon_landmark_MM_B2_DNARoot" [
    code [ "toon_landmark_MM_B2" ]
    title [ "Lotsa Lute Savings & Loan" ]
    pos [ 480 15 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_pillars_ur" ]
     color [ 0.97 0.87 0.47 1 ]
@@ -6454,13 +6443,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   cell_id [ 0 ]
-   pos [ 494.332 -5.43464 -7.62939e-006 ]
-   nhpr [ -60 0 0 ]
-  ]
  ]
  visgroup "4327" [
   vis [   "4327"   "4326"   "4325"   "4324"   "4321"   "4320"   "4318"   "4319"   "4328"   "4329"   "4330"   "4323"   ]
@@ -6474,18 +6456,18 @@ group "minniesMelodyLand" [
   suit_edge [ 123 217 ]
   suit_edge [ 217 122 ]
   suit_edge [ 122 217 ]
-  battle_cell [ 20 20 485 -45 -0.5 ]
+  battle_cell [ 20 20 485 -45 0 ]
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
    pos [ 505 -65 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb50:random_DNARoot" [
    pos [ 465 -40 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -6509,7 +6491,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb50:random_DNARoot" [
    pos [ 465 -55 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -6528,7 +6510,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb49:random_DNARoot" [
    pos [ 505 -25 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -6557,13 +6539,13 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 17.42 4.46 17.63 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
   ]
   flat_building "tb50:random_DNARoot" [
    pos [ 465 -65 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -6582,7 +6564,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb53:random_DNARoot" [
    pos [ 505 -55 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -6611,7 +6593,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb53:random_DNARoot" [
    pos [ 505 -45 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -6648,18 +6630,18 @@ group "minniesMelodyLand" [
   suit_edge [ 129 127 ]
   suit_edge [ 124 129 ]
   suit_edge [ 129 124 ]
-  battle_cell [ 20 20 485 -85 -0.5 ]
+  battle_cell [ 20 20 485 -85 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
-   pos [ 465 -65 -7.62939e-006 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 465 -65 0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb50:random_DNARoot" [
    pos [ 465 -95 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -6678,12 +6660,12 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 2.74 3.45 19.45 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb53:random_DNARoot" [
    pos [ 505 -90 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -6699,10 +6681,15 @@ group "minniesMelodyLand" [
      color [ 0.67 0.4 0.99 1 ]
     ]
    ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 8.00001 -8 0 ]
+    hpr [ 180 0 0 ]
+   ]
   ]
   flat_building "tb52:random_DNARoot" [
    pos [ 465 -105 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -6715,9 +6702,9 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 6.46 -7.52 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
   ]
@@ -6725,7 +6712,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A1" ]
    title [ "Leo's Fenders" ]
    pos [ 505 -65 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -6738,7 +6725,7 @@ group "minniesMelodyLand" [
      code [ "humanist" ]
      color [ 0.25098 0.501961 0.501961 1 ]
      pos [ -0.41 0 0.9 ]
-     nhpr [ -0 0 -1 ]
+     hpr [ 0 0 1 ]
      scale [ 1.1 1 1 ]
      kern [ 0.053911 ]
      width [ 26.6035 ]
@@ -6787,7 +6774,7 @@ group "minniesMelodyLand" [
      code [ "humanist" ]
      color [ 0.25098 0.501961 0.501961 1 ]
      pos [ 0 0 0.04 ]
-     nhpr [ -0 0 -2 ]
+     hpr [ 0 0 2 ]
      scale [ 1 1 0.9 ]
      kern [ 0.064575 ]
      width [ 30.6786 ]
@@ -6841,7 +6828,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_B1" ]
    title [ "The Borrowed Chord Pawn Shop" ]
    pos [ 465 -80 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -6849,12 +6836,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -2.49 -2.78 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 17.52 -4.3 0 ]
-    nhpr [ 150 0 -0 ]
+    hpr [ 150 0 0 ]
    ]
    sign [
     code [ "MM_sign3" ]
@@ -6958,13 +6945,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_fightIdle" ]
-   cell_id [ 0 ]
-   pos [ 499.523 -96.4141 -7.62939e-006 ]
-   nhpr [ -120 0 0 ]
-  ]
  ]
  visgroup "4329" [
   vis [   "4329"   "4328"   "4327"   "4326"   "4325"   "4330"   "4331"   "4332"   "4334"   "4333"   ]
@@ -6988,18 +6968,18 @@ group "minniesMelodyLand" [
   suit_edge [ 133 219 ]
   suit_edge [ 219 131 ]
   suit_edge [ 131 219 ]
-  battle_cell [ 20 20 492 -119.5 -0.5 ]
+  battle_cell [ 20 20 492 -119.5 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
-   pos [ 505 -145 7.62939e-006 ]
-   nhpr [ 90 0 -0 ]
+   pos [ 505 -145 0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb52:random_DNARoot" [
    pos [ 465 -145 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7014,7 +6994,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb54:random_DNARoot" [
    pos [ 480 -145 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7027,20 +7007,20 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 2.39 -12.1 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -21.13 -36.03 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
    ]
   ]
   flat_building "tb52:random_DNARoot" [
    pos [ 465 -115 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7069,7 +7049,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb54:random_DNARoot" [
    pos [ 505 -145 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7090,12 +7070,17 @@ group "minniesMelodyLand" [
      count [ 1 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 9.4516 -6.95709 0 ]
+    hpr [ 90 0 0 ]
+   ]
   ]
   landmark_building "tb52:toon_landmark_MM_C1_DNARoot" [
    code [ "toon_landmark_MM_C1" ]
    title [ "Flowery Flute Fleeces" ]
    pos [ 465 -135 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 0.42 0.85 1 ]
@@ -7268,7 +7253,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_B2" ]
    title [ "Wagner's Vocational Violin Videos" ]
    pos [ 495 -145 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.97 0.87 0.47 1 ]
@@ -7393,13 +7378,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   cell_id [ 0 ]
-   pos [ 496.06 -139.26 7.62939e-006 ]
-   nhpr [ -165 0 0 ]
-  ]
  ]
  visgroup "4330" [
   vis [   "4333"   "4330"   "4331"   "4332"   "4329"   "4328"   "4327"   "4326"   "4325"   "4334"   "4335"   ]
@@ -7415,10 +7393,10 @@ group "minniesMelodyLand" [
   suit_edge [ 137 220 ]
   suit_edge [ 220 138 ]
   suit_edge [ 138 220 ]
-  battle_cell [ 20 20 525 -125 -0.5 ]
+  battle_cell [ 20 20 525 -125 0 ]
   flat_building "tb55:random_DNARoot" [
    pos [ 515 -145 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7438,7 +7416,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 515 -105 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7453,7 +7431,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 530 -105 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7468,12 +7446,12 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 2.62 4.61 17.14 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 505 -105 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -7493,7 +7471,7 @@ group "minniesMelodyLand" [
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
    pos [ 505 -145 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
@@ -7502,7 +7480,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A2" ]
    title [ "The Teli-Caster Network" ]
    pos [ 535 -145 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.97 0.87 0.47 1 ]
@@ -7514,7 +7492,7 @@ group "minniesMelodyLand" [
      code [ "humanist" ]
      color [ 0 0 0.501961 1 ]
      pos [ 0 0 0.85 ]
-     nhpr [ -0 0 -2 ]
+     hpr [ 0 0 2 ]
      scale [ 0.9 1 0.9 ]
      width [ 26.2158 ]
      height [ 26.2158 ]
@@ -7567,7 +7545,7 @@ group "minniesMelodyLand" [
     baseline [
      code [ "humanist" ]
      color [ 0 0 0.501961 1 ]
-     nhpr [ -0 0 -2 ]
+     hpr [ 0 0 2 ]
      scale [ 0.8 1 0.8 ]
      width [ 31.109 ]
      height [ 31.109 ]
@@ -7654,7 +7632,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 550 -145 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -7687,18 +7665,18 @@ group "minniesMelodyLand" [
   suit_edge [ 141 142 ]
   suit_edge [ 143 144 ]
   suit_edge [ 144 138 ]
-  battle_cell [ 20 20 565 -125 -0.5 ]
+  battle_cell [ 20 20 565 -125 0 ]
   street "street_double_corner_DNARoot" [
    code [ "street_double_corner" ]
-   pos [ 545 -145 2.28882e-005 ]
-   nhpr [ -0 0 -0 ]
+   pos [ 545 -145 0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 575 -155 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7727,7 +7705,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 595 -155 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -7752,18 +7730,18 @@ group "minniesMelodyLand" [
    prop "prop_cello_flat_DNARoot" [
     code [ "prop_cello_flat" ]
     pos [ 3.53 -0.74 -0.18 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_smokestack_DNARoot" [
     code [ "prop_smokestack" ]
     pos [ 4.1 3.88 14.31 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 0.8 0.47 0.8 1 ]
    ]
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 595 -140 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7780,19 +7758,19 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 7.08 -20.57 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -31.11 -44.88 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 595 -125 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7811,7 +7789,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 585 -125 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7840,7 +7818,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 585 -115 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7869,13 +7847,13 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_MM_DNARoot" [
     code [ "neighborhood_sign_MM" ]
     pos [ 5.61 -1.3 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 585 -105 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -7890,7 +7868,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 565 -145 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -7905,13 +7883,13 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 6.32 -1.21 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb55:random_DNARoot" [
    pos [ 565 -155 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -7919,38 +7897,32 @@ group "minniesMelodyLand" [
     color [ 0.7 0.76 1 1 ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_fightIdle" ]
-   cell_id [ 0 ]
-   pos [ 581.505 -131.939 2.28882e-005 ]
-   nhpr [ -105 0 0 ]
-  ]
  ]
  visgroup "4332" [
-  vis [   "4332"   "4331"   "4330"   "4329"   "4333"   "4334"   "4335"   "4345"   ]
+  vis [   "4332"   "4331"   "4330"   "4329"   "4333"   "4334"   "4335"   ]
   suit_edge [ 142 145 ]
   suit_edge [ 145 146 ]
   suit_edge [ 146 147 ]
   suit_edge [ 148 149 ]
   suit_edge [ 149 150 ]
   suit_edge [ 150 143 ]
+  suit_edge [ 146 146 ]
   suit_edge [ 221 146 ]
   suit_edge [ 146 221 ]
   suit_edge [ 221 150 ]
   suit_edge [ 150 221 ]
-  battle_cell [ 20 20 565 -75 -0.5 ]
+  battle_cell [ 20 20 565 -75 0 ]
   street "street_divided_transition_DNARoot" [
    code [ "street_divided_transition" ]
    pos [ 600 -85 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb56:random_DNARoot" [
    pos [ 545 -105 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -7965,7 +7937,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb56:random_DNARoot" [
    pos [ 545 -95 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -7994,7 +7966,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb56:random_DNARoot" [
    pos [ 545 -85 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -8023,7 +7995,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb56:random_DNARoot" [
    pos [ 530 -70 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -8052,12 +8024,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 7.02 -5.95 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb56:random_DNARoot" [
    pos [ 530 -55 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -8072,7 +8044,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 585 -85 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -8091,13 +8063,13 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 15.15 5.23 17.18 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 600 -85 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -8114,15 +8086,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 13 -12 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 600 -65 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -8148,33 +8120,23 @@ group "minniesMelodyLand" [
      color [ 0.8 0.22 0.68 1 ]
     ]
    ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 16.95 -21.55 0 ]
+    hpr [ 0 0 0 ]
+   ]
   ]
   street "street_keyboard_20x40_DNARoot" [
    code [ "street_keyboard_20x40" ]
    pos [ 585 -105 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
-  flat_building "tb56:random_DNARoot" [
-   pos [ 530 -85 0 ]
-   nhpr [ 90 0 -0 ]
-   width [ 15 ]
-   wall [
-    height [ 20 ]
-    code [ "wall_lg_brick_ur" ]
-    color [ 0.7 0.76 1 1 ]
-    windows [
-     code [ "window_sm_round_ul" ]
-     color [ 0.65 0.4 0.82 1 ]
-     count [ 2 ]
-    ]
-   ]
-  ]
   flat_building "tb72:random_DNARoot" [
    pos [ 600 -50 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -8194,29 +8156,42 @@ group "minniesMelodyLand" [
     height [ 10 ]
     code [ "wall_lg_brick_ur" ]
     color [ 1 0.62 0.85 1 ]
+    windows [
+     code [ "window_md_curved_ur" ]
+     color [ 0.69 0.58 0.96 1 ]
+     count [ 1 ]
+    ]
    ]
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 11.52 3.22 17.04 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 12.92 -6.23 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_idle0" ]
-   cell_id [ 0 ]
-   pos [ 579.925 -81.2803 7.62939e-006 ]
-   nhpr [ 75 0 0 ]
+  flat_building "tb56:random_DNARoot" [
+   pos [ 530 -85 0 ]
+   hpr [ 90 0 0 ]
+   width [ 15 ]
+   wall [
+    height [ 20 ]
+    code [ "wall_lg_brick_ur" ]
+    color [ 0.7 0.76 1 1 ]
+    windows [
+     code [ "window_sm_round_ul" ]
+     color [ 0.65 0.4 0.82 1 ]
+     count [ 2 ]
+    ]
+   ]
   ]
  ]
  visgroup "4333" [
-  vis [   "4333"   "4332"   "4331"   "4330"   "4334"   "4335"   "4336"   "4337"   "4338"   "4345"   ]
+  vis [   "4333"   "4332"   "4331"   "4330"   "4334"   "4335"   "4336"   "4337"   "4338"   ]
   suit_edge [ 147 151 ]
   suit_edge [ 151 152 ]
   suit_edge [ 153 148 ]
@@ -8225,22 +8200,44 @@ group "minniesMelodyLand" [
   suit_edge [ 155 153 ]
   suit_edge [ 151 156 ]
   suit_edge [ 156 151 ]
-  battle_cell [ 20 20 580 -25 -0.5 ]
+  battle_cell [ 20 20 580 -25 0 ]
+  street "street_divided_40x70_DNARoot" [
+   code [ "street_divided_40x70" ]
+   pos [ 600 -45 0 ]
+   hpr [ 90 0 0 ]
+   texture [ "street_street_MM_tex" ]
+   texture [ "street_sidewalk_MM_tex" ]
+   texture [ "street_curb_MM_tex" ]
+  ]
   landmark_building "tb56:toon_landmark_MM_E1_DNARoot" [
    code [ "toon_landmark_MM_E1" ]
    title [ "" ]
    pos [ 530 -40 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 0.7 0.78 1 1 ]
    ]
   ]
+  flat_building "tb56:random_DNARoot" [
+   pos [ 530 -15 0 ]
+   hpr [ 90 0 0 ]
+   width [ 10 ]
+   wall [
+    height [ 20 ]
+    code [ "wall_bricks_ur" ]
+    color [ 0.96 0.96 0.73 1 ]
+    cornice [
+     code [ "cornice_curved_ur" ]
+     color [ 1 1 0.58 1 ]
+    ]
+   ]
+  ]
   landmark_building "tb72:toon_landmark_MM_D1_DNARoot" [
    code [ "toon_landmark_MM_D1" ]
    title [ "Fast Freddie's Fretless Fingerboards" ]
-   pos [ 600.833 -35.1853 0 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 600 -35 0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -8475,307 +8472,57 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  node "streets" [
-   street "street_divided_40x70_DNARoot" [
-    code [ "street_divided_40x70" ]
-    pos [ 600 -45 0 ]
-    nhpr [ 90 0 -0 ]
-    texture [ "street_street_MM_tex" ]
-    texture [ "street_sidewalk_MM_tex" ]
-    texture [ "street_curb_MM_tex" ]
+  flat_building "tb72:random_DNARoot" [
+   pos [ 600 -25 0 ]
+   hpr [ -90 0 0 ]
+   width [ 10 ]
+   wall [
+    height [ 20 ]
+    code [ "wall_md_blank_ur" ]
+    color [ 0.97 0.58 0.55 1 ]
+    windows [
+     code [ "window_sm_curved_ur" ]
+     color [ 0.97 0.87 0.47 1 ]
+     count [ 4 ]
+    ]
+    cornice [
+     code [ "cornice_curved_ur" ]
+     color [ 0.81 0.3 0.51 1 ]
+    ]
    ]
-   street "street_sidewalk_20x20_DNARoot" [
-    code [ "street_sidewalk_20x20" ]
-    pos [ 620 -4.99999 0 ]
-    nhpr [ -180 0 -0 ]
-    texture [ "street_street_MM_tex" ]
-    texture [ "street_sidewalk_MM_tex" ]
-    texture [ "street_curb_MM_tex" ]
+   prop "prop_minnie_planter_DNARoot" [
+    code [ "prop_minnie_planter" ]
+    pos [ 9.99999 -5 0 ]
+    hpr [ 75 0 0 ]
    ]
-   street "street_sidewalk_20x20_DNARoot" [
-    code [ "street_sidewalk_20x20" ]
-    pos [ 640 -4.99998 0 ]
-    nhpr [ 180 0 -0 ]
-    texture [ "street_street_MM_tex" ]
-    texture [ "street_sidewalk_MM_tex" ]
-    texture [ "street_curb_MM_tex" ]
-   ]
-   street "street_sidewalk_20x20_DNARoot" [
-    code [ "street_sidewalk_20x20" ]
-    pos [ 660 -4.99999 0 ]
-    nhpr [ -180 0 -0 ]
-    texture [ "street_street_MM_tex" ]
-    texture [ "street_sidewalk_MM_tex" ]
-    texture [ "street_curb_MM_tex" ]
+   prop "prop_minnie_planter_DNARoot" [
+    code [ "prop_minnie_planter" ]
+    pos [ 27 -6 0 ]
+    hpr [ 120 0 0 ]
    ]
   ]
-  node "buildings" [
-   flat_building "tb56:random_DNARoot" [
-    pos [ 530 -15 0 ]
-    nhpr [ 90 0 -0 ]
-    width [ 10 ]
-    wall [
-     height [ 20 ]
-     code [ "wall_bricks_ur" ]
-     color [ 0.96 0.96 0.73 1 ]
-     cornice [
-      code [ "cornice_curved_ur" ]
-      color [ 1 1 0.58 1 ]
-     ]
+  flat_building "tb72:random_DNARoot" [
+   pos [ 600 -5 0 ]
+   hpr [ -90 0 0 ]
+   width [ 20 ]
+   wall [
+    height [ 20 ]
+    code [ "wall_md_blank_ur" ]
+    color [ 0.97 0.58 0.55 1 ]
+    windows [
+     code [ "window_sm_curved_ur" ]
+     color [ 0.97 0.87 0.47 1 ]
+     count [ 4 ]
     ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 600 -5 0 ]
-    nhpr [ -0 0 -0 ]
-    width [ 20 ]
-    wall [
-     height [ 10 ]
-     code [ "wall_sm_brick_pink_ur" ]
-     color [ 1 1 1 1 ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 2 ]
-     ]
-    ]
-    wall [
-     height [ 10 ]
-     code [ "wall_sm_brick_pink_ur" ]
-     color [ 1 1 1 1 ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 2 ]
-     ]
-     cornice [
-      code [ "cornice_brick_ur" ]
-      color [ 0.74 0.65 0.99 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 620 -5 0 ]
-    nhpr [ -0 0 -0 ]
-    width [ 25 ]
-    wall [
-     height [ 10 ]
-     code [ "wall_md_bricks_ur" ]
-     color [ 0.87 0.89 1 1 ]
-     windows [
-      code [ "window_porthole_ur" ]
-      color [ 0.42 0.42 0.85 1 ]
-      count [ 0 ]
-     ]
-     flat_door [
-      code [ "door_single_square_ur" ]
-      color [ 0.7 0.78 1 1 ]
-     ]
-    ]
-    wall [
-     height [ 10 ]
-     code [ "wall_md_bricks_ur" ]
-     color [ 0.87 0.89 1 1 ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 2 ]
-     ]
-     cornice [
-      code [ "cornice_brick_ur" ]
-      color [ 0.74 0.65 0.99 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 645 -5 0 ]
-    nhpr [ -0 0 -0 ]
-    width [ 15 ]
-    wall [
-     height [ 10 ]
-     code [ "wall_sm_brick_pink_ur" ]
-     color [ 1 1 1 1 ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 2 ]
-     ]
-    ]
-    wall [
-     height [ 10 ]
-     code [ "wall_sm_brick_pink_ur" ]
-     color [ 1 1 1 1 ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 2 ]
-     ]
-     cornice [
-      code [ "cornice_brick_ur" ]
-      color [ 0.74 0.65 0.99 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 640 -25 0 ]
-    nhpr [ -180 0 -0 ]
-    width [ 20 ]
-    wall [
-     height [ 10 ]
-     code [ "wall_md_blank_ur" ]
-     color [ 1 0.98 0.65 1 ]
-     windows [
-      code [ "window_porthole_ul" ]
-      color [ 0.69 0.33 0.69 1 ]
-      count [ 2 ]
-     ]
-    ]
-    wall [
-     height [ 10 ]
-     code [ "wall_md_blank_dl" ]
-     color [ 1 0.98 0.65 1 ]
-     windows [
-      code [ "window_porthole_ul" ]
-      color [ 0.65 0.4 0.82 1 ]
-      count [ 2 ]
-     ]
-     cornice [
-      code [ "cornice_stone_ur" ]
-      color [ 0.67 0.4 0.99 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 620 -25 0 ]
-    nhpr [ 180 0 -0 ]
-    width [ 20 ]
-    wall [
-     height [ 20 ]
-     code [ "wall_md_blank_ur" ]
-     color [ 1 0.7 0.7 1 ]
-     windows [
-      code [ "window_sm_curved_ur" ]
-      color [ 0.97 0.87 0.47 1 ]
-      count [ 4 ]
-     ]
-     cornice [
-      code [ "cornice_curved_ur" ]
-      color [ 0.81 0.3 0.51 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 660 -4.99999 0 ]
-    nhpr [ 90 0 -0 ]
-    width [ 15 ]
-    wall [
-     height [ 10 ]
-     code [ "wall_sm_brick_pink_ur" ]
-     color [ 1 0.67 1 1 ]
-     windows [
-      code [ "window_sm_curved_ur" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 0 ]
-     ]
-     flat_door [
-      code [ "door_single_square_ur" ]
-      color [ 0.7 0.78 1 1 ]
-     ]
-    ]
-    wall [
-     height [ 10 ]
-     code [ "wall_sm_brick_pink_ur" ]
-     color [ 1 0.67 1 1 ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.96 0.79 1 1 ]
-      count [ 2 ]
-     ]
-     cornice [
-      code [ "cornice_brick_ur" ]
-      color [ 0.74 0.65 0.99 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 660 -25 0 ]
-    nhpr [ -180 0 -0 ]
-    width [ 20 ]
-    wall [
-     height [ 20 ]
-     code [ "wall_bricks_ur" ]
-     color [ 1 0.98 0.65 1 ]
-     windows [
-      code [ "window_md_curved_ur" ]
-      color [ 1 0.79 0.49 1 ]
-      count [ 4 ]
-     ]
-     cornice [
-      code [ "cornice_curved_ur" ]
-      color [ 1 1 0.58 1 ]
-     ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 660 -40 0 ]
-    nhpr [ 90 0 -0 ]
-    width [ 15 ]
-    wall [
-     height [ 20 ]
-     code [ "wall_bricks_ur" ]
-     color [ 1 0.98 0.65 1 ]
-     windows [
-      code [ "window_md_curved_ul" ]
-      color [ 1 0.79 0.49 1 ]
-      count [ 2 ]
-     ]
-     cornice [
-      code [ "cornice_curved_ur" ]
-      color [ 1 1 0.58 1 ]
-     ]
-     flat_door [
-      code [ "door_single_shuttered_ur" ]
-      color [ 1 0.79 0.49 1 ]
-     ]
-    ]
-    prop "prop_cello_flat_DNARoot" [
-     code [ "prop_cello_flat" ]
-     pos [ 1.8478 -1.79199 7.62939e-006 ]
-     nhpr [ 45 0 -0 ]
-    ]
-   ]
-   flat_building "tb72:random_DNARoot" [
-    pos [ 600 -25 0 ]
-    nhpr [ -90 0 -0 ]
-    width [ 10 ]
-    wall [
-     height [ 20 ]
-     code [ "wall_md_blank_ur" ]
-     color [ 0.97 0.58 0.55 1 ]
-     cornice [
-      code [ "cornice_curved_ur" ]
-      color [ 0.81 0.3 0.51 1 ]
-     ]
-     windows [
-      code [ "window_sm_curved_ul" ]
-      color [ 0.97 0.87 0.47 1 ]
-      count [ 1 ]
-     ]
-    ]
-    prop "prop_minnie_planter_DNARoot" [
-     code [ "prop_minnie_planter" ]
-     pos [ 9.99999 -5 0 ]
-     nhpr [ 75 0 -0 ]
-    ]
-    prop "prop_minnie_planter_DNARoot" [
-     code [ "prop_minnie_planter" ]
-     pos [ 27.4279 -4.81219 0 ]
-     nhpr [ 120 0 -0 ]
+    cornice [
+     code [ "cornice_curved_ur" ]
+     color [ 0.81 0.3 0.51 1 ]
     ]
    ]
   ]
  ]
  visgroup "4334" [
-  vis [   "4334"   "4333"   "4332"   "4331"   "4330"   "4335"   "4336"   "4337"   "4338"   "4345"   ]
+  vis [   "4334"   "4333"   "4332"   "4331"   "4330"   "4335"   "4336"   "4337"   "4338"   ]
   suit_edge [ 152 157 ]
   suit_edge [ 157 158 ]
   suit_edge [ 158 159 ]
@@ -8786,18 +8533,18 @@ group "minniesMelodyLand" [
   suit_edge [ 162 222 ]
   suit_edge [ 222 158 ]
   suit_edge [ 158 222 ]
-  battle_cell [ 20 20 565 15 -0.5 ]
+  battle_cell [ 20 20 565 15 0 ]
   street "street_divided_transition_DNARoot" [
    code [ "street_divided_transition" ]
-   pos [ 530 35 1.52588e-005 ]
-   nhpr [ -90 0 -0 ]
+   pos [ 530 35 0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 530 35 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -8823,10 +8570,15 @@ group "minniesMelodyLand" [
      color [ 0.67 0.4 0.99 1 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 21 -17 0 ]
+    hpr [ 150 0 0 ]
+   ]
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 585 35 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -8845,17 +8597,32 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 10 -24.9999 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 0 -10 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
+   ]
+  ]
+  flat_building "tb72:random_DNARoot" [
+   pos [ 600 10 0 ]
+   hpr [ -90 0 0 ]
+   width [ 15 ]
+   wall [
+    height [ 20 ]
+    code [ "wall_lg_brick_ur" ]
+    color [ 1 0.62 0.85 1 ]
+    windows [
+     code [ "window_md_curtains_ur" ]
+     color [ 0.64 0.45 0.92 1 ]
+     count [ 1 ]
+    ]
    ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 530 15 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -8874,23 +8641,23 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 7.9 1.77 19.26 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 9.99999 -9.99994 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -2 -8 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
    ]
   ]
   flat_building "tb56:random_DNARoot" [
    pos [ 530 -5 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -8917,26 +8684,26 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -4.99992 -34.9999 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -19.9999 -35 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -34.9999 -35 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 600 35 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -8965,7 +8732,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 530 25 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -8994,7 +8761,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 600 25 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -9010,42 +8777,6 @@ group "minniesMelodyLand" [
      color [ 0.81 0.3 0.51 1 ]
     ]
    ]
-  ]
-  flat_building "tb72:random_DNARoot" [
-   pos [ 600 10 0 ]
-   nhpr [ -90 0 -0 ]
-   width [ 15 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_sm_brick_pink_ur" ]
-    color [ 1 0.67 1 1 ]
-    windows [
-     code [ "window_sm_curved_ul" ]
-     color [ 0.96 0.79 1 1 ]
-     count [ 2 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_sm_brick_pink_ur" ]
-    color [ 1 0.67 1 1 ]
-    windows [
-     code [ "window_sm_curved_ul" ]
-     color [ 0.96 0.79 1 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_brick_ur" ]
-     color [ 0.74 0.65 0.99 1 ]
-    ]
-   ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   cell_id [ 0 ]
-   pos [ 548.826 20.8875 1.52588e-005 ]
-   nhpr [ -120 0 0 ]
   ]
  ]
  visgroup "4335" [
@@ -9064,11 +8795,11 @@ group "minniesMelodyLand" [
   suit_edge [ 167 223 ]
   suit_edge [ 223 164 ]
   suit_edge [ 164 223 ]
-  battle_cell [ 20 20 565 70 -0.5 ]
+  battle_cell [ 20 20 565 70 0 ]
   street "street_double_corner_DNARoot" [
    code [ "street_double_corner" ]
-   pos [ 585 95 -1.52588e-005 ]
-   nhpr [ 180 0 -0 ]
+   pos [ 585 95 0 ]
+   hpr [ 180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -9076,14 +8807,14 @@ group "minniesMelodyLand" [
   street "street_20x40_DNARoot" [
    code [ "street_20x40" ]
    pos [ 605 95 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 545 35 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -9102,7 +8833,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 545 65 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -9126,12 +8857,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 7.00001 -4 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
    ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 545 75 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -9160,7 +8891,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 550 105 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -9183,15 +8914,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 6.43 -7.13 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 565 105 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -9216,7 +8947,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 565 95 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -9241,13 +8972,13 @@ group "minniesMelodyLand" [
    prop "neighborhood_sign_DL_DNARoot" [
     code [ "neighborhood_sign_DL" ]
     pos [ 4.91 -1.35 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 595 95 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -9262,7 +8993,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 605 55 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -9281,7 +9012,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 585 55 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -9301,14 +9032,14 @@ group "minniesMelodyLand" [
   street "street_keyboard_20x40_DNARoot" [
    code [ "street_keyboard_20x40" ]
    pos [ 585 35 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 535 90 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -9327,9 +9058,9 @@ group "minniesMelodyLand" [
   ]
   landmark_building "tb70:toon_landmark_MM_A1_DNARoot" [
    code [ "toon_landmark_MM_A1" ]
-   title [ "Ziggy's Zoo of Zigeunermusik" ]
+   title [ "Ziggy's Zoo of Zigeunermusik" ]
    pos [ 545 45 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -9435,7 +9166,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 535 75 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -9463,12 +9194,12 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 4.52 1.25 19.97 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 535 105 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -9497,13 +9228,13 @@ group "minniesMelodyLand" [
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ 1.57 6.75 18.57 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb70:random_DNARoot" [
    pos [ 575 95 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -9529,13 +9260,11 @@ group "minniesMelodyLand" [
      color [ 0.8 0.22 0.68 1 ]
     ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_mailbox_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_mailbox" ]
-   anim [ "tt_a_ara_mml_mailbox_fightIdle" ]
-   cell_id [ 0 ]
-   pos [ 578.865 89.4285 -1.52588e-005 ]
-   nhpr [ -15 0 0 ]
+   prop "prop_mailbox_MM_DNARoot" [
+    code [ "prop_mailbox_MM" ]
+    pos [ 10.22 -7.18 0 ]
+    hpr [ -180 0 0 ]
+   ]
   ]
  ]
  visgroup "4336" [
@@ -9544,18 +9273,18 @@ group "minniesMelodyLand" [
   suit_edge [ 170 171 ]
   suit_edge [ 172 173 ]
   suit_edge [ 173 168 ]
-  battle_cell [ 20 20 619 81.5 -0.5 ]
+  battle_cell [ 20 20 619 81.5 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
    pos [ 645 95 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 85 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -9574,7 +9303,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 95 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -9599,7 +9328,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 645 70 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -9616,25 +9345,25 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -8.41 -9.5 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -20.5 -36.32 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
    prop "neighborhood_sign_MM_DNARoot" [
     code [ "neighborhood_sign_MM" ]
     pos [ 6.94 -1.21 0 ]
-    nhpr [ 180 0 -0 ]
+    hpr [ -180 0 0 ]
     scale [ 1.5 1.5 1.5 ]
    ]
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 625 55 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -9653,7 +9382,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb72:random_DNARoot" [
    pos [ 645 55 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -9687,14 +9416,15 @@ group "minniesMelodyLand" [
   suit_edge [ 175 176 ]
   suit_edge [ 177 178 ]
   suit_edge [ 178 172 ]
+  suit_edge [ 175 175 ]
   suit_edge [ 175 179 ]
   suit_edge [ 179 175 ]
   suit_edge [ 178 179 ]
   suit_edge [ 179 178 ]
-  battle_cell [ 20 20 625 115 -0.5 ]
+  battle_cell [ 20 20 625 115 0 ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 125 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -9704,7 +9434,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb71:random_DNARoot" [
    pos [ 605 95 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -9730,7 +9460,7 @@ group "minniesMelodyLand" [
   street "street_20x40_DNARoot" [
    code [ "street_20x40" ]
    pos [ 605 115 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -9738,14 +9468,14 @@ group "minniesMelodyLand" [
   street "street_keyboard_20x40_DNARoot" [
    code [ "street_keyboard_20x40" ]
    pos [ 605 135 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb71:random_DNARoot" [
    pos [ 605 110 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -9771,15 +9501,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 1 -7 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
   ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 135 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -9798,7 +9528,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb71:random_DNARoot" [
    pos [ 605 125 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -9817,9 +9547,9 @@ group "minniesMelodyLand" [
   ]
   landmark_building "tb62:toon_landmark_MM_B2_DNARoot" [
    code [ "toon_landmark_MM_B2" ]
-   title [ "Quentin's Quintessential Quadrilles" ]
+   title [ "Quentin's Quintessential Quadrilles" ]
    pos [ 645 110 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_pillars_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -9827,12 +9557,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 18.72 -3.52 0 ]
-    nhpr [ 120 0 -0 ]
+    hpr [ 120 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -1.73 -4.11 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    sign [
     code [ "MM_sign1" ]
@@ -9954,13 +9684,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_hydrant_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_hydrant" ]
-   anim [ "tt_a_ara_mml_hydrant_idle0" ]
-   cell_id [ 0 ]
-   pos [ 612.056 124.133 0 ]
-   nhpr [ 60 0 0 ]
-  ]
  ]
  visgroup "4338" [
   vis [   "4338"   "4337"   "4336"   "4335"   "4339"   "4340"   "4333"   "4334"   "4332"   ]
@@ -9974,10 +9697,10 @@ group "minniesMelodyLand" [
   suit_edge [ 177 225 ]
   suit_edge [ 225 176 ]
   suit_edge [ 176 225 ]
-  battle_cell [ 20 20 625 155 -0.5 ]
+  battle_cell [ 20 20 625 155 0 ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 150 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -9992,13 +9715,13 @@ group "minniesMelodyLand" [
    prop "prop_smokestack_DNARoot" [
     code [ "prop_smokestack" ]
     pos [ 10.38 6.14 11 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 175 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -10017,7 +9740,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb71:random_DNARoot" [
    pos [ 605 150 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -10043,11 +9766,16 @@ group "minniesMelodyLand" [
      color [ 0.67 0.4 0.99 1 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 10.05 -2.7 0 ]
+    hpr [ 150 0 0 ]
+   ]
   ]
   street "street_keyboard_20x40_DNARoot" [
    code [ "street_keyboard_20x40" ]
    pos [ 605 155 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
@@ -10055,14 +9783,14 @@ group "minniesMelodyLand" [
   street "street_20x40_DNARoot" [
    code [ "street_20x40" ]
    pos [ 605 175 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb62:random_DNARoot" [
    pos [ 645 165 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -10090,7 +9818,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb71:random_DNARoot" [
    pos [ 605 135 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -10106,13 +9834,6 @@ group "minniesMelodyLand" [
      color [ 0.67 0.4 0.99 1 ]
     ]
    ]
-  ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   cell_id [ 0 ]
-   pos [ 608.013 161.047 1.52588e-005 ]
-   nhpr [ 60 0 0 ]
   ]
  ]
  visgroup "4339" [
@@ -10131,18 +9852,18 @@ group "minniesMelodyLand" [
   suit_edge [ 187 182 ]
   suit_edge [ 226 184 ]
   suit_edge [ 184 226 ]
-  battle_cell [ 20 20 632 189.5 -0.5 ]
+  battle_cell [ 20 20 632 189.5 0 ]
   street "street_curved_corner_DNARoot" [
    code [ "street_curved_corner" ]
    pos [ 605 175 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb67:random_DNARoot" [
    pos [ 605 180 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -10167,7 +9888,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb67:random_DNARoot" [
    pos [ 605 195 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -10194,19 +9915,19 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 3.4 -9.38 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
    ]
    prop "prop_MM_trumpets_lamp_DNARoot" [
     code [ "prop_MM_trumpets_lamp" ]
     pos [ -14.99 -35.93 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
    ]
   ]
   flat_building "tb67:random_DNARoot" [
    pos [ 605 205 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -10227,7 +9948,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_C1" ]
    title [ "Mr. Costello's Yellow Cellos" ]
    pos [ 613 215 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    door [
     code [ "door_double_pillars_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -10333,7 +10054,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_A2" ]
    title [ "Harry's House of Harmonious Humbuckers" ]
    pos [ 605 165 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -10345,7 +10066,7 @@ group "minniesMelodyLand" [
      code [ "humanist" ]
      color [ 0 0.25098 0.501961 1 ]
      pos [ -0.43 0 1.01 ]
-     nhpr [ -0 0 -3 ]
+     hpr [ 0 0 3 ]
      kern [ 0.041104 ]
      width [ 20.2951 ]
      height [ 20.2951 ]
@@ -10402,7 +10123,7 @@ group "minniesMelodyLand" [
      code [ "humanist" ]
      color [ 0 0.25098 0.501961 1 ]
      pos [ 0 0 0.04 ]
-     nhpr [ -0 0 -3 ]
+     hpr [ 0 0 3 ]
      kern [ 0.035773 ]
      width [ 24.8182 ]
      height [ 24.8182 ]
@@ -10474,7 +10195,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb67:random_DNARoot" [
    pos [ 630 215 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -10502,7 +10223,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb67:random_DNARoot" [
    pos [ 605 215 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -10526,11 +10247,11 @@ group "minniesMelodyLand" [
   suit_edge [ 183 188 ]
   suit_edge [ 188 189 ]
   suit_edge [ 189 184 ]
-  battle_cell [ 20 20 655 195 -0.5 ]
+  battle_cell [ 20 20 655 195 0 ]
   street "street_40x40_DNARoot" [
    code [ "street_40x40" ]
    pos [ 695 215 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ -180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -10538,7 +10259,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 675 235 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -10546,7 +10267,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 655 235 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -10554,7 +10275,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 655 175 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -10562,7 +10283,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 675 175 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -10570,14 +10291,14 @@ group "minniesMelodyLand" [
   street "street_10x40_DNARoot" [
    code [ "street_10x40" ]
    pos [ 655 215 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ 180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb67:20_DNARoot" [
    pos [ 655 215 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -10596,7 +10317,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb67:20_DNARoot" [
    pos [ 655 235 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -10623,20 +10344,20 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 8.35 -8.6 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 27.34 -13.54 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
   ]
   flat_building "tb67:20_DNARoot" [
    pos [ 675 235 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -10661,13 +10382,13 @@ group "minniesMelodyLand" [
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ 5.94 9.43 19.44 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 0.7 0.76 1 1 ]
    ]
   ]
   flat_building "tb62:20_DNARoot" [
    pos [ 655 175 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -10686,7 +10407,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb62:20_DNARoot" [
    pos [ 655 155 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -10705,7 +10426,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb62:20_DNARoot" [
    pos [ 675 155 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -10732,15 +10453,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 11.6 -9.51 0 ]
-    nhpr [ -180 0 -0 ]
+    hpr [ 180 0 0 ]
     scale [ 0.9 0.9 0.9 ]
    ]
   ]
   flat_building "tb62:20_DNARoot" [
    pos [ 695 155 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -10766,10 +10487,15 @@ group "minniesMelodyLand" [
      color [ 0.68 0.22 0.8 1 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 6 -6 0 ]
+    hpr [ 90 0 0 ]
+   ]
   ]
   flat_building "tb67:20_DNARoot" [
    pos [ 695 235 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20.7 ]
    wall [
     height [ 10 ]
@@ -10794,12 +10520,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 23.6 -1.89 0 ]
-    nhpr [ 60 0 -0 ]
+    hpr [ 60 0 0 ]
    ]
   ]
   flat_building "tb62:20_DNARoot" [
    pos [ 695 175.5 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20.7 ]
    wall [
     height [ 10 ]
@@ -10828,17 +10554,17 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -3.24 -2.08 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 16.82 2.54 18.59 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb67:20_DNARoot" [
    pos [ 645 215 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -10858,7 +10584,7 @@ group "minniesMelodyLand" [
   prop "linktunnel_mm_4000_DNARoot" [
    code [ "prop_safe_zone_entrance_tunnel" ]
    pos [ 694.9 215 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    sign [
     code [ "tunnel_sign_magenta" ]
     pos [ 0 0 -2.13 ]
@@ -10867,7 +10593,7 @@ group "minniesMelodyLand" [
      code [ "mickey" ]
      color [ 0.443137 0.541176 0.941176 1 ]
      pos [ 0 0 -0.81 ]
-     nhpr [ -0 0 2 ]
+     hpr [ 0 0 -2 ]
      scale [ 1.5 1 1.5 ]
      wiggle [ 2.60407 ]
      width [ 33.3333 ]
@@ -10914,7 +10640,7 @@ group "minniesMelodyLand" [
      code [ "mickey" ]
      color [ 0.501961 0.501961 1 1 ]
      pos [ 0 0 -1.89 ]
-     nhpr [ -0 0 2 ]
+     hpr [ 0 0 -2 ]
      scale [ 0.8 1 0.8 ]
      width [ 45.4545 ]
      height [ 45.4545 ]
@@ -10978,18 +10704,6 @@ group "minniesMelodyLand" [
     ]
    ]
   ]
-  interactive_prop "interactive_prop_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "interactive_prop_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   cell_id [ 0 ]
-   pos [ 663.038 177.827 0 ]
-   nhpr [ 180 0 0 ]
-  ]
-  prop "prop_tt_m_ara_gen_tunnelAheadSign_DNARoot" [
-   code [ "prop_tt_m_ara_gen_tunnelAheadSign" ]
-   pos [ 689.764 186.368 -0.500015 ]
-   nhpr [ -90 0 0 ]
-  ]
  ]
  visgroup "4341" [
   vis [   "4341"   "4342"   "4318"   "4319"   "4320"   "4321"   "4323"   "4324"   "4325"   "4326"   "4322"   "4327"   ]
@@ -11001,18 +10715,18 @@ group "minniesMelodyLand" [
   suit_edge [ 98 210 ]
   suit_edge [ 211 104 ]
   suit_edge [ 104 211 ]
-  battle_cell [ 20 20 405 -50 -0.5 ]
+  battle_cell [ 20 20 405 -50 0 ]
   street "street_10x40_DNARoot" [
    code [ "street_10x40" ]
    pos [ 385 -65 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 425 -60 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -11037,12 +10751,12 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 4.11 2.48 19.33 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 425 -45 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11061,7 +10775,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 425 -25 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -11077,14 +10791,14 @@ group "minniesMelodyLand" [
   street "street_keyboard_40x40_DNARoot" [
    code [ "street_keyboard_40x40" ]
    pos [ 385 -25 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
    texture [ "street_sidewalk_MM_keyboard_tex" ]
   ]
   flat_building "tb44:random_DNARoot" [
    pos [ 385 -60 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -11112,12 +10826,12 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 17.53 5.52 19.16 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb44:random_DNARoot" [
    pos [ 385 -40 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11136,7 +10850,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb44:random_DNARoot" [
    pos [ 385 -75 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11174,11 +10888,11 @@ group "minniesMelodyLand" [
   suit_edge [ 110 105 ]
   suit_edge [ 212 106 ]
   suit_edge [ 106 212 ]
-  battle_cell [ 20 20 405 -94 -0.5 ]
+  battle_cell [ 20 20 405 -94 0 ]
   street "street_courtyard_70_exit_DNARoot" [
    code [ "street_courtyard_70_exit" ]
    pos [ 405 -110 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11186,7 +10900,7 @@ group "minniesMelodyLand" [
   street "street_courtyard_70_DNARoot" [
    code [ "street_courtyard_70" ]
    pos [ 405 -110 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11194,7 +10908,7 @@ group "minniesMelodyLand" [
   street "street_courtyard_70_DNARoot" [
    code [ "street_courtyard_70" ]
    pos [ 405 -110 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11202,7 +10916,7 @@ group "minniesMelodyLand" [
   street "street_courtyard_70_DNARoot" [
    code [ "street_courtyard_70" ]
    pos [ 405 -110 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11211,7 +10925,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_E1" ]
    title [ "" ]
    pos [ 415 -145 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    door [
     code [ "door_double_curved_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -11219,17 +10933,17 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ -3.08 -3.7 0 ]
-    nhpr [ 60 0 -0 ]
+    hpr [ 60 0 0 ]
    ]
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 32.65 -3.07 0 ]
-    nhpr [ 135 0 -0 ]
+    hpr [ 135 0 0 ]
    ]
   ]
   flat_building "tb44:random_DNARoot" [
    pos [ 370 -75 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11248,12 +10962,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 20.82 -6.93 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb44:random_DNARoot" [
    pos [ 370 -95 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -11278,18 +10992,18 @@ group "minniesMelodyLand" [
    prop "prop_trashcan_MM_DNARoot" [
     code [ "prop_trashcan_MM" ]
     pos [ 11.83 -7.99 0 ]
-    nhpr [ 45 0 -0 ]
+    hpr [ 45 0 0 ]
    ]
    prop "prop_smokestack_DNARoot" [
     code [ "prop_smokestack" ]
     pos [ 4.07 4.7 14.82 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
   ]
   flat_building "tb44:random_DNARoot" [
    pos [ 370 -105 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -11308,7 +11022,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb43:random_DNARoot" [
    pos [ 370 -145 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -11325,15 +11039,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 10.29 -5.75 0 ]
-    nhpr [ -90 0 -0 ]
+    hpr [ -90 0 0 ]
     scale [ 0.7 0.7 0.7 ]
    ]
   ]
   flat_building "tb43:random_DNARoot" [
    pos [ 390 -145 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -11362,7 +11076,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb43:random_DNARoot" [
    pos [ 425 -145 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -11372,7 +11086,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb43:random_DNARoot" [
    pos [ 440 -145 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -11397,18 +11111,18 @@ group "minniesMelodyLand" [
    prop "prop_trumpet_flat_DNARoot" [
     code [ "prop_trumpet_flat" ]
     pos [ 4.51 -0.56 -0.1 ]
-    nhpr [ 30 0 -0 ]
+    hpr [ 30 0 0 ]
    ]
    prop "prop_roof_access_DNARoot" [
     code [ "prop_roof_access" ]
     pos [ 3.84 4.96 18.78 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 1 0.7 0.7 1 ]
    ]
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 440 -115 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -11437,13 +11151,13 @@ group "minniesMelodyLand" [
    prop "prop_chimney_DNARoot" [
     code [ "prop_chimney" ]
     pos [ 10.41 2.25 17.87 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
     color [ 0.97 0.47 0.67 1 ]
    ]
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 425 -75 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11460,19 +11174,19 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -21 -35 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ -6.55 -7.37 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb43:random_DNARoot" [
    pos [ 440 -130 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -11500,7 +11214,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 440 -90 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -11529,14 +11243,14 @@ group "minniesMelodyLand" [
    prop "prop_mailbox_MM_DNARoot" [
     code [ "prop_mailbox_MM" ]
     pos [ 10 -8 0 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   landmark_building "tb44:toon_landmark_MM_A1_DNARoot" [
    code [ "toon_landmark_MM_A1" ]
    title [ "Con Moto Cycles" ]
    pos [ 370 -125 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    door [
     code [ "door_double_round_ur" ]
     color [ 0.7 0.78 1 1 ]
@@ -11605,7 +11319,7 @@ group "minniesMelodyLand" [
    code [ "toon_landmark_MM_B2" ]
    title [ "Ellie's Elegant Elegies" ]
    pos [ 440 -100 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    door [
     code [ "door_double_square_ur" ]
     color [ 1 1 1 1 ]
@@ -11695,14 +11409,14 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ -17 -8 0 ]
-    nhpr [ 90 0 -0 ]
+    hpr [ 90 0 0 ]
    ]
   ]
   flat_building "tb45:random_DNARoot" [
    pos [ 440 -75 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11722,26 +11436,26 @@ group "minniesMelodyLand" [
  ]
  visgroup "4343" [
   vis [   "4343"   "4318"   "4315"   "4319"   "4320"   "4314"   "4322"   "4323"   "4324"   "4313"   ]
-  battle_cell [ 20 20 325 175 -0.5 ]
+  battle_cell [ 20 20 325 175 0 ]
   street "street_stairs_40x10x5_DNARoot" [
    code [ "street_stairs_40x10x5" ]
    pos [ 345 145 0 ]
-   nhpr [ 90 0 -0 ]
-   texture [ "street_street_MM_tex" ]
+   hpr [ 90 0 0 ]
+   texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   street "street_sidewalk_40x40_DNARoot" [
    code [ "street_sidewalk_40x40" ]
    pos [ 345 155 5 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 285 155 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -11762,10 +11476,15 @@ group "minniesMelodyLand" [
      color [ 1 1 0.58 1 ]
     ]
    ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 4.1 -3.09 5.02 ]
+    hpr [ 30 0 0 ]
+   ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 285 205 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -11790,17 +11509,17 @@ group "minniesMelodyLand" [
    prop "prop_trumpet_flat_DNARoot" [
     code [ "prop_trumpet_flat" ]
     pos [ 3.47 -0.73 4.89 ]
-    nhpr [ 45 2 -0 ]
+    hpr [ 45 2 0 ]
    ]
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 11.13 3.13 18.86 ]
-    nhpr [ 15 0 -0 ]
+    hpr [ 15 0 0 ]
    ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 300 205 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11822,12 +11541,12 @@ group "minniesMelodyLand" [
    building_type [ "hq" ]
    title [ "" ]
    pos [ 326 172 5 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
   ]
   street "street_sidewalk_10x40_DNARoot" [
    code [ "street_sidewalk_10x40" ]
    pos [ 345 195 5 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11835,7 +11554,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 305 205 5 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11843,7 +11562,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 305 185 5 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11851,7 +11570,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 365 205 5 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11859,7 +11578,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_20x20_DNARoot" [
    code [ "street_sidewalk_20x20" ]
    pos [ 365 185 5 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11867,7 +11586,7 @@ group "minniesMelodyLand" [
   street "street_sidewalk_10x20_DNARoot" [
    code [ "street_sidewalk_10x20" ]
    pos [ 285 165 5 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
@@ -11875,14 +11594,14 @@ group "minniesMelodyLand" [
   street "street_sidewalk_10x20_DNARoot" [
    code [ "street_sidewalk_10x20" ]
    pos [ 345 165 5 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    texture [ "street_street_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 305 145 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -11906,12 +11625,12 @@ group "minniesMelodyLand" [
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 5 -5 5 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 305 155 0 ]
-   nhpr [ -180 0 -0 ]
+   hpr [ 180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -11935,7 +11654,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 315 205 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -11959,7 +11678,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 285 190 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -11974,7 +11693,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 345 155 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -12003,7 +11722,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 365 170 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -12027,17 +11746,17 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 3.00001 -49 5 ]
-    nhpr [ 120 0 -0 ]
+    hpr [ 120 0 0 ]
    ]
    prop "prop_MM_flute_lamp_DNARoot" [
     code [ "prop_MM_flute_lamp" ]
     pos [ 20 -25 5 ]
-    nhpr [ -0 2 -0 ]
+    hpr [ 0 2 0 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 365 190 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -12060,15 +11779,15 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 16.5 -8.85 5 ]
-    nhpr [ 30 0 -0 ]
+    hpr [ 30 0 0 ]
     scale [ 0.8 0.8 0.8 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 365 205 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -12085,14 +11804,14 @@ group "minniesMelodyLand" [
     ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
     pos [ 12.77 -18.47 5 ]
-    nhpr [ 30 0 -0 ]
+    hpr [ 30 0 0 ]
    ]
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 350 205 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -12117,7 +11836,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 330 205 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -12141,7 +11860,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb38:random_DNARoot" [
    pos [ 365 155 0 ]
-   nhpr [ 180 0 -0 ]
+   hpr [ -180 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -12165,12 +11884,12 @@ group "minniesMelodyLand" [
    prop "prop_minnie_planter_DNARoot" [
     code [ "prop_minnie_planter" ]
     pos [ 31 -12 5 ]
-    nhpr [ -45 0 -0 ]
+    hpr [ -45 0 0 ]
    ]
   ]
   flat_building "tb29:random_DNARoot" [
    pos [ 285 175 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -12194,24 +11913,24 @@ group "minniesMelodyLand" [
    prop "prop_piano_DNARoot" [
     code [ "prop_piano" ]
     pos [ 5.00002 -10 5 ]
-    nhpr [ -45 0 -0 ]
+    hpr [ -45 0 0 ]
    ]
   ]
  ]
  visgroup "4344" [
   vis [   "4344"   "4309"   "4308"   "4307"   "4306"   "4304"   "4305"   "4310"   "4311"   "4312"   "4313"   "4314"   ]
-  battle_cell [ 20 20 180 260 -0.5 ]
+  battle_cell [ 20 20 180 260 0 ]
   street "street_sunken_40x40_DNARoot" [
    code [ "street_sunken_40x40" ]
    pos [ 160 240 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_sidewalk_MM_tex" ]
    texture [ "street_curb_MM_tex" ]
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 200 260 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -12236,7 +11955,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 200 260 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -12265,7 +11984,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 200 280 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 20 ]
    wall [
     height [ 20 ]
@@ -12289,12 +12008,12 @@ group "minniesMelodyLand" [
    prop "prop_cello_flat_DNARoot" [
     code [ "prop_cello_flat" ]
     pos [ 2.6 -0.86 -5 ]
-    nhpr [ 60 0 -0 ]
+    hpr [ 60 0 0 ]
    ]
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 175 280 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 10 ]
@@ -12323,7 +12042,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 190 280 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -12352,7 +12071,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 160 240 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -12377,7 +12096,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 160 260 0 ]
-   nhpr [ 90 0 -0 ]
+   hpr [ 90 0 0 ]
    width [ 20 ]
    wall [
     height [ 10 ]
@@ -12402,12 +12121,12 @@ group "minniesMelodyLand" [
    prop "prop_stovepipe_DNARoot" [
     code [ "prop_stovepipe" ]
     pos [ 14.74 3.18 18.68 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb21:random_DNARoot" [
    pos [ 160 280 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 15 ]
    wall [
     height [ 20 ]
@@ -12419,20 +12138,25 @@ group "minniesMelodyLand" [
      count [ 4 ]
     ]
    ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 7.32001 -33.08 -4.95 ]
-    nhpr [ -0 0 -0 ]
+   prop "prop_trashcan_MM_DNARoot" [
+    code [ "prop_trashcan_MM" ]
+    pos [ 5 -5 -4.97 ]
+    hpr [ 135 0 0 ]
    ]
    prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
+    code [ "prop_tree_small_ur" ]
+    pos [ 7.32001 -33.08 -4.95 ]
+    hpr [ 0 0 0 ]
+   ]
+   prop "prop_tree_small_ur_DNARoot" [
+    code [ "prop_tree_small_ur" ]
     pos [ 32.32 -32.08 -4.97 ]
-    nhpr [ -0 0 -0 ]
+    hpr [ 0 0 0 ]
    ]
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 175 290 0 ]
-   nhpr [ -90 0 -0 ]
+   hpr [ -90 0 0 ]
    width [ 10 ]
    wall [
     height [ 10 ]
@@ -12461,7 +12185,7 @@ group "minniesMelodyLand" [
   ]
   flat_building "tb27:random_DNARoot" [
    pos [ 190 280 0 ]
-   nhpr [ -0 0 -0 ]
+   hpr [ 0 0 0 ]
    width [ 10 ]
    wall [
     height [ 20 ]
@@ -12477,438 +12201,6 @@ group "minniesMelodyLand" [
      color [ 0.67 0.4 0.99 1 ]
     ]
    ]
-  ]
-  anim_prop "animated_prop_generic_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "animated_prop_generic_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_idleBounce0" ]
-   pos [ 165.214 274.885 -4.99992 ]
-   nhpr [ 45 0 -0 ]
-  ]
- ]
- visgroup "4345" [
-  vis [   "4345"   "4334"   "4333"   "4332"   ]
-  node "fishing_pond_1" [
-   prop "npc_fisherman_origin_0" [
-    code [ "DCS" ]
-    pos [ 748.6 -14.4 0 ]
-    nhpr [ 100 0 -0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ 724.456 -3.10784 1.8323 ]
-    nhpr [ 135 0 -0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ 705.052 -26.4757 1.93412 ]
-    nhpr [ -45 0 -0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ 705.399 -3.22262 1.93032 ]
-    nhpr [ -135 0 -0 ]
-   ]
-   prop "fishing_spot_DNARoot" [
-    code [ "fishing_spot" ]
-    pos [ 725.294 -26.1615 1.92918 ]
-    nhpr [ 45 0 -0 ]
-   ]
-  ]
-  street "street_MM_pond_DNARoot" [
-   code [ "street_MM_pond" ]
-   pos [ 714.998 -15.0019 0 ]
-   nhpr [ 90 0 -0 ]
-   texture [ "street_street_MM_tex" ]
-   texture [ "street_sidewalk_MM_tex" ]
-   texture [ "street_curb_MM_tex" ]
-  ]
-  node "props" [
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 706.435 -44.1919 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 724.063 14.7822 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 744.411 -6.13884 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 744.215 -23.8466 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 684.659 -6.34639 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 684.552 -23.4373 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_minnie_planter_DNARoot" [
-    code [ "prop_minnie_planter" ]
-    pos [ 692.739 -14.8675 0 ]
-    nhpr [ -0 0 -0 ]
-   ]
-   prop "prop_minnie_planter_DNARoot" [
-    code [ "prop_minnie_planter" ]
-    pos [ 715 6.36464 0 ]
-    nhpr [ -90 0 -0 ]
-   ]
-   prop "prop_minnie_planter_DNARoot" [
-    code [ "prop_minnie_planter" ]
-    pos [ 714.935 -37.2866 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 724.141 -43.8418 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_MM_trumpets_lamp_DNARoot" [
-    code [ "prop_MM_trumpets_lamp" ]
-    pos [ 706.318 14.9642 0 ]
-    nhpr [ 90 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 768.622 -15.9713 -9.15527e-005 ]
-    nhpr [ 120 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 757.737 -34.5499 0.000656128 ]
-    nhpr [ -150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 741.06 -52.7211 -9.15527e-005 ]
-    nhpr [ -150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 715.094 -69.6694 -0.000106811 ]
-    nhpr [ -150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 693.413 -54.1594 -9.15527e-005 ]
-    nhpr [ -150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 675 -40 0 ]
-    nhpr [ -150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 757.895 2.79545 -0.00012207 ]
-    nhpr [ 150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 739.948 21.2931 -9.15527e-005 ]
-    nhpr [ 150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 715.275 38.2677 -9.15527e-005 ]
-    nhpr [ 150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 694.724 22.6005 -9.15527e-005 ]
-    nhpr [ 150 0 -0 ]
-   ]
-   prop "prop_tree_small_ur_DNARoot" [
-    code [ "prop_tree_small_ur_MM" ]
-    pos [ 674.551 8.34234 0 ]
-    nhpr [ 150 0 -0 ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 718.17 64.7325 10.0141 ]
-   nhpr [ -0 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 20 ]
-    code [ "wall_md_blank_ur" ]
-    color [ 1 0.98 0.65 1 ]
-    windows [
-     code [ "window_sm_round_ur" ]
-     color [ 0.59 0.49 1 1 ]
-     count [ 4 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.67 0.4 0.99 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 785 -60.0025 12.1503 ]
-   nhpr [ 180 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_blank_ur" ]
-    color [ 1 0.98 0.65 1 ]
-    windows [
-     code [ "window_sm_round_ul" ]
-     color [ 0.69 0.33 0.69 1 ]
-     count [ 2 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_blank_dl" ]
-    color [ 1 0.98 0.65 1 ]
-    windows [
-     code [ "window_sm_round_ul" ]
-     color [ 0.69 0.33 0.69 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.8 0.22 0.68 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 718.176 84.6762 10.2378 ]
-   nhpr [ -90 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 20 ]
-    code [ "wall_md_blank_ur" ]
-    color [ 0.91 0.91 0.54 1 ]
-    windows [
-     code [ "window_sm_round_ur" ]
-     color [ 0.59 0.49 1 1 ]
-     count [ 4 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.67 0.4 0.99 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 769.998 49.9981 10.4481 ]
-   nhpr [ -0 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_lg_brick_ur" ]
-    color [ 1 0.62 0.85 1 ]
-    windows [
-     code [ "window_md_curved_ur" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 0 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_lg_brick_ur" ]
-    color [ 1 0.62 0.85 1 ]
-    windows [
-     code [ "window_md_curved_ur" ]
-     color [ 0.69 0.58 0.96 1 ]
-     count [ 1 ]
-    ]
-    cornice [
-     code [ "cornice_dental_ur" ]
-     color [ 1 1 1 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 769.998 69.9981 10.4355 ]
-   nhpr [ -90 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_lg_brick_ur" ]
-    color [ 1 0.67 1 1 ]
-    windows [
-     code [ "window_md_curved_ur" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 0 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_lg_brick_ur" ]
-    color [ 1 0.67 1 1 ]
-    windows [
-     code [ "window_md_curved_ur" ]
-     color [ 0.69 0.58 0.96 1 ]
-     count [ 1 ]
-    ]
-    cornice [
-     code [ "cornice_dental_ur" ]
-     color [ 1 1 1 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 684.998 -85.0019 12.1995 ]
-   nhpr [ 180 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.87 0.89 1 1 ]
-    windows [
-     code [ "window_porthole_ur" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 0 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.87 0.89 1 1 ]
-    windows [
-     code [ "window_sm_curved_ul" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_stone_ur" ]
-     color [ 0.43 0.32 0.85 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 789.863 -3.49114 9.81783 ]
-   nhpr [ -45 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_bricks_ur" ]
-    color [ 0.91 0.91 0.54 1 ]
-    windows [
-     code [ "window_md_curved_ul" ]
-     color [ 0.97 0.87 0.47 1 ]
-     count [ 2 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_bricks_ur" ]
-    color [ 0.91 0.91 0.54 1 ]
-    windows [
-     code [ "window_md_curved_ul" ]
-     color [ 1 0.79 0.49 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_stone_ur" ]
-     color [ 1 1 0.58 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 764.999 -60.0022 12.1714 ]
-   nhpr [ -90 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_blank_ur" ]
-    color [ 0.91 0.91 0.54 1 ]
-    windows [
-     code [ "window_sm_round_ul" ]
-     color [ 0.69 0.33 0.69 1 ]
-     count [ 2 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_blank_dl" ]
-    color [ 0.91 0.91 0.54 1 ]
-    windows [
-     code [ "window_sm_round_ul" ]
-     color [ 0.69 0.33 0.69 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_curved_ur" ]
-     color [ 0.8 0.22 0.68 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 684.998 -105.002 12.3563 ]
-   nhpr [ 90 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.49 0.69 1 1 ]
-    windows [
-     code [ "window_porthole_ur" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 0 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_md_bricks_ur" ]
-    color [ 0.49 0.69 1 1 ]
-    windows [
-     code [ "window_sm_curved_ul" ]
-     color [ 0.42 0.42 0.85 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_stone_ur" ]
-     color [ 0.43 0.32 0.85 1 ]
-    ]
-   ]
-  ]
-  flat_building "tb0:random_DNARoot" [
-   pos [ 799.846 13.7964 9.86125 ]
-   nhpr [ -120 0 -0 ]
-   width [ 20 ]
-   wall [
-    height [ 10 ]
-    code [ "wall_bricks_ur" ]
-    color [ 1 0.98 0.65 1 ]
-    windows [
-     code [ "window_md_curved_ul" ]
-     color [ 0.97 0.87 0.47 1 ]
-     count [ 2 ]
-    ]
-   ]
-   wall [
-    height [ 10 ]
-    code [ "wall_bricks_ur" ]
-    color [ 1 0.98 0.65 1 ]
-    windows [
-     code [ "window_md_curved_ul" ]
-     color [ 1 0.79 0.49 1 ]
-     count [ 2 ]
-    ]
-    cornice [
-     code [ "cornice_stone_ur" ]
-     color [ 1 1 0.58 1 ]
-    ]
-   ]
-  ]
-  anim_prop "animated_prop_generic_phase_6_models_char__mml_trashcan_DNARoot" [
-   code [ "animated_prop_generic_phase_6_models_char__mml_trashcan" ]
-   anim [ "tt_a_ara_mml_trashcan_fightIdle" ]
-   pos [ 662.666 -7.33014 0 ]
-   nhpr [ 0 0 0 ]
   ]
  ]
 ]

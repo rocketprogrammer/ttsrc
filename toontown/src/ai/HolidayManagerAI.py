@@ -89,7 +89,7 @@ OncelyMultipleStartHolidays = (ToontownGlobals.COLD_CALLER_INVASION,
                                ToontownGlobals.MR_HOLLYWOOD_INVASION,
                                ToontownGlobals.ROBBER_BARON_INVASION,
                                ToontownGlobals.BIG_WIG_INVASION,
-                               ToontownGlobals.BIG_CHEESE_INVASION,                               
+                               ToontownGlobals.BIG_CHEESE_INVASION,
                                )
 
 # These variables are too useful in debugging holidays, keeping them around
@@ -102,7 +102,7 @@ TestServerHolidayTimeDelta = timedelta(days = TestServerHolidayDaysAhead)
 
 # TODO figure out how to make this work for more than just oncely holidays
 OriginalHolidays = {
-    ToontownGlobals.HYDRANT_ZERO_HOLIDAY: 
+    ToontownGlobals.HYDRANT_ZERO_HOLIDAY:
     { 'startAndEndPairs':       [datetime.datetime( 2010, Month.MAY, 5, 8, 0), # firstMoveArmUp1
                                           datetime.datetime( 2010, Month.JUNE,   12,  11, 55),],
       'phaseDates': [datetime.datetime( 2010, Month.MAY, 9,  11, 05), # firstMoveStruggle
@@ -110,11 +110,11 @@ OriginalHolidays = {
                      datetime.datetime( 2010, Month.MAY,    18,  11, 05), # firstMoveJump hydrants around hydrant zero animate
                      datetime.datetime( 2010, Month.MAY,   21,  16, 05), # firstMoveJumpBalance
                      datetime.datetime( 2010, Month.MAY,   22,  15, 30), # firstMoveArmUp3 Hydrant Zero and his hydrant pals get more elaborate animations
-                     datetime.datetime( 2010, Month.JUNE,   3,  15, 30), # firstMoveJumpSpin 
+                     datetime.datetime( 2010, Month.JUNE,   3,  15, 30), # firstMoveJumpSpin
                     ],
     },
 
-    ToontownGlobals.TRASHCAN_ZERO_HOLIDAY: 
+    ToontownGlobals.TRASHCAN_ZERO_HOLIDAY:
     { 'startAndEndPairs':       [datetime.datetime( 2010, Month.MAY, 8,  12, 15), # firstMoveLidFLip1
                                           datetime.datetime( 2010, Month.JUNE,  12,  11, 55),],
       'phaseDates': [datetime.datetime( 2010, Month.MAY, 11,  11, 05), # firstMoveStruggle
@@ -124,9 +124,9 @@ OriginalHolidays = {
                      datetime.datetime( 2010, Month.MAY,   29,  14, 10), # firstMoveJumpHit Trashcan Zero and his trashcan pals get more elaborate animations
                      datetime.datetime( 2010, Month.JUNE,   6,  14, 01), # firstMoveJumpJuggle
                      ],
-    },    
+    },
 
-    ToontownGlobals.MAILBOX_ZERO_HOLIDAY: 
+    ToontownGlobals.MAILBOX_ZERO_HOLIDAY:
     { 'startAndEndPairs':       [datetime.datetime( 2010, Month.MAY,    9,  12, 00), # firstMoveFlagSpin1
                        datetime.datetime( 2010, Month.JUNE,  12,  11, 55),],
       'phaseDates': [datetime.datetime( 2010, Month.MAY,    16,  16, 55), # firstMoveStruggle & Jump
@@ -137,79 +137,79 @@ OriginalHolidays = {
                      datetime.datetime( 2010, Month.JUNE,   8,  11, 45), # firstMoveJump3Summersaults
                      ],
     },
-    
-    ToontownGlobals.SILLYMETER_HOLIDAY: 
+
+    ToontownGlobals.SILLYMETER_HOLIDAY:
     { 'startAndEndPairs':       [datetime.datetime( 2010, Month.MAY,    14,   0,  01),          # Stage 1 animates
                                          datetime.datetime( 2010, Month.JULY,  14,   0,  01),],
       'phaseDates': [datetime.datetime( 2010, Month.MAY,   17,   16,  01),    # Stage 1 animates, stage 2 built
                      datetime.datetime( 2010, Month.MAY,   19,   00,  01),           # Stage 1 loc 2
-                     datetime.datetime( 2010, Month.MAY,   22,   14,  01),           # Stage 1 loc 3                     
+                     datetime.datetime( 2010, Month.MAY,   22,   14,  01),           # Stage 1 loc 3
                      datetime.datetime( 2010, Month.MAY,   24,   17,  01),           # Stage 1 loc 4
-                     
+
                      datetime.datetime( 2010, Month.MAY,   26,   00,  01),           # Stage 2 loc 5
                      datetime.datetime( 2010, Month.MAY,   30,   10,  01),           # Stage 2 loc 6
-                     
+
                      datetime.datetime( 2010, Month.JUNE,   2,   0,  01),           # Stage 3 is added and animates
                      datetime.datetime( 2010, Month.JUNE,   5,  12,  00),           # Stage 3 loc 8
                      datetime.datetime( 2010, Month.JUNE,   8,   10,  01),            # Stage 3 loc 9
-                     
+
                      datetime.datetime( 2010, Month.JUNE,   9,   00,  01),            # Stage 4 animates
                      datetime.datetime( 2010, Month.JUNE,   12,   10,  01),          # Stage 4 loc 11
                      datetime.datetime( 2010, Month.JUNE,   12,  12,  01),           # Stage 4 loc 12
-                     
+
                      datetime.datetime( 2010, Month.JUNE,   13,   13, 30),          # Stage 5 silly meter plummets
-                     
+
                      datetime.datetime( 2010, Month.JUNE,   14,   0, 01),          # Scientist chatter change
-                     
+
                      datetime.datetime( 2010, Month.JUNE, 28, 0, 01),                  # Silly meter shuts down
                      ],
     },
 
-    ToontownGlobals.SILLY_SURGE_HOLIDAY: 
-    { 'startAndEndPairs':       [datetime.datetime( 2010, Month.MAY,    14,   0,  01), 
+    ToontownGlobals.SILLY_SURGE_HOLIDAY:
+    { 'startAndEndPairs':       [datetime.datetime( 2010, Month.MAY,    14,   0,  01),
                                          datetime.datetime( 2010, Month.JUNE,   13,   13,  30), ],     # Cogs invade and silly surges fizzle out
     },
-    
+
     ToontownGlobals.TROUBLE_BOSSBOTS_4: # Down sizer
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.FEBRUARY, 1, 18, 0),
                                      datetime.datetime( 2009, Month.FEBRUARY, 1, 23, 0), ],
     },
-    
+
     ToontownGlobals.DOWN_SIZER_INVASION: # Down sizer
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 13, 13, 30),
                                      datetime.datetime( 2010, Month.JUNE, 13, 17, 30), ],
     },
-    
+
     ToontownGlobals.SELLBOT_SURPRISE_4:  # Mover & shaker
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.JANUARY, 11, 18, 0),
                                      datetime.datetime( 2009, Month.JANUARY, 11, 23, 0), ],
     },
-    
+
     ToontownGlobals.MOVER_AND_SHAKER_INVASION:  # Mover & shaker
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 13, 18, 30),
                                      datetime.datetime( 2010, Month.JUNE, 13, 22, 30), ],
     },
-    
+
     ToontownGlobals.LAWBOT_GAMBIT_2:    # Double talker
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.JANUARY, 24, 18, 0),
                                      datetime.datetime( 2009, Month.JANUARY, 24, 23, 0),],
     },
-    
+
     ToontownGlobals.DOUBLETALKER_INVASION:    # Double talker
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 14, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 14, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 14, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 14, 14, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 14, 18, 00),
                                      datetime.datetime( 2010, Month.JUNE, 14, 22, 00),],
-    },    
-    
-    ToontownGlobals.YES_MAN_INVASION:    
+    },
+
+    ToontownGlobals.YES_MAN_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 15, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 15, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 15, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 15, 14, 00),
 
@@ -222,254 +222,254 @@ OriginalHolidays = {
                                      datetime.datetime( 2009, Month.JANUARY, 17, 18, 00),
                                      datetime.datetime( 2009, Month.JANUARY, 17, 23, 00),],
     },
-    
+
     ToontownGlobals.PENNY_PINCHER_INVASION:    # Penny Pincher
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 16, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 16, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 16, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 16, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 16, 18, 00),
                                      datetime.datetime( 2010, Month.JUNE, 16, 22, 00),],
     },
-    
-    ToontownGlobals.TIGHTWAD_INVASION: 
+
+    ToontownGlobals.TIGHTWAD_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 17, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 17, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 17, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 17, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 17, 18, 00),
                                      datetime.datetime( 2010, Month.JUNE, 17, 22, 00),],
     },
-    
-    ToontownGlobals.TELEMARKETER_INVASION: 
+
+    ToontownGlobals.TELEMARKETER_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 18, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 18, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 18, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 18, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 18, 18, 00),
                                      datetime.datetime( 2010, Month.JUNE, 18, 22, 00),],
     },
-    
-    ToontownGlobals.HEADHUNTER_INVASION: 
+
+    ToontownGlobals.HEADHUNTER_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 19, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 19, 4, 59),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 19, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 19, 12, 59),
 
                                      datetime.datetime( 2010, Month.JUNE, 19, 18, 00),
                                      datetime.datetime( 2010, Month.JUNE, 19, 20, 59),],
     },
-    
-    ToontownGlobals.SPINDOCTOR_INVASION: 
+
+    ToontownGlobals.SPINDOCTOR_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 19, 5, 00),
                                      datetime.datetime( 2010, Month.JUNE, 19, 8, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 19, 13, 00),
                                      datetime.datetime( 2010, Month.JUNE, 19, 16, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 19, 21, 00),
                                      datetime.datetime( 2010, Month.JUNE, 19, 23, 59),],
     },
-    
-    ToontownGlobals.MONEYBAGS_INVASION: 
+
+    ToontownGlobals.MONEYBAGS_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 20, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 20, 4, 59),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 20, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 20, 12, 59),
 
                                      datetime.datetime( 2010, Month.JUNE, 20, 18, 00),
                                      datetime.datetime( 2010, Month.JUNE, 20, 20, 59),],
     },
-    
-    ToontownGlobals.TWOFACES_INVASION: 
+
+    ToontownGlobals.TWOFACES_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 20, 5, 00),
                                      datetime.datetime( 2010, Month.JUNE, 20, 8, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 20, 13, 00),
                                      datetime.datetime( 2010, Month.JUNE, 20, 16, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 20, 21, 00),
                                      datetime.datetime( 2010, Month.JUNE, 20, 23, 59),],
     },
-    
+
     ToontownGlobals.SELLBOT_SURPRISE_2:     # Name dropper
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.JANUARY, 10, 18, 00),
-                                     datetime.datetime( 2009, Month.JANUARY, 10, 23, 00),],    
+                                     datetime.datetime( 2009, Month.JANUARY, 10, 23, 00),],
     },
-    
+
     ToontownGlobals.NAME_DROPPER_INVASION:     # Name dropper
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 21, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 21, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 21, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 21, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 21, 18, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 21, 22, 00),],    
+                                     datetime.datetime( 2010, Month.JUNE, 21, 22, 00),],
     },
-    
+
     ToontownGlobals.TROUBLE_BOSSBOTS_3:     # Micromanager
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.FEBRUARY, 10, 0, 00),
-                                     datetime.datetime( 2009, Month.FEBRUARY, 15, 0, 00),],    
+                                     datetime.datetime( 2009, Month.FEBRUARY, 15, 0, 00),],
     },
-    
+
     ToontownGlobals.MICROMANAGER_INVASION:     # Micromanager
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 22, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 22, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 22, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 22, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 22, 18, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 22, 22, 00),],    
+                                     datetime.datetime( 2010, Month.JUNE, 22, 22, 00),],
     },
-    
+
     ToontownGlobals.CASHBOT_CONUNDRUM_4:    # Number cruncher
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.JANUARY, 18, 18, 00),
-                                     datetime.datetime( 2009, Month.JANUARY, 18, 23, 00),],    
+                                     datetime.datetime( 2009, Month.JANUARY, 18, 23, 00),],
     },
-    
+
     ToontownGlobals.NUMBER_CRUNCHER_INVASION:    # Number cruncher
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 23, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 23, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 23, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 23, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 23, 18, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 23, 22, 00),],    
+                                     datetime.datetime( 2010, Month.JUNE, 23, 22, 00),],
     },
-    
+
     ToontownGlobals.LAWBOT_GAMBIT_3:    # Ambulance chaser
     { 'startAndEndPairs' : [datetime.datetime( 2009, Month.JANUARY, 25, 10, 00),
-                                     datetime.datetime( 2009, Month.JANUARY, 25, 15, 00),],    
+                                     datetime.datetime( 2009, Month.JANUARY, 25, 15, 00),],
     },
-    
+
     ToontownGlobals.AMBULANCE_CHASER_INVASION:    # Ambulance chaser
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 24, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 24, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 24, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 24, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 24, 18, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 24, 22, 00),],    
+                                     datetime.datetime( 2010, Month.JUNE, 24, 22, 00),],
     },
-    
-    ToontownGlobals.MINGLER_INVASION: 
+
+    ToontownGlobals.MINGLER_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 25, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 25, 4, 59),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 25, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 25, 12, 59),
 
                                      datetime.datetime( 2010, Month.JUNE, 25, 18, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 25, 20, 59),],    
+                                     datetime.datetime( 2010, Month.JUNE, 25, 20, 59),],
     },
-    
-    ToontownGlobals.LOANSHARK_INVASION: 
+
+    ToontownGlobals.LOANSHARK_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 25, 5, 00),
                                      datetime.datetime( 2010, Month.JUNE, 25, 8, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 25, 13, 00),
                                      datetime.datetime( 2010, Month.JUNE, 25, 16, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 25, 21, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 25, 23, 59),],    
-    },    
-    
+                                     datetime.datetime( 2010, Month.JUNE, 25, 23, 59),],
+    },
+
     ToontownGlobals.CORPORATE_RAIDER_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 26, 2, 00),
                                      datetime.datetime( 2010, Month.JUNE, 26, 4, 59),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 26, 10, 00),
                                      datetime.datetime( 2010, Month.JUNE, 26, 12, 59),
 
                                      datetime.datetime( 2010, Month.JUNE, 26, 18, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 26, 20, 59),],    
-    },    
-    
+                                     datetime.datetime( 2010, Month.JUNE, 26, 20, 59),],
+    },
+
     ToontownGlobals.LEGAL_EAGLE_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 26, 5, 00),
                                      datetime.datetime( 2010, Month.JUNE, 26, 8, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 26, 13, 00),
                                      datetime.datetime( 2010, Month.JUNE, 26, 16, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 26, 21, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 26, 23, 59),],    
-    },    
-    
+                                     datetime.datetime( 2010, Month.JUNE, 26, 23, 59),],
+    },
+
     ToontownGlobals.MR_HOLLYWOOD_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 27, 0, 00),
                                      datetime.datetime( 2010, Month.JUNE, 27, 2, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 27, 8, 00),
                                      datetime.datetime( 2010, Month.JUNE, 27, 10, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 27, 16, 00),
-                                     datetime.datetime( 2010, Month.JUNE, 27, 18, 00),],    
-    },    
-    
+                                     datetime.datetime( 2010, Month.JUNE, 27, 18, 00),],
+    },
+
     ToontownGlobals.ROBBER_BARON_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 27, 2, 01),
                                      datetime.datetime( 2010, Month.JUNE, 27, 4, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 27, 10, 01),
                                      datetime.datetime( 2010, Month.JUNE, 27, 12, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 27, 18, 01),
-                                     datetime.datetime( 2010, Month.JUNE, 27, 20, 00),],    
-    },    
-    
+                                     datetime.datetime( 2010, Month.JUNE, 27, 20, 00),],
+    },
+
     ToontownGlobals.BIG_WIG_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 27, 4, 01),
                                      datetime.datetime( 2010, Month.JUNE, 27, 6, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 27, 12, 01),
                                      datetime.datetime( 2010, Month.JUNE, 27, 14, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 27, 20, 01),
-                                     datetime.datetime( 2010, Month.JUNE, 27, 22, 00),],    
-    },    
-    
+                                     datetime.datetime( 2010, Month.JUNE, 27, 22, 00),],
+    },
+
     ToontownGlobals.BIG_CHEESE_INVASION:
     { 'startAndEndPairs' : [datetime.datetime( 2010, Month.JUNE, 27, 6, 01),
                                      datetime.datetime( 2010, Month.JUNE, 27, 8, 00),
-                                     
+
                                      datetime.datetime( 2010, Month.JUNE, 27, 14, 01),
                                      datetime.datetime( 2010, Month.JUNE, 27, 16, 00),
 
                                      datetime.datetime( 2010, Month.JUNE, 27, 22, 01),
-                                     datetime.datetime( 2010, Month.JUNE, 27, 23, 59),],    
-    },    
-    
-    ToontownGlobals.HYDRANTS_BUFF_BATTLES: 
+                                     datetime.datetime( 2010, Month.JUNE, 27, 23, 59),],
+    },
+
+    ToontownGlobals.HYDRANTS_BUFF_BATTLES:
     { 'startAndEndPairs':    [datetime.datetime( 2010, Month.JUNE,   12,  12, 01), # they just animate but don't help
                                         datetime.datetime( 2031, Month.JUNE,   7,   3,  0),],
       'phaseDates': [datetime.datetime( 2010, Month.JUNE,   14,   3,  0),], # they're actually helping now
     },
 
-    ToontownGlobals.MAILBOXES_BUFF_BATTLES: 
+    ToontownGlobals.MAILBOXES_BUFF_BATTLES:
     { 'startAndEndPairs':       [datetime.datetime( 2010, Month.JUNE,   12,  12, 01), # they just animate but don't help
                                            datetime.datetime( 2031, Month.JUNE,  11,   3,  0),], #forever, impressive if we hit this!
-      'phaseDates': [datetime.datetime( 2010, Month.JUNE,  18,   00,  01),], # they're actually helping now      
+      'phaseDates': [datetime.datetime( 2010, Month.JUNE,  18,   00,  01),], # they're actually helping now
     },
 
-    ToontownGlobals.TRASHCANS_BUFF_BATTLES: 
+    ToontownGlobals.TRASHCANS_BUFF_BATTLES:
     { 'startAndEndPairs':       [datetime.datetime( 2010, Month.JUNE,   12,  12, 01), # they just animate but don't help
                                           datetime.datetime( 2031, Month.JUNE,  11,   3,  0), ], #forever, impressive if we hit this!
-      'phaseDates': [datetime.datetime( 2010, Month.JUNE,  18,  00,  01),], # they're actually helping now 
+      'phaseDates': [datetime.datetime( 2010, Month.JUNE,  18,  00,  01),], # they're actually helping now
     },
-    
+
 }
 
 AdjustedHolidays = {}
@@ -478,7 +478,7 @@ def adjustHolidaysForTestServer():
     for holidayId in OriginalHolidays:
         AdjustedHolidays[holidayId] = {'startAndEndPairs':[], 'phaseDates': []}
         newStartAndEndPairs = []
-        
+
         for curDate in OriginalHolidays[holidayId]['startAndEndPairs']:
             adjusted = curDate - TestServerHolidayTimeDelta
             newStartAndEndPairs.append((adjusted.year, adjusted.month, adjusted.day, adjusted.hour, adjusted.minute, adjusted.second))
@@ -493,7 +493,7 @@ def adjustHolidaysForTestServer():
 
 adjustHolidaysForTestServer()
 # TODO put this in a notify? although it should be an info if done so
-print "AdjustedHolidays = %s" % AdjustedHolidays        
+print "AdjustedHolidays = %s" % AdjustedHolidays
 
 class HolidayManagerAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('HolidayManagerAI')
@@ -539,13 +539,13 @@ class HolidayManagerAI:
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
         [ (Month.OCTOBER, 31, 02, 0, 0),         # 2am-6am PST
           (Month.OCTOBER, 31, 07, 0, 0),
-        
+
           (Month.OCTOBER, 31, 10, 0, 0),        # 10am-3pm PST, 1pm-6pm EST
           (Month.OCTOBER, 31, 15, 0, 0),
 
           (Month.OCTOBER, 31, 18, 0, 0),        # 6pm-10pm PST, 9pm-1am EST
           (Month.OCTOBER, 31, 23, 0, 0),
-          
+
           (Month.NOVEMBER, 1, 02, 0, 0),        # 2am-6am PST
           (Month.NOVEMBER, 1, 07, 0, 0),
 
@@ -574,7 +574,7 @@ class HolidayManagerAI:
          ],
         displayOnCalendar = True,
         ),
-        
+
         #To occur at the same time as april fools 2009
         ToontownGlobals.CRASHED_LEADERBOARD: HolidayInfo_Oncely(
         None,
@@ -624,7 +624,7 @@ class HolidayManagerAI:
 
           (Month.OCTOBER, 27, 22, 0, 1),
           (Month.OCTOBER, 27, 22, 59, 59),
-          
+
           (Month.OCTOBER, 28, 0, 0, 1),          # 12am-1am PST, 3am-4am EST
           (Month.OCTOBER, 28, 0, 59, 59),
 
@@ -659,8 +659,8 @@ class HolidayManagerAI:
           (Month.OCTOBER, 28, 20, 59, 59),
 
           (Month.OCTOBER, 28, 22, 0, 1),
-          (Month.OCTOBER, 28, 22, 59, 59),       
-        
+          (Month.OCTOBER, 28, 22, 59, 59),
+
           (Month.OCTOBER, 29, 0, 0, 1),          # 12am-1am PST, 3am-4am EST
           (Month.OCTOBER, 29, 0, 59, 59),
 
@@ -839,7 +839,7 @@ class HolidayManagerAI:
          (2029, Month.JANUARY, 1,  23, 59, 59)],
         displayOnCalendar = False,
         ),
-        
+
         ToontownGlobals.HYDRANT_ZERO_HOLIDAY: HolidayInfo_Oncely(
         HydrantZeroHolidayAI.HydrantZeroHolidayAI,
         # Hydrant zero animating
@@ -853,68 +853,68 @@ class HolidayManagerAI:
         # Mailbox zero animating
         AdjustedHolidays[ToontownGlobals.MAILBOX_ZERO_HOLIDAY]['startAndEndPairs'],
         displayOnCalendar = False,
-        phaseDates = AdjustedHolidays[ToontownGlobals.MAILBOX_ZERO_HOLIDAY]['phaseDates'],        
-        ),           
+        phaseDates = AdjustedHolidays[ToontownGlobals.MAILBOX_ZERO_HOLIDAY]['phaseDates'],
+        ),
 
         ToontownGlobals.TRASHCAN_ZERO_HOLIDAY: HolidayInfo_Oncely(
         TrashcanZeroHolidayAI.TrashcanZeroHolidayAI,
         # Trashcan zero animating
-        AdjustedHolidays[ToontownGlobals.TRASHCAN_ZERO_HOLIDAY]['startAndEndPairs'],        
+        AdjustedHolidays[ToontownGlobals.TRASHCAN_ZERO_HOLIDAY]['startAndEndPairs'],
         displayOnCalendar = False,
-        phaseDates = AdjustedHolidays[ToontownGlobals.TRASHCAN_ZERO_HOLIDAY]['phaseDates'],        
-        ),           
+        phaseDates = AdjustedHolidays[ToontownGlobals.TRASHCAN_ZERO_HOLIDAY]['phaseDates'],
+        ),
 
         ToontownGlobals.SILLYMETER_HOLIDAY: HolidayInfo_Oncely(
         SillyMeterHolidayAI.SillyMeterHolidayAI,
         # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.SILLYMETER_HOLIDAY]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.SILLYMETER_HOLIDAY]['startAndEndPairs'],
         displayOnCalendar = False,
         phaseDates = AdjustedHolidays[ToontownGlobals.SILLYMETER_HOLIDAY]['phaseDates'],
-        ), 
-		
+        ),
+
         ToontownGlobals.SILLY_SURGE_HOLIDAY: HolidayInfo_Oncely(
         None,
         # Silly Surge text appearing when cog gets damaged
-        AdjustedHolidays[ToontownGlobals.SILLY_SURGE_HOLIDAY]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.SILLY_SURGE_HOLIDAY]['startAndEndPairs'],
         displayOnCalendar = False,
-        phaseDates = AdjustedHolidays[ToontownGlobals.SILLY_SURGE_HOLIDAY]['phaseDates'],        
-        ),         
-        
+        phaseDates = AdjustedHolidays[ToontownGlobals.SILLY_SURGE_HOLIDAY]['phaseDates'],
+        ),
+
         ToontownGlobals.SILLY_CHATTER_ONE: HolidayInfo_Oncely(
         None,
         [(2010, Month.MAY, 14, 0, 0, 1),
           (2010, Month.MAY, 25, 23, 59, 59)],
         displayOnCalendar = False,
-        ),          
-        
+        ),
+
         ToontownGlobals.SILLY_CHATTER_TWO: HolidayInfo_Oncely(
         None,
         [(2010, Month.MAY, 26, 0, 0, 1),
           (2010, Month.JUNE, 1, 23, 59, 59)],
         displayOnCalendar = False,
-        ),     
-        
+        ),
+
         ToontownGlobals.SILLY_CHATTER_THREE: HolidayInfo_Oncely(
         None,
         [(2010, Month.JUNE, 2, 0, 0, 1),
           (2010, Month.JUNE, 17, 23, 59, 59)],
         displayOnCalendar = False,
-        ),     
-        
+        ),
+
         ToontownGlobals.SILLY_CHATTER_FOUR: HolidayInfo_Oncely(
         None,
         [(2010, Month.JUNE, 18, 0, 0, 1),
           (2010, Month.JUNE, 27, 23, 59, 59)],
         displayOnCalendar = False,
         ),
-        
+
         ToontownGlobals.SILLY_CHATTER_FIVE: HolidayInfo_Oncely(
         None,
         [(2010, Month.JUNE, 28, 0, 0, 1),
           (2010, Month.JULY, 13, 23, 59, 59)],
         displayOnCalendar = False,
         ),
-        
+
         ToontownGlobals.SILLY_TEST : HolidayInfo_Oncely(
         HolidayRepeaterAI.HolidayRepeaterAI,
         [(2010, Month.APRIL, 2 , 0, 0, 1),
@@ -957,7 +957,7 @@ class HolidayManagerAI:
                                  },
         ),
     }
-    
+
     if not simbase.config.GetBool('want-silly-test', False):
         del holidaysCommon[ToontownGlobals.SILLY_TEST]
 
@@ -977,22 +977,13 @@ class HolidayManagerAI:
           (Month.NOVEMBER, 1, 23, 59, 59)],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.WINTER_CAROLING: HolidayInfo_Yearly(
         WinterCarolingMgrAI.WinterCarolingMgrAI,
         [(Month.DECEMBER, 22, 0, 0, 1),
           (Month.JANUARY, 1, 23, 59, 59)],
         displayOnCalendar = True,
         ),
-
-        ToontownGlobals.RESISTANCE_EVENT: HolidayInfo_Yearly(
-        ResistanceEventMgrAI.ResistanceEventMgrAI,
-        # HACK! TODO: make this last indefinately
-        [(Month.JANUARY, 1, 0, 0, 1),
-          (Month.DECEMBER, 31, 23, 59, 59)],
-        displayOnCalendar = False,
-        ),
-
 
         ToontownGlobals.ELECTION_PROMOTION: HolidayInfo_Oncely(
         None,
@@ -1107,13 +1098,13 @@ class HolidayManagerAI:
 
         ToontownGlobals.SELLBOT_SURPRISE_2: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.SELLBOT_SURPRISE_2]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.SELLBOT_SURPRISE_2]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.NAME_DROPPER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.NAME_DROPPER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.NAME_DROPPER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
@@ -1127,43 +1118,43 @@ class HolidayManagerAI:
 
         ToontownGlobals.SELLBOT_SURPRISE_4: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.SELLBOT_SURPRISE_4]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.SELLBOT_SURPRISE_4]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.MOVER_AND_SHAKER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.MOVER_AND_SHAKER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.MOVER_AND_SHAKER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.MR_HOLLYWOOD_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.MR_HOLLYWOOD_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.MR_HOLLYWOOD_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.MINGLER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.MINGLER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.MINGLER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.TWOFACES_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.TWOFACES_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.TWOFACES_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.TELEMARKETER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.TELEMARKETER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.TELEMARKETER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.HEADHUNTER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.HEADHUNTER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.HEADHUNTER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
@@ -1177,13 +1168,13 @@ class HolidayManagerAI:
 
         ToontownGlobals.CASHBOT_CONUNDRUM_2: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.CASHBOT_CONUNDRUM_2]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.CASHBOT_CONUNDRUM_2]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.PENNY_PINCHER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.PENNY_PINCHER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.PENNY_PINCHER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
@@ -1197,39 +1188,39 @@ class HolidayManagerAI:
 
         ToontownGlobals.CASHBOT_CONUNDRUM_4: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.CASHBOT_CONUNDRUM_4]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.CASHBOT_CONUNDRUM_4]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.NUMBER_CRUNCHER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.NUMBER_CRUNCHER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.NUMBER_CRUNCHER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.ROBBER_BARON_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.ROBBER_BARON_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.ROBBER_BARON_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.LOANSHARK_INVASION : HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.LOANSHARK_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.LOANSHARK_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.MONEYBAGS_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.MONEYBAGS_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.MONEYBAGS_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.TIGHTWAD_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.TIGHTWAD_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.TIGHTWAD_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
-        ),       
+        ),
 
         ToontownGlobals.LAWBOT_GAMBIT_1: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
@@ -1241,13 +1232,13 @@ class HolidayManagerAI:
 
         ToontownGlobals.LAWBOT_GAMBIT_2: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.LAWBOT_GAMBIT_2]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.LAWBOT_GAMBIT_2]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.DOUBLETALKER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.DOUBLETALKER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.DOUBLETALKER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
@@ -1256,7 +1247,7 @@ class HolidayManagerAI:
         AdjustedHolidays[ToontownGlobals.LAWBOT_GAMBIT_3]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.AMBULANCE_CHASER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
         AdjustedHolidays[ToontownGlobals.AMBULANCE_CHASER_INVASION]['startAndEndPairs'],
@@ -1270,16 +1261,16 @@ class HolidayManagerAI:
           ],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.LEGAL_EAGLE_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
         AdjustedHolidays[ToontownGlobals.LEGAL_EAGLE_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.SPINDOCTOR_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.SPINDOCTOR_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.SPINDOCTOR_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
@@ -1301,55 +1292,55 @@ class HolidayManagerAI:
 
         ToontownGlobals.TROUBLE_BOSSBOTS_3: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.TROUBLE_BOSSBOTS_3]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.TROUBLE_BOSSBOTS_3]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.MICROMANAGER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
-        AdjustedHolidays[ToontownGlobals.MICROMANAGER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.MICROMANAGER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
         ToontownGlobals.TROUBLE_BOSSBOTS_4: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
           # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.TROUBLE_BOSSBOTS_4]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.TROUBLE_BOSSBOTS_4]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.DOWN_SIZER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
           # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.DOWN_SIZER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.DOWN_SIZER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.CORPORATE_RAIDER_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
           # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.CORPORATE_RAIDER_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.CORPORATE_RAIDER_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.YES_MAN_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
           # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.YES_MAN_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.YES_MAN_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.BIG_WIG_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
           # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.BIG_WIG_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.BIG_WIG_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.BIG_CHEESE_INVASION: HolidayInfo_Oncely(
         HolidaySuitInvasionManagerAI.HolidaySuitInvasionManagerAI,
           # Silly Meter animating
-        AdjustedHolidays[ToontownGlobals.BIG_CHEESE_INVASION]['startAndEndPairs'], 
+        AdjustedHolidays[ToontownGlobals.BIG_CHEESE_INVASION]['startAndEndPairs'],
         displayOnCalendar = True,
         ),
 
@@ -1370,7 +1361,7 @@ class HolidayManagerAI:
           (2009, Month.AUGUST, 21, 13, 0, 0),
 
           (2009, Month.AUGUST, 21, 18, 0, 0),
-          (2009, Month.AUGUST, 21, 21, 0, 0),          
+          (2009, Month.AUGUST, 21, 21, 0, 0),
           ],
         displayOnCalendar = True,
         ),
@@ -1384,7 +1375,7 @@ class HolidayManagerAI:
           (2009, Month.AUGUST, 22, 13, 0, 0),
 
           (2009, Month.AUGUST, 22, 18, 0, 0),
-          (2009, Month.AUGUST, 22, 21, 0, 0),          
+          (2009, Month.AUGUST, 22, 21, 0, 0),
           ],
         displayOnCalendar = True,
         ),
@@ -1398,7 +1389,7 @@ class HolidayManagerAI:
           (2009, Month.AUGUST, 23, 13, 0, 0),
 
           (2009, Month.AUGUST, 23, 18, 0, 0),
-          (2009, Month.AUGUST, 23, 21, 0, 0),          
+          (2009, Month.AUGUST, 23, 21, 0, 0),
           ],
         displayOnCalendar = True,
         ),
@@ -1412,11 +1403,11 @@ class HolidayManagerAI:
           (2009, Month.AUGUST, 24, 13, 0, 0),
 
           (2009, Month.AUGUST, 24, 18, 0, 0),
-          (2009, Month.AUGUST, 24, 21, 0, 0),          
+          (2009, Month.AUGUST, 24, 21, 0, 0),
           ],
         displayOnCalendar = True,
         ),
-        
+
         ToontownGlobals.VICTORY_PARTY_HOLIDAY: HolidayInfo_Oncely(
         None,
         [(2010, Month.JULY, 21, 0, 0, 1),
@@ -1672,7 +1663,7 @@ class HolidayManagerAI:
                 BingoNightHolidayAI.BingoNightHolidayAI,
                 [(Day.SATURDAY, 0, 0, 1),
                  (Day.SATURDAY, 1, 59, 59),
-    
+
                  (Day.SATURDAY, 6, 0, 0),
                  (Day.SATURDAY, 7, 59, 59),
 
@@ -1694,7 +1685,7 @@ class HolidayManagerAI:
 
                  (Day.SATURDAY, 14, 0, 0),
                  (Day.SATURDAY, 15, 59, 59),
-    
+
                  (Day.SATURDAY, 20, 0, 0),
                  (Day.SATURDAY, 21, 59, 59),
                  ],
@@ -1807,7 +1798,7 @@ class HolidayManagerAI:
     def startHolidayDoLater(self, task):
         self.startHoliday(task.holidayId)
         return Task.done
-        
+
     def nullifyDates(self, dates):
         """This is a hacky way to get holidays not to intefere with the repeater
             Needs to be changed by 2015"""
@@ -1840,13 +1831,13 @@ class HolidayManagerAI:
                 if testMode == 0:
                     holidayObj = holidayClass(self.air, holidayId,
                                           holidayInfo.tupleList,
-                                          holidayInfo.getPhaseDates())        
+                                          holidayInfo.getPhaseDates())
                 else:
                     startAndEndDates = self.nullifyDates(holidayInfo.tupleList)
                     phaseDates = self.nullifyDates(holidayInfo.getPhaseDates())
                     holidayObj = holidayClass(self.air, holidayId,
                                           startAndEndDates,
-                                          phaseDates) 
+                                          phaseDates)
             elif hasattr(holidayInfo, 'isTestHoliday') and holidayInfo.isTestHoliday():
                 testHolidays = holidayInfo.getTestHolidays()
                 holidayObj = holidayClass(self.air, holidayId, holidayInfo.tupleList, testHolidays)
@@ -1865,9 +1856,6 @@ class HolidayManagerAI:
             # Just store None, at least it will still indicate
             # that a holiday was started
             self.currentHolidays[holidayId] = None
-
-        # Update the news manager, which in turn updates all the clients
-        self.updateNewsManager(self.currentHolidays.keys())
 
         # Spawn a do later for the end of the holiday
         currentTime = time.time()
@@ -1919,10 +1907,6 @@ class HolidayManagerAI:
         else:
             self.notify.warning("Tried to stop a holiday that was not started")
 
-        # Update the news manager, which in turn updates all the clients
-        # Send the negative of the holiday ID signifying the end of the holiday
-        self.updateNewsManager(self.currentHolidays.keys())
-
         # Start the same holiday for the next time
         currentTime = time.time()
         startTime = holidayInfo.getNextHolidayTime(currentTime)
@@ -1961,7 +1945,7 @@ class HolidayManagerAI:
                     self.waitForHolidayStart(holidayId, startTime)
 
 
-                    
+
     #######################################################################
     # This function is required for those holidays that required some
     # time for cleanup.
@@ -1980,10 +1964,6 @@ class HolidayManagerAI:
             del self.currentHolidays[holidayId]
         else:
             self.notify.warning("Tried to stop a holiday that was not started")
-
-        # Update the news manager, which in turn updates all the clients
-        # Send the negative of the holiday ID signifying the end of the holiday
-        self.updateNewsManager(self.currentHolidays.keys())
 
         # Start the same holiday for the next time
         currentTime = time.time()
@@ -2018,9 +1998,6 @@ class HolidayManagerAI:
                 if not stopForever:
                     self.waitForHolidayStart(holidayId, startTime)
 
-    def updateNewsManager(self, holidayIdList):
-        self.air.newsManager.d_setHolidayIdList(holidayIdList)
-
     def isMoreXpHolidayRunning(self):
         """Return True if the double XP holiday is running."""
         keysList = self.currentHolidays.keys()
@@ -2044,7 +2021,7 @@ class HolidayManagerAI:
             holidayObj = self.currentHolidays[holidayId]
             if holidayObj and hasattr(holidayObj,"getCurPhase"):
                 result = holidayObj.getCurPhase()
-        return result    
+        return result
 
     def parseCalendarHolidays(self):
         """Tell the client of the toontown holidays displayed in the calendar."""

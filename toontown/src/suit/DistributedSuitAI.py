@@ -227,23 +227,19 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
         self.b_setPathState(0)
 
     # setPathEndpoints
-    def b_setPathEndpoints(self, start, end, minPathLen, maxPathLen):
-        self.setPathEndpoints(start, end, minPathLen, maxPathLen)
-        self.d_setPathEndpoints(start, end, minPathLen, maxPathLen)
+    def b_setPathEndpoints(self, start, end):
+        self.setPathEndpoints(start, end)
+        self.d_setPathEndpoints(start, end)
 
-    def d_setPathEndpoints(self, start, end, minPathLen, maxPathLen):
-        self.sendUpdate("setPathEndpoints", [start, end, minPathLen, maxPathLen])
+    def d_setPathEndpoints(self, start, end):
+        self.sendUpdate("setPathEndpoints", [start, end])
 
-    def setPathEndpoints(self, start, end, minPathLen, maxPathLen):
+    def setPathEndpoints(self, start, end):
         self.pathEndpointStart = start
         self.pathEndpointEnd = end
-        self.minPathLen = minPathLen
-        self.maxPathLen = maxPathLen
 
     def getPathEndpoints(self):
-        return (self.pathEndpointStart, self.pathEndpointEnd,
-                self.minPathLen, self.maxPathLen)
-
+        return (self.pathEndpointStart, self.pathEndpointEnd)
 
     # setPathPosition
     def b_setPathPosition(self, index, timestamp):
@@ -320,7 +316,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
 
         # Tell all the clients about the suit's path and its start
         # time on that path.
-        self.setPathEndpoints(idx1, idx2, self.minPathLen, self.maxPathLen)
+        self.setPathEndpoints(idx1, idx2)
         self.setPathPosition(0, self.pathStartTime)
 
         # We don't call setPathState() yet, because we haven't been

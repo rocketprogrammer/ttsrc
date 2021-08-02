@@ -5,7 +5,7 @@
 from otp.ai.AIBaseGlobal import *
 
 from direct.directnotify import DirectNotifyGlobal
-from toontown.suit import DistributedTutorialSuitAI
+from toontown.suit import DistributedSuitAI
 import TutorialBattleManagerAI
 
 class SuitPlannerTutorialAI:
@@ -31,7 +31,7 @@ class SuitPlannerTutorialAI:
             self.air)
 
         # Create a flunky
-        newSuit = DistributedTutorialSuitAI.DistributedTutorialSuitAI(self.air, self)
+        newSuit = DistributedSuitAI.DistributedSuitAI(self.air, self)
         newSuit.setupSuitDNA(1, 1, "c")
         # This is a special tutorial path state
         newSuit.generateWithRequired(self.zoneId)
@@ -50,7 +50,7 @@ class SuitPlannerTutorialAI:
             battleMgr = self.battle.battleMgr
             if battleMgr.cellId2battle.has_key(cellId):
                 battleMgr.destroy(self.battle)
-            
+
             self.battle = None
 
     def getDoId(self):
@@ -72,5 +72,5 @@ class SuitPlannerTutorialAI:
         # Get rid of the suit.
         suit.requestDelete()
         self.suit = None
-        
-        
+
+

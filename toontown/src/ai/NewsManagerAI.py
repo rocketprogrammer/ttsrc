@@ -57,9 +57,6 @@ class NewsManagerAI(DistributedObjectAI.DistributedObjectAI):
         # Use news manager to broadcast a system message to all the clients
         self.sendUpdate("sendSystemMessage", [message, style])
 
-    def d_setHolidayIdList(self, holidayIdList):
-        self.sendUpdate("setHolidayIdList", [holidayIdList])
-
     def bingoWin(self, zoneId):
         self.sendUpdate("setBingoWin", [0])
 

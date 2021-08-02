@@ -18,7 +18,7 @@ class TutorialHQBuildingAI:
         self.air = air
         self.exteriorZone = exteriorZone
         self.interiorZone = interiorZone
-        
+
         self.setup(blockNumber)
 
     def cleanup(self):
@@ -48,8 +48,6 @@ class TutorialHQBuildingAI:
         self.npc = NPCToons.createNPC(self.air, Quests.ToonHQ, desc,
                                       self.interiorZone,
                                       questCallback=self.unlockInsideDoor1)
-        # Flag npc as part of tutorial
-        self.npc.setTutorial(1)
 
         self.interior.generateWithRequired(self.interiorZone)
         # Outside door 0. Locked til you defeat the Flunky:
@@ -100,10 +98,8 @@ class TutorialHQBuildingAI:
         self.door1=door1
         self.insideDoor0=insideDoor0
         self.insideDoor1=insideDoor1
-        # hide the periscope
-        self.interior.setTutorial(1)
         return
-       
+
     def unlockDoor(self, door):
         door.setDoorLock(FADoorCodes.UNLOCKED)
 

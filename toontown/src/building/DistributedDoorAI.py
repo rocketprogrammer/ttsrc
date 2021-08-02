@@ -221,7 +221,7 @@ class DistributedDoorAI(DistributedObjectAI.DistributedObjectAI):
         # unique avatarIDs.
         if not self.avatarsWhoAreEntering.has_key(avatarID):
             self.avatarsWhoAreEntering[avatarID]=1
-            self.sendUpdate("avatarEnter", [avatarID])
+            self.sendUpdate("toonEnter", [avatarID])
         self.openDoor(self.fsm)
 
     def openDoor(self, doorFsm):
@@ -241,7 +241,7 @@ class DistributedDoorAI(DistributedObjectAI.DistributedObjectAI):
         # Make sure you send the avatar exit before telling the door to
         # open Otherwise the client will get the open door and will not be
         # on the list of avatars to walk through the door yet.
-        self.sendUpdate("avatarExit", [avatarID])
+        self.sendUpdate("toonExit", [avatarID])
         # Ok, now enqueue the avatar (which opens the door)
         self.enqueueAvatarIdExit(avatarID)
 

@@ -338,9 +338,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         DistributedAvatarAI.DistributedAvatarAI.handleLogicalZoneChange(
             self, newZoneId, oldZoneId)
 
-        # make sure ghost mode is disabled on zone change (fixes furniture arranger exploit)
-        self.b_setGhostMode(0)
-
         # not quite sure where to do this - we need to assign teleport access
         # to the toon when he enters Goofy Stadium
         zoneId = ZoneUtil.getCanonicalZoneId(newZoneId)

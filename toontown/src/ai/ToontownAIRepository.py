@@ -21,12 +21,8 @@ from toontown.hood import MMHoodDataAI
 from toontown.hood import DGHoodDataAI
 from toontown.hood import BRHoodDataAI
 from toontown.hood import DLHoodDataAI
-from toontown.hood import CSHoodDataAI
 from toontown.hood import OZHoodDataAI
 from toontown.hood import GZHoodDataAI
-from toontown.hood import CashbotHQDataAI
-from toontown.hood import LawbotHQDataAI
-from toontown.hood import BossbotHQDataAI
 from toontown.quest import QuestManagerAI
 from toontown.fishing import FishManagerAI
 from toontown.shtiker import CogPageManagerAI
@@ -119,13 +115,11 @@ class ToontownAIRepository(AIDistrict):
 
         TheBrrrgh: ([TheBrrrgh, 1, 0],
                     [TheBrrrgh + 100, 1, 1],
-                    [TheBrrrgh + 200, 1, 1],
-                    [TheBrrrgh + 300, 1, 1],
+                    [TheBrrrgh + 200, 1, 1]
                     ),
 
         DonaldsDreamland: ([DonaldsDreamland, 1, 0],
-                           [DonaldsDreamland + 100, 1, 1],
-                           [DonaldsDreamland + 200, 1, 1],
+                           [DonaldsDreamland + 100, 1, 1]
                            ),
 
         DaisyGardens: ([DaisyGardens, 1, 0],
@@ -355,11 +349,10 @@ class ToontownAIRepository(AIDistrict):
         # First, load up all of our DNA files for the world.
         self.loadDNA()
 
-        # Create a new district (aka shard) for this AI:
-        self.districtId = self.allocateChannel()
-
-        self.rootObj = DistributedObjectAI(self)
-        self.rootObj.generateWithRequiredAndId(self.districtId, 0, 0)
+        self.district = DistributedObjectAI(self)
+        self.district.generateOtpObject(
+                OTP_DO_ID_TOONTOWN, OTP_ZONE_ID_DISTRICTS,
+                doId=self.districtId)
 
         # The Time manager.  This negotiates a timestamp exchange for
         # the purposes of synchronizing clocks between client and
@@ -372,7 +365,7 @@ class ToontownAIRepository(AIDistrict):
         # in) will get a chance to synchronize.
         self.timeManager = TimeManagerAI.TimeManagerAI(self)
         self.timeManager.generateOtpObject(
-            self.rootObj.getDoId(), OTPGlobals.UberZone)
+            self.district.getDoId(), OTPGlobals.UberZone)
 
         # The trophy manager should be created before the building
         # managers.
@@ -459,8 +452,6 @@ class ToontownAIRepository(AIDistrict):
         self.startupHood(DGHoodDataAI.DGHoodDataAI(self))
         self.startupHood(BRHoodDataAI.BRHoodDataAI(self))
         self.startupHood(DLHoodDataAI.DLHoodDataAI(self))
-        self.startupHood(CSHoodDataAI.CSHoodDataAI(self))
-        self.startupHood(CashbotHQDataAI.CashbotHQDataAI(self))
 
         # The Holiday Manager should be instantiated after the each
         # of the hoods and estateMgrAI are generated because Bingo Night
@@ -475,9 +466,6 @@ class ToontownAIRepository(AIDistrict):
         # buildings.
         if self.suitPlanners:
             self.suitPlanners.values()[0].assignInitialSuitBuildings()
-
-        # mark district as avaliable
-        self.district.b_setAvailable(1)
 
         # Register our AI with the StateServer.
         dg = PyDatagram()

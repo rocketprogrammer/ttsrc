@@ -91,7 +91,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
             return
 
         # Fetch the actual avatar object
-        av = self.air.doId2do.get(avId)        
+        av = self.air.doId2do.get(avId)
         if not av:
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.avatarEnter unknown')
             self.notify.warning("av %s not in doId2do tried to pick up mailbox" % (avId))
@@ -113,7 +113,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
 
             # Update the quest manager. Yes, there are mailbox quests.
             self.air.questManager.toonOpenedMailbox(self.av)
-            
+
             if len(av.mailboxContents) != 0:
                 # Purchases are available!  Tell the client; he will
                 # start accepting the items one at a time when he's
@@ -124,11 +124,11 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
                 # start accepting the items one at a time when he's
                 # ready.
                 self.sendAwardCatalog()
-            
+
             elif ((av.numMailItems > 0) or (av.getNumInvitesToShowInMailbox() > 0)):
                 # he's got mail, tell the client
                 self.sendMail()
-            
+
             elif len(av.onOrder) != 0:
                 self.sendUpdate("setMovie", [MailboxGlobals.MAILBOX_MOVIE_WAITING, avId])
                 self.sendClearMovie()
@@ -166,7 +166,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
     def sendMail(self):
         DistributedMailboxAI.notify.debug("sendMail")
         # Now open the catalog up on the client.
-        self.sendUpdate("setMovie", [MailboxGlobals.MAILBOX_MOVIE_READY, self.av.doId])        
+        self.sendUpdate("setMovie", [MailboxGlobals.MAILBOX_MOVIE_READY, self.av.doId])
         #RAU TODO set mailNotify to oldItems
         # The avatar has seen his items now.
         #if self.av.mailNotify == ToontownGlobals.NewItems:
@@ -188,7 +188,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
     def __handleBootMessage(self, avId):
         self.notify.warning('avatar:' + str(avId) + ' got booted ')
         self.sendClearMovie()
-        
+
     def sendExitMovie(self):
         assert(DistributedMailboxAI.notify.debug('sendExitMovie()'))
         # Send movie to play closing sound
@@ -214,16 +214,12 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
         if itemIndex < 0 or itemIndex >= (len(self.av.mailboxContents) + len(self.av.awardMailboxContents)):
             result = False
         if result:
-            if not item.isAward():
-                if adjustedMailboxContentsIndex < 0:
-                    result = False
-                elif adjustedMailboxContentsIndex >= len(self.av.mailboxContents):
-                    result = False                
-                else:
-                    if self.av.mailboxContents[adjustedMailboxContentsIndex] != item:                
-                        result = False
+            if adjustedMailboxContentsIndex < 0:
+                result = False
+            elif adjustedMailboxContentsIndex >= len(self.av.mailboxContents):
+                result = False
             else:
-                if self.av.awardMailboxContents[itemIndex] != item:
+                if self.av.mailboxContents[adjustedMailboxContentsIndex] != item:
                     result = False
         return result
 
@@ -237,8 +233,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
         if self.av:
             adjustedMailboxContentsIndex = itemIndex - len(self.av.awardMailboxContents)
         else:
-            adjustedMailboxContentsIndex = itemIndex 
-        isAward = item.isAward()
+            adjustedMailboxContentsIndex = itemIndex
         if self.busy != avId:
             # The client should filter this already.
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptItem busy with %s' % (self.busy))
@@ -249,26 +244,22 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptItem invalid index %s' % (itemIndex))
             retcode = ToontownGlobals.P_InvalidIndex
         elif not self.isItemIndexValid(item, itemIndex):
-            self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptItem invalid index %d isAward=%s adjustedIndex=%d' % (itemIndex, isAward, adjustedMailboxContentsIndex))
+            self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptItem invalid index %d adjustedIndex=%d' % (itemIndex, adjustedMailboxContentsIndex))
             retcode = ToontownGlobals.P_InvalidIndex
         else:
             # Give the item to the user.
             retcode = item.recordPurchase(self.av, optional)
             if retcode >= 0:
-                if isAward:
-                    del self.av.awardMailboxContents[itemIndex]
-                    self.av.b_setAwardMailboxContents(self.av.awardMailboxContents)
-                else:
-                    del self.av.mailboxContents[adjustedMailboxContentsIndex]
-                    self.av.b_setMailboxContents(self.av.mailboxContents)
+                del self.av.mailboxContents[adjustedMailboxContentsIndex]
+                self.av.b_setMailboxContents(self.av.mailboxContents)
             elif retcode == ToontownGlobals.P_ReachedPurchaseLimit or \
                 retcode == ToontownGlobals.P_NoRoomForItem:
                 pass
                 #del self.av.mailboxContents[itemIndex]
-                #self.av.b_setMailboxContents(self.av.mailboxContents)                
-        #import pdb; pdb.set_trace()            
+                #self.av.b_setMailboxContents(self.av.mailboxContents)
+        #import pdb; pdb.set_trace()
         self.sendUpdateToAvatarId(avId, "acceptItemResponse", [context, retcode])
-        
+
     def discardItemMessage(self, context, blob, itemIndex, optional):
         DistributedMailboxAI.notify.debug("discardItemMessage")
         # Sent from the client code to request a particular item from
@@ -279,8 +270,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
         if self.av:
             adjustedMailboxContentsIndex = itemIndex - len(self.av.awardMailboxContents)
         else:
-            adjustedMailboxContentsIndex = itemIndex 
-        isAward = item.isAward()
+            adjustedMailboxContentsIndex = itemIndex
         if self.busy != avId:
             # The client should filter this already.
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptItem busy with %s' % (self.busy))
@@ -290,20 +280,14 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.discardItem invalid index %s' % (itemIndex))
             retcode = ToontownGlobals.P_InvalidIndex
         elif not self.isItemIndexValid(item, itemIndex):
-            self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.discardItem invalid index %d isAward=%s adjustedIndex=%d' % (itemIndex, isAward, adjustedMailboxContentsIndex ))
+            self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.discardItem invalid index %d adjustedIndex=%d' % (itemIndex, adjustedMailboxContentsIndex ))
             retcode = ToontownGlobals.P_InvalidIndex
         else:
             # delete the item
-            if item.isAward():
-                del self.av.awardMailboxContents[itemIndex]
-                self.air.writeServerEvent("Discarding Item award", avId, "discarded item %s" % (item.getName()))
-                self.av.b_setAwardMailboxContents(self.av.awardMailboxContents)
-            else:
-                del self.av.mailboxContents[adjustedMailboxContentsIndex]
-                self.air.writeServerEvent("Discarding Item", avId, "discarded item %s" % (item.getName()))
-                self.av.b_setMailboxContents(self.av.mailboxContents)
+            del self.av.mailboxContents[adjustedMailboxContentsIndex]
+            self.air.writeServerEvent("Discarding Item", avId, "discarded item %s" % (item.getName()))
+            self.av.b_setMailboxContents(self.av.mailboxContents)
 
-            
         self.sendUpdateToAvatarId(avId, "discardItemResponse", [context, retcode])
 
     def acceptInviteMessage(self, context, inviteKey):
@@ -324,7 +308,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptInvite busy with %s' % (self.busy))
             self.notify.warning("Got unexpected accept invite request from %s while busy with %s." % (avId, self.busy))
             retcode = ToontownGlobals.P_NotAtMailbox
-        
+
         elif not validInviteKey:
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.acceptInvite invalid inviteKey %s' % (inviteKey))
             retcode = ToontownGlobals.P_InvalidIndex
@@ -335,7 +319,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
 
         if not (retcode == None):
             self.sendUpdateToAvatarId(avId, "acceptItemResponse", [context, retcode])
-        
+
 
     def respondToAcceptInviteCallback(self, context, inviteKey, retcode):
         """Tell the client the result of accepting/rejecting the invite."""
@@ -357,7 +341,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
                 break
         if validInviteKey:
             self.air.partyManager.markInviteReadButNotReplied(inviteKey)
-        
+
     def rejectInviteMessage(self, context, inviteKey):
         DistributedMailboxAI.notify.debug("rejectInviteMessage")
         # Sent from the client code to request a particular item from
@@ -376,7 +360,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.rejectInvite busy with %s' % (self.busy))
             DistributedMailboxAI.notify.warning("Got unexpected reject invite request from %s while busy with %s." % (avId, self.busy))
             retcode = ToontownGlobals.P_NotAtMailbox
-        
+
         elif not validInviteKey:
             self.air.writeServerEvent('suspicious', avId, 'DistributedMailboxAI.rejectInvite invalid inviteKey %s' % (inviteKey))
             retcode = ToontownGlobals.P_InvalidIndex
@@ -387,7 +371,7 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
 
         if not (retcode == None):
             self.sendUpdateToAvatarId(avId, "discardItemResponse", [context, retcode])
-        
+
 
     def respondToRejectInviteCallback(self, context, inviteKey, retcode):
         DistributedMailboxAI.notify.debug("respondToRejectInviteCallback")
@@ -395,4 +379,4 @@ class DistributedMailboxAI(DistributedObjectAI.DistributedObjectAI):
         if self.av:
             self.sendUpdateToAvatarId(self.av.doId, "discardItemResponse", [context, retcode])
         pass
-        
+

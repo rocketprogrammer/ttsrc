@@ -42,7 +42,7 @@ def getRandomDNA(seed, gender):
 
 def createNPC(air, npcId, desc, zoneId, posIndex=0, questCallback=None):
     import DistributedNPCToonAI, DistributedNPCClerkAI, DistributedNPCTailorAI, DistributedNPCBlockerAI
-    zoneId, name, dnaType, gender, protected, type = desc
+    canonicalZoneId, name, dnaType, gender, protected, type = desc
     if type == NPC_REGULAR:
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
     else:

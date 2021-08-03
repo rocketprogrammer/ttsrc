@@ -364,8 +364,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         # let the pets know about the zone change
         from toontown.pets import PetObserve
 
-        self.air.welcomeValleyManager.toonSetZone(self.doId, newZoneId)
-
         # if we're in an estate, make sure to broadcast this message
         # to all estate zones
         broadcastZones = [oldZoneId, newZoneId]

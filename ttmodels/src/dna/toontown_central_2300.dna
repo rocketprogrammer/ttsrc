@@ -9239,7 +9239,7 @@ group "toontownCentral" [
       baseline [
        code [ "mickey" ]
        color [ 0 0.501961 0.25098 1 ]
-       pos [ -0.05 0 1.35 ]
+       pos [ -.05 0 1.35 ]
        scale [ 0.45 1 0.35 ]
        text [
         letters [ "K" ]

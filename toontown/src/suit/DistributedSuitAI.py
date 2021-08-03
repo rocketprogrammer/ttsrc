@@ -20,7 +20,6 @@ import DistributedSuitBaseAI
 from toontown.hood import ZoneUtil
 import random
 
-
 class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
     """
     /////////////////////////////////////////////////////////////////////
@@ -52,7 +51,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
 
     def __init__(self, air, suitPlanner):
         """__init__(air, suitPlanner)"""
-        DistributedSuitBaseAI.DistributedSuitBaseAI.__init__(self, air, 
+        DistributedSuitBaseAI.DistributedSuitBaseAI.__init__(self, air,
                                                                 suitPlanner)
 
         # the track of the suit when it comes out a certain type of a
@@ -93,7 +92,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
         taskMgr.remove(self.taskName("flyAwayNow"))
         taskMgr.remove(self.taskName("danceNowFlyAwayLater"))
         taskMgr.remove(self.taskName("move"))
-            
+
     def pointInMyPath(self, point, elapsedTime):
         """
         pointInMyPath(self, DNASuitPoint point, float elapsedTime)
@@ -116,7 +115,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
         return self.legList.isPointInRange(point,
                                            elapsed - self.sp.PATH_COLLISION_BUFFER,
                                            elapsed + self.sp.PATH_COLLISION_BUFFER)
-        
+
 
     def requestBattle(self, x, y, z, h, p, r):
         """requestBattle(x, y, z, h, p, r)
@@ -305,7 +304,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
         generated.
         """
         self.makeLegList()
-        
+
         if self.notify.getDebug():
             self.notify.debug("Leg list:")
             print self.legList
@@ -370,7 +369,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
             zoneId = self.legList.getZoneId(nextLeg)
             zoneId = ZoneUtil.getTrueZoneId(zoneId, self.branchId)
             self.__enterZone(zoneId)
-            
+
             self.notify.debug("Suit %d reached leg %d of %d in zone %d." %
                               (self.getDoId(), nextLeg, numLegs - 1,
                                self.zoneId))
@@ -413,7 +412,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
             if self.attemptingTakeover:
                 # We made it inside our building!
                 self.startTakeOver()
-            
+
             #self.notify.debug("Suit %s finished walk to building" % (self.doId))
             self.requestRemoval()
         return Task.done
@@ -458,7 +457,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
             self.openCogHQDoor(1)
         elif legType == SuitLeg.TFromCoghq:
             self.openCogHQDoor(0)
-            
+
 
     def resume(self):
         """
@@ -506,7 +505,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
         blockNumber = self.buildingDestination
         if blockNumber == None:
             return
-        
+
         assert self.sp.buildingMgr.isValidBlockNumber(blockNumber)
 
         building = self.sp.buildingMgr.getBuilding(blockNumber)
@@ -587,7 +586,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
             door.requestSuitEnter(self.getDoId())
         else:
             door.requestSuitExit(self.getDoId())
-            
+
 
     def startTakeOver(self):
         """
@@ -598,11 +597,11 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
 
         blockNumber = self.buildingDestination
         assert blockNumber != None
-        
+
         if not self.sp.buildingMgr.isSuitBlock(blockNumber):
             self.notify.debug( "Suit %d taking over building %d in %d" % \
                                ( self.getDoId(), blockNumber, self.zoneId ) )
-                
+
             difficulty = self.getActualLevel() - 1
             if self.buildingDestinationIsCogdo:
                 self.sp.cogdoTakeOver(blockNumber, difficulty, self.buildingHeight)

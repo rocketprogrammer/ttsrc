@@ -378,14 +378,13 @@ dclass DistributedTrolley : DistributedObject {
   setMinigameZone(uint16 zoneId, uint16 minigameId) p2p;
 };
 
-
 dclass DistributedSuitPlanner : DistributedObject {
   // tell the client-side suit planner which zone it exists in
   setZoneId(uint16 zoneId) required broadcast ram;
-  suitListQuery() p2p clsend;
-  suitListResponse(uint8array suitList) p2p;
-  buildingListQuery() p2p clsend;
-  buildingListResponse(uint8array buildingList) p2p;
+  suitListQuery() airecv clsend;
+  suitListResponse(uint8array suitList);
+  buildingListQuery() airecv clsend;
+  buildingListResponse(uint8array buildingList);
 };
 
 dclass DistributedSuit : DistributedObject {
@@ -1006,16 +1005,16 @@ dclass DistributedDoor : DistributedObject {
   setDoorIndex(uint8 doorIndex) required broadcast ram;
 
   // Answers the question: Where does this door go?
-  setOtherZoneIdAndDoId(uint32 zoneId, uint32 doId) p2p;
+  setOtherZoneIdAndDoId(uint32 zoneId, uint32 doId);
 
   // This client wants to go though the door:
-  requestEnter() p2p clsend;
+  requestEnter() airecv clsend;
 
   // The client can ask to leave the door:
-  requestExit() p2p clsend;
+  requestExit() airecv clsend;
 
   // Tell the toon they may not enter:
-  rejectEnter(int8 reason) p2p;
+  rejectEnter(int8 reason);
 
   // Tell all nearby that a toon is entering the door queue:
   toonEnter(uint32 avatarID) broadcast;
@@ -1038,7 +1037,6 @@ dclass DistributedHouseDoor : DistributedDoor {
   setHouseId(uint32 houseId) required broadcast ram;
 };
 
-
 // Make sure the NPC is created after the interiors
 
 // We don't inherit from DistributedToon, because that class has a
@@ -1057,9 +1055,9 @@ dclass DistributedNPCToonBase : DistributedNode {
   setPageNumber(int16 paragraph, int8 pageNumber, int16 timestamp) broadcast ram clsend;
 
   // These let the server know when toons show up and leave
-  avatarEnter() p2p clsend;
+  avatarEnter() airecv clsend;
   // Free an avatar that is requesting interaction, but needs to be denied
-  freeAvatar() p2p;
+  freeAvatar();
 };
 
 dclass DistributedNPCToon : DistributedNPCToonBase {

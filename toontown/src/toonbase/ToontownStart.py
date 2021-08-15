@@ -199,6 +199,11 @@ from otp.distributed.OtpDoGlobals import *
 
 cr.generateGlobalObject(OTP_DO_ID_FRIEND_MANAGER, "FriendManager")
 
+def inject():
+    execfile('inject.py')
+
+base.accept('f5', inject)
+
 # Start the show
 if not launcher.isDummy():
     # If the launcher is starting us, it knows the game server

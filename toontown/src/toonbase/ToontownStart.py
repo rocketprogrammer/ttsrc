@@ -200,7 +200,7 @@ from otp.distributed.OtpDoGlobals import *
 cr.generateGlobalObject(OTP_DO_ID_FRIEND_MANAGER, "FriendManager")
 
 def inject():
-    execfile('inject.py')
+    execfile('inject.py', globals())
 
 base.accept('f5', inject)
 

@@ -126,7 +126,7 @@ class DistributedLawbotCannon (DistributedObject.DistributedObject):
 
     def announceGenerate(self):
         DistributedObject.DistributedObject.announceGenerate(self)
-        assert(not self.boss.cannons.has_key(self.index))
+        assert(self.index not in self.boss.cannons)
         self.boss.cannons[self.index] = self
         
 
@@ -357,7 +357,7 @@ class DistributedLawbotCannon (DistributedObject.DistributedObject):
 
 
 
-            if (self.cr.doId2do.has_key(self.avId)):
+            if (self.avId in self.cr.doId2do):
                 # If the toon exists, look it up
                 self.av = self.cr.doId2do[self.avId]
                 self.acceptOnce(self.av.uniqueName('disable'), 
@@ -1060,7 +1060,7 @@ class DistributedLawbotCannon (DistributedObject.DistributedObject):
         flightResults = self.__calcFlightResults(avId, launchTime)
         # pull all the results into the local namespace
         for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+            exec("%s = flightResults['%s']" % (key, key))
 
         self.notify.debug("start position: " + str(startPos))
         self.notify.debug("start velocity: " + str(startVel))

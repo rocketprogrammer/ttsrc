@@ -246,7 +246,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
     def __finishInterval(self, name):
         """ Force the specified interval to jump to the end
         """
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             interval = self.activeIntervals[name]
             if (interval.isPlaying()):
                 assert(self.notify.debug('finishInterval(): %s' % \
@@ -254,7 +254,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
                 interval.finish()
 
     def __cleanupIntervals(self):
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
         self.activeIntervals = {}
 
@@ -298,7 +298,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         self.toons = []
         for toonId in toonIds:
             if (toonId != 0):
-                if (self.cr.doId2do.has_key(toonId)):
+                if (toonId in self.cr.doId2do):
                     toon = self.cr.doId2do[toonId]
                     toon.stopSmooth()
                     self.toons.append(toon)
@@ -319,7 +319,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         self.suits = []
         self.joiningReserves = []
         for suitId in suitIds:
-            if (self.cr.doId2do.has_key(suitId)):
+            if (suitId in self.cr.doId2do):
                 suit = self.cr.doId2do[suitId]
                 self.suits.append(suit)
                 # Set this on the client
@@ -338,7 +338,7 @@ class DistributedCogdoInterior(DistributedObject.DistributedObject):
         assert(len(reserveIds) == len(values))
         for index in range(len(reserveIds)):
             suitId = reserveIds[index]
-            if (self.cr.doId2do.has_key(suitId)):
+            if (suitId in self.cr.doId2do):
                 suit = self.cr.doId2do[suitId]
                 self.reserveSuits.append((suit, values[index]))
             else:

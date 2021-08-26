@@ -97,14 +97,14 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
     def enterOn(self):
         """Handle entering the on state."""
         self.beltSoundInterval.loop()
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             self.doMethodLater(self.foodWaitTimes[i], self.startFoodMoving,
                                'start-%d-%d' % (self.index, i),
                                extraArgs = [i])
     def exitOn(self):
         """Handle exiting the on state."""
         self.beltSoundInterval.finish()
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             taskName = 'start-%d-%d' % (self.index, i)
             self.removeTask(taskName)
         pass
@@ -113,7 +113,7 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
         """Handle entering the toonup state."""
         self.beltSound.setPlayRate(self.ToonupBeltSpeed / self.BeltSpeed)
         self.beltSoundInterval.loop()
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             self.removeFood(i)
             self.beltActor.setPlayRate(self.ToonupBeltActorPlayRate, 'idle')
             self.doMethodLater(self.toonupWaitTimes[i], self.startToonupMoving,
@@ -122,7 +122,7 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
     def exitToonup(self):
         """Handle exiting the toonup state."""
         self.beltSoundInterval.finish()
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             taskName = 'startToonup-%d-%d' % (self.index, i)
             self.removeTask(taskName)
         pass    
@@ -133,7 +133,7 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
             ival.finish()
         for ival in self.toonupIvals:
             ival.finish()            
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             self.removeFood(i)
             self.removeToonup(i)
         if self.beltActor:
@@ -217,10 +217,10 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
             
 
     def cleanup(self):
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             taskName = 'start-%d-%d' % (self.index, i)
             self.removeTask(taskName)
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             taskName = 'startToonup-%d-%d' % (self.index, i)
             self.removeTask(taskName)
         for ival in self.foodIvals:
@@ -239,7 +239,7 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
         """Create the node paths the food will be parented to."""
         assert self.notify.debugStateCall(self)
         # we may later just load this from the belt model
-        for i in xrange(self.NumFoodNodes):
+        for i in range(self.NumFoodNodes):
             # we want index 0 to be the first one out
             newPosIndex = self.NumFoodNodes -1 - i
             yPos = -(self.beltLength / 2.0) + (newPosIndex *self.distBetweenFoodNodes)            
@@ -257,7 +257,7 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
     def setupFoodIvals(self):
         """Create all the food intervals for the belt."""
         assert self.notify.debugStateCall(self)        
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             foodIval = self.createOneFoodIval(self.foodNodes[i])
             self.foodIvals.append(foodIval)
 
@@ -346,7 +346,7 @@ class DistributedFoodBelt(DistributedObject.DistributedObject, FSM.FSM, FoodBelt
     def setupToonupIvals(self):
         """Create all the toonup intervals for the belt."""
         assert self.notify.debugStateCall(self)        
-        for i in xrange(len(self.foodNodes)):
+        for i in range(len(self.foodNodes)):
             toonupIval = self.createOneToonupIval(self.foodNodes[i])
             self.toonupIvals.append(toonupIval)
 

@@ -249,7 +249,7 @@ class PetTraits:
         
         # create dictionary of trait name to Trait object
         self.traits = {}
-        for i in xrange(len(PetTraits.TraitDescs)):
+        for i in range(len(PetTraits.TraitDescs)):
             # if we have a valid value for this trait...
             if i < len(traitValueList) and traitValueList[i] > 0.:
                 # assign it directly
@@ -263,7 +263,7 @@ class PetTraits:
             
         # pre-calculate the extreme traits, ordered by... extremity-ness
         extremeTraits = []
-        for trait in self.traits.values():
+        for trait in list(self.traits.values()):
             if not trait.hasWorth:
                 continue
             if trait.quality == TraitDistribution.TraitQuality.AVERAGE:
@@ -276,7 +276,7 @@ class PetTraits:
         if __debug__:
             # make sure it's decreasing
             if len(extremeTraits) > 1:
-                for i in xrange(len(extremeTraits)-1):
+                for i in range(len(extremeTraits)-1):
                     assert (extremeTraits[i].howExtreme >=
                             extremeTraits[i+1].howExtreme)
         self.extremeTraits = []
@@ -306,7 +306,7 @@ class PetTraits:
 
         total = 0
         numUsed = 0
-        for trait in self.traits.values():
+        for trait in list(self.traits.values()):
             if trait.hasWorth:
                 if trait.higherIsBetter:
                     value = trait.value
@@ -315,7 +315,7 @@ class PetTraits:
                 total += value
                 numUsed += 1
 
-        value = total / len(self.traits.values())
+        value = total / len(list(self.traits.values()))
         """ TRAITFIX -- replace value calculation with:
         value = total / float(numUsed)
         """

@@ -81,7 +81,7 @@ class NormalBingo(BingoCardBase.BingoCardBase):
             return BingoGlobals.WIN
 
         # Next check remaining rows and columns
-        for i in xrange(BingoGlobals.CARD_ROWS):
+        for i in range(BingoGlobals.CARD_ROWS):
             if i != (BingoGlobals.CARD_ROWS/2):
                 rowResult = self.rowCheck(i)
                 colResult = self.colCheck(i)

@@ -2,15 +2,15 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
-from TrolleyConstants import *
+from .TrolleyConstants import *
 from direct.gui.DirectGui import *
 from toontown.toonbase import TTLocalizer
 
 from direct.distributed import DistributedNode
 from direct.distributed.ClockDelta import globalClockDelta
-from ChineseCheckersBoard import ChineseCheckersBoard
-from GameTutorials import *
-from GameMenu import GameMenu
+from .ChineseCheckersBoard import ChineseCheckersBoard
+from .GameTutorials import *
+from .GameMenu import GameMenu
 from direct.fsm import ClassicFSM, State
 from direct.fsm import StateData
 from toontown.distributed import DelayDelete
@@ -252,7 +252,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
     
     def setTableState(self, tableStateList, isplaying):
         y = 0
-        print "SET TABLE STATE"
+        print("SET TABLE STATE")
         if isplaying == 0:
             self.isPlaying = False
         else:
@@ -261,7 +261,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
             if x != 0:
                 # If we are to sit him down, make sure that he has not already been animated by fillslot
                 # (deltas are handled by that function)
-                if not x in self.tableState and self.cr.doId2do.has_key(x) and x not in self.haveAnimated:
+                if not x in self.tableState and x in self.cr.doId2do and x not in self.haveAnimated:
                     seatIndex = tableStateList.index(x)
                     toon = self.cr.doId2do[x]
                     toon.stopSmooth()
@@ -297,10 +297,10 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
             if x != None:
                 numPlayers += 1
         #check for a game menu up
-        print " GETTING 2", self.gameMenu, numPlayers
+        print(" GETTING 2", self.gameMenu, numPlayers)
         if self.gameMenu:
             if numPlayers > 2:
-                print " GETTING HERE!!"
+                print(" GETTING HERE!!")
                 self.gameMenu.FindFour.setColor(.7,.7,.7,.7)
                 self.gameMenu.FindFour['command'] = self.doNothing
                 self.gameMenu.findFourText['fg'] = (.7,.7,.7,.7)
@@ -338,7 +338,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
                                        WhisperPopup.WTNormal)
                 
         else:
-            if self.cr.doId2do.has_key(avId):
+            if avId in self.cr.doId2do:
                 stateString = self.fsm.getCurrentState().getName()
                 if stateString == "sitting" or stateString == "observing" :
                     base.cr.playGame.getPlace().setState('walk') #To stop Cohesion between EmptySlot and AnnounceWin
@@ -356,7 +356,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
                                            OTPGlobals.getInterfaceFont(),
                                            WhisperPopup.WTNormal)
 
-        if self.cr.doId2do.has_key(avId):
+        if avId in self.cr.doId2do:
             # If the toon exists, look it up
             toon = self.cr.doId2do[avId]
             #self.winTrack.finish() 
@@ -544,7 +544,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
                 self.seatPos = index
                 pass #not in a game but need to animate into the game
 
-        if self.cr.doId2do.has_key(avId):
+        if avId in self.cr.doId2do:
             toon = self.cr.doId2do[avId]
 
             toon.stopSmooth()
@@ -584,7 +584,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
         if avId in self.haveAnimated:
                self.haveAnimated.remove(avId)
            # self.fullSeat[index] = self.seatState.Empty
-        if self.cr.doId2do.has_key(avId):
+        if avId in self.cr.doId2do:
             if avId == base.localAvatar.getDoId():
                 if self.gameZone:
                     base.cr.removeInterest(self.gameZone)
@@ -909,7 +909,7 @@ class DistributedPicnicTable(DistributedNode.DistributedNode):
             keyList.append(key)
             
         for key in keyList:
-            if self.__toonTracks.has_key(key):
+            if key in self.__toonTracks:
                 self.clearToonTrack(key)
 
     def doNothing(self):

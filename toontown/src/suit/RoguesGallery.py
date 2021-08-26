@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from direct.showbase import PandaObject
 from direct.fsm import StateData
-import Suit, SuitDNA
+from . import Suit, SuitDNA
 from toontown.toonbase import ToontownGlobals
 import whrandom
 
@@ -92,7 +92,7 @@ class RoguesGallery(PandaObject.PandaObject, StateData.StateData):
         self.text.setTextColor(0.0, 0.0, 0.0, 1.0)
         self.rowHeight = 0.0
         self.minXScale = None
-        print "rognamestr='", self.rognamestr, "'\n"
+        print("rognamestr='", self.rognamestr, "'\n")
         if self.rognamestr == None or len(self.rognamestr) == 0:
             for dept in SuitDNA.suitDepts:
                 self.__makeDept(dept)

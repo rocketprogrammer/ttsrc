@@ -10,9 +10,9 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.friends import ToontownFriendSecret
-import ToonAvatarDetailPanel
-import AvatarPanelBase
-import PlayerDetailPanel
+from . import ToonAvatarDetailPanel
+from . import AvatarPanelBase
+from . import PlayerDetailPanel
 from otp.otpbase import OTPGlobals
 
 GAME_LOGO_NAMES = {"Default" : 'GameLogo_Unknown',
@@ -105,7 +105,7 @@ class PlayerInfoPanel(AvatarPanelBase.AvatarPanelBase):
             logoImageName = GAME_LOGO_NAMES["Default"]
             if not self.playerInfo.onlineYesNo:
                 logoImageName = GAME_LOGO_NAMES["Default"]
-            elif GAME_LOGO_NAMES.has_key(self.playerInfo.location):
+            elif self.playerInfo.location in GAME_LOGO_NAMES:
                 logoImageName = GAME_LOGO_NAMES[self.playerInfo.location]
             model = loader.loadModel(GAME_LOGO_FILE)
             logoImage = model.find("**/" + logoImageName)

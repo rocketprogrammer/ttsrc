@@ -13,8 +13,8 @@ class DTutorialObject(DistributedObject,DTutorialObjectBase):
 
         # we place this object in __builtin__ for convenience.
         # Do not do this in production!
-        import __builtin__
-        __builtin__.tutObj = self
+        import builtins
+        builtins.tutObj = self
 
         
     @report(types = ['module', 'args', 'deltaStamp'], dConfigParam = ['dtutorial'])
@@ -81,8 +81,8 @@ class DTutorialObject(DistributedObject,DTutorialObjectBase):
 class DTutorial(FSM):
     def __init__(self):
         FSM.__init__(self, 'DTutorial')
-        import __builtin__
-        __builtin__.tut = self
+        import builtins
+        builtins.tut = self
 
         self.ih = None
         
@@ -105,7 +105,7 @@ class DTutorial(FSM):
         tutObj.b_requestMeal(2)
 
     def enterPhase7(self):
-        print tutObj.getTimeSinceLastMeal()
+        print(tutObj.getTimeSinceLastMeal())
         
     def enterOff(self):
         if self.ih:

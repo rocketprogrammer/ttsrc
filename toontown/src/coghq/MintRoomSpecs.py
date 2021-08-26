@@ -47,13 +47,13 @@ for roomName in CashbotMintEntrances + CashbotMintMiddleRooms + CashbotMintFinal
 del i
 CashbotMintRoomId2RoomName = invertDict(CashbotMintRoomName2RoomId)
 CashbotMintSpecModules = {}
-for (roomName, roomId) in CashbotMintRoomName2RoomId.items():
-    exec 'from toontown.coghq import %s' % roomName
+for (roomName, roomId) in list(CashbotMintRoomName2RoomId.items()):
+    exec('from toontown.coghq import %s' % roomName)
     CashbotMintSpecModules[roomId] = eval(roomName)
 
 CogSpecModules = {'CashbotMintBoilerRoom_Battle00': CashbotMintBoilerRoom_Battle00_Cogs, 'CashbotMintBoilerRoom_Battle01': CashbotMintBoilerRoom_Battle01_Cogs, 'CashbotMintControlRoom_Battle00': CashbotMintControlRoom_Battle00_Cogs, 'CashbotMintDuctRoom_Battle00': CashbotMintDuctRoom_Battle00_Cogs, 'CashbotMintDuctRoom_Battle01': CashbotMintDuctRoom_Battle01_Cogs, 'CashbotMintGearRoom_Battle00': CashbotMintGearRoom_Battle00_Cogs, 'CashbotMintGearRoom_Battle01': CashbotMintGearRoom_Battle01_Cogs, 'CashbotMintLavaRoomFoyer_Battle00': CashbotMintLavaRoomFoyer_Battle00_Cogs, 'CashbotMintLavaRoomFoyer_Battle01': CashbotMintLavaRoomFoyer_Battle01_Cogs, 'CashbotMintLobby_Battle00': CashbotMintLobby_Battle00_Cogs, 'CashbotMintLobby_Battle01': CashbotMintLobby_Battle01_Cogs, 'CashbotMintOilRoom_Battle00': CashbotMintOilRoom_Battle00_Cogs, 'CashbotMintPaintMixerReward_Battle00': CashbotMintPaintMixerReward_Battle00_Cogs, 'CashbotMintPipeRoom_Battle00': CashbotMintPipeRoom_Battle00_Cogs, 'CashbotMintPipeRoom_Battle01': CashbotMintPipeRoom_Battle01_Cogs}
 roomId2numBattles = {}
-for (roomName, roomId) in CashbotMintRoomName2RoomId.items():
+for (roomName, roomId) in list(CashbotMintRoomName2RoomId.items()):
     if roomName not in CogSpecModules:
         roomId2numBattles[roomId] = 0
     else:

@@ -34,7 +34,7 @@ class BoardingPartyBase:
         self.maxSize = groupSize
         
     def getGroupLeader(self, avatarId):
-        if self.avIdDict.has_key(avatarId):
+        if avatarId in self.avIdDict:
             leaderId = self.avIdDict[avatarId]
             return leaderId
         else:
@@ -51,7 +51,7 @@ class BoardingPartyBase:
         """
         returns the memberlist with the leader at index 0
         """
-        if self.avIdDict.has_key(avatarId):
+        if avatarId in self.avIdDict:
             leaderId = self.avIdDict[avatarId]
             group = self.groupListDict.get(leaderId)
             if group:
@@ -62,7 +62,7 @@ class BoardingPartyBase:
         return []
             
     def getGroupInviteList(self, avatarId):
-        if self.avIdDict.has_key(avatarId):
+        if avatarId in self.avIdDict:
             leaderId = self.avIdDict[avatarId]
             group = self.groupListDict.get(leaderId)
             if group:
@@ -73,7 +73,7 @@ class BoardingPartyBase:
         return []
             
     def getGroupKickList(self, avatarId):
-        if self.avIdDict.has_key(avatarId):
+        if avatarId in self.avIdDict:
             leaderId = self.avIdDict[avatarId]
             group = self.groupListDict.get(leaderId)
             if group:
@@ -100,7 +100,7 @@ class BoardingPartyBase:
         If the avatar is a non-leader just check if the avatar is there in it's leader's invite list.
         """
         pendingInvite = False
-        if self.avIdDict.has_key(avatarId):
+        if avatarId in self.avIdDict:
             leaderId = self.avIdDict[avatarId]
             leaderInviteList = self.getGroupInviteList(leaderId)
             if (leaderId == avatarId):

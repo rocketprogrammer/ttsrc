@@ -1,5 +1,5 @@
 from pandac.PandaModules import *
-import ShtikerPage
+from . import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.quest import Quests
@@ -104,7 +104,7 @@ class QuestPage(ShtikerPage.ShtikerPage):
         # This is annoying - the newQuests are lists (not tuples) but
         # the keys to the page's quest dict must be tuples (not lists)
         # so they are immutable hashable keys. Convert where appropriate.
-        for index, questDesc in self.quests.items():
+        for index, questDesc in list(self.quests.items()):
             if ((questDesc is not None) and (list(questDesc) not in newQuests)):
                 # Must be an old quest we have completed
                 self.clearQuestFrame(index)
@@ -112,12 +112,12 @@ class QuestPage(ShtikerPage.ShtikerPage):
         # Add new quests
         for questDesc in newQuests:
             newQuestDesc = tuple(questDesc)
-            if newQuestDesc not in self.quests.values():
+            if newQuestDesc not in list(self.quests.values()):
                 index = self.getLowestUnusedIndex()
                 self.fillQuestFrame(newQuestDesc, index)
 
         # Always update friend quests to see if they have changed
-        for i in self.quests.keys():
+        for i in list(self.quests.keys()):
             questDesc = self.quests[i]
             if questDesc:
                 questId = questDesc[0]

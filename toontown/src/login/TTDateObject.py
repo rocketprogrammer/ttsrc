@@ -1,4 +1,4 @@
-import DateObject
+from . import DateObject
 
 class TTDateObject(DateObject.DateObject):
     """ Toontown date object; uses the account server date """

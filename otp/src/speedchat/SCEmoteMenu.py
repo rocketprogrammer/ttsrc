@@ -1,7 +1,7 @@
 """SCEmoteMenu.py: contains the SCEmoteMenu class"""
 
-from SCMenu import SCMenu
-from SCEmoteTerminal import SCEmoteTerminal
+from .SCMenu import SCMenu
+from .SCEmoteTerminal import SCEmoteTerminal
 
 class SCEmoteMenu(SCMenu):
     """ SCEmoteMenu represents a menu of SCEmoteTerminals. """

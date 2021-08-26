@@ -2,11 +2,11 @@ from direct.showbase.ShowBaseGlobal import *
 from direct.showbase.PandaObject import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
-from CrateGlobals import *
+from .CrateGlobals import *
 from direct.showbase.PythonUtil import fitSrcAngle2Dest
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
-import MovingPlatform, DistributedCrushableEntity
+from . import MovingPlatform, DistributedCrushableEntity
 
 class DistributedCrate(DistributedCrushableEntity.DistributedCrushableEntity):
     __module__ = __name__

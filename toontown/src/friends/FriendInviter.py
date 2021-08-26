@@ -505,11 +505,11 @@ class FriendInviter(DirectFrame):
             # shouldn't be possible, but maybe someone managed to click
             # the "Friend" button before the AvatarPanel shut itself down
             # or something dumb like that.
-            if not base.cr.doId2do.has_key(self.avId):
+            if self.avId not in base.cr.doId2do:
                 self.fsm.request('wentAway')
                 return
 
-        if not base.cr.doId2do.has_key(self.avId):            
+        if self.avId not in base.cr.doId2do:            
             self.fsm.request('wentAway')
             return
         else:
@@ -719,7 +719,7 @@ class FriendInviter(DirectFrame):
         # We cheat by sending a spurious "disable" message in this
         # case.  Presumably this will not confuse anyone, since no one
         # else should be listening for this toon's disable message.
-        if not base.cr.doId2do.has_key(self.avId):
+        if self.avId not in base.cr.doId2do:
             messenger.send(self.avDisableName)
 
     def exitFriendsNoMore(self):

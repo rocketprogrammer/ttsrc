@@ -21,7 +21,7 @@ username2entIdBase = {
     'jloehrle':10*EntIdRange,
     'rurbino' :11*EntIdRange,
     }
-assert uniqueElements(username2entIdBase.values())
+assert uniqueElements(list(username2entIdBase.values()))
 
 usernameConfigVar = 'level-edit-username'
 undefinedUsername = 'UNDEFINED_USERNAME'

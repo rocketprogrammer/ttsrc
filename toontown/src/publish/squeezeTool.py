@@ -56,9 +56,9 @@ import base64, imp, marshal, os, string, sys, md5
 # usage
 
 def usage():
-    print
-    print "SQUEEZE", VERSION, "(c) 1997-1998 by Secret Labs AB"
-    print """\
+    print()
+    print("SQUEEZE", VERSION, "(c) 1997-1998 by Secret Labs AB")
+    print("""\
 Convert a Python application to a compressed module package.
 
 Usage: squeeze [-1ux] -o app [-b start] modules... [-d files...]
@@ -85,7 +85,7 @@ StringIO file object).
 The -x option can be used with -d to create a self-extracting archive,
 instead of a package.  When the resulting script is executed, the
 data files are extracted.  Omit the -b option in this case.
-"""
+""")
     sys.exit(1)
 
 
@@ -138,7 +138,7 @@ class Squeezer:
         try:
             module = compile(codestring, basename, "exec")
         except:
-            print ":: There's an error preventing compiling in " + file
+            print(":: There's an error preventing compiling in " + file)
             raise
             #sys.exit(1)
 
@@ -149,7 +149,7 @@ class Squeezer:
         modulePath = moduleName.split('.')
         for i in range(len(modulePath)):
             prefix = '.'.join(modulePath[:i + 1])
-            if not self.modules.has_key(prefix):
+            if prefix not in self.modules:
                 self.modules[prefix] = None
         
     def adddata(self, file):
@@ -321,8 +321,8 @@ def squeeze(app, start, filelist):
     except IOError:
         pass
     except ValueError:
-        print bootstrap, "was not created by squeeze.  You have to manually"
-        print "remove the file to proceed."
+        print(bootstrap, "was not created by squeeze.  You have to manually")
+        print("remove the file to proceed.")
         sys.exit(1)
 
     #
@@ -400,5 +400,5 @@ exec "import %(start)s"
 
     dummy, rawbytes = sq.getstatus()
 
-    print "squeezed", rawbytes, "to", bytes, "bytes",
-    print "(%d%%)" % (bytes * 100 / rawbytes)
+    print("squeezed", rawbytes, "to", bytes, "bytes", end=' ')
+    print("(%d%%)" % (bytes * 100 / rawbytes))

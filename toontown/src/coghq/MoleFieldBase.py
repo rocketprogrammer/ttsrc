@@ -49,7 +49,7 @@ class MoleFieldBase:
         curTimeBetweenPopup = self.TimeBetweenPopupMax # how long before another mole pops up
         curStayUpTime = self.StayUpTimeMax  # how long does the mole stay up
         curTime = 3
-        eligibleMoles = range(self.numMoles)
+        eligibleMoles = list(range(self.numMoles))
         self.getRng().shuffle(eligibleMoles)
         usedMoles = []
         self.notify.debug('eligibleMoles=%s' % eligibleMoles)

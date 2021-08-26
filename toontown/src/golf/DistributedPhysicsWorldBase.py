@@ -9,7 +9,7 @@ from toontown.minigame import ArrowKeys
 from direct.showbase import PythonUtil
 from direct.task import Task
 from direct.distributed.ClockDelta import *
-import BuildGeometry
+from . import BuildGeometry
 from toontown.golf import GolfGlobals
 import random, time
 
@@ -225,7 +225,7 @@ class DistributedPhysicsWorldBase:
             
         
     def preStep(self):
-        print "Base class prestep"
+        print("Base class prestep")
         pass
         
     def postStep(self):
@@ -429,7 +429,7 @@ class DistributedPhysicsWorldBase:
             #(time, )
             timeData = (0.0, 5.0)
             forceData = (moveDistance/4.0, -moveDistance/4.0)
-            print ("Move Distance %s" % (moveDistance))
+            print(("Move Distance %s" % (moveDistance)))
             
             self.commonObjectDict[commonId] = (commonId, type, box, motor, timeData, forceData)
             
@@ -451,7 +451,7 @@ class DistributedPhysicsWorldBase:
         
         geom = OdeSphereGeom(space, radius)
         self.space.setSurfaceType(geom, 1) # GolfGlobals.BALL_SURFACE
-        print (("collide ID is %s") % (self.space.setCollideId(geom, 42))) # GolfGlobals.BALL_COLLIDE_ID
+        print((("collide ID is %s") % (self.space.setCollideId(geom, 42)))) # GolfGlobals.BALL_COLLIDE_ID
         self.space.getCollideId(geom)
         geom2 = OdeSphereGeom(space, radius)
 

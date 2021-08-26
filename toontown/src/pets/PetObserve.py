@@ -21,7 +21,7 @@ def getEventName(zoneId):
 def send(zoneIds, petObserve):
     if petObserve.isValid():
         #notify.debug('sending pet observe %s to %s' % (petObserve, zoneIds))
-        if type(zoneIds) not in (types.ListType, types.TupleType):
+        if type(zoneIds) not in (list, tuple):
             zoneIds = [zoneIds]
         for zoneId in zoneIds:
             messenger.send(getEventName(zoneId), [petObserve])

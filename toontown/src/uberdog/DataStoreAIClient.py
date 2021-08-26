@@ -1,7 +1,7 @@
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from toontown.uberdog import DataStoreGlobals
 from direct.showbase.DirectObject import DirectObject
-import cPickle
+import pickle
 
 class DataStoreAIClient(DirectObject):
     """
@@ -47,8 +47,8 @@ class DataStoreAIClient(DirectObject):
         self.__resultsCallback = resultsCallback
         self.__storeClass = DataStoreGlobals.getStoreClass(storeId)
         self.__queryTypesDict = self.__storeClass.QueryTypes
-        self.__queryStringDict = dict(zip(self.__queryTypesDict.values(),
-                                          self.__queryTypesDict.keys()))
+        self.__queryStringDict = dict(list(zip(list(self.__queryTypesDict.values()),
+                                          list(self.__queryTypesDict.keys()))))
         self.__enabled = False
 
     def openStore(self):
@@ -78,7 +78,7 @@ class DataStoreAIClient(DirectObject):
         return self.__enabled
     
     def getQueryTypes(self):
-        return self.__queryTypesDict.keys()
+        return list(self.__queryTypesDict.keys())
 
     def getQueryTypeString(self,qId):
         return self.__queryStringDict.get(qId,None)
@@ -93,7 +93,7 @@ class DataStoreAIClient(DirectObject):
             if qId is not None:
                 query = (qId,queryData)
                 # pack the data to be sent to the Uberdog store.
-                pQuery = cPickle.dumps(query)
+                pQuery = pickle.dumps(query)
                 self.__storeMgr.queryStore(self.__storeId,pQuery)
             else:
                 self.notify.debug('Tried to send invalid query type: \'%s\'' % (queryTypeString,))
@@ -113,7 +113,7 @@ class DataStoreAIClient(DirectObject):
         if data == 'Store not found':
             self.notify.debug('%s not present on uberdog. Query dropped.' %(self.__storeClass.__name__,))
         else:
-            results = cPickle.loads(data)
+            results = pickle.loads(data)
             self.__resultsCallback(results)
 
     def __startClient(self):

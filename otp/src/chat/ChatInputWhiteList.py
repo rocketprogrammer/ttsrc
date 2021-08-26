@@ -305,11 +305,11 @@ class ChatInputWhiteList(FSM.FSM, DirectEntry):
         pass
     
     def __execMessage(self, message):
-        print ("_execMessage %s" % (message))
+        print(("_execMessage %s" % (message)))
         if not ChatInputTyped.ExecNamespace:
             # Import some useful variables into the ExecNamespace initially.
             ChatInputTyped.ExecNamespace = { }
-            exec 'from pandac.PandaModules import *' in globals(), self.ExecNamespace
+            exec('from pandac.PandaModules import *', globals(), self.ExecNamespace)
             self.importExecNamespace()
 
         # Now try to evaluate the expression using ChatInputTyped.ExecNamespace as
@@ -322,7 +322,7 @@ class ChatInputWhiteList(FSM.FSM, DirectEntry):
             # "import math".  These aren't expressions, so eval()
             # fails, but they can be exec'ed.
             try:
-                exec message in globals(), ChatInputTyped.ExecNamespace
+                exec(message, globals(), ChatInputTyped.ExecNamespace)
                 return 'ok'
             except:
                 exception = sys.exc_info()[0]

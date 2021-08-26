@@ -11,3 +11,4 @@ news/*
 .cvsignore
 .latestissue
 useropt
+inject.py

@@ -4,8 +4,8 @@ from toontown.catalog import CatalogFlooringItem
 from toontown.catalog import CatalogMouldingItem
 from toontown.catalog import CatalogWainscotingItem
 from toontown.catalog import CatalogItemList
-import RepairAvatars
-import DatabaseObject
+from . import RepairAvatars
+from . import DatabaseObject
 import time
 
 # Conversion 
@@ -166,7 +166,7 @@ class AvatarWallpaperFixer(RepairAvatars.AvatarIterator):
     def printSometimes(self, av):
         now = time.time()
         if now - self.lastPrintTime > self.printInterval:
-            print "Avatar %d: %s" % (av.doId, av.name)
+            print("Avatar %d: %s" % (av.doId, av.name))
             self.lastPrintTime = now
 
     
@@ -200,7 +200,7 @@ def convertWallpaperAvatarVals():
     avatarVals = open('avatar.vals')
     avatars = avatarVals.readlines()
 
-    print "Fixing %s avatars" % (len(avatars))
+    print("Fixing %s avatars" % (len(avatars)))
     f = AvatarWallpaperFixer(simbase.air)
     f.objIdList = avatars
     f.start()
@@ -209,7 +209,7 @@ def convertWallpaperHouseVals():
     houseVals = open('house.vals')
     houses = houseVals.readlines()
     
-    print "Fixing %s houses" % (len(houses))
+    print("Fixing %s houses" % (len(houses)))
     f2 = HouseWallpaperFixer(simbase.air)
     f2.objIdList = houses
     f2.start()

@@ -8,7 +8,7 @@ from otp.level import BasicEntities
 from toontown.coghq import BattleBlockerAI
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownBattleGlobals
-from GolfGreenGameGlobals import *
+from .GolfGreenGameGlobals import *
 
 import random
 import time
@@ -74,7 +74,7 @@ class DistributedGolfGreenGameAI(BattleBlockerAI.BattleBlockerAI,
             numToons =  len(self.level.presentAvIds)
         
         numBoards = self.puzzleBase + (numToons * self.puzzlePerPlayer)
-        boardSelect = range(0, len(gameBoards))
+        boardSelect = list(range(0, len(gameBoards)))
         
         didGetLast = 1
         
@@ -106,9 +106,9 @@ class DistributedGolfGreenGameAI(BattleBlockerAI.BattleBlockerAI,
             for ball in attackString:
                 color = self.translateData.get(ball)
                 if (color) or (color == 0):
-                    place = random.choice(range(0,len(attackPattern) + 1))
+                    place = random.choice(list(range(0,len(attackPattern) + 1)))
                     attackPattern.insert(place, color)
-                    place = random.choice(range(0,len(attackPattern) + 1))
+                    place = random.choice(list(range(0,len(attackPattern) + 1)))
                     attackPattern.insert(place, color)
             self.attackPatterns.append(attackPattern)
                 
@@ -121,7 +121,7 @@ class DistributedGolfGreenGameAI(BattleBlockerAI.BattleBlockerAI,
         #import pdb; pdb.set_trace()
         
     def __printTime(self, task):
-        print ("Time Left %s" % (self.getTimeLeft()))
+        print(("Time Left %s" % (self.getTimeLeft())))
         taskMgr.doMethodLater(1.0, self.__printTime, self.taskName("GolfGreenGameTimeout Print"))
         return task.done
         
@@ -159,7 +159,7 @@ class DistributedGolfGreenGameAI(BattleBlockerAI.BattleBlockerAI,
                 if (boardToAssign == None) or (len(self.boardList[boardIndex][0]) < len(self.boardList[boardToAssign][0])):
                     boardToAssign = boardIndex
                 elif (len(self.boardList[boardIndex][0]) == len(self.boardList[boardToAssign][0])):
-                    choice = random.choice(range(2))
+                    choice = random.choice(list(range(2)))
                     if choice:
                        boardToAssign = boardIndex 
                     

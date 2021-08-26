@@ -6,8 +6,8 @@ import random
 from direct.task.Task import Task
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
-import ToonInteriorColors
-import cPickle
+from . import ToonInteriorColors
+import pickle
 from toontown.toonbase import TTLocalizer
 
 class DistributedHQInterior(DistributedObject.DistributedObject):
@@ -158,7 +158,7 @@ class DistributedHQInterior(DistributedObject.DistributedObject):
         # This message is sent from the AI when the leaderboard is updated
         # We assume that because we got this message, something must have changed,
         # or we are in our generate
-        avIds, names, scores = cPickle.loads(leaderData)
+        avIds, names, scores = pickle.loads(leaderData)
         # Note, these lists are in order, highest score first
         self.notify.debug("setLeaderBoard: avIds: %s, names: %s, scores: %s" % (avIds, names, scores))
         self.leaderAvIds = avIds

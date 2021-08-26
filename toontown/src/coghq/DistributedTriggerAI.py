@@ -2,7 +2,7 @@
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
-import DistributedSwitchAI
+from . import DistributedSwitchAI
 
 
 class DistributedTriggerAI(DistributedSwitchAI.DistributedSwitchAI):

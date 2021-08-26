@@ -93,7 +93,7 @@ class CogHQExterior(BattlePlace.BattlePlace):
         BattlePlace.BattlePlace.enterTeleportIn(self, requestStatus)
 
     def enterTeleportOut(self, requestStatus):
-        if requestStatus.has_key('battle'):
+        if 'battle' in requestStatus:
             self.__teleportOutDone(requestStatus)
         else:
             BattlePlace.BattlePlace.enterTeleportOut(self, requestStatus, self.__teleportOutDone)

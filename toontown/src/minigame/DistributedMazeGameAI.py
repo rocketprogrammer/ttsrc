@@ -1,12 +1,12 @@
 """DistributedMazeGameAI module: contains the DistributedMazeGameAI class"""
 
-from DistributedMinigameAI import *
+from .DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-import PatternGameGlobals
+from . import PatternGameGlobals
 from direct.task.Task import Task
-import MazeGameGlobals
-import MazeData
+from . import MazeGameGlobals
+from . import MazeData
 
 class DistributedMazeGameAI(DistributedMinigameAI):
     def __init__(self, air, minigameId):
@@ -70,7 +70,7 @@ class DistributedMazeGameAI(DistributedMinigameAI):
         self.takenTable = [0] * self.numTreasures
 
         # reset scores
-        for avId in self.scoreDict.keys():
+        for avId in list(self.scoreDict.keys()):
             self.scoreDict[avId] = 0
 
     def setGameStart(self, timestamp):
@@ -126,7 +126,7 @@ class DistributedMazeGameAI(DistributedMinigameAI):
         # we're getting strange AI crashes where a toon claims
         # a treasure, and the toon is not listed in the scoreDict
         avId = self.air.getAvatarIdFromSender()
-        if not self.scoreDict.has_key(avId):
+        if avId not in self.scoreDict:
             self.notify.warning(
                 'PROBLEM: avatar %s called claimTreasure(%s) '
                 'but he is not in the scoreDict: %s. avIdList is: %s' %
@@ -174,12 +174,12 @@ class DistributedMazeGameAI(DistributedMinigameAI):
         self.notify.debug("doneShowingScores")
         # tone down the scores, and make sure everyone has
         # at least one jellybean
-        for key in self.scoreDict.keys():
+        for key in list(self.scoreDict.keys()):
             self.scoreDict[key] = max(1, self.scoreDict[key]/12)
 
         if self.numTreasuresTaken >= self.numTreasures:
             # increase everybody's score
-            for key in self.scoreDict.keys():
+            for key in list(self.scoreDict.keys()):
                 self.scoreDict[key] += 8
 
         self.gameOver()

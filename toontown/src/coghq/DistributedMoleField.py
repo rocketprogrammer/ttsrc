@@ -47,7 +47,7 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
     def disable(self):
         """Disable the mole field."""
         self.cleanupTimer()
-        for ival in self.toonHitTracks.values():
+        for ival in list(self.toonHitTracks.values()):
             ival.finish()
         self.toonHitTracks = {}
         DistributedNodePathEntity.disable(self)
@@ -104,8 +104,8 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
         """Create the field and load the assets."""
         moleIndex = 0
         self.moleHills = []
-        for indexY in xrange(self.numSquaresY):
-            for indexX in xrange(self.numSquaresX):
+        for indexY in range(self.numSquaresY):
+            for indexX in range(self.numSquaresX):
                 xPos = indexX * self.spacingX
                 yPos = indexY * self.spacingY
                 newMoleHill = MoleHill.MoleHill(xPos, yPos, 0, self, moleIndex)
@@ -422,7 +422,7 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
 
         # put the toon under a new node
         assert (toon.getParent() == render)
-        parentNode = render.attachNewNode('mazeFlyToonParent-'+`avId`)
+        parentNode = render.attachNewNode('mazeFlyToonParent-'+repr(avId))
         parentNode.setPos(toon.getPos(render))
         toon.reparentTo(parentNode)
         toon.setPos(0,0,0)
@@ -507,7 +507,7 @@ class DistributedMoleField(DistributedNodePathEntity, MoleFieldBase.MoleFieldBas
                 camera.lookAt(toon)
                 return Task.cont
 
-            camTaskName = "mazeToonFlyCam-"+`avId`
+            camTaskName = "mazeToonFlyCam-"+repr(avId)
             taskMgr.add(camTask, camTaskName, priority=20)
 
             def cleanupCamTask(self=self, toon=toon,

@@ -1,8 +1,8 @@
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from ElevatorConstants import *
-from ElevatorUtils import *
+from .ElevatorConstants import *
+from .ElevatorUtils import *
 from direct.showbase import PythonUtil
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
@@ -140,7 +140,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
         if self.bldgRequest:
             self.cr.relatedObjectMgr.abortRequest(self.bldgRequest)
             self.bldgRequest = None
-        for request in self.toonRequests.values():
+        for request in list(self.toonRequests.values()):
             self.cr.relatedObjectMgr.abortRequest(request)
         self.toonRequests = {}
 
@@ -249,12 +249,12 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
             # be taken.
             pass
 
-        elif not self.cr.doId2do.has_key(avId):
+        elif avId not in self.cr.doId2do:
             # It's someone who hasn't been generated yet.
             func = PythonUtil.Functor(
                 self.gotToon, index, avId)
                                       
-            assert not self.toonRequests.has_key(index)
+            assert index not in self.toonRequests
             self.toonRequests[index] = self.cr.relatedObjectMgr.requestObjects(
                 [avId], allCallback = func)
 
@@ -284,7 +284,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
             else:
                 toon.setAnimState("run", 1.0)
                 animFunc = Func(toon.setAnimState, "neutral", 1.0)
-            toon.headsUp(self.getElevatorModel(), apply(Point3, self.getScaledPoint(index)))
+            toon.headsUp(self.getElevatorModel(), Point3(*self.getScaledPoint(index)))
 
             track = Sequence(
                 # Pos 1: -1.5, 5, 0
@@ -292,7 +292,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
                 # Pos 3: -2.5, 3, 0
                 # Pos 4: 2.5, 3, 0
                 LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75,
-                                apply(Point3, self.getScaledPoint(index)),
+                                Point3(*self.getScaledPoint(index)),
                                 other=self.getElevatorModel()),
                 LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25,
                                 Point3(180, 0, 0),
@@ -350,7 +350,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
             pass
                 
     def emptySlot(self, index, avId, bailFlag, timestamp):
-        print "Emptying slot: %d for %d" % (index, avId)
+        print("Emptying slot: %d for %d" % (index, avId))
         # If localToon is exiting, he needs to change state
         if avId == 0:
             # This means that no one is currently exiting, and no action
@@ -368,7 +368,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
             self.deferredSlots = newSlots
 
         else:
-            if self.cr.doId2do.has_key(avId):
+            if avId in self.cr.doId2do:
                 # See if we need to reset the clock
                 # (countdown assumes we've created a clockNode already)
                 if (bailFlag == 1 and hasattr(self, 'clockNode')):
@@ -407,7 +407,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
                     
                     LerpPosInterval(toon, TOON_EXIT_ELEVATOR_TIME,
                                     Point3(0,-ElevatorData[self.type]['collRadius'],0),
-                                    startPos = apply(Point3, self.getScaledPoint(index)),
+                                    startPos = Point3(*self.getScaledPoint(index)),
                                     other=self.getElevatorModel()
                                     ),
                     animFunc,
@@ -439,7 +439,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
 
     def handleEnterSphere(self, collEntry):
         self.notify.debug("Entering Elevator Sphere....")
-        print("FSMhandleEnterSphere elevator%s avatar%s" % (self.elevatorTripId, localAvatar.lastElevatorLeft))
+        print(("FSMhandleEnterSphere elevator%s avatar%s" % (self.elevatorTripId, localAvatar.lastElevatorLeft)))
         if self.elevatorTripId and (localAvatar.lastElevatorLeft == self.elevatorTripId):
             #print("NO BACKCIES!")
             self.rejectBoard(base.localAvatar.doId, REJECT_SHUFFLE)
@@ -455,7 +455,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
         # reason 0: unknown, 1: shuffle, 2: too low laff, 3: no seat, 4: need promotion
         # This should only be sent to us if our localToon requested
         # permission to board the elevator.
-        print("rejectBoard %s" % (reason))
+        print(("rejectBoard %s" % (reason)))
         if hasattr(base.localAvatar, "elevatorNotifier"):
             if reason == REJECT_SHUFFLE:
                 base.localAvatar.elevatorNotifier.showMe(TTLocalizer.ElevatorHoppedOff)
@@ -546,7 +546,7 @@ class DistributedElevatorFSM(DistributedObject.DistributedObject, FSM):
         #import pdb; pdb.set_trace()
         # for any avatars that are still parented to us, remove them from the scene graph
         # so that they're not there when the doors open again
-        for avId in self.boardedAvIds.keys():
+        for avId in list(self.boardedAvIds.keys()):
             av = self.cr.doId2do.get(avId)
             if av is not None:
                 if av.getParent().compareTo(self.getElevatorModel()) == 0:

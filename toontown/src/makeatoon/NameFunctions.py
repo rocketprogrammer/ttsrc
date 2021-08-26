@@ -183,7 +183,7 @@ class NameFunctions:
         return
     
     def writeNameMaster(self):
-        print "Writing Name Master"
+        print("Writing Name Master")
         output = open('NameMasterEnglish.txt', 'w')
         for x in self.header:
             output.write(x+'\n')
@@ -194,7 +194,7 @@ class NameFunctions:
 
         uniqueID = 0
         for cat in range(0,9):
-            print "Working on list " + str(cat) + ".  UniqueID is up to " + str(uniqueID)
+            print("Working on list " + str(cat) + ".  UniqueID is up to " + str(uniqueID))
             for name in categoryNames[cat]:
                 output.write(str(uniqueID) + "*" + str(cat) + "*" + name + '\n')
                 uniqueID += 1
@@ -206,16 +206,16 @@ class NameFunctions:
         try:
             input = open('NameMasterEnglish.txt1', 'r')
         except:
-            print "NameFunctions: Error opening list text file."
+            print("NameFunctions: Error opening list text file.")
             return
-        for currentLine in input.xreadlines():
+        for currentLine in input:
             if currentLine.lstrip()[0:1] != '#':
                 a1 = currentLine.find('*')
                 a2 = currentLine.find('*', a1+1)
                 self.nameDictionary[int(currentLine[0:a1])]=(int(currentLine[a1+1:a2]),
                                                              currentLine[a2+1:len(currentLine)-1])
         masterList = [[],[],[],[],[],[],[],[],[]]
-        for tu in self.nameDictionary.values():
+        for tu in list(self.nameDictionary.values()):
             masterList[tu[0]].append(tu[1])
 
         self.nboyTitles = masterList[0]
@@ -228,8 +228,8 @@ class NameFunctions:
         self.nlastPrefixes = masterList[7]
         self.nlastSuffixes = masterList[8]
 
-        print self.boyTitles
-        print self.nboyTitles
+        print(self.boyTitles)
+        print(self.nboyTitles)
 
 
 

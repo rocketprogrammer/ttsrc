@@ -66,7 +66,7 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
     def delete(self):
         assert self.notify.debugCall()
         self.ignoreAll()
-        for i in self.asyncRequests.values():
+        for i in list(self.asyncRequests.values()):
             i.delete()
         DistributedObjectGlobalUD.delete(self)
 
@@ -79,10 +79,10 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
         assert avatarId
 
         self.notify.debug("avatarOnlinePlusAccountInfo")
-        if self.isAvatarOnline.has_key(avatarId):
+        if avatarId in self.isAvatarOnline:
             assert self.notify.debug(
                 "\n\nWe got a duplicate avatar online notice %s"%(avatarId,))
-        if avatarId and not self.isAvatarOnline.has_key(avatarId):
+        if avatarId and avatarId not in self.isAvatarOnline:
             self.isAvatarOnline[avatarId]=True
             self.avatarId2Info[avatarId] = AvatarFriendInfo(avatarName=str(avatarId),
                                                             playerName = playerName,
@@ -100,20 +100,20 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
 
             # Callback function for asynchronous avatar name fetch
             def setName(avatarId, avatarId2info, friends, context, name):
-                if avatarId2info.has_key(avatarId):
+                if avatarId in avatarId2info:
                     avatarId2info[avatarId].avatarName = name[0]
                     for friendId in friends:
-                        if self.isAvatarOnline.has_key(friendId):
+                        if friendId in self.isAvatarOnline:
                             if (friendId in self.avatarId2FriendsList) and (avatarId in self.avatarId2FriendsList[friendId]):
                                 self.sendUpdateToAvatarId(friendId,"updateAvatarFriend",
                                                           [avatarId,self.getFriendView(friendId,avatarId)])
                             self.sendExtraUpdates(friendId,avatarId)
 
             # Get my friends' info to me
-            for friend in friends.keys():
+            for friend in list(friends.keys()):
                 friendId = friend
-                if not self.isAvatarOnline.has_key(friendId):
-                    if not self.avatarId2Info.has_key(friendId):
+                if friendId not in self.isAvatarOnline:
+                    if friendId not in self.avatarId2Info:
                         self.avatarId2Info[friendId] = AvatarFriendInfo()
                         #fetch this friend's name from the gameDB since we don't have it yet
                         context=self.air.allocateContext()
@@ -127,7 +127,7 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
                         self.sendUpdateToAvatarId(avatarId,"updateAvatarFriend",[friendId,self.getFriendView(avatarId,friendId)])
                         self.sendExtraUpdates(avatarId,friendId)
                 else:
-                    assert self.avatarId2Info.has_key(friendId)
+                    assert friendId in self.avatarId2Info
                     self.sendUpdateToAvatarId(avatarId,"updateAvatarFriend",[friendId,self.getFriendView(avatarId,friendId)])
                     self.sendExtraUpdates(avatarId,friendId)
 
@@ -138,14 +138,14 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
             self.air.contextToClassName[context]=dclassName
             self.acceptOnce(
                 "doFieldResponse-%s"%(context,), 
-                setName, [avatarId, self.avatarId2Info, friends.keys()])
+                setName, [avatarId, self.avatarId2Info, list(friends.keys())])
             self.air.queryObjectField(
                 dclassName, "setName", avatarId, context)
 
     def getFriendView(self, viewerId, friendId):
         info = self.avatarId2Info[friendId]
-        assert self.avatarId2FriendsList.has_key(viewerId), "avatarId2FriendsList has no key %d" % viewerId
-        assert self.avatarId2FriendsList[viewerId].has_key(friendId), "avatarId2FriendsList[%d] has no key %d" % (viewerId, friendId)
+        assert viewerId in self.avatarId2FriendsList, "avatarId2FriendsList has no key %d" % viewerId
+        assert friendId in self.avatarId2FriendsList[viewerId], "avatarId2FriendsList[%d] has no key %d" % (viewerId, friendId)
         info.openChatFriendshipYesNo = self.avatarId2FriendsList[viewerId][friendId]
         if info.openChatFriendshipYesNo or \
            (info.openChatEnabledYesNo and \
@@ -169,12 +169,12 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
         assert self.notify.debugCall()
         self.isAvatarOnline.pop(avatarId,None)
 
-        if self.avatarId2Info.has_key(avatarId):
+        if avatarId in self.avatarId2Info:
             self.avatarId2Info[avatarId].onlineYesNo = 0
         
         if avatarId:
             friendsList = self.avatarId2FriendsList.get(avatarId, None)
-            if friendsList is not None and self.avatarId2Info.has_key(avatarId):
+            if friendsList is not None and avatarId in self.avatarId2Info:
                 for friend in friendsList:
                     self.sendUpdateToAvatarId(
                         friend, "updateAvatarFriend", [avatarId,self.avatarId2Info[avatarId]])
@@ -243,7 +243,7 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
             assert otherAvatarId not in invitations
 
             self.avatarId2FriendsList[avatarId][otherAvatarId] = 0
-            if self.avatarId2FriendsList.has_key(otherAvatarId):
+            if otherAvatarId in self.avatarId2FriendsList:
                 self.avatarId2FriendsList[otherAvatarId][avatarId] = 0
 
             #update the friends database
@@ -319,9 +319,9 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
         if otherAvatarId not in friendsList:
             reject(RejectCode.ALREADY_NOT_YOUR_FRIEND)
         else:
-            if self.avatarId2FriendsList.has_key(avatarId):
+            if avatarId in self.avatarId2FriendsList:
                 self.avatarId2FriendsList[avatarId].pop(otherAvatarId,None)
-            if self.avatarId2FriendsList.has_key(otherAvatarId):
+            if otherAvatarId in self.avatarId2FriendsList:
                 self.avatarId2FriendsList[otherAvatarId].pop(avatarId,None)
             self.db.removeFriendship(avatarId,otherAvatarId)
             self.sendUpdateToAvatarId(avatarId,"removeAvatarFriend",[otherAvatarId])
@@ -329,11 +329,11 @@ class AvatarFriendsManagerUD(DistributedObjectGlobalUD):
     
 
     def updateAvatarName(self, avatarId, avatarName):
-        if self.avatarId2Info.has_key(avatarId):
+        if avatarId in self.avatarId2Info:
             self.avatarId2Info[avatarId].avatarName = avatarName
             friends = self.avatarId2FriendsList.get(avatarId,[])
             for friendId in friends:
-                if self.isAvatarOnline.has_key(friendId):
+                if friendId in self.isAvatarOnline:
                     self.sendUpdateToAvatarId(friendId,"updateAvatarFriend",
                                               [avatarId,self.getFriendView(friendId,avatarId)])
                     self.sendExtraUpdates(friendId,avatarId)

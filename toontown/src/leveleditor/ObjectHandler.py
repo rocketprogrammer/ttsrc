@@ -6,15 +6,15 @@ from pandac.PandaModules import *
 from direct.actor import Actor
 from direct.leveleditor import ObjectGlobals as OG
 
-from SuitPointObj import *
-from GroupObj import *
-from PropObj import *
-from LandmarkObj import *
-from FlatBuildingObj import *
-from AnimBuildingObj import *
-from AnimPropObj import *
-from InteractivePropObj import *
-from StreetObj import *
+from .SuitPointObj import *
+from .GroupObj import *
+from .PropObj import *
+from .LandmarkObj import *
+from .FlatBuildingObj import *
+from .AnimBuildingObj import *
+from .AnimPropObj import *
+from .InteractivePropObj import *
+from .StreetObj import *
 
 class ObjectHandler:
     """ ObjectHandler will create and update objects """
@@ -24,7 +24,7 @@ class ObjectHandler:
 
     def createGroup(self, name=None):
         if name is None:
-            groupName = 'group_' + `self.editor.getGroupNum()`
+            groupName = 'group_' + repr(self.editor.getGroupNum())
             self.editor.setGroupNum(self.editor.getGroupNum() + 1)
         else:
             groupName = name
@@ -32,7 +32,7 @@ class ObjectHandler:
 
     def createVisGroup(self, name=None):
         if name is None:
-            groupName = 'VisGroup_' + `self.editor.getGroupNum()`
+            groupName = 'VisGroup_' + repr(self.editor.getGroupNum())
             self.editor.setGroupNum(self.editor.getGroupNum() + 1)
         else:
             groupName = name
@@ -42,7 +42,7 @@ class ObjectHandler:
 
     def createNode(self, name=None):
         if name is None:
-            groupName = 'node_' + `self.editor.getGroupNum()`
+            groupName = 'node_' + repr(self.editor.getGroupNum())
             self.editor.setGroupNum(self.editor.getGroupNum() + 1)
         else:
             groupName = name

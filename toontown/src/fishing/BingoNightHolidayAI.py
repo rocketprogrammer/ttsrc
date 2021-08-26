@@ -65,7 +65,7 @@ class BingoNightHolidayAI(HolidayBaseAI.HolidayBaseAI):
     def start(self):
 
         if self.air.bingoMgr:
-            raise PythonUtil.SingletonError, "Bingo Manager already Exists! DO NOT RUN HOLIDAY!!"
+            raise PythonUtil.SingletonError("Bingo Manager already Exists! DO NOT RUN HOLIDAY!!")
         else:
             self.notify.info('Starting BingoNight Holiday: %s' % (time.ctime()))
             self.bingoMgr = BingoManagerAI.BingoManagerAI(self.air)

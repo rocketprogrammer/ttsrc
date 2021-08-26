@@ -12,7 +12,7 @@ from pandac.PandaModules import *
 
 ctprojs = os.getenv("CTPROJS")
 if not ctprojs:
-    print "CTPROJS is not defined."
+    print("CTPROJS is not defined.")
     sys.exit(1)
 
 # These are modules that Python always tries to import up-front.  They
@@ -153,7 +153,7 @@ def setupPackages():
 
     for moduleName in packages:
         str = 'import %s' % (moduleName)
-        exec str
+        exec(str)
 
         module = sys.modules[moduleName]
         modulefinder.AddPackagePath(moduleName, module.__path__[0])
@@ -275,7 +275,7 @@ class Freezer:
         excludes = []
         includes = []
         autoIncludes = []
-        for moduleName, token in self.modules.items():
+        for moduleName, token in list(self.modules.items()):
             if token == self.MTInclude:
                 includes.append(moduleName)
             elif token == self.MTAuto:
@@ -298,7 +298,7 @@ class Freezer:
                 pass
 
         # Now, any new modules we found get added to the export list.
-        for moduleName in self.mf.modules.keys():
+        for moduleName in list(self.mf.modules.keys()):
             if moduleName not in self.modules:
                 self.modules[moduleName] = self.MTAuto
 
@@ -327,8 +327,8 @@ class Freezer:
                 
         if missing:
             error = "There are some missing modules: %r" % missing
-            print error
-            raise StandardError, error
+            print(error)
+            raise Exception(error)
 
     def mangleName(self, moduleName):
         return 'M_' + moduleName.replace('.', '__')        
@@ -339,7 +339,7 @@ class Freezer:
         # referencing.
         moduleNames = []
 
-        for moduleName, token in self.modules.items():
+        for moduleName, token in list(self.modules.items()):
             prevToken = self.previousModules.get(moduleName, None)
             if token == self.MTInclude or token == self.MTAuto:
                 # Include this module (even if a previous pass
@@ -358,7 +358,7 @@ class Freezer:
         # actual filename we put in there is meaningful only for stack
         # traces, so we'll just use the module name.
         replace_paths = []
-        for moduleName, module in self.mf.modules.items():
+        for moduleName, module in list(self.mf.modules.items()):
             if module.__code__:
                 origPathname = module.__code__.co_filename
                 replace_paths.append((origPathname, moduleName))
@@ -366,7 +366,7 @@ class Freezer:
 
         # Now that we have built up the replacement mapping, go back
         # through and actually replace the paths.
-        for moduleName, module in self.mf.modules.items():
+        for moduleName, module in list(self.mf.modules.items()):
             if module.__code__:
                 co = self.mf.replace_paths_in_code(module.__code__)
                 module.__code__ = co;
@@ -579,13 +579,13 @@ class Freezer:
 
 
         for compile in compileList:
-            print compile
+            print(compile)
             if os.system(compile) != 0:
-                raise StandardError
+                raise Exception
 
-        print link
+        print(link)
         if os.system(link) != 0:
-            raise StandardError
+            raise Exception
 
     def compileDll(self, basename, sourceList):
         if sys.platform == 'win32':
@@ -647,13 +647,13 @@ class Freezer:
 
 
         for compile in compileList:
-            print compile
+            print(compile)
             if os.system(compile) != 0:
-                raise StandardError
+                raise Exception
 
-        print link
+        print(link)
         if os.system(link) != 0:
-            raise StandardError
+            raise Exception
 
     def makeModuleDef(self, mangledName, code, isStatic):
         result = ''

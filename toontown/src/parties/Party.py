@@ -163,7 +163,7 @@ class Party(Place.Place):
             self.partyPlanner.close()
             del self.partyPlanner
         if hasattr(base, "distributedParty"):
-            if base.cr.doId2do.has_key(base.distributedParty.partyInfo.hostId):
+            if base.distributedParty.partyInfo.hostId in base.cr.doId2do:
                 host = base.cr.doId2do[base.distributedParty.partyInfo.hostId]
                 if hasattr(host, "gmIcon") and host.gmIcon:
                     host.removeGMIcon()
@@ -278,7 +278,7 @@ class Party(Place.Place):
         # DistributedParty in delete.
         if hasattr(base, "distributedParty"):
             x,y,z = base.distributedParty.getClearSquarePos()
-            if base.cr.doId2do.has_key(base.distributedParty.partyInfo.hostId):
+            if base.distributedParty.partyInfo.hostId in base.cr.doId2do:
                 host = base.cr.doId2do[base.distributedParty.partyInfo.hostId]
                 if hasattr(host, "gmIcon") and host.gmIcon:
                     host.removeGMIcon()

@@ -4,8 +4,8 @@
 ##################################################
 
 
-from FriendManagerService_services_types import *
-import urlparse, types
+from .FriendManagerService_services_types import *
+import urllib.parse, types
 from ZSI.TCcompound import ComplexType, Struct
 from ZSI import client
 import ZSI
@@ -39,7 +39,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(generateTokenResponse.typecode)
         if isinstance(response, generateTokenResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         generateTokenReturn = response._generateTokenReturn
         return generateTokenReturn
 
@@ -60,7 +60,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(generateTokenParentAuthResponse.typecode)
         if isinstance(response, generateTokenParentAuthResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         generateTokenParentAuthReturn = response._generateTokenParentAuthReturn
         return generateTokenParentAuthReturn
 
@@ -77,7 +77,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(redeemTokenResponse.typecode)
         if isinstance(response, redeemTokenResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         redeemTokenReturn = response._redeemTokenReturn
         return redeemTokenReturn
 
@@ -99,7 +99,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(redeemTokenParentAuthResponse.typecode)
         if isinstance(response, redeemTokenParentAuthResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         redeemTokenParentAuthReturn = response._redeemTokenParentAuthReturn
         return redeemTokenParentAuthReturn
 
@@ -116,7 +116,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(makeCasualFriendsResponse.typecode)
         if isinstance(response, makeCasualFriendsResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         return 
 
     # op: <ZSI.wstools.WSDLTools.Message instance at 0x00F0A5A8>
@@ -133,7 +133,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(makeFriendsResponse.typecode)
         if isinstance(response, makeFriendsResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         return 
 
     # op: <ZSI.wstools.WSDLTools.Message instance at 0x00F1C940>
@@ -148,7 +148,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(getFriendsResponse.typecode)
         if isinstance(response, getFriendsResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         getFriendsReturn = response._getFriendsReturn
         return getFriendsReturn
 
@@ -164,7 +164,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(getNamedFriendsResponse.typecode)
         if isinstance(response, getNamedFriendsResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         getNamedFriendsReturn = response._getNamedFriendsReturn
         return getNamedFriendsReturn
 
@@ -180,7 +180,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(getTokensResponse.typecode)
         if isinstance(response, getTokensResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         getTokensReturn = response._getTokensReturn
         return getTokensReturn
 
@@ -197,7 +197,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(deleteFriendResponse.typecode)
         if isinstance(response, deleteFriendResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         return 
 
     # op: <ZSI.wstools.WSDLTools.Message instance at 0x00F1C0F8>
@@ -211,7 +211,7 @@ class FriendManagerSoapBindingSOAP:
         # no output wsaction
         response = self.binding.Receive(generateRandomTokenResponse.typecode)
         if isinstance(response, generateRandomTokenResponse.typecode.pyclass) is False:
-            raise TypeError, "%s incorrect response type" % (response.__class__)
+            raise TypeError("%s incorrect response type" % (response.__class__))
         generateRandomTokenReturn = response._generateRandomTokenReturn
         return generateRandomTokenReturn
 

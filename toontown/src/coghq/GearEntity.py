@@ -1,6 +1,6 @@
 from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities
-import MovingPlatform
+from . import MovingPlatform
 
 class GearEntity(BasicEntities.NodePathEntity):
     __module__ = __name__

@@ -162,7 +162,7 @@ class OtpAvatarManagerUD(DistributedObjectGlobalUD):
     
     def delete(self):
         self.ignoreAll()
-        for i in self.asyncRequests.values():
+        for i in list(self.asyncRequests.values()):
             i.delete()
         self.asyncRequests={}
         DistributedObjectGlobalUD.delete(self)
@@ -287,7 +287,7 @@ class OtpAvatarManagerUD(DistributedObjectGlobalUD):
         # token through the login message.
         avatarIds = []
         avatarRecords = {}
-        for subId in accountDetails.subDetails.keys():
+        for subId in list(accountDetails.subDetails.keys()):
             avatarData = self.db.getAvatarIdsForSubscription(subId)
             avatarRecords[subId] = avatarData
             avatarIds.extend([record[0] for record in avatarData])
@@ -312,7 +312,7 @@ class OtpAvatarManagerUD(DistributedObjectGlobalUD):
             self.notify.warning('tried to send avId list for account %s that has since logged out' % (accountId))
             return
 
-        for subId in accountDetails.subDetails.keys():
+        for subId in list(accountDetails.subDetails.keys()):
             avatarData = self.db.getAvatarIdsForSubscription(subId)
             avatarIds.extend([record[0] for record in avatarData])
         # The game server sniffs this message to enfore security

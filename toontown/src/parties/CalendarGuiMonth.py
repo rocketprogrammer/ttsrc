@@ -44,7 +44,7 @@ class CalendarGuiMonth(DirectFrame):
         self.monthLocator.setZ(0.6)
 
         self.weekDayLocators = []
-        for i in xrange(7):
+        for i in range(7):
             self.weekDayLocators.append( self.attachNewNode('weekDayLocator-%d'%i))
             self.weekDayLocators[i].setZ(0.5)
             self.weekDayLocators[i].setX( i*(0.24) + -0.75)
@@ -52,9 +52,9 @@ class CalendarGuiMonth(DirectFrame):
         dayTopLeftX = -0.8
         dayTopLeftZ = 0.4
         self.dayLocators =[]        
-        for row in xrange(6):
+        for row in range(6):
             oneWeek = []
-            for col in xrange(7):
+            for col in range(7):
                 newDayLoc = self.attachNewNode('dayLocator-row-%d-col-%d' %
                                                (row,col))
                 newDayLoc.setX( col *0.24 + dayTopLeftX)
@@ -90,9 +90,9 @@ class CalendarGuiMonth(DirectFrame):
             self.attachMarker(weekDayLoc)
 
         self.dayLocators =[]        
-        for row in xrange(6):
+        for row in range(6):
             oneWeek = []
-            for col in xrange(7):
+            for col in range(7):
                 newDayLoc = self.find('**/loc_box_%s_%s' % (row, col))
                 oneWeek.append(newDayLoc)
             self.dayLocators.append(oneWeek)
@@ -129,7 +129,7 @@ class CalendarGuiMonth(DirectFrame):
             )
 
         self.weekdayLabels = []
-        for posIndex in xrange(7):
+        for posIndex in range(7):
             # Sunday is the usual first day of the week, but
             # self.startDate.weekDay() reports 0 for Monday
             adjustedNameIndex = (posIndex-1) % 7

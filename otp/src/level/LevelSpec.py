@@ -1,6 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import list2dict, uniqueElements
 import string, LevelConstants, types
+import importlib
 if __dev__:
     import os
 
@@ -14,11 +15,11 @@ class LevelSpec:
         newSpec = 0
         if type(spec) is types.ModuleType:
             if __dev__:
-                reload(spec)
+                importlib.reload(spec)
             self.specDict = spec.levelSpec
             if __dev__:
                 self.setFilename(spec.__file__)
-        elif type(spec) is types.DictType:
+        elif type(spec) is dict:
             self.specDict = spec
         elif spec is None:
             if __dev__:
@@ -32,7 +33,7 @@ class LevelSpec:
         self.setScenario(scenario)
         if __dev__:
             if newSpec:
-                import EntityTypes, EntityTypeRegistry
+                from . import EntityTypes, EntityTypeRegistry
                 etr = EntityTypeRegistry.EntityTypeRegistry(EntityTypes)
                 self.setEntityTypeReg(etr)
                 entId = LevelConstants.UberZoneEntId
@@ -56,12 +57,12 @@ class LevelSpec:
         return self.scenario
 
     def getGlobalEntIds(self):
-        return self.privGetGlobalEntityDict().keys()
+        return list(self.privGetGlobalEntityDict().keys())
 
     def getScenarioEntIds(self, scenario=None):
         if scenario is None:
             scenario = self.scenario
-        return self.privGetScenarioEntityDict(scenario).keys()
+        return list(self.privGetScenarioEntityDict(scenario).keys())
         return
 
     def getAllEntIds(self):
@@ -69,7 +70,7 @@ class LevelSpec:
 
     def getAllEntIdsFromAllScenarios(self):
         entIds = self.getGlobalEntIds()
-        for scenario in xrange(self.getNumScenarios()):
+        for scenario in range(self.getNumScenarios()):
             entIds.extend(self.getScenarioEntIds(scenario))
 
         return entIds
@@ -80,8 +81,8 @@ class LevelSpec:
 
     def getCopyOfSpec(self, spec):
         specCopy = {}
-        exec 'from %s import *' % self.getSpecImportsModuleName()
-        for key in spec.keys():
+        exec('from %s import *' % self.getSpecImportsModuleName())
+        for key in list(spec.keys()):
             specCopy[key] = eval(repr(spec[key]))
 
         return specCopy
@@ -124,7 +125,7 @@ class LevelSpec:
         zoneIds.sort()
         for zoneNum in zoneIds:
             spec = self.getEntitySpec(zoneNum)
-            print 'zone %s : %s' % (zoneNum, spec['name'])
+            print('zone %s : %s' % (zoneNum, spec['name']))
 
     if __dev__:
 
@@ -161,7 +162,7 @@ class LevelSpec:
             globalEnts[entId] = {}
             spec = globalEnts[entId]
             attribDescs = self.entTypeReg.getTypeDesc(entType).getAttribDescDict()
-            for (name, desc) in attribDescs.items():
+            for (name, desc) in list(attribDescs.items()):
                 spec[name] = desc.getDefaultValue()
 
             spec['type'] = entType
@@ -212,7 +213,7 @@ class LevelSpec:
                     backupFilename = self.privGetBackupFilename(filename)
                     self.privRemoveFile(backupFilename)
                     os.rename(filename, backupFilename)
-                except OSError, e:
+                except OSError as e:
                     LevelSpec.notify.warning('error during backup: %s' % str(e))
 
             LevelSpec.notify.info("writing to '%s'" % filename)
@@ -274,9 +275,9 @@ class LevelSpec:
                  'levelMgr', 'editMgr', 'zone')
                 firstAttribs = ('type', 'name', 'comment', 'parentEntId', 'pos', 'x', 'y', 'z', 'hpr', 'h', 'p', 'r', 'scale', 'sx', 'sy', 'sz', 'color', 'model')
                 str = t(0) + '%s = {\n' % name
-                entIds = dict.keys()
+                entIds = list(dict.keys())
                 entType2ids = self.getEntType2ids(entIds)
-                types = sortList(entType2ids.keys(), firstTypes)
+                types = sortList(list(entType2ids.keys()), firstTypes)
                 for type in types:
                     str += t(1) + '# %s\n' % string.upper(type)
                     entIds = entType2ids[type]
@@ -284,7 +285,7 @@ class LevelSpec:
                     for entId in entIds:
                         str += t(1) + '%s: {\n' % entId
                         spec = dict[entId]
-                        attribs = sortList(spec.keys(), firstAttribs)
+                        attribs = sortList(list(spec.keys()), firstAttribs)
                         for attrib in attribs:
                             str += t(2) + "'%s': %s,\n" % (attrib, repr(spec[attrib]))
 
@@ -324,7 +325,7 @@ class LevelSpec:
         def testPrettyString(self, prettyString=None):
             if prettyString is None:
                 prettyString = self.getPrettyString()
-            exec prettyString
+            exec(prettyString)
             return
 
         def checkSpecIntegrity(self):
@@ -342,13 +343,13 @@ class LevelSpec:
                     typeDesc = self.entTypeReg.getTypeDesc(entType)
                     attribNames = typeDesc.getAttribNames()
                     attribDescs = typeDesc.getAttribDescDict()
-                    for attrib in spec.keys():
+                    for attrib in list(spec.keys()):
                         if attrib not in attribNames:
                             LevelSpec.notify.warning("entId %s (%s): unknown attrib '%s', omitting" % (entId, spec['type'], attrib))
                             del spec[attrib]
 
                     for attribName in attribNames:
-                        if not spec.has_key(attribName):
+                        if attribName not in spec:
                             default = attribDescs[attribName].getDefaultValue()
                             LevelSpec.notify.warning("entId %s (%s): missing attrib '%s', setting to default (%s)" % (entId, spec['type'], attribName, repr(default)))
                             spec[attribName] = default

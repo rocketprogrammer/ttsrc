@@ -144,7 +144,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         def _setMedianTraits(self, szId):
             # call this on an existing pet to set all his traits to median
             # values for a particular safe zone. For gameplay balancing.
-            for i in xrange(PetTraits.PetTraits.NumTraits):
+            for i in range(PetTraits.PetTraits.NumTraits):
                 traitName = PetTraits.getTraitNames()[i]
                 traitDesc = PetTraits.PetTraits.TraitDescs[i]
                 distrib = traitDesc[1]
@@ -155,7 +155,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         def _setLowTraits(self, szId):
             # call this on an existing pet to set all his traits to the
             # lowest values for a particular safe zone. For gameplay balancing.
-            for i in xrange(PetTraits.PetTraits.NumTraits):
+            for i in range(PetTraits.PetTraits.NumTraits):
                 traitName = PetTraits.getTraitNames()[i]
                 traitDesc = PetTraits.PetTraits.TraitDescs[i]
                 distrib = traitDesc[1]
@@ -167,7 +167,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             # call this on an existing pet to set all his traits to the
             # highest values for a particular safe zone. For gameplay
             # balancing.
-            for i in xrange(PetTraits.PetTraits.NumTraits):
+            for i in range(PetTraits.PetTraits.NumTraits):
                 traitName = PetTraits.getTraitNames()[i]
                 traitDesc = PetTraits.PetTraits.TraitDescs[i]
                 distrib = traitDesc[1]
@@ -178,7 +178,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         def _setTypicalTraits(self, szId):
             # call this on an existing pet to set all his traits to typical
             # random values for a particular safezone. For gameplay balancing.
-            for i in xrange(PetTraits.PetTraits.NumTraits):
+            for i in range(PetTraits.PetTraits.NumTraits):
                 traitName = PetTraits.getTraitNames()[i]
                 traitDesc = PetTraits.PetTraits.TraitDescs[i]
                 distrib = traitDesc[1]
@@ -273,7 +273,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             self.inEstate = 0
             self.estateZones = []
 
-        PetObserve.send(broadcastZones.keys(),
+        PetObserve.send(list(broadcastZones.keys()),
                         PetObserve.PetActionObserve(
             PetObserve.Actions.CHANGE_ZONE, self.doId,
             (oldZoneId, newZoneId)))
@@ -348,7 +348,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
 
     # get, b_set, d_set, and set funcs are generated for each trait
     def __generateDistTraitFuncs(self):
-        for i in xrange(PetTraits.PetTraits.NumTraits):
+        for i in range(PetTraits.PetTraits.NumTraits):
             traitName = PetTraits.getTraitNames()[i]
             getterName = self.getSetterName(traitName, 'get')
             b_setterName = self.getSetterName(traitName, 'b_set')
@@ -642,7 +642,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         if not hasattr(self, '_beingCreatedInDB'):
             # if there are any new traits, we need to set their generated value in
             # the DB.
-            for i in xrange(len(self.traitList)):
+            for i in range(len(self.traitList)):
                 value = self.traitList[i]
                 if value == 0.:
                     traitName = PetTraits.getTraitNames()[i]
@@ -686,7 +686,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
             self.setDNA(self.initialDNA)
 
         # pass in the cached required mood component values
-        for mood, value in self.requiredMoodComponents.items():
+        for mood, value in list(self.requiredMoodComponents.items()):
             self.mood.setComponent(mood, value, announce=0)
         self.requiredMoodComponents = {}
 
@@ -1022,10 +1022,10 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         else:
             self.setMoodComponent(component, lerp(curVal, 1., factor))
     def addToMoods(self, mood2delta):
-        for mood, delta in mood2delta.items():
+        for mood, delta in list(mood2delta.items()):
             self.addToMood(mood, delta)
     def lerpMoods(self, mood2factor):
-        for mood, factor in mood2factor.items():
+        for mood, factor in list(mood2factor.items()):
             self.lerpMood(mood, factor)
     if __debug__:
         def maxMood(self):
@@ -1226,22 +1226,22 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         nearbyToonDict = self._getFullNearbyToonDict()
         if not len(nearbyToonDict):
             return None
-        return nearbyToonDict[random.choice(nearbyToonDict.keys())]
+        return nearbyToonDict[random.choice(list(nearbyToonDict.keys()))]
     def _getNearbyToonNonOwner(self):
         nearbyToonDict = self._getNearbyToonDict()
         if not len(nearbyToonDict):
             return None
-        return nearbyToonDict[random.choice(nearbyToonDict.keys())]
+        return nearbyToonDict[random.choice(list(nearbyToonDict.keys()))]
     def _getNearbyPet(self):
         nearbyPetDict = self._getNearbyPetDict()
         if not len(nearbyPetDict):
             return None
-        return nearbyPetDict[random.choice(nearbyPetDict.keys())]
+        return nearbyPetDict[random.choice(list(nearbyPetDict.keys()))]
     def _getNearbyAvatar(self):
         nearbyAvDict = self._getNearbyAvatarDict()
         if not len(nearbyAvDict):
             return None
-        return nearbyAvDict[random.choice(nearbyAvDict.keys())]
+        return nearbyAvDict[random.choice(list(nearbyAvDict.keys()))]
 
     #
     # pet movie methods
@@ -1428,7 +1428,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
     def __lockPetMoveTask(self, avId):
         # In case the pet or toon has been deleted without cleaning up this
         # task, we need to do some checking first
-        if (not hasattr(self, 'air') or not self.air.doId2do.has_key(avId)):
+        if (not hasattr(self, 'air') or avId not in self.air.doId2do):
             self.notify.warning("avId: %s gone or self deleted!" % avId)
             # TODO: do we need to do some cleanup here?
             return Task.done
@@ -1445,7 +1445,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         # We need to calculate the distance the pet should come within for
         # toons of varying size. Shorter toons need the pet to come in closer,
         # while tall toons need them to stay out a little further.
-        if self.movieDistSwitch.has_key(self.movieMode):
+        if self.movieMode in self.movieDistSwitch:
             dist_Callable = self.movieDistSwitch.get(self.movieMode)
             movieDist = dist_Callable(av.getStyle().getLegSize())
         else:
@@ -1518,7 +1518,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         if self.mood.isComponentActive('fatigue'):
             cutoff *= .5
         # Apply base accuracy for the specific trick
-        assert(PetTricks.TrickAccuracies.has_key(trickId))
+        assert(trickId in PetTricks.TrickAccuracies)
         cutoff *= PetTricks.TrickAccuracies[trickId]
         DistributedPetAI.notify.debug('_willDoTrick: %s / %s' % (
             randVal, cutoff))

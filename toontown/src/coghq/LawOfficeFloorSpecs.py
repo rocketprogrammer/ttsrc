@@ -34,8 +34,8 @@ LawbotOfficeFloorIDs = (0,1)
 
 # dict of roomId to spec Python module
 LawbotOfficeSpecModules = {}
-for roomName, roomId in LawbotOfficeFloorName2FloorId.items():
-    exec 'from toontown.coghq import %s' % roomName
+for roomName, roomId in list(LawbotOfficeFloorName2FloorId.items()):
+    exec('from toontown.coghq import %s' % roomName)
     LawbotOfficeSpecModules[roomId] = eval(roomName)
 
 ## until cogs are entities...
@@ -45,7 +45,7 @@ CogSpecModules = {
     }
 
 floorId2numBattles = {}
-for roomName, roomId in LawbotOfficeFloorName2FloorId.items():
+for roomName, roomId in list(LawbotOfficeFloorName2FloorId.items()):
     if roomName not in CogSpecModules:
         floorId2numBattles[roomId] = 0
     else:

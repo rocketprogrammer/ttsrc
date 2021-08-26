@@ -15,7 +15,7 @@ the sum will be evaluated as the end of the last action.
 """
 
 from direct.directnotify import DirectNotifyGlobal
-import RingAction
+from . import RingAction
 
 class RingTrack:
     notify = DirectNotifyGlobal.directNotify.newCategory("RingTrack")

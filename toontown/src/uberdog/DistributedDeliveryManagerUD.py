@@ -3,7 +3,7 @@ The Toontown Delivery Manager UD handles all the delivery accross all
 districts.
 """
 
-from cPickle import loads, dumps
+from pickle import loads, dumps
 
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
@@ -19,7 +19,7 @@ from toontown.catalog import CatalogItemList
 from toontown.catalog import CatalogItem
 from toontown.catalog import CatalogPoleItem
 from toontown.catalog import CatalogBeanItem
-from LRUlist import LRUlist
+from .LRUlist import LRUlist
 
 
 if __debug__:
@@ -493,10 +493,10 @@ class DistributedDeliveryManagerUD(DistributedObjectGlobalUD):
                 #return a Reject message to the AI caller
     
     def hello(self, message):
-        print message
+        print(message)
         replyToChannel = self.air.getSenderReturnChannel()
         if message == "boo boo stinks":
-            print "no he doesn't you fool"
+            print("no he doesn't you fool")
             self.sendUpdateToChannel(
                    replyToChannel, "rejectHello", ["no he doesn't you fool"])
         else:

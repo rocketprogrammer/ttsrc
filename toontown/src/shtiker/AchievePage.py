@@ -1,6 +1,6 @@
 """AchievePage module: contains the AchievePage class"""
 
-import ShtikerPage
+from . import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer

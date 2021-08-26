@@ -6,7 +6,7 @@
 #          and can send you to the party grounds to plan your party
 #-------------------------------------------------------------------------------
 
-from DistributedNPCToonBase import DistributedNPCToonBase
+from .DistributedNPCToonBase import DistributedNPCToonBase
 from direct.distributed.DistributedObject import DistributedObject
 from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer

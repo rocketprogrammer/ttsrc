@@ -1,4 +1,4 @@
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import socket
 import datetime
 import os
@@ -242,14 +242,14 @@ class DistributedCpuInfoMgrUD(DistributedObjectGlobalUD):
     def addFingerprint(self, replyTo, **kw):
         """Add a new fingerprint to auto ban."""
         try:
-            fingerprint = urllib.unquote(kw['fingerprintToAdd'])
+            fingerprint = urllib.parse.unquote(kw['fingerprintToAdd'])
             self.bannedFingerprints.add(fingerprint)
             self.updateRecordFile()
             header,body,footer,help= self.getMainMenu()
             replyTo.respondXML(self.securityBanMgrAddFingerprintXML %
                                ("%s" % fingerprint))
             
-        except Exception, e:
+        except Exception as e:
             replyTo.respondXML(self.securityBanMgrFailureXML %
                                ("Catastrophic failure add fingerprint %s" % str(e)))
             self.notify.warning("Got exception %s" % str(e))
@@ -258,7 +258,7 @@ class DistributedCpuInfoMgrUD(DistributedObjectGlobalUD):
     def removeFingerprint(self, replyTo, **kw):
         """Remove a fingerprint to auto ban."""
         try:
-            fingerprint = urllib.unquote(kw['fingerprintToRemove'])
+            fingerprint = urllib.parse.unquote(kw['fingerprintToRemove'])
             if fingerprint in self.bannedFingerprints:
                 self.bannedFingerprints.remove(fingerprint)
                 self.updateRecordFile()
@@ -267,7 +267,7 @@ class DistributedCpuInfoMgrUD(DistributedObjectGlobalUD):
                                    ("%s" % fingerprint))
             else:
                 replyTo.respondXML(self.securityBanMgrFailureXML % ("%s not a banned fingerprint" % fingerprint))
-        except Exception, e:
+        except Exception as e:
             replyTo.respondXML(self.securityBanMgrFailureXML %
                                ("Catastrophic failure add fingerprint %s" % str(e)))
             self.notify.warning("Got exception %s" % str(e))  
@@ -286,7 +286,7 @@ class DistributedCpuInfoMgrUD(DistributedObjectGlobalUD):
             </table>
             """        
             replyTo.respond(header +body+ help+footer)
-        except Exception, e:
+        except Exception as e:
             replyTo.respondXML(self.securityBanMgrFailureXML % ("Catastrophic failure listing fingerprints %s" % str(e)))
             self.notify.warning("Got exception %s" % str(e))
 

@@ -22,7 +22,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         self.numChairs = 8
         self.dinerStatus = {} # is the dinner dead, hungry,  eating
         self.dinerInfo = {} # keep track how long they stay in hungry and eating states
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             self.dinerStatus[i] = self.INACTIVE
             diffSettings = ToontownGlobals.BossbotBossDifficultySettings[self.boss.battleDifficulty]
             hungryDuration = diffSettings[4]
@@ -74,7 +74,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
         hungryDurations = []
         eatingDurations = []
         dinerLevels = []
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             hungryDurations.append(self.dinerInfo[i][0])
             eatingDurations.append(self.dinerInfo[i][1])
             dinerLevels.append(self.dinerInfo[i][2])
@@ -183,7 +183,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
     def getNotDeadInfo(self):
         """Return a list of (<table index>, <chair Index>, <suit level>) suits that are not dead."""
         notDeadList  = []
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             if self.dinerStatus[i] != self.DEAD:
                 notDeadList.append( (self.index, i, self.dinerInfo[i][2]))
         return notDeadList
@@ -244,7 +244,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
 
     ### FSM States ###
     def enterOn(self):
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             self.b_setDinerStatus(i, self.HUNGRY)
         """Handle entering the on state."""
         pass
@@ -263,7 +263,7 @@ class DistributedBanquetTableAI(DistributedObjectAI.DistributedObjectAI, FSM.FSM
 
     def enterInactive(self):
         """Handle going to the inactive state."""
-        for task in self.transitionTasks.values():
+        for task in list(self.transitionTasks.values()):
             self.removeTask(task)
         self.transitionTasks = {}
 

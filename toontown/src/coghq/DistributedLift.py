@@ -5,7 +5,7 @@ from otp.level import BasicEntities
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
 from direct.fsm import State
-import LiftConstants, MovingPlatform
+from . import LiftConstants, MovingPlatform
 
 class DistributedLift(BasicEntities.DistributedNodePathEntity):
     __module__ = __name__
@@ -85,7 +85,7 @@ class DistributedLift(BasicEntities.DistributedNodePathEntity):
         if len(self.endGuardName):
             self.endGuard = zoneNp.find('**/%s' % self.endGuardName)
         side2srch = {'front': '**/wall_front', 'back': '**/wall_back', 'left': '**/wall_left', 'right': '**/wall_right'}
-        for side in side2srch.values():
+        for side in list(side2srch.values()):
             np = self.platformModel.find(side)
             if not np.isEmpty():
                 np.setScale(1.0, 1.0, 2.0)

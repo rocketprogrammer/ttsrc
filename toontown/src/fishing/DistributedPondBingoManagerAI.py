@@ -295,14 +295,14 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
               success = self.card.cellUpdateCheck(cellId, genus, species)
               if success == BingoGlobals.WIN:
                   self.avId2Fish[avId] = ( None, None )
-                  for id in self.avId2Fish.keys():
+                  for id in list(self.avId2Fish.keys()):
                       if id != avId:
                           self.notify.debug('cardUpdate: avId %s enable Bingo' %(id))
                           self.d_updateGameState(id, cellId)
                           self.d_enableBingo(id)
               elif success == BingoGlobals.UPDATE:
                   self.avId2Fish[avId] = ( None, None )
-                  for id in self.avId2Fish.keys():
+                  for id in list(self.avId2Fish.keys()):
                       if id != avId:
                           self.notify.debug('cardUpdate: avId %s Update only' %(id))
                           self.d_updateGameState(id, cellId)
@@ -344,7 +344,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
         # validate that the user and the ai have matching fish. Otherwise,
         # it could be a hack attempt. Without this check, a hacker could
         # send a boot every time, virtually guaranteeing a win.
-        if self.avId2Fish.has_key(id):
+        if id in self.avId2Fish:
             if self.avId2Fish[id] != (genus, species):
                 self.notify.warning('isUpdateValid: Avatar and AI Fish do not match.')
                 result = 0
@@ -445,7 +445,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
     # Output: Returns success or failure
     ############################################################
     def removeAvFromGame(self, avId):
-        if self.avId2Fish.has_key(avId):
+        if avId in self.avId2Fish:
             self.notify.debug("removeAvFromGame: Removing avId %s from avId2Fish" % (avId))
             del self.avId2Fish[avId]
         else:
@@ -560,7 +560,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
     # Output: None
     ###########################################################
     def setAvCatch(self, avId, catch):
-        if self.avId2Fish.has_key(avId):
+        if avId in self.avId2Fish:
             self.avId2Fish[avId] = catch
 
             # For cheating / testing
@@ -646,7 +646,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
         # however, that seems silly to call this for
         # every game since the spots handle entering and
         # exiting already.
-        avIdList = self.pond.avId2SpotDict.keys()
+        avIdList = list(self.pond.avId2SpotDict.keys())
         if avIdList:
             self.notify.debug('enterIntro: Avatars %s found at Fishing Pond in zone %s' %(avIdList, self.zoneId))
             for id in avIdList:
@@ -711,7 +711,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
                             BingoGlobals.TIMEOUT_SESSION,
                             ['Playing'])
 
-        for id in self.avId2Fish.keys():
+        for id in list(self.avId2Fish.keys()):
             self.d_setCardState(id)
             if self.typeId == BingoGlobals.BLOCKOUT_CARD:
                 self.d_setJackpot(id)
@@ -765,7 +765,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
                             ['GameOver'])
         # Change the client state for each player
         # participating in the game.
-        for id in self.avId2Fish.keys():
+        for id in list(self.avId2Fish.keys()):
             # Reset Fish for each player in the game.
             self.avId2Fish[id] = (None, None)
             self.d_setState(id, 'Playing')
@@ -819,7 +819,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
         self.timeStamp = globalClockDelta.getRealNetworkTime()
         avId = self.air.getAvatarIdFromSender()
         winningIds = []
-        for id in self.avId2Fish.keys():
+        for id in list(self.avId2Fish.keys()):
             if (id is not None):
                 winningIds.append(str(id))
                 av = self.air.doId2do.get(id, None)
@@ -948,7 +948,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
         #self.timeStamp = globalClockDelta.getRealNetworkTime()
         self.timeStamp = self.air.bingoMgr.getIntermissionTime()
 
-        for id in self.avId2Fish.keys():
+        for id in list(self.avId2Fish.keys()):
             self.d_setState(id, 'Intermission')
 
     ################################################################# 
@@ -993,7 +993,7 @@ class DistributedPondBingoManagerAI(DistributedObjectAI.DistributedObjectAI, FSM
         self.notify.debug("enterCloseEvent: Enter CloseEvent State in zone %s" %(self.zoneId))
         self.timeStamp = globalClockDelta.getRealNetworkTime()
 
-        for id in self.avId2Fish.keys():
+        for id in list(self.avId2Fish.keys()):
             self.d_setState(id, 'CloseEvent')
 
         self.__startTimeout(self.uniqueName('CloseEventTimer-%s'%(self.doId)),

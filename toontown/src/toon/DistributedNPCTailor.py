@@ -1,12 +1,12 @@
 from pandac.PandaModules import *
-from DistributedNPCToonBase import *
+from .DistributedNPCToonBase import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-import NPCToons
+from . import NPCToons
 from direct.task.Task import Task
-import TailorClothesGUI
+from . import TailorClothesGUI
 from toontown.toonbase import TTLocalizer
-import ToonDNA
+from . import ToonDNA
 from toontown.estate import ClosetGlobals
 
 class DistributedNPCTailor(DistributedNPCToonBase):
@@ -184,12 +184,12 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                                        self.uniqueName('popupPurchaseGUI'))
                 # print out our clothes and closet information before we start
                 print ("-----------Starting tailor interaction-----------")
-                print "avid: %s, gender: %s" % (self.av.doId, self.av.style.gender)
-                print "current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
+                print("avid: %s, gender: %s" % (self.av.doId, self.av.style.gender))
+                print("current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
                                                                        self.av.style.sleeveTex, self.av.style.sleeveTexColor,
-                                                                       self.av.style.botTex, self.av.style.botTexColor)
-                print "topsList = %s" % self.av.getClothesTopsList()
-                print "bottomsList = %s" % self.av.getClothesBottomsList()
+                                                                       self.av.style.botTex, self.av.style.botTexColor))
+                print("topsList = %s" % self.av.getClothesTopsList())
+                print("bottomsList = %s" % self.av.getClothesBottomsList())
                 print ("-------------------------------------------------")
 
             
@@ -201,12 +201,12 @@ class DistributedNPCTailor(DistributedNPCToonBase):
             if self.av and self.isLocalToon:
                 # print out our clothes and closet information before we start
                 print ("-----------ending tailor interaction-----------")
-                print "avid: %s, gender: %s" % (self.av.doId, self.av.style.gender)
-                print "current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
+                print("avid: %s, gender: %s" % (self.av.doId, self.av.style.gender))
+                print("current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
                                                                        self.av.style.sleeveTex, self.av.style.sleeveTexColor,
-                                                                       self.av.style.botTex, self.av.style.botTexColor)
-                print "topsList = %s" % self.av.getClothesTopsList()
-                print "bottomsList = %s" % self.av.getClothesBottomsList()
+                                                                       self.av.style.botTex, self.av.style.botTexColor))
+                print("topsList = %s" % self.av.getClothesTopsList())
+                print("bottomsList = %s" % self.av.getClothesBottomsList())
                 print ("-------------------------------------------------")
                 
             self.resetTailor()
@@ -319,7 +319,7 @@ class DistributedNPCTailor(DistributedNPCToonBase):
                 which = which | ClosetGlobals.SHIRT
             if self.clothesGUI.bottomChoice != -1:
                 which = which | ClosetGlobals.SHORTS
-            print "setDNA: which = %d, top = %d, bot = %d" % (which, self.clothesGUI.topChoice, self.clothesGUI.bottomChoice)
+            print("setDNA: which = %d, top = %d, bot = %d" % (which, self.clothesGUI.topChoice, self.clothesGUI.bottomChoice))
             # if the closet is full or almost full, confirm that we want to lose the
             # clothes we are wearing
             if self.roomAvailable == 0:

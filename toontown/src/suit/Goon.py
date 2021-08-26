@@ -1,6 +1,6 @@
 from direct.showbase.ShowBaseGlobal import *
 from direct.actor import Actor
-import SuitDNA
+from . import SuitDNA
 from otp.avatar import Avatar
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *

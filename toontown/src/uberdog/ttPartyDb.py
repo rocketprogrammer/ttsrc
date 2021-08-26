@@ -33,7 +33,7 @@ class ttPartyDb:
                                       user=user,
                                       passwd=passwd,
                                       )
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             self.notify.warning("Failed to connect to MySQL db=%s at %s:%d.  ttMaildb DB is disabled."%(db,host,port))
             self.notify.warning("Error detail: %s"%str(e))
             self.sqlAvailable = False
@@ -47,10 +47,10 @@ class ttPartyDb:
             cursor.execute("CREATE DATABASE `%s`"%self.dbname)
             if __debug__:
                 ttPartyDb.notify.info("Database '%s' did not exist, created a new one!"%self.dbname)
-        except _mysql_exceptions.ProgrammingError, e:
+        except _mysql_exceptions.ProgrammingError as e:
             # ttPartyDb.notify.info('%s' % str(e))
             pass
-        except _mysql_exceptions.OperationalError, e:
+        except _mysql_exceptions.OperationalError as e:
             ttPartyDb.notify.info('%s' % str(e))            
             pass
 
@@ -81,7 +81,7 @@ class ttPartyDb:
                 DEFAULT CHARSET=utf8;
                 """)
                 # this ensure that the table values come directly from PartyGlobals.PartyStatus
-                for index in xrange(len(PartyGlobals.PartyStatus)):
+                for index in range(len(PartyGlobals.PartyStatus)):
                     cursor.execute(\
                         "INSERT INTO ttPartyStatus(statusId, description) VALUES (%d, '%s')" %
                     (index, PartyGlobals.PartyStatus.getString(index)))
@@ -127,7 +127,7 @@ class ttPartyDb:
             # TOTAL = 539 bytes
             if __debug__:
                 ttPartyDb.notify.info("Table ttParty did not exist, created a new one!")
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             pass            
 
         try:
@@ -173,7 +173,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getParty retry. Giving up:\n%s" % str(e))
                 return ()
@@ -184,7 +184,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getParty, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getParty(partyId,True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getParty, giving up:\n%s" % str(e))
             return ()
 
@@ -225,7 +225,7 @@ class ttPartyDb:
             cursor.execute(ttSQL.putPartyINSERT,
                            (hostId, startTime, endTime, isPrivate, inviteTheme, activityStr, decorStr, status))
             self.db.commit() 
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("putParty failed with error '%s' on retry. Giving up." % str(e))
                 return False
@@ -236,7 +236,7 @@ class ttPartyDb:
                 self.notify.warning("putParty failed with error '%s'. Retrying." % str(e))
                 self.reconnect()
                 return self.putParty(hostId, startTime, endTime, isPrivate, inviteTheme, activityStr, decorStr, status, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("putParty failed with error '%s'. Giving up." % str(e))
             return False
         else:
@@ -260,7 +260,7 @@ class ttPartyDb:
 
             self.db.commit()
                 
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error in deleteParty retry, giving up:\n%s" % str(e))
                 return
@@ -271,7 +271,7 @@ class ttPartyDb:
                 self.notify.warning("Unnown error in deleteParty, retrying:\n%s" % str(e))
                 self.reconnect()
                 self.deleteParty(partyId,True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in deleteParty, giving up:\n%s" % str(e))
             return            
 
@@ -301,7 +301,7 @@ class ttPartyDb:
             self._setPartyStatusToCanStart(res)
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPartiesAvailableToStart retry, giving up:\n%s" % str(e))
                 return ()
@@ -312,7 +312,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getPartiesAvailableToStart, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getPartiesAvailableToStart(currentTime,True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getPartiesAvailableToStart, giving up:\n%s" % str(e))
             return ()
 
@@ -343,7 +343,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPartiesOfHost retry, giving up:\n%s" % str(e))
                 return ()
@@ -354,7 +354,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getPartiesOfHost, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getPartiesOfHost(hostId, sortedByStartTime, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getPartiesOfHost, giving up:\n%s" % str(e))
             return ()
 
@@ -374,7 +374,7 @@ class ttPartyDb:
             res = cursor.fetchall()
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPartiesOfHostThatCanStart retry, giving up:\n%s" % str(e))
                 return ()
@@ -385,7 +385,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getPartiesOfHostThatCanStart, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getPartiesOfHostThatCanStart(hostId, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getPartiesOfHostThatCanStart, giving up:\n%s" % str(e))
             return ()
 
@@ -406,7 +406,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on changePrivate retry, giving up:\n%s" % str(e))
                 return ()
@@ -417,7 +417,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in changePrivate, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.changePrivate( newPrivateStatus, partyId, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in changePrivate, giving up:\n%s" % str(e))
             return ()                
 
@@ -439,7 +439,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on changePartyStatus retry, giving up:\n%s" % str(e))
                 return ()
@@ -450,7 +450,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in changePartyStatus, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.changePartyStatus( newPartyStatus, partyId, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in changePartyStatus, giving up:\n%s" % str(e))
             return ()
 
@@ -458,7 +458,7 @@ class ttPartyDb:
         """Convert a list of integers to a string sql recognizes."""
         # string version of partyIds is so close to what we need, but it adds the L
         inClause = "("
-        for index in xrange(len(partyIds)):                
+        for index in range(len(partyIds)):                
             inClause += "%d" % partyIds[index]
             if index < len(partyIds) - 1:
                 inClause += ","
@@ -492,7 +492,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in getMultipleParties, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getMultipleParties retry. Giving up:\n%s" % str(e))
                 return ()
@@ -503,7 +503,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getMultipleParties, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getMultipleParties(partyIds,sortByStartTime, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getMultipleParties, giving up:\n%s" % str(e))
             return ()
 
@@ -543,7 +543,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in getPrioritizedParties, returning %s" % str(res))
             return res        
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPrioritizedParties retry. Giving up:\n%s" % str(e))
                 return ()
@@ -554,7 +554,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getPrioritizedParties getCancelledFutureParties, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getPrioritizedParties( partyIds, thresholdTime, limit, future, cancelled, isRetry=True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getPrioritizedParties getCancelledFutureParties, giving up:\n%s" % str(e))
             return ()
         
@@ -591,7 +591,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in getHostPrioritizedParties, returning %s" % str(res))
             return res        
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getHostPrioritizedParties retry. Giving up:\n%s" % str(e))
                 return ()
@@ -602,7 +602,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in getHostPrioritizedParties getCancelledFutureParties, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.getHostPrioritizedParties( hostId, thresholdTime, limit, future, cancelled, isRetry=True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in getHostPrioritizedParties getCancelledFutureParties, giving up:\n%s" % str(e))
             return ()
         
@@ -626,7 +626,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on forceFinishForStarted retry, giving up:\n%s" % str(e))
                 return ()
@@ -637,7 +637,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in forceFinishForStarted, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.forceFinishForStarted( thresholdTime, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in forceFinishForStarted, giving up:\n%s" % str(e))
             return ()
 
@@ -660,7 +660,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on forceNeverStartedForCanStart retry, giving up:\n%s" % str(e))
                 return ()
@@ -671,7 +671,7 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in forceNeverStartedForCanStart, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.forceNeverStartedForCanStart( thresholdTime, True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in forceNeverStartedForCanStart, giving up:\n%s" % str(e))
             return ()
 
@@ -701,7 +701,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError,e:
+        except _mysql_exceptions.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on changeMultiplePartiesStatus retry, giving up:\n%s" % str(e))
                 return ()
@@ -712,6 +712,6 @@ class ttPartyDb:
                 self.notify.warning("Unknown error in changeMultiplePartiesStatus, retrying:\n%s" % str(e))
                 self.reconnect()
                 return self.changeMultiplePartiesStatus( partyIds, newPartyStatus,  True)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Unknown error in changeMultiplePartiesStatus, giving up:\n%s" % str(e))
             return ()

@@ -9,7 +9,7 @@ except NameError:
 
 from direct.showbase.DirectObject import DirectObject
 from direct.showbase import ShowBase
-from RobotToon import *
+from .RobotToon import *
 from toontown.battle.BattleProps import *
 from direct.gui.DirectGui import *
 from direct.gui import DirectGuiGlobals
@@ -17,10 +17,10 @@ from pandac.PandaModules import *
 from toontown.leveleditor.PieMenu import *
 from direct.directtools.DirectSelection import SelectionRay
 from direct.showbase.TkGlobal import *
-from Tkinter import *
-from tkFileDialog import askopenfilename, asksaveasfilename
-from tkSimpleDialog import askstring, askfloat
-from tkMessageBox import showwarning, showinfo
+from tkinter import *
+from tkinter.filedialog import askopenfilename, asksaveasfilename
+from tkinter.simpledialog import askstring, askfloat
+from tkinter.messagebox import showwarning, showinfo
 from direct.tkwidgets.AppShell import *
 from direct.tkwidgets.SceneGraphExplorer import *
 from direct.interval.IntervalGlobal import *
@@ -28,13 +28,13 @@ from toontown.battle.SuitBattleGlobals import SuitAttributes
 from toontown.makeatoon import NameGenerator
 from direct.tkwidgets import Valuator
 from direct.tkwidgets import Slider
-import ToonDNA
+from . import ToonDNA
 from direct.task.Task import Task
 from toontown.suit import SuitDNA
 from toontown.suit import Suit
 from otp.otpbase import OTPLocalizer
 from toontown.toonbase import TTLocalizer
-import __builtin__
+import builtins
 from toontown.hood import SkyUtil
 from direct.distributed.PyDatagram import PyDatagram
 from toontown.pets import PetDNA
@@ -325,19 +325,19 @@ ChatCategories = {
     }
 
 chatDict = OTPLocalizer.SpeedChatStaticText
-chatKeys = chatDict.keys()
+chatKeys = list(chatDict.keys())
 chatKeys.sort()
 
 customChatDict = OTPLocalizer.CustomSCStrings
-customChatKeys = customChatDict.keys()
+customChatKeys = list(customChatDict.keys())
 customChatKeys.sort()
 
 faceoffTaunts = OTPLocalizer.SuitFaceoffTaunts
-faceoffTauntsKeys = faceoffTaunts.keys()
+faceoffTauntsKeys = list(faceoffTaunts.keys())
 faceoffTauntsKeys.sort()
 
 attackTaunts = TTLocalizer.SuitAttackTaunts
-attackTauntsKeys = attackTaunts.keys()
+attackTauntsKeys = list(attackTaunts.keys())
 attackTauntsKeys.sort()
 
 namegen = NameGenerator.NameGenerator()
@@ -531,8 +531,8 @@ if sys.argv[1:]:
     try:
         opts, pargs = getopt.getopt(sys.argv[1:], '')
         hoods = pargs
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
 # If you do not run from the command line, we just load all of them
 # or you can hack this up for your own purposes.
 else:
@@ -554,12 +554,12 @@ hoodIds = {'TT' : 'toontown_central',
 NEIGHBORHOODS = []
 NEIGHBORHOOD_CODES = {}
 for hoodId in hoods:
-    if hoodIds.has_key(hoodId):
+    if hoodId in hoodIds:
         hoodName = hoodIds[hoodId]
         NEIGHBORHOOD_CODES[hoodName] = hoodId
         NEIGHBORHOODS.append(hoodName)
     else:
-        print 'Error: no hood defined for: ', hoodId
+        print('Error: no hood defined for: ', hoodId)
 
 # Load DNA
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "$TTMODELS/src/dna"))
@@ -568,12 +568,12 @@ try:
     if dnaLoaded:
         pass
 except NameError:
-    print "Loading LevelEditor for hoods: ", hoods
+    print("Loading LevelEditor for hoods: ", hoods)
     # DNAStorage instance for storing level DNA info
     # We need to use the __builtin__.foo syntax, not the
     # __builtins__["foo"] syntax, since this file runs at the top
     # level.
-    __builtin__.DNASTORE = DNASTORE = DNAStorage()
+    builtins.DNASTORE = DNASTORE = DNAStorage()
     # Load the generic storage files
     loadDNAFile(DNASTORE, 'phase_4/dna/storage.dna', CSDefault, 1)
     loadDNAFile(DNASTORE, 'phase_5/dna/storage_town.dna', CSDefault, 1)
@@ -606,7 +606,7 @@ except NameError:
         loadDNAFile(DNASTORE, 'phase_8/dna/storage_DL_town.dna', CSDefault, 1)
     if 'PA' in hoods:
         loadDNAFile(DNASTORE, 'phase_13/dna/storage_party_sz.dna', CSDefault, 1)        
-    __builtin__.dnaLoaded = 1
+    builtins.dnaLoaded = 1
 
 class RobotToonManager(DirectObject):
     def __init__(self, toonParent = None):
@@ -615,10 +615,8 @@ class RobotToonManager(DirectObject):
         self.toonParent = toonParent
         self.avatarDict = {}
         self.avatarType = 't'
-        self.toonIds = NPCToons.NPCToonDict.keys()
-        self.namePlusIds = map(
-            lambda id: (TTLocalizer.NPCToonNames.get(id, 'Mystery NPC'), id),
-            self.toonIds)
+        self.toonIds = list(NPCToons.NPCToonDict.keys())
+        self.namePlusIds = [(TTLocalizer.NPCToonNames.get(id, 'Mystery NPC'), id) for id in self.toonIds]
         self.namePlusIds.sort()
         self.numToons = len(self.toonIds)
         self.suitTrack = 'Corporate'
@@ -720,7 +718,7 @@ class RobotToonManager(DirectObject):
         self.suitPointToplevel = self.NPToplevel.attachNewNode('suitPoints')
 
     def addProp(self, propType):
-        print "addProp %s " % propType
+        print("addProp %s " % propType)
         # Record new prop type
         self.setCurrent('prop_texture', propType)
         # And create new prop
@@ -744,7 +742,7 @@ class RobotToonManager(DirectObject):
     def printCameraPosition(self):
         base.localAvatar.printCameraPosition(base.localAvatar.cameraIndex)
     def showHiRes(self, switchIn = 10000):
-        for t in self.avatarDict.values():
+        for t in list(self.avatarDict.values()):
             t.showHiRes(switchIn = switchIn)
     def findToonTop(self):
         if last:
@@ -991,7 +989,7 @@ class RobotToonManager(DirectObject):
         if tcfFilename:
             filename = Filename(tcfFilename)
             f = open(filename.toOsSpecific(), 'wb')
-            for t in self.avatarDict.values():
+            for t in list(self.avatarDict.values()):
                 type = t.style.type
                 if type == 't':
                     style = t.style.asTuple()
@@ -1036,7 +1034,7 @@ class RobotToonManager(DirectObject):
             render2d.hide()
 
     def clearToons(self):
-        for t in self.avatarDict.values():
+        for t in list(self.avatarDict.values()):
             t.nametag.unmanage(self.marginManager)
             t.destroy()
         self.avatarDict = {}
@@ -1045,7 +1043,7 @@ class RobotToonManager(DirectObject):
     def toggleDirectMode(self):
         self.fDirectMode = 1 - self.fDirectMode
         if self.fDirectMode:
-            print 'SWITCH TO DIRECT MODE'
+            print('SWITCH TO DIRECT MODE')
             # Start up direct
             taskMgr.removeTasksMatching('updateSmartCamera*')
             camera.wrtReparentTo(render)
@@ -1054,7 +1052,7 @@ class RobotToonManager(DirectObject):
             direct.selectedNPReadout.setText('DIRECT MODE')
             direct.selectedNPReadout.reparentTo(aspect2d)
         else:
-            print 'SWITCH TO TOONTOWN MODE'
+            print('SWITCH TO TOONTOWN MODE')
             # Return to toontown mode
             if direct:
                 direct.deselectAll()
@@ -1366,35 +1364,31 @@ class RobotToonControlPanel(AppShell):
         self.npToplevel = None
         self.maleTopsList = ToonDNA.getAllTops('m')
         self.maleTopsDict = self.sortVariants(self.maleTopsList)
-        self.maleTopsKeys = self.maleTopsDict.keys()
+        self.maleTopsKeys = list(self.maleTopsDict.keys())
         self.maleTopsKeys.sort()
-        self.maleTopsNames = map(lambda x: ToonTopsDict[x], self.maleTopsKeys)
+        self.maleTopsNames = [ToonTopsDict[x] for x in self.maleTopsKeys]
         self.maleBottomsList = ToonDNA.getAllBottoms('m')
         self.maleBottomsDict = self.sortVariants(self.maleBottomsList)
-        self.maleBottomsKeys = self.maleBottomsDict.keys()
+        self.maleBottomsKeys = list(self.maleBottomsDict.keys())
         self.maleBottomsKeys.sort()
-        self.maleBottomsNames = map(
-            lambda x: BoyBottomsDict[x], self.maleBottomsKeys)
+        self.maleBottomsNames = [BoyBottomsDict[x] for x in self.maleBottomsKeys]
         self.femaleTopsList = ToonDNA.getAllTops('f')
         self.femaleTopsDict = self.sortVariants(self.femaleTopsList)
-        self.femaleTopsKeys = self.femaleTopsDict.keys()
+        self.femaleTopsKeys = list(self.femaleTopsDict.keys())
         self.femaleTopsKeys.sort()
-        self.femaleTopsNames = map(lambda x: ToonTopsDict[x],
-                                   self.femaleTopsKeys)
+        self.femaleTopsNames = [ToonTopsDict[x] for x in self.femaleTopsKeys]
         self.femaleBottomsList = ToonDNA.getAllBottoms('f')
         self.femaleBottomsDict = self.sortVariants(self.femaleBottomsList)
         self.femaleSkirtsList = ToonDNA.getAllBottoms('f','skirts')
         self.femaleSkirtsDict = self.sortVariants(self.femaleSkirtsList)
-        self.femaleSkirtsKeys = self.femaleSkirtsDict.keys()
+        self.femaleSkirtsKeys = list(self.femaleSkirtsDict.keys())
         self.femaleSkirtsKeys.sort()
-        self.femaleSkirtsNames = map(
-            lambda x: GirlBottomsDict[x], self.femaleSkirtsKeys)
+        self.femaleSkirtsNames = [GirlBottomsDict[x] for x in self.femaleSkirtsKeys]
         self.femaleShortsList = ToonDNA.getAllBottoms('f','shorts')
         self.femaleShortsDict = self.sortVariants(self.femaleShortsList)
-        self.femaleShortsKeys = self.femaleShortsDict.keys()
+        self.femaleShortsKeys = list(self.femaleShortsDict.keys())
         self.femaleShortsKeys.sort()
-        self.femaleShortsNames = map(
-            lambda x: GirlBottomsDict[x], self.femaleShortsKeys)
+        self.femaleShortsNames = [GirlBottomsDict[x] for x in self.femaleShortsKeys]
         self.doodleColorButtonList = []
         self.doodleColorScaleButtonList = []
         self.doodleEyeColorButtonList = []
@@ -1560,7 +1554,7 @@ class RobotToonControlPanel(AppShell):
         self.speciesDict = { 'c' : 'Cat', 'd' : 'Dog', 'f' : 'Duck',
                              'h' : 'Horse', 'm' : 'Mouse', 'r' : 'Rabbit',
                              'p' : 'Monkey', 'b' : 'Bear', 's' : 'Swine' }
-        speciesList = self.speciesDict.values()
+        speciesList = list(self.speciesDict.values())
         speciesList.sort()
         self.headDict = {}
         for head in ToonDNA.toonHeadTypes:
@@ -1986,7 +1980,7 @@ class RobotToonControlPanel(AppShell):
         # Associate menu with button and vice versa
         self.props = Menu(self.handPropChoiceButton)
         self.handPropChoiceButton['menu'] = self.props
-        for prop in globalPropPool.propTypes.keys():
+        for prop in list(globalPropPool.propTypes.keys()):
             self.props.add_command(label = prop, command = lambda selectProp = prop: self.useProp(selectProp))
         frame.pack(fill = X, expand = 0)
         
@@ -3184,7 +3178,7 @@ class RobotToonControlPanel(AppShell):
         self.anim.set(anim)
         st = self.rtm.selectedToon
         if st:
-            if (isinstance(st.style, types.ListType) or isinstance(st.style, types.TupleType)):
+            if (isinstance(st.style, list) or isinstance(st.style, tuple)):
                 numFrames = st.getNumFrames(anim)
                 if numFrames is None:
                     numFrames = 100
@@ -3197,7 +3191,7 @@ class RobotToonControlPanel(AppShell):
     def poseDoodle(self, frame):
         st = self.rtm.selectedToon
         if st:
-            if (isinstance(st.style, types.ListType) or isinstance(st.style, types.TupleType)):
+            if (isinstance(st.style, list) or isinstance(st.style, tuple)):
                 st.stop()
                 anim = self.anim.get()
                 if anim is None:
@@ -3253,8 +3247,8 @@ class RobotToonControlPanel(AppShell):
     def loadSpecifiedDNAFile(self):
         path = dnaDirectory.toOsSpecific()
         if not os.path.isdir(path):
-            print 'Robot Toon Manager Warning: Invalid default DNA directory!'
-            print 'Using current directory'
+            print('Robot Toon Manager Warning: Invalid default DNA directory!')
+            print('Using current directory')
             path = '.'
         dnaFilename = askopenfilename(
             defaultextension = '.dna',
@@ -3264,7 +3258,7 @@ class RobotToonControlPanel(AppShell):
             parent = self.component('hull'))
         if dnaFilename:
             self.loadDNAFromFile(dnaFilename)
-        print "Finished Load: ", dnaFilename
+        print("Finished Load: ", dnaFilename)
 
     def loadDNAFromFile(self, filename):
         # Reset level, destroying existing scene/DNA hierarcy
@@ -3376,7 +3370,7 @@ class RobotToonControlPanel(AppShell):
                         relief = None)
         ivalList = []
         for i in range(10,0,-1):
-            ivalList.append(Func(setText, l, `i`))
+            ivalList.append(Func(setText, l, repr(i)))
             ivalList.append(Wait(1.0))
         ivalList.append(Func(l.destroy))
         ivalList.append(Func(self._takeScreenshot))
@@ -3450,13 +3444,13 @@ class RobotToonControlPanel(AppShell):
         self.bar4.updateProgress(values[3])
 
     def setObstacleType(self):
-        print 'CHOOSING OBSTACLE DGG.TYPE:', self.obstacleType.get()
+        print('CHOOSING OBSTACLE DGG.TYPE:', self.obstacleType.get())
 
     def toggleFun(self):
         if self.getVariable('Obstacle', 'Make Fun?').get():
-            print 'THIS IS GOING TO BE FUN!'
+            print('THIS IS GOING TO BE FUN!')
         else:
-            print 'NOT SO FUN'
+            print('NOT SO FUN')
 
     def popupFactoryDialog(self):
         data = askstring('Input Factory Data', 'Factory Data:',
@@ -3466,12 +3460,12 @@ class RobotToonControlPanel(AppShell):
 
     def toggleGridSnap(self):
         if self._fGridSnap.get():
-            print 'Turning on grid!'
+            print('Turning on grid!')
         else:
-            print 'Turning off grid!'
+            print('Turning off grid!')
 
     def setStomperSize(self, size):
-        print 'New Stomper Size:', size       
+        print('New Stomper Size:', size)       
         
 
 

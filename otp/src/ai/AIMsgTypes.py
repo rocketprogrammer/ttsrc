@@ -108,8 +108,8 @@ AIMsgName2Id = {
 AIMsgId2Names = invertDictLossless(AIMsgName2Id)
 
 # put msg names in module scope, assigned to msg value
-for name, value in AIMsgName2Id.items():
-    exec '%s = %s' % (name, value)
+for name, value in list(AIMsgName2Id.items()):
+    exec('%s = %s' % (name, value))
 del name, value
 
 # The ID number of the database server.  The above direct-to-dbserver

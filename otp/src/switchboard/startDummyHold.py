@@ -1,5 +1,5 @@
-from sbNode import sbNode
-from sbWedge import sbWedge
+from .sbNode import sbNode
+from .sbWedge import sbWedge
 import sys
 import socket  
 import select
@@ -11,7 +11,7 @@ import select
 #myWedge.node.enterPlayer(1234)
 
 def log(message):
-    print message
+    print(message)
     sys.stdout.flush()
 
 
@@ -66,7 +66,7 @@ while True:
                 s = s + data
 
 
-    except Exception,e:
+    except Exception as e:
         log("Caught error:")
         log(e)
         try:

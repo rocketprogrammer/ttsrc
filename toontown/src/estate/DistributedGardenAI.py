@@ -1,13 +1,13 @@
 from otp.ai.AIBase import *
 from direct.distributed.ClockDelta import *
 from direct.distributed import DistributedObjectAI
-import DistributedHouseAI
+from . import DistributedHouseAI
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
 import random
-import cPickle
-import HouseGlobals
+import pickle
+from . import HouseGlobals
 
 class DistributedGardenAI(DistributedObjectAI.DistributedObjectAI):
 

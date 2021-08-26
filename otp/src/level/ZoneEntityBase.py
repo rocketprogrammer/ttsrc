@@ -1,4 +1,4 @@
-import Entity, LevelConstants
+from . import Entity, LevelConstants
 
 class ZoneEntityBase(Entity.Entity):
     __module__ = __name__

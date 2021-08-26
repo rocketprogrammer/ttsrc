@@ -4,7 +4,7 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
-import DistributedDoorEntityBase
+from . import DistributedDoorEntityBase
 from direct.fsm import FourState
 from direct.fsm import ClassicFSM
 from otp.level import DistributedEntity
@@ -236,7 +236,7 @@ class DistributedDoorEntity(DistributedDoorEntityBase.DistributedDoorEntityBase,
             del self.initialLock2StateIndex
             door = doorway.find('doortop')
             if door.isEmpty():
-                print 'doortop hack'
+                print('doortop hack')
                 door = doorway.attachNewNode('doortop')
                 doorway.find('doortop1').reparentTo(door)
                 doorway.find('doortop2').reparentTo(door)
@@ -257,7 +257,7 @@ class DistributedDoorEntity(DistributedDoorEntityBase.DistributedDoorEntityBase,
             self.doorLeft.show()
             door = doorway.find('doorbottom')
             if door.isEmpty():
-                print 'doorbottom hack'
+                print('doorbottom hack')
                 door = doorway.attachNewNode('doorbottom')
                 doorway.find('doorbottom1').reparentTo(door)
                 doorway.find('doorbottom2').reparentTo(door)

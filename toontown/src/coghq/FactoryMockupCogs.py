@@ -1,4 +1,4 @@
-from SpecImports import *
+from .SpecImports import *
 
 ### SEE SellbotLegFactoryCogs.py FOR EXAMPLES OF DATA FORMATS
 

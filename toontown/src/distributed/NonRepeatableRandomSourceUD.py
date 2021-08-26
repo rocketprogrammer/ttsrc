@@ -61,7 +61,7 @@ class NonRepeatableRandomSourceUD(DistributedObjectGlobalUD):
                 if self._fakeIt:
                     # if we're in fake-it mode, just generate random numbers locally
                     # (and repeatably)
-                    for i in xrange(numRandoms):
+                    for i in range(numRandoms):
                         request.randoms.append(random.random() * 0xffffffff)
                 else:
                     request.randoms += self._randoms[:numRandoms]

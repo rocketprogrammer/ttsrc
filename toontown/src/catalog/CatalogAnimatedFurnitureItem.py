@@ -1,4 +1,4 @@
-from CatalogFurnitureItem import *
+from .CatalogFurnitureItem import *
 
 # The first 6 CatalogFurnitureItem properties are defined in CatalogFurnitureItem.py
 # They are:

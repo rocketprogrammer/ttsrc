@@ -1,4 +1,4 @@
-import Entity
+from . import Entity
 
 class VisibilityBlocker:
     __module__ = __name__

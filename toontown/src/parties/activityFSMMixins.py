@@ -13,7 +13,7 @@ duplication that would occur otherwise.
 """
 
 # parties imports
-from BaseActivityFSM import BaseActivityFSM
+from .BaseActivityFSM import BaseActivityFSM
 
 #--------------------------------------------------------------------------
 # Idle State

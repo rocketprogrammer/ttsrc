@@ -48,7 +48,7 @@ class PetLookerAI:
             self.exitPetLook()
         if len(self.others):
             PetLookerAI.notify.warning('%s: self.others not empty: %s' %
-                                       (self.doId, self.others.keys()))
+                                       (self.doId, list(self.others.keys())))
             self.others = {}
 
     def _getPetLookerBodyNode(self):
@@ -67,7 +67,7 @@ class PetLookerAI:
             return
         if len(self.others):
             PetLookerAI.notify.warning("%s: len(self.others) != 0: %s" %
-                                       (self.doId, self.others.keys()))
+                                       (self.doId, list(self.others.keys())))
             self.others = {}
 
         self.__active = 1
@@ -85,7 +85,7 @@ class PetLookerAI:
         # if we're still showing as looking at someone, force not looking.
         # this is a hack, we shouldn't have to do this.
         if len(self.others):
-            otherIds = self.others.keys()
+            otherIds = list(self.others.keys())
             PetLookerAI.notify.warning('%s: still in otherIds: %s' % (
                 self.doId, otherIds))
             for otherId in otherIds:
@@ -94,7 +94,7 @@ class PetLookerAI:
             if len(self.others):
                 PetLookerAI.notify.warning(
                     "%s: self.others still not empty: %s" %
-                    (self.doId, self.others.keys()))
+                    (self.doId, list(self.others.keys())))
                 self.others = {}
 
         self._destroyPetLookSphere()

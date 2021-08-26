@@ -1,7 +1,7 @@
 """ShardPage module: contains the ShardPage class"""
 
 from pandac.PandaModules import *
-import ShtikerPage
+from . import ShtikerPage
 from direct.task.Task import Task
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -436,7 +436,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
                 buttonTuple[2]['state'] = DGG.NORMAL
 
         # Now look for shards that are no longer on the list.
-        for shardId, buttonTuple in self.shardButtonMap.items():
+        for shardId, buttonTuple in list(self.shardButtonMap.items()):
             if shardId not in currentMap:
                 # This shard should be removed.
                 buttonTuple[0].destroy()

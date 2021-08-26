@@ -1,12 +1,12 @@
 """DistributedTugOfWarGameAI module: contains the DistributedTugOfWarGameAI class"""
 
-from DistributedMinigameAI import *
+from .DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 import random
 from direct.task.Task import Task
 import copy
-import TugOfWarGameGlobals
+from . import TugOfWarGameGlobals
 import math
 
 class DistributedTugOfWarGameAI(DistributedMinigameAI):
@@ -284,7 +284,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
         f = [0,0]
         # total up all the toon forces on each side
         for i in [0,1]:
-            for x in self.forceDict[i].values():
+            for x in list(self.forceDict[i].values()):
                 f[i] += x
         # since the cog is always on the right side (side=0) add that in
         if self.gameType == TugOfWarGameGlobals.TOON_VS_COG:
@@ -323,7 +323,7 @@ class DistributedTugOfWarGameAI(DistributedMinigameAI):
         if self.howManyReported == self.numPlayers:
             self.howManyReported = 0
             self.calculateOffsets()
-            self.sendUpdate("sendCurrentPosition", [self.offsetDict.keys(), self.offsetDict.values()])
+            self.sendUpdate("sendCurrentPosition", [list(self.offsetDict.keys()), list(self.offsetDict.values())])
             if self.gameType == TugOfWarGameGlobals.TOON_VS_COG:
                 self.sendUpdate("sendSuitPosition", [self.suitOffset])
             

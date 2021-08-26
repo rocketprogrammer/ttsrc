@@ -17,11 +17,11 @@ from direct.showbase import RandomNumGen
 from toontown.toonbase import TTLocalizer
 import random
 import random
-import cPickle
+import pickle
 from direct.showbase import PythonUtil
-import GameSprite
+from . import GameSprite
 from math import pi
-import GardenProgressMeter
+from . import GardenProgressMeter
 
 
 class GardenDropGame(DirectObject.DirectObject):
@@ -76,7 +76,7 @@ class GardenDropGame(DirectObject.DirectObject):
         
         self.queExtent = 3
         
-        print("Grid Dimensions X%s Z%s" % (gX, gZ))
+        print(("Grid Dimensions X%s Z%s" % (gX, gZ)))
         
         self.grid = []
         self.gridDimX= gX
@@ -288,7 +288,7 @@ class GardenDropGame(DirectObject.DirectObject):
         tileDimZ = rangeZ / self.gridDimZ
         tileX = int(framedX / tileDimX)
         tileZ = int(framedZ / tileDimZ)
-        print("find Grid tileX%s tileZ%s" % (tileX, tileZ))
+        print(("find Grid tileX%s tileZ%s" % (tileX, tileZ)))
         
         return tileX, tileZ
         
@@ -300,7 +300,7 @@ class GardenDropGame(DirectObject.DirectObject):
         tileDimZ = rangeZ / self.gridDimZ
         posX = (tileDimX * x) + self.minX
         posZ = (tileDimZ * z) + self.minZ
-        print("find Pos X%s Z%s" % (posX, posZ))
+        print(("find Pos X%s Z%s" % (posX, posZ)))
         return posX, posZ
         
         
@@ -311,7 +311,7 @@ class GardenDropGame(DirectObject.DirectObject):
                 newX, newZ = self.findPos(x,z)
                 sprite.setX(newX)
                 sprite.setZ(newZ)
-                print("Setting Final Pos X%s Z%s" % (newX, newZ))
+                print(("Setting Final Pos X%s Z%s" % (newX, newZ)))
             else:
                 self.placeIntoGrid(sprite, x+1, z-1)
                 #import pdb; pdb.set_trace()
@@ -424,7 +424,7 @@ class GardenDropGame(DirectObject.DirectObject):
             scale = size,
             image_color = (1.0, 1.0, 1.0, 1),
             )
-        colorChoice = random.choice(range(0, 3))
+        colorChoice = random.choice(list(range(0, 3)))
         newSprite = GameSprite.GameSprite(nodeObj, colorChoice, found)
         self.sprites.append(newSprite)
         if found:

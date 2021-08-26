@@ -4,7 +4,7 @@ from toontown.toonbase.ToontownGlobals import *
 
 # call this on the client to print your local toon's avatar ID
 def getLocalAvId():
-    print str(base.localAvatar.doId)
+    print(str(base.localAvatar.doId))
 
 # call startMinigameAI() on the AI server (see MinigameDebugAI.py)
 

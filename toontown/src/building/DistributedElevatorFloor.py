@@ -1,9 +1,9 @@
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from ElevatorConstants import *
-from ElevatorUtils import *
-import DistributedElevatorFSM
+from .ElevatorConstants import *
+from .ElevatorUtils import *
+from . import DistributedElevatorFSM
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
@@ -351,7 +351,7 @@ class DistributedElevatorFloor(DistributedElevatorFSM.DistributedElevatorFSM):
         #makes the toons leave the elevator
         bailFlag = 0
         #print self.boardedAvIds
-        for avId, slot in self.boardedAvIds.items():
+        for avId, slot in list(self.boardedAvIds.items()):
             #print("Kicking toon out! avId %s Slot %s" % (avId, slot))
             self.emptySlot(slot, avId, bailFlag, globalClockDelta.getRealNetworkTime())
             if avId == base.localAvatar.doId:

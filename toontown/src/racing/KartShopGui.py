@@ -25,10 +25,10 @@ from direct.showbase import DirectObject, PythonUtil
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownTimer
-from KartShopGlobals import *
+from .KartShopGlobals import *
 from toontown.racing.Kart import Kart
 from toontown.shtiker.KartPage import KartViewer
-from KartDNA import *
+from .KartDNA import *
 from toontown.toontowngui.TeaserPanel import TeaserPanel
 
 ##########################################################################
@@ -206,7 +206,7 @@ class KartShopGuiMgr( object, DirectObject.DirectObject ):
             model = loader.loadModel( 'phase_6/models/gui/BuyKartPanel' )
             
             #create list of karts not owned by player
-            self.unownedKartList = KartDict.keys()
+            self.unownedKartList = list(KartDict.keys())
             if base.localAvatar.hasKart():
                 k = base.localAvatar.getKartBodyType()
                 if k in self.unownedKartList:
@@ -1505,7 +1505,7 @@ class KartShopGuiMgr( object, DirectObject.DirectObject ):
         del self.timer
 
         # Ignore all events
-        for event in self.dialogEventDict.values():
+        for event in list(self.dialogEventDict.values()):
             self.ignore( event )
 
         self.dialogEventDict = None

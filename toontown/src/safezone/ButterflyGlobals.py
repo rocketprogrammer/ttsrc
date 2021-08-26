@@ -216,19 +216,19 @@ ButterflyPoints = ((
 allocatedIndexes = {}
 
 def generateIndexes(doId, playground):
-    assert((doId != None) and (not allocatedIndexes.has_key(doId)))
+    assert((doId != None) and (doId not in allocatedIndexes))
 
     # Build a list of used and unused index numbers for each area of
     # the indicated playground.
     usedI = []
     unusedI = []
     for area in ButterflyPoints[playground]:
-        usedI.append(range(0, len(area)))
+        usedI.append(list(range(0, len(area))))
         unusedI.append([])
     allocatedIndexes[doId] = (usedI, unusedI)
 
 def clearIndexes(doId):
-    if (allocatedIndexes.has_key(doId)):
+    if (doId in allocatedIndexes):
         del allocatedIndexes[doId]
 
 def getFirstRoute(playground, area, doId):
@@ -241,7 +241,7 @@ def getFirstRoute(playground, area, doId):
 def __getCurrentPos(playground, area, doId):
     """ Return a valid starting point
     """
-    if (allocatedIndexes.has_key(doId)):
+    if (doId in allocatedIndexes):
         unusedI = allocatedIndexes[doId][0][area]
         usedI = allocatedIndexes[doId][1][area]
     else:
@@ -261,7 +261,7 @@ def getNextPos(currentPos, playground, area, doId):
     """ Return a tuple of a Point3, its index, and the time required to
         get there 
     """
-    if (allocatedIndexes.has_key(doId)):
+    if (doId in allocatedIndexes):
         unusedI = allocatedIndexes[doId][0][area]
         usedI = allocatedIndexes[doId][1][area]
     else:
@@ -285,7 +285,7 @@ def getNextPos(currentPos, playground, area, doId):
     return (nextPos, index, time)
 
 def recycleIndex(index, playground, area, doId):
-    if (allocatedIndexes.has_key(doId)):
+    if (doId in allocatedIndexes):
         unusedI = allocatedIndexes[doId][0][area]
         usedI = allocatedIndexes[doId][1][area]
     else:

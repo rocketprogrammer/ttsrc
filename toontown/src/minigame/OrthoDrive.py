@@ -2,7 +2,7 @@
 
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
-import ArrowKeys
+from . import ArrowKeys
 from direct.task.Task import Task
 
 class OrthoDrive:

@@ -19,7 +19,7 @@ class MintRoomBase:
     if __dev__:
 
         def getMintEntityTypeReg(self):
-            import FactoryEntityTypes
+            from . import FactoryEntityTypes
             from otp.level import EntityTypeRegistry
             typeReg = EntityTypeRegistry.EntityTypeRegistry(FactoryEntityTypes)
             return typeReg

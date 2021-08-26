@@ -1,15 +1,15 @@
 from direct.leveleditor.ObjectMgrBase import *
-from LevelEditorGlobals import *
+from .LevelEditorGlobals import *
 
-from SuitPointObj import *
-from GroupObj import *
-from PropObj import *
-from LandmarkObj import *
-from FlatBuildingObj import *
-from AnimBuildingObj import *
-from AnimPropObj import *
-from InteractivePropObj import *
-from StreetObj import *
+from .SuitPointObj import *
+from .GroupObj import *
+from .PropObj import *
+from .LandmarkObj import *
+from .FlatBuildingObj import *
+from .AnimBuildingObj import *
+from .AnimPropObj import *
+from .InteractivePropObj import *
+from .StreetObj import *
 
 class ObjectMgr(ObjectMgrBase):
 
@@ -127,7 +127,7 @@ class ObjectMgr(ObjectMgrBase):
         try:
             nodePath = NodePath(DNASTORE.findPandaNode(dnaNode))
         except:
-            print "Can't find Panda Node", dnaNode, parent
+            print("Can't find Panda Node", dnaNode, parent)
             return parent
 
         if DNAClassEqual(dnaNode, DNA_PROP):
@@ -143,7 +143,7 @@ class ObjectMgr(ObjectMgrBase):
             obj = self.findObjectByNodePath(newParent)
             objDef = obj[OG.OBJ_DEF]
             objProp = obj[OG.OBJ_PROP]
-            for propName in objDef.dnaProperties.keys():
+            for propName in list(objDef.dnaProperties.keys()):
                 propDef = objDef.properties[propName]
                 propDataType = propDef[OG.PROP_DATATYPE]
                 val = getattr(dnaNode, objDef.dnaProperties[propName])()
@@ -167,7 +167,7 @@ class ObjectMgr(ObjectMgrBase):
             name = dnaNode.getName()
             index = name.find(':')
             if index < 0:
-                print 'Wrong flat building DNA', name
+                print('Wrong flat building DNA', name)
 ##                 if dnaNode.getNumChildren() == 0:
 ##                     dnaParent.remove(dnaNode)
             else:

@@ -79,7 +79,7 @@ class TwoDSectionMgr(DirectObject):
         # Creating level blocks        
         # We don't create a section for the start section. It does not have a spawnPoint
         # TODO: We could make it a section, dunno if it'll break.
-        for index in xrange(len(ToonBlitzGlobals.BlockListStart)):
+        for index in range(len(ToonBlitzGlobals.BlockListStart)):
             blockAttribs = ToonBlitzGlobals.BlockListStart[index]
             fileName = ToonBlitzGlobals.BlockTypes[blockAttribs[0]][0]
             blockIndex = int(fileName[-1])

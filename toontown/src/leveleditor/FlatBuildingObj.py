@@ -3,7 +3,7 @@ FlatBuilding object
 """
 
 import random, string
-from ToonTownObj import *
+from .ToonTownObj import *
 
 class FlatBuildingObj(ToonTownObj):
     def __init__(self, editor, buildingType, dna=None, nodePath=None):
@@ -23,7 +23,7 @@ class FlatBuildingObj(ToonTownObj):
 
     def getRandomHeightList(self, buildingHeight):
         # Select a list of wall heights
-        heightLists = self.getList(`buildingHeight` + '_ft_wall_heights')
+        heightLists = self.getList(repr(buildingHeight) + '_ft_wall_heights')
         l = len(heightLists)
         if l > 0:
             # If a list exists for this building height, pick randomly
@@ -82,7 +82,7 @@ class FlatBuildingObj(ToonTownObj):
     def getRandomDictionaryEntry(self, dict):
         numKeys = len(dict)
         if numKeys > 0:
-            keys = dict.keys()
+            keys = list(dict.keys())
             key = keys[random.randint(0, numKeys - 1)]
             return dict[key]
         else:
@@ -130,16 +130,16 @@ class FlatBuildingObj(ToonTownObj):
             buildingType = createHeightCode(heightList)
         else:
             # Use specified height list
-            heightList = map(string.atof, string.split(buildingType, '_'))
+            heightList = list(map(string.atof, string.split(buildingType, '_')))
             height = calcHeight(heightList)
             # Is this a never before seen height list?  If so, record it.
             try:
-                attr = self.getAttribute(`height` + '_ft_wall_heights')
+                attr = self.getAttribute(repr(height) + '_ft_wall_heights')
                 if heightList not in attr.getList():
-                    print 'Adding new height list entry'
+                    print('Adding new height list entry')
                     attr.add(heightList)
             except KeyError:
-                print 'Non standard height building'
+                print('Non standard height building')
 
         # See if this building type corresponds to existing style dict
         try:
@@ -155,7 +155,7 @@ class FlatBuildingObj(ToonTownObj):
             numWalls = len(heightList)
             # Get the building_style attribute dictionary for
             # this number of walls
-            dict = self.getDict(`numWalls` + '_wall_styles')
+            dict = self.getDict(repr(numWalls) + '_wall_styles')
 
         if not dict:
             # Still no dict, create new random style using height list

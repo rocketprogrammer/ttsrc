@@ -422,7 +422,7 @@ class DistributedClubElevator(DistributedElevatorFSM.DistributedElevatorFSM):
         #makes the toons leave the elevator
         bailFlag = 0
         #print self.boardedAvIds
-        for avId, slot in self.boardedAvIds.items():
+        for avId, slot in list(self.boardedAvIds.items()):
             #print("Kicking toon out! avId %s Slot %s" % (avId, slot))
             self.emptySlot(slot, avId, bailFlag, globalClockDelta.getRealNetworkTime())
             if avId == base.localAvatar.doId:
@@ -519,12 +519,12 @@ class DistributedClubElevator(DistributedElevatorFSM.DistributedElevatorFSM):
             # be taken.
             pass
 
-        elif not self.cr.doId2do.has_key(avId):
+        elif avId not in self.cr.doId2do:
             # It's someone who hasn't been generated yet.
             func = PythonUtil.Functor(
                 self.gotToon, index, avId)
                                       
-            assert not self.toonRequests.has_key(index)
+            assert index not in self.toonRequests
             self.toonRequests[index] = self.cr.relatedObjectMgr.requestObjects(
                 [avId], allCallback = func)
 
@@ -657,7 +657,7 @@ class DistributedClubElevator(DistributedElevatorFSM.DistributedElevatorFSM):
             self.deferredSlots = newSlots
 
         else:
-            if self.cr.doId2do.has_key(avId):
+            if avId in self.cr.doId2do:
                 # See if we need to reset the clock
                 # (countdown assumes we've created a clockNode already)
                 if (bailFlag == 1 and hasattr(self, 'clockNode')):
@@ -777,5 +777,5 @@ class DistributedClubElevator(DistributedElevatorFSM.DistributedElevatorFSM):
             keyList.append(key)
             
         for key in keyList:
-            if self.__toonTracks.has_key(key):
+            if key in self.__toonTracks:
                 self.clearToonTrack(key)

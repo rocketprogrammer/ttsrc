@@ -9,7 +9,7 @@ from toontown.catalog import CatalogItem
 from toontown.catalog import CatalogItemTypes
 from toontown.catalog import CatalogClothingItem
 from toontown.toonbase import ToontownGlobals
-import ToonDNA
+from . import ToonDNA
 
 class DistributedToonUD(DistributedObjectUD):
     

@@ -5,8 +5,8 @@ over an infinite period of time
 
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
-import HolidayBaseAI
-import ToontownMagicWordManagerAI
+from . import HolidayBaseAI
+from . import ToontownMagicWordManagerAI
 
 scaleFactor = 12
 restartWaitTime = 60
@@ -36,7 +36,7 @@ class HolidayRepeaterAI(HolidayBaseAI.HolidayBaseAI):
             taskMgr.doMethodLater(aiInitTime, self.startLoop, "WaitForAir")
             self.aiInitialized = 1
             
-        for holiday in self.testHolidays.keys():
+        for holiday in list(self.testHolidays.keys()):
             # Set the holiday state to show that it has not yet begun
             if self.air.holidayManager.isHolidayRunning(holiday):
                 self.air.holidayManager.endHoliday(holiday, True)
@@ -71,7 +71,7 @@ class HolidayRepeaterAI(HolidayBaseAI.HolidayBaseAI):
             self.air.holidayManager.forcePhase(holiday, curState)
         if nextStepIn == -1:
             count = 0
-            for holiday in self.testHolidayStates.keys():
+            for holiday in list(self.testHolidayStates.keys()):
                 if self.testHolidayStates[holiday] == -1:
                     count = count+1
             if count == len(self.testHolidays):
@@ -85,7 +85,7 @@ class HolidayRepeaterAI(HolidayBaseAI.HolidayBaseAI):
         """
         End all the Test  holidays
         """
-        for holiday in self.testHolidays.keys():
+        for holiday in list(self.testHolidays.keys()):
             if taskMgr.hasTaskNamed("testHoliday_" + str(holiday)):
                 taskMgr.remove("testHoliday_" + str(holiday))
             self.air.holidayManager.endHoliday(holiday, True)

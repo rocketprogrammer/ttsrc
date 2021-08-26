@@ -1,4 +1,4 @@
-import CatalogFurnitureItem, CatalogChatItem, CatalogClothingItem, CatalogEmoteItem, CatalogWallpaperItem, CatalogFlooringItem, CatalogWainscotingItem, CatalogMouldingItem, CatalogWindowItem, CatalogPoleItem, CatalogPetTrickItem, CatalogInvalidItem
+from . import CatalogFurnitureItem, CatalogChatItem, CatalogClothingItem, CatalogEmoteItem, CatalogWallpaperItem, CatalogFlooringItem, CatalogWainscotingItem, CatalogMouldingItem, CatalogWindowItem, CatalogPoleItem, CatalogPetTrickItem, CatalogInvalidItem
 INVALID_ITEM = 0
 FURNITURE_ITEM = 1
 CHAT_ITEM = 2

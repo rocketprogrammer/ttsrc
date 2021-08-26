@@ -201,7 +201,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
             )
 
     def makeNPCFriendButton(self, NPCFriendId, numCalls):
-        if (not TTLocalizer.NPCToonNames.has_key(NPCFriendId)):
+        if (NPCFriendId not in TTLocalizer.NPCToonNames):
             return None
 
         friendName = TTLocalizer.NPCToonNames[NPCFriendId]
@@ -324,7 +324,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
 
         
         # Remove old buttons
-        for friendPair in self.friends.keys():
+        for friendPair in list(self.friends.keys()):
             if friendPair not in newFriends:
                 friendButton = self.friends[friendPair]
                 self.scrollList.removeItem(friendButton)
@@ -334,7 +334,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
 
         # Add buttons for new friends
         for friendPair in newFriends:
-            if not self.friends.has_key(friendPair):
+            if friendPair not in self.friends:
                 friendButton = self.makeFriendButton(friendPair)
                 if friendButton:
                     self.scrollList.addItem(friendButton)
@@ -349,7 +349,7 @@ class TownBattleSOSPanel(DirectFrame, StateData.StateData):
         
         # Determine if any should be disabled because their
         # attacks won't work (e.g. all the cogs are already lured)
-        for friend, count in base.localAvatar.NPCFriendsDict.items():
+        for friend, count in list(base.localAvatar.NPCFriendsDict.items()):
             track = NPCToons.getNPCTrack(friend)
             if ((track == ToontownBattleGlobals.LURE_TRACK and
                  self.canLure == 0) or 

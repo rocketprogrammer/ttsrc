@@ -9,8 +9,7 @@ class VisGroupsUI(wx.Dialog):
         self.editor = editor
         self.visGroups = visGroups
 
-        self.visGroupNames = map(lambda pair: pair[1].getName(),
-                                 self.visGroups)        
+        self.visGroupNames = [pair[1].getName() for pair in self.visGroups]        
 
         # Initialize dictionary of visibility relationships
         self.visDict = {}
@@ -64,7 +63,7 @@ class VisGroupsUI(wx.Dialog):
 
     def selectVisGroup(self, evt):
         target = evt.GetString()
-        print 'Setting vis options for group:', target
+        print('Setting vis options for group:', target)
         # Record current target
         oldTarget = self.target
         # Record new target
@@ -96,7 +95,7 @@ class VisGroupsUI(wx.Dialog):
             # MRM: Add change in visibility here
             # Show all vs. show active
             if state == 1:
-                print 'Vis Group:', self.target, 'adding group:', groupName
+                print('Vis Group:', self.target, 'adding group:', groupName)
                 if groupName not in visList:
                     visList.append(groupName)
                     if hasattr(targetNP, 'addVisible'):
@@ -107,7 +106,7 @@ class VisGroupsUI(wx.Dialog):
                     groupNP.show()
                     groupNP.setColor(1, 0, 0, 1)
             else:
-                print 'Vis Group:', self.target, 'removing group:', groupName
+                print('Vis Group:', self.target, 'removing group:', groupName)
                 if groupName in visList:
                     visList.remove(groupName)
                     if hasattr(targetNP, 'removeVisible'):
@@ -123,7 +122,7 @@ class VisGroupsUI(wx.Dialog):
         # Get current visibility list for target
         targetInfo = self.visDict[self.target]
         visList = targetInfo[2]
-        for key in self.visDict.keys():
+        for key in list(self.visDict.keys()):
             groupNP = self.visDict[key][0]
             if key in visList:
                 groupNP.show()
@@ -145,7 +144,7 @@ class VisGroupsUI(wx.Dialog):
         # Get current visibility list for target
         targetInfo = self.visDict[self.target]
         visList = targetInfo[2]
-        for key in self.visDict.keys():
+        for key in list(self.visDict.keys()):
             groupNP = self.visDict[key][0]        
             groupNP.show()
             groupNP.clearColor()

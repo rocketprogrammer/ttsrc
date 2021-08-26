@@ -273,7 +273,7 @@ class ToonControlManager(ControlManager):
             # down one level to find the vis groups as an optimization
             groupNode = self.editor.NPToplevel.find("**/" + groupFullName)
             if groupNode.isEmpty():
-                print "Could not find visgroup"
+                print("Could not find visgroup")
             self.nodeList.append(groupNode)
             for j in range(DNASTORE.getNumVisiblesInDNAVisGroup(i)):
                 visName = DNASTORE.getVisibleName(i, j)

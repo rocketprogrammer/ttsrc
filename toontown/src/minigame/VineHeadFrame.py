@@ -16,7 +16,7 @@ class VineHeadFrame(DirectFrame):
                 'pos':(0,0,0),
                 }
         opts.update(kwargs)
-        apply(DirectFrame.__init__,(self,)+args,opts)
+        DirectFrame.__init__(*(self,)+args, **opts)
         self.initialiseoptions(VineHeadFrame)
 
         if (av):

@@ -29,7 +29,7 @@ class Room(NodePath):
         if dbg:
             self.showAxes()
             self.ls()
-            print self.getPos(render)
+            print(self.getPos(render))
 
     def __del__(self):
         self.unload()

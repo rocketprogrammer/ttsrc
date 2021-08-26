@@ -1,7 +1,7 @@
 """UserFunnel.py: Contains functions to report data back to hitbox and our own data collection servers""" 
 
 import os, sys, socket, random
-from urllib import quote_plus
+from urllib.parse import quote_plus
 
 from pandac.PandaModules import HTTPClient
 from pandac.PandaModules import HTTPCookie
@@ -392,7 +392,7 @@ class UserFunnel:
                     self.pandaHTTPClientVarWSS = [domain, loc, variable, value]
                     self.setTheHTTPCookie(self.pandaHTTPClientVarWSS)
         except IndexError:
-            print "UserFunnel(Warning): Cookie Data file bad"
+            print("UserFunnel(Warning): Cookie Data file bad")
 
         del thedata
 
@@ -611,7 +611,7 @@ class HitBoxCookie:
         try:
             sdir = os.listdir(self.ieCookieDir)
         except WindowsError:
-            print 'Dir does not exist, do nothing'
+            print('Dir does not exist, do nothing')
             return
             
         while sdir:
@@ -676,7 +676,7 @@ class HitBoxCookie:
                 # We've located the entry we need to modify
                 # print 'DM Found'
                 iecData.pop(x)
-                print 'Removed it from the list'
+                print('Removed it from the list')
                 break
             x += 1
         # Now we need to write the list back out to file.
@@ -830,7 +830,7 @@ class HitBoxCookie:
 
 def convertHitBoxIEtoPython():
     if (sys.platform != 'win32'):
-        print "Cookie Converter: Warning: System is not MS-Windows. I have not been setup to work with other systems yet. Sorry " + sys.platform + " user. The game client will create a cookie."
+        print("Cookie Converter: Warning: System is not MS-Windows. I have not been setup to work with other systems yet. Sorry " + sys.platform + " user. The game client will create a cookie.")
         return
     if __dev__:
         return
@@ -849,7 +849,7 @@ def convertHitBoxIEtoPython():
 
 def convertHitBoxPythontoIE():
     if (sys.platform != 'win32'):
-        print "System is not MS-Windows. I have not been setup to work with other systems yet. Sorry " + sys.platform + " user."
+        print("System is not MS-Windows. I have not been setup to work with other systems yet. Sorry " + sys.platform + " user.")
         return
 
     # Next, if the cookiefile already exists, then we don't have to convert it from IE to python.
@@ -864,7 +864,7 @@ def convertHitBoxPythontoIE():
 
 def getreg(regVar):
     if (sys.platform != 'win32'):
-        print "System is not MS-Windows. I haven't been setup yet to work with systems other than MS-Win using MS-Internet Explorer Cookies"
+        print("System is not MS-Windows. I haven't been setup yet to work with systems other than MS-Win using MS-Internet Explorer Cookies")
         return ''
     # Site to scan for cookie from
 
@@ -884,7 +884,7 @@ def getreg(regVar):
             wholeCookie = temp
             break
     if (wholeCookie == None):
-        print "Cookie not found for site name: " + siteName
+        print("Cookie not found for site name: " + siteName)
         return ''
     CompleteCookiePath = cookiedir + '\\' + wholeCookie
     cf = open(CompleteCookiePath, 'r')
@@ -958,7 +958,7 @@ def getMAC(staticMAC = [None]):
                 
 
     if (sys.platform != 'darwin' and sys.platform != 'win32'):
-        print "System is not running OSX or MS-Windows."
+        print("System is not running OSX or MS-Windows.")
         return '-2'
 
    else:
@@ -1047,7 +1047,7 @@ def reportMemoryLeaks():
     try:
         baseURL = patcherVer()[0].split('/lo')[0]
     except IndexError:
-        print 'Base URL not available for leak submit'
+        print('Base URL not available for leak submit')
         return
     basePort = 80
     if baseURL.count(':') == 2:

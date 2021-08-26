@@ -386,7 +386,7 @@ class Playground(Place.Place):
 
         from toontown.classicchars import CCharPaths
 
-        for name, pointDef in paths.items():
+        for name, pointDef in list(paths.items()):
             self.showDebugPointText(name, pointDef[0])
 
             # Also draw the connecting lines.
@@ -544,7 +544,7 @@ class Playground(Place.Place):
         else:
             # Some return code that is not handled
             self.notify.error("Unknown done status for DownloadForceAcknowledge: "
-                              + `doneStatus`)
+                              + repr(doneStatus))
         
     # door state inherited from Place.py
         
@@ -585,7 +585,7 @@ class Playground(Place.Place):
         else:
             # Some return code that is not handled
             self.notify.error("Unknown done status for HealthForceAcknowledge: "
-                              + `doneStatus`)
+                              + repr(doneStatus))
 
     # hfa reject state
 
@@ -631,7 +631,7 @@ class Playground(Place.Place):
         else:
             # Some return code that is not handled
             self.notify.error("Unknown done status for NPCForceAcknowledge: "
-                              + `doneStatus`)
+                              + repr(doneStatus))
 
     # npca reject state
 

@@ -1,11 +1,11 @@
 from otp.ai.AIBase import *
 from direct.distributed.ClockDelta import *
-from BattleBase import *
-from BattleCalculatorAI import *
+from .BattleBase import *
+from .BattleCalculatorAI import *
 from toontown.toonbase.ToontownBattleGlobals import *
-from SuitBattleGlobals import *
+from .SuitBattleGlobals import *
 from direct.showbase.PythonUtil import addListsByValue
-import DistributedBattleBaseAI
+from . import DistributedBattleBaseAI
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
 import random
@@ -73,7 +73,7 @@ class DistributedBattleBldgAI(DistributedBattleBaseAI.DistributedBattleBaseAI):
             self.notify.warning('faceOffDone() - toon: %d not in toon list' % \
                 toonId)
             return
-        assert(self.responses.has_key(toonId))
+        assert(toonId in self.responses)
         self.responses[toonId] += 1
         self.notify.debug('toon: %d done facing off' % toonId)
         if not self.ignoreFaceOffDone:

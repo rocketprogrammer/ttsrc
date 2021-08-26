@@ -6,10 +6,10 @@ to be game specific.
 """
 
 from direct.leveleditor.LevelEditorBase import *
-from ObjectHandler import *
-from ObjectPalette import *
-from LevelEditorUI import *
-from ProtoPalette import *
+from .ObjectHandler import *
+from .ObjectPalette import *
+from .LevelEditorUI import *
+from .ProtoPalette import *
 
 class LevelEditor(LevelEditorBase):
     """ Class for Panda3D LevelEditor """ 

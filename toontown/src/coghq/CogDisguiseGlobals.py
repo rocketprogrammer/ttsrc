@@ -115,6 +115,6 @@ def asNumber(bitstring):
 
 
 def dept2deptIndex(dept):
-    if type(dept) == bytes:
+    if type(dept) == types.StringType:
         dept = SuitDNA.suitDepts.index(dept)
     return dept

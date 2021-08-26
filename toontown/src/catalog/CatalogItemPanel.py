@@ -2,12 +2,12 @@ from direct.gui.DirectGui import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
-from . import CatalogItemTypes, CatalogItem
-from .CatalogWallpaperItem import getAllWallpapers
-from .CatalogFlooringItem import getAllFloorings
-from .CatalogMouldingItem import getAllMouldings
-from .CatalogWainscotingItem import getAllWainscotings
-from .CatalogFurnitureItem import getAllFurnitures
+import CatalogItemTypes, CatalogItem
+from CatalogWallpaperItem import getAllWallpapers
+from CatalogFlooringItem import getAllFloorings
+from CatalogMouldingItem import getAllMouldings
+from CatalogWainscotingItem import getAllWainscotings
+from CatalogFurnitureItem import getAllFurnitures
 CATALOG_PANEL_WORDWRAP = 8
 
 class CatalogItemPanel(DirectFrame):

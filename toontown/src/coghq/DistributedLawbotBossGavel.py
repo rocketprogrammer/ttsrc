@@ -65,7 +65,7 @@ class DistributedLawbotBossGavel(DistributedObject.DistributedObject, FSM.FSM):
 
 
         
-        assert(self.index not in self.boss.gavels)
+        assert(not self.boss.gavels.has_key(self.index))
         self.boss.gavels[self.index] = self
 
     def delete(self):

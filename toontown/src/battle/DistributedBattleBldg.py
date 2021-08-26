@@ -1,18 +1,18 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-from .BattleBase import *
+from BattleBase import *
 
 from direct.actor import Actor
 from toontown.suit import SuitDNA
 from direct.directnotify import DirectNotifyGlobal
-from . import DistributedBattleBase
+import DistributedBattleBase
 from toontown.toon import TTEmote
 from otp.avatar import Emote
 from toontown.toonbase import TTLocalizer
-from . import MovieUtil
+import MovieUtil
 from direct.fsm import State
 from toontown.suit import Suit
-from . import SuitBattleGlobals
+import SuitBattleGlobals
 import random
 from toontown.toonbase import ToontownGlobals
 

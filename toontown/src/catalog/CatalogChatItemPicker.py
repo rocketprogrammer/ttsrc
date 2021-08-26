@@ -1,6 +1,6 @@
 from direct.gui.DirectGui import *
 from direct.showbase import DirectObject
-from . import CatalogItem
+import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from otp.otpbase import OTPLocalizer

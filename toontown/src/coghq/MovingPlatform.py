@@ -17,7 +17,7 @@ class MovingPlatform(DirectObject.DirectObject, NodePath):
     def setupCopyModel(self, parentToken, model, floorNodeName=None, parentingNode=None):
         if floorNodeName is None:
             floorNodeName = 'floor'
-        if type(parentToken) == int:
+        if type(parentToken) == types.IntType:
             parentToken = ToontownGlobals.SPDynamic + parentToken
         self.parentToken = parentToken
         self.name = 'MovingPlatform-%s' % parentToken

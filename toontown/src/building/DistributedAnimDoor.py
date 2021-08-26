@@ -32,7 +32,7 @@ class DistributedAnimDoor(DistributedDoor.DistributedDoor):
         """Return only a nodepath to our parent building.
         See also getAnimBuilding.
         """
-        if ('building' not in self.__dict__):
+        if (not self.__dict__.has_key('building')):
             if self.doorType == DoorTypes.EXT_ANIM_STANDARD:
                 searchStr = "**/??"+str(self.block)+":animated_building_*_DNARoot;+s"
                 self.notify.debug("searchStr=%s" % searchStr)
@@ -86,7 +86,7 @@ class DistributedAnimDoor(DistributedDoor.DistributedDoor):
     def getAnimBuilding(self):
         """Return a handle on the animated building prop."""
         # Once we find it, we store it, so we don't have to find it again.
-        if ('animBuilding' not in self.__dict__):            
+        if (not self.__dict__.has_key('animBuilding')):            
             if self.doorType == DoorTypes.EXT_ANIM_STANDARD:
                 #self.building = self.cr.playGame.hood.loader.geom.find(
                 #        "**/??"+str(self.block)+":animated_building_*_DNARoot;+s")

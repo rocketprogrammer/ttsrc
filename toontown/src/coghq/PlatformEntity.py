@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities
-from . import MovingPlatform
+import MovingPlatform
 
 class PlatformEntity(BasicEntities.NodePathEntity):
     __module__ = __name__

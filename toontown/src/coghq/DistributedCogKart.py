@@ -253,12 +253,12 @@ class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
             # be taken.
             pass
 
-        elif avId not in self.cr.doId2do:
+        elif not self.cr.doId2do.has_key(avId):
             # It's someone who hasn't been generated yet.
             func = PythonUtil.Functor(
                 self.gotToon, index, avId)
                                       
-            assert index not in self.toonRequests
+            assert not self.toonRequests.has_key(index)
             self.toonRequests[index] = self.cr.relatedObjectMgr.requestObjects(
                 [avId], allCallback = func)
 
@@ -434,7 +434,7 @@ class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
             self.deferredSlots = newSlots
 
         else:
-            if avId in self.cr.doId2do:
+            if self.cr.doId2do.has_key(avId):
                 # See if we need to reset the clock
                 # (countdown assumes we've created a clockNode already)
                 if (bailFlag == 1 and hasattr(self, 'clockNode')):
@@ -544,7 +544,7 @@ class DistributedCogKart(DistributedElevatorExt.DistributedElevatorExt):
         # This should only be sent to us if our localToon requested
         # permission to board the elevator.
         # reason 0: unknown, 1: shuffle, 2: too low laff, 3: no seat, 4: need promotion        
-        print(("rejectBoard %s" % (reason)))
+        print("rejectBoard %s" % (reason))
         if hasattr(base.localAvatar, "elevatorNotifier"):
             if reason == ElevatorConstants.REJECT_SHUFFLE:
                 base.localAvatar.elevatorNotifier.showMe(TTLocalizer.ElevatorHoppedOff)

@@ -1,4 +1,4 @@
-from . import PlatformEntity
+import PlatformEntity
 
 class PaintMixer(PlatformEntity.PlatformEntity):
     __module__ = __name__

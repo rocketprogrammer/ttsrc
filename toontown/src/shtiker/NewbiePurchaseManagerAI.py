@@ -1,4 +1,4 @@
-from . import PurchaseManagerAI
+import PurchaseManagerAI
 
 class NewbiePurchaseManagerAI(PurchaseManagerAI.PurchaseManagerAI):
 

@@ -1,10 +1,10 @@
 
-from .DistributedMinigameAI import *
+from DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
-from . import PhotoGameGlobals
+import PhotoGameGlobals
 from toontown.minigame import PhotoGameBase
 import random
 

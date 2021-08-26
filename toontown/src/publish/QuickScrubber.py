@@ -222,10 +222,10 @@ VALIDATE_DOWNLOAD=%s
 
 try:
     opts, pargs = getopt.getopt(sys.argv[1:], 'hRf:p:m:')
-except Exception as e:
+except Exception, e:
     # User passed in a bad option, print the error and the help, then exit
-    print(e)
-    print(helpString)
+    print e
+    print helpString
     sys.exit(1)
 
 platform = 'WIN32'
@@ -235,7 +235,7 @@ if os.name != 'nt':
 for opt in opts:
     flag, value = opt
     if (flag == '-h'):
-        print(helpString)
+        print helpString
         sys.exit(1)
     elif (flag == '-R'):
         cdmode = 1
@@ -246,11 +246,11 @@ for opt in opts:
     elif (flag == '-m'):
         mode = value
     else:
-        print('illegal option: ' + flag)
+        print 'illegal option: ' + flag
         sys.exit(1)
 
 if (not (len(pargs) == 3)):
-    print('Must specify a command, an installDirectory, and a persistDirectory')
+    print 'Must specify a command, an installDirectory, and a persistDirectory'
     sys.exit(1)
 else:
     command = pargs[0]
@@ -299,14 +299,14 @@ class Scrubber:
             self.doCopyCommand()
 
         else:
-            print("Invalid command: %s" % (command))
+            print "Invalid command: %s" % (command)
             sys.exit(1)
 
     def doCopyCommand(self):
         # First, open the existing download database (in two files).
         if not self.persistServerDbFilename.exists() or \
            not self.persistClientDbFilename.exists():
-            print("server.ddb or client.ddb not found.")
+            print "server.ddb or client.ddb not found."
             sys.exit(1)
 
         self.dldb = DownloadDb(self.persistServerDbFilename, self.persistClientDbFilename)
@@ -400,7 +400,7 @@ class Scrubber:
         progressFilename.unlink()
         progressFile = open(progressFilename.toOsSpecific(), "w")
 
-        items = list(self.progressMap.items())
+        items = self.progressMap.items()
 
         # Sort it into alphabetical order by filename, for no good reason.
         items.sort()
@@ -418,7 +418,7 @@ class Scrubber:
 
             self.currentMfname = Filename(self.lineList[1])
             self.currentMfphase = eval(self.lineList[2])
-            self.notify.info('doCDPatch: scanning multifile: ' + self.currentMfname.cStr() + ' phase: ' + repr(self.currentMfphase))
+            self.notify.info('doCDPatch: scanning multifile: ' + self.currentMfname.cStr() + ' phase: ' + `self.currentMfphase`)
 
             # copy in the webmode multifile instead of generating a new one
             baseName = self.currentMfname.getBasenameWoExtension()
@@ -572,8 +572,8 @@ class Scrubber:
 
             else:
                 # error
-                raise Exception('Unknown directive: ' + repr(self.lineList[0])
-                                      + ' on line: ' + repr(self.lineNum+1))
+                raise StandardError, ('Unknown directive: ' + `self.lineList[0]`
+                                      + ' on line: ' + `self.lineNum+1`)
             self.lineList = self.getNextLine()
 
         # All done, close the final multifile
@@ -644,7 +644,7 @@ class Scrubber:
             self.notify.error("Unable to open multifile %s for writing." % (sourceFilename.cStr()))
         self.currentMfphase = eval(self.lineList[2])
         self.notify.info('parseMfile: creating multifile: ' + self.currentMfname.cStr()
-                          + ' phase: ' + repr(self.currentMfphase))
+                          + ' phase: ' + `self.currentMfphase`)
         mfsize = 0 # This will be filled in later
         mfstatus = DownloadDb.StatusIncomplete
         self.dldb.serverAddMultifile(self.currentMfname.getFullpath(),
@@ -674,7 +674,7 @@ class Scrubber:
 
     def fileVer(self, filename, version):
         # Return the name of the versioned file
-        return Filename(filename.cStr() + '.v' + repr(version))
+        return Filename(filename.cStr() + '.v' + `version`)
 
     def compFile(self, filename):
         # Return the name of the compressed file
@@ -936,7 +936,7 @@ class Scrubber:
 
             # Now sign the file.
             command = 'otp-sign1 -n %s' % (sourceFilename)
-            print(command)
+            print command
             exitStatus = os.system(command)
             if exitStatus != 0:
                 raise 'Command failed: %s' % (command)
@@ -1113,9 +1113,9 @@ class Scrubber:
             potentialTotal = totalPatchesSize + patchSize
             if (potentialTotal > actualFileSize):
                 self.notify.debug('parseFile: Truncating patch list at version: '
-                                  + repr(version) + '\n'
-                                  + '    total would have been: ' + repr(potentialTotal) + '\n'
-                                  + '    but entire file is only: ' + repr(actualFileSize))
+                                  + `version` + '\n'
+                                  + '    total would have been: ' + `potentialTotal` + '\n'
+                                  + '    but entire file is only: ' + `actualFileSize`)
                 compPatchFilename.unlink()
                 try:
                     del self.progressMap[compPatchFilename.getBasenameWoExtension()]
@@ -1134,7 +1134,7 @@ class Scrubber:
 
         # Remove any versions that we do not need anymore
         for version in range(lastVersion+1, highVer+1):
-            self.notify.debug('parseFile: Removing obsolete version: ' + repr(version))
+            self.notify.debug('parseFile: Removing obsolete version: ' + `version`)
             patchFilename = self.patchVer(persistFilename, version)
             patchFilename.unlink()
             try:
@@ -1157,7 +1157,7 @@ class Scrubber:
         # temporary filename, and returns the temporary filename.
         tempFilename = Filename.temporary('', 'Scrub_')
         command = 'bunzip2 <"%s" >"%s"' % (filename.toOsSpecific(), tempFilename.toOsSpecific())
-        print(command)
+        print command
         exitStatus = os.system(command)
         if exitStatus != 0:
             raise 'Command failed: %s' % (command)
@@ -1236,7 +1236,7 @@ class Scrubber:
         else:
             command = 'pzip -o "%s" "%s"' % (destFilename.toOsSpecific(),
                                              sourceFilename.toOsSpecific())
-        print(command)
+        print command
         exitStatus = os.system(command)
         if exitStatus != 0:
             raise 'Command failed: %s' % (command)
@@ -1254,7 +1254,7 @@ class Scrubber:
         actualFileSize = fileSize
         if actualFileSize == None:
             actualFileSize = contentFilename.getFileSize()
-        self.notify.info('actualFileSize = ' + repr(actualFileSize))
+        self.notify.info('actualFileSize = ' + `actualFileSize`)
         # Keep a running total of the patch sizes so we do not exceed the
         # size of the actual file
         totalPatchesSize = 0
@@ -1283,9 +1283,9 @@ class Scrubber:
             potentialTotal = totalPatchesSize + patchSize
             if (version > 15 or potentialTotal > actualFileSize):
                 self.notify.debug('wiseScrubber: Truncating patch list at version: '
-                                  + repr(version) + '\n'
-                                  + '    total would have been: ' + repr(potentialTotal) + '\n'
-                                  + '    but entire file is only: ' + repr(actualFileSize))
+                                  + `version` + '\n'
+                                  + '    total would have been: ' + `potentialTotal` + '\n'
+                                  + '    but entire file is only: ' + `actualFileSize`)
                 copyPatchFilename.unlink()
                 try:
                     del self.progressMap[copyPatchFilename.getBasenameWoExtension()]
@@ -1304,7 +1304,7 @@ class Scrubber:
 
         # Remove any versions that we do not need anymore
         for version in range(lastVersion+1, highVer+1):
-            self.notify.debug('wiseScrubber: Removing obsolete version: ' + repr(version))
+            self.notify.debug('wiseScrubber: Removing obsolete version: ' + `version`)
             patchFilename = self.patchVer(persistFilename, version)
             patchFilename.unlink()
             try:

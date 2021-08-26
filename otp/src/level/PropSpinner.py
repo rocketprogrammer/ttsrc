@@ -1,5 +1,5 @@
 from direct.interval.IntervalGlobal import *
-from . import Entity
+import Entity
 
 class PropSpinner(Entity.Entity):
     __module__ = __name__
@@ -27,7 +27,7 @@ class PropSpinner(Entity.Entity):
             try:
                 rate = int(nameParts[3])
             except:
-                print('invalid prop rotate string: %s' % name)
+                print 'invalid prop rotate string: %s' % name
 
             if neg:
                 rate = -rate
@@ -39,7 +39,7 @@ class PropSpinner(Entity.Entity):
             elif axis == 'Z':
                 hpr = Vec3(0, 0, rate * 360)
             else:
-                print('error', axis)
+                print 'error', axis
             spinTracks.append(LerpHprInterval(prop, 60, hpr))
 
         spinTracks.loop()

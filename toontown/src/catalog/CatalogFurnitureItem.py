@@ -22,7 +22,7 @@ woodColors = [
   0.933, 0.773, 0.569, 1.0), (0.9333, 0.6785, 0.055, 1.0), (0.545, 0.451, 0.333, 1.0), (0.541, 0.0, 0.0, 1.0), (0.5451, 0.2706, 0.0745, 1.0), (0.5451, 0.4118, 0.4118, 1.0)]
 BankToMoney = {1300: 1000, 1310: 2500, 1320: 5000, 1330: 7500, 1340: 10000}
 MoneyToBank = {}
-for (bankId, maxMoney) in list(BankToMoney.items()):
+for (bankId, maxMoney) in BankToMoney.items():
     MoneyToBank[maxMoney] = bankId
 
 MaxBankId = 1340
@@ -164,7 +164,7 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
         self.applyColor(model, type[FTColor])
         if type[FTColorOptions] != None:
             if self.colorOption == None:
-                option = random.choice(list(type[FTColorOptions].values()))
+                option = random.choice(type[FTColorOptions].values())
             else:
                 option = type[FTColorOptions].get(self.colorOption)
             self.applyColor(model, option)
@@ -211,7 +211,7 @@ def nextAvailableBank(avatar, duplicateItems):
 
 def getAllBanks():
     list = []
-    for bankId in list(BankToMoney.keys()):
+    for bankId in BankToMoney.keys():
         list.append(CatalogFurnitureItem(bankId))
 
     return list

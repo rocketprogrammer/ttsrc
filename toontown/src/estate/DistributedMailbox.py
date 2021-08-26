@@ -1,6 +1,6 @@
 from direct.distributed import DistributedObject
 from toontown.toonbase import ToontownGlobals
-from . import MailboxGlobals
+import MailboxGlobals
 from toontown.catalog import CatalogItem
 from toontown.catalog import CatalogItemList
 from toontown.toontowngui import TTDialog

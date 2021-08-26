@@ -1,5 +1,5 @@
 from direct.directnotify import DirectNotifyGlobal
-from . import HoodDataAI, ZoneUtil
+import HoodDataAI, ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.safezone import OZTreasurePlannerAI
 from toontown.racing import DistributedStartingBlockAI

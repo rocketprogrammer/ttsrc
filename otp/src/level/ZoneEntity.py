@@ -1,4 +1,4 @@
-from . import ZoneEntityBase, BasicEntities
+import ZoneEntityBase, BasicEntities
 
 class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
     __module__ = __name__
@@ -24,7 +24,7 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
         return self.nodePath
 
     def getVisibleZoneNums(self):
-        return list(self.visibleZoneNums.keys())
+        return self.visibleZoneNums.keys()
 
     def incrementRefCounts(self, zoneNumList):
         for zoneNum in zoneNumList:

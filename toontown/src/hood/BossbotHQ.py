@@ -1,5 +1,5 @@
 
-from . import CogHood
+import CogHood
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import BossbotCogHQLoader
 from toontown.hood import ZoneUtil

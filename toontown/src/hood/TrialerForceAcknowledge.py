@@ -1,6 +1,6 @@
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
-from . import ZoneUtil
+import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 from toontown.toontowngui import TeaserPanel
 

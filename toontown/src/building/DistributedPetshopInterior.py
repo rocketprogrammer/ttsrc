@@ -6,7 +6,7 @@ import random
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.actor import Actor
-from . import ToonInteriorColors
+import ToonInteriorColors
 from toontown.hood import ZoneUtil
 
 

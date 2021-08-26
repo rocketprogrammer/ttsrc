@@ -15,7 +15,7 @@ from toontown.hood import Place
 from toontown.hood import SkyUtil
 from toontown.pets import PetTutorial
 from direct.controls.GravityWalker import GravityWalker
-from . import HouseGlobals
+import HouseGlobals
 
 class Estate(Place.Place):
     notify = DirectNotifyGlobal.directNotify.newCategory("Estate")

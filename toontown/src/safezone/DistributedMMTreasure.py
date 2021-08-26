@@ -1,4 +1,4 @@
-from . import DistributedSZTreasure
+import DistributedSZTreasure
 
 class DistributedMMTreasure(DistributedSZTreasure.DistributedSZTreasure):
     def __init__(self, cr):

@@ -6,7 +6,7 @@ from direct.task import Task
 from toontown.minigame import CannonGameGlobals
 from direct.distributed import DistributedObjectAI
 from toontown.minigame import Trajectory
-from . import CannonGlobals
+import CannonGlobals
 
 class DistributedCannonAI(DistributedObjectAI.DistributedObjectAI):
 

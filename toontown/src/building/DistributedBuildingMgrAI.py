@@ -7,12 +7,12 @@
 
 import os
 from direct.task.Task import Task
-import pickle
+import cPickle
 from otp.ai.AIBaseGlobal import *
-from . import DistributedBuildingAI
-from . import HQBuildingAI
-from . import GagshopBuildingAI
-from . import PetshopBuildingAI
+import DistributedBuildingAI
+import HQBuildingAI
+import GagshopBuildingAI
+import PetshopBuildingAI
 from toontown.building.KartShopBuildingAI import KartShopBuildingAI
 from toontown.building import DistributedAnimBuildingAI
 #import DistributedDoorAI
@@ -81,14 +81,14 @@ class DistributedBuildingMgrAI:
     def cleanup(self):
         taskMgr.remove(str(self.branchID)+'_delayed_save-timer')
 
-        for building in list(self.__buildings.values()):
+        for building in self.__buildings.values():
             building.cleanup()
         self.__buildings = {}
         
     def isValidBlockNumber(self, blockNumber):
         """return true if that block refers to a real block"""
         assert(self.debugPrint("isValidBlockNumber(blockNumber="+str(blockNumber)+")"))
-        return blockNumber in self.__buildings
+        return self.__buildings.has_key(blockNumber)
 
     def delayedSaveTask(self, task):
         assert(self.debugPrint("delayedSaveTask()"))
@@ -99,13 +99,13 @@ class DistributedBuildingMgrAI:
     def isSuitBlock(self, blockNumber):
         """return true if that block is a suit block/building"""
         assert(self.debugPrint("isSuitBlock(blockNumber="+str(blockNumber)+")"))
-        assert(blockNumber in self.__buildings)
+        assert(self.__buildings.has_key(blockNumber))
         return self.__buildings[blockNumber].isSuitBlock()
 
     def getSuitBlocks(self):
         assert(self.debugPrint("getSuitBlocks()"))
         blocks=[]
-        for i in list(self.__buildings.values()):
+        for i in self.__buildings.values():
             if i.isSuitBlock():
                 blocks.append(i.getBlock()[0])
         return blocks
@@ -113,7 +113,7 @@ class DistributedBuildingMgrAI:
     def getEstablishedSuitBlocks(self):
         assert(self.debugPrint("getEstablishedSuitBlocks()"))
         blocks=[]
-        for i in list(self.__buildings.values()):
+        for i in self.__buildings.values():
             if i.isEstablishedSuitBlock():
                 blocks.append(i.getBlock()[0])
         return blocks
@@ -121,7 +121,7 @@ class DistributedBuildingMgrAI:
     def getToonBlocks(self):
         assert(self.debugPrint("getToonBlocks()"))
         blocks=[]
-        for i in list(self.__buildings.values()):
+        for i in self.__buildings.values():
             if isinstance(i, HQBuildingAI.HQBuildingAI):
                 continue
             if not i.isSuitBlock():
@@ -129,14 +129,14 @@ class DistributedBuildingMgrAI:
         return blocks
 
     def getBuildings(self):
-        return list(self.__buildings.values())
+        return self.__buildings.values()
 
     def getFrontDoorPoint(self, blockNumber):
         """get any associated path point for the specified building,
            useful for suits to know where to go when exiting from a
            building"""
         assert(self.debugPrint("getFrontDoorPoint(blockNumber="+str(blockNumber)+")"))
-        assert(blockNumber in self.__buildings)
+        assert(self.__buildings.has_key(blockNumber))
         return self.__buildings[blockNumber].getFrontDoorPoint()
 
     def getBuildingTrack(self, blockNumber):
@@ -144,12 +144,12 @@ class DistributedBuildingMgrAI:
            useful for suits to know where to go when exiting from a
            building"""
         assert(self.debugPrint("getBuildingTrack(blockNumber="+str(blockNumber)+")"))
-        assert(blockNumber in self.__buildings)
+        assert(self.__buildings.has_key(blockNumber))
         return self.__buildings[blockNumber].track
 
     def getBuilding( self, blockNumber ):
         assert(self.debugPrint("getBuilding(%s)" %(str(blockNumber),)))
-        assert(blockNumber in self.__buildings)
+        assert(self.__buildings.has_key(blockNumber))
         return self.__buildings[blockNumber]
         
     def setFrontDoorPoint(self, blockNumber, point):
@@ -158,7 +158,7 @@ class DistributedBuildingMgrAI:
            building"""
         assert(self.debugPrint("setFrontDoorPoint(blockNumber="+str(blockNumber)
                 +", point="+str(point)+")"))
-        assert(blockNumber in self.__buildings)
+        assert(self.__buildings.has_key(blockNumber))
         return self.__buildings[blockNumber].setFrontDoorPoint(point)
     
     def getDNABlockLists(self):
@@ -203,7 +203,7 @@ class DistributedBuildingMgrAI:
         """Create a new building and keep track of it."""
         assert(self.debugPrint("newBuilding(blockNumber="+str(blockNumber)
                 +", blockData="+str(blockData)+")"))
-        assert(blockNumber not in self.__buildings)
+        assert(not self.__buildings.has_key(blockNumber))
 
         building=DistributedBuildingAI.DistributedBuildingAI(
             self.air, blockNumber, self.branchID, self.trophyMgr)
@@ -238,7 +238,7 @@ class DistributedBuildingMgrAI:
         """Create a new building and keep track of it."""
         assert(self.debugPrint("newBuilding(blockNumber="+str(blockNumber)
                 +", blockData="+str(blockData)+")"))
-        assert(blockNumber not in self.__buildings)
+        assert(not self.__buildings.has_key(blockNumber))
 
         building=DistributedAnimBuildingAI.DistributedAnimBuildingAI(
                 self.air, blockNumber, self.branchID, self.trophyMgr)
@@ -267,7 +267,7 @@ class DistributedBuildingMgrAI:
 
     def newHQBuilding(self, blockNumber):
         """Create a new HQ building and keep track of it."""
-        assert(blockNumber not in self.__buildings)
+        assert(not self.__buildings.has_key(blockNumber))
         dnaStore = self.air.dnaStoreMap[self.canonicalBranchID]
         exteriorZoneId = dnaStore.getZoneFromBlockNumber(blockNumber)
         exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchID)
@@ -281,7 +281,7 @@ class DistributedBuildingMgrAI:
     def newGagshopBuilding(self, blockNumber):
         """Create a new Gagshop building and keep track of it."""
         assert(self.debugPrint("newGagshopBuilding(blockNumber="+str(blockNumber)+")"))
-        assert(blockNumber not in self.__buildings)
+        assert(not self.__buildings.has_key(blockNumber))
         dnaStore = self.air.dnaStoreMap[self.canonicalBranchID]
         exteriorZoneId = dnaStore.getZoneFromBlockNumber(blockNumber)
         exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchID)
@@ -293,7 +293,7 @@ class DistributedBuildingMgrAI:
     def newPetshopBuilding(self, blockNumber):
         """Create a new Petshop building and keep track of it."""
         assert(self.debugPrint("newPetshopBuilding(blockNumber="+str(blockNumber)+")"))
-        assert(blockNumber not in self.__buildings)
+        assert(not self.__buildings.has_key(blockNumber))
         dnaStore = self.air.dnaStoreMap[self.canonicalBranchID]
         exteriorZoneId = dnaStore.getZoneFromBlockNumber(blockNumber)
         exteriorZoneId = ZoneUtil.getTrueZoneId(exteriorZoneId, self.branchID)
@@ -311,7 +311,7 @@ class DistributedBuildingMgrAI:
         Return: None
         """
         assert( self.debugPrint( "newKartShopBuilding(blockNumber=" + str( blockNumber ) + ")" ) )
-        assert( blockNumber not in self.__buildings )
+        assert( not self.__buildings.has_key( blockNumber ) )
 
         dnaStore = self.air.dnaStoreMap[ self.canonicalBranchID ]
 
@@ -337,15 +337,15 @@ class DistributedBuildingMgrAI:
         if block:
             # Save just this one block to the file:
             pickleData=block.getPickleData()
-            pickle.dump(pickleData, file)
+            cPickle.dump(pickleData, file)
         else:
             # Save them all:
-            for i in list(self.__buildings.values()):
+            for i in self.__buildings.values():
                 # HQs do not need to be saved
                 if isinstance(i, HQBuildingAI.HQBuildingAI):
                     continue
                 pickleData=i.getPickleData()
-                pickle.dump(pickleData, file)
+                cPickle.dump(pickleData, file)
     
     def fastSave(self, block):
         """Save data to default location"""
@@ -398,7 +398,7 @@ class DistributedBuildingMgrAI:
         blocks={}
         try:
             while 1:
-                pickleData=pickle.load(file)
+                pickleData=cPickle.load(file)
                 blocks[int(pickleData['block'])]=pickleData
         except EOFError:
             pass

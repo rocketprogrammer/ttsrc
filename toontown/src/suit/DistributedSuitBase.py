@@ -3,14 +3,14 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.directtools.DirectGeometry import CLAMP
 from otp.avatar import DistributedAvatar
-from . import Suit
+import Suit
 from toontown.toonbase import ToontownGlobals
 from toontown.battle import DistributedBattle
 from direct.fsm import ClassicFSM
 from direct.fsm import State
-from . import SuitTimings, SuitBase, DistributedSuitPlanner, SuitDNA
+import SuitTimings, SuitBase, DistributedSuitPlanner, SuitDNA
 from direct.directnotify import DirectNotifyGlobal
-from . import SuitDialog
+import SuitDialog
 from toontown.battle import BattleProps
 import math, copy
 

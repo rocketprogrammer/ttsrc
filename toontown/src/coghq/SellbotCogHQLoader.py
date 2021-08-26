@@ -1,13 +1,13 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
-from . import CogHQLoader
+import CogHQLoader
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *
 from direct.gui import DirectGui
 from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
 from direct.fsm import State
-from . import FactoryExterior, FactoryInterior, SellbotHQExterior, SellbotHQBossBattle
+import FactoryExterior, FactoryInterior, SellbotHQExterior, SellbotHQBossBattle
 aspectSF = 0.7227
 
 class SellbotCogHQLoader(CogHQLoader.CogHQLoader):

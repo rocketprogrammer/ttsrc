@@ -225,7 +225,7 @@ class TTChatInputWhiteList(ChatInputWhiteListFrame):
         friend avatarId and then send it.
         """
         online = 0
-        if avatarId in base.cr.doId2do:
+        if base.cr.doId2do.has_key(avatarId):
             # The avatar is online, and in fact, nearby.
             online = 1
             

@@ -1,4 +1,4 @@
-from . import PlayingCardDeck
+import PlayingCardDeck
 
 EasiestGameDuration = 120
 HardestGameDuration = 90

@@ -9,7 +9,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import AppRunnerGlobal
 from pandac.PandaModules import *
 from direct.showbase import DirectObject
-from . import BlinkingArrows
+import BlinkingArrows
 from toontown.toon import ToonHeadFrame
 from toontown.char import CharDNA
 from toontown.suit import SuitDNA
@@ -247,7 +247,7 @@ def readFile(filename):
 def getLineOfTokens(gen):
     tokens = []
     nextNeg = 0
-    token = next(gen)
+    token = gen.next()
     # The end of the file is special
     if token[0] == tokenize.ENDMARKER:
         return None
@@ -275,7 +275,7 @@ def getLineOfTokens(gen):
             tokens.append(token[1])
         else:
             notify.warning("Ignored token type: %s on line: %s" % (tokenize.tok_name[token[0]], token[2][0]))
-        token = next(gen)
+        token = gen.next()
     return tokens
 
 def parseId(line):
@@ -289,7 +289,7 @@ def parseId(line):
         lineDict[curId] = []
 
 def questDefined(scriptId):
-    return scriptId in lineDict
+    return lineDict.has_key(scriptId)
                     
 
 class NPCMoviePlayer(DirectObject.DirectObject):
@@ -320,9 +320,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
 
     # Look for this var first in the private dict, then in the global dict
     def getVar(self, varName):
-        if varName in self.privateVarDict:
+        if self.privateVarDict.has_key(varName):
             return self.privateVarDict[varName]
-        elif varName in globalVarDict:
+        elif globalVarDict.has_key(varName):
             return globalVarDict[varName]
         elif (varName.find('tomDialogue') > -1) or (varName.find('harryDialogue') > -1):
             notify.warning("%s getting referenced. Tutorial Ack: %d  \
@@ -332,9 +332,9 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             notify.error("Variable not defined: %s" % (varName))
 
     def delVar(self, varName):
-        if varName in self.privateVarDict:
+        if self.privateVarDict.has_key(varName):
             del self.privateVarDict[varName]
-        elif varName in globalVarDict:
+        elif globalVarDict.has_key(varName):
             del globalVarDict[varName]
         else:
             notify.warning("Variable not defined: %s" % (varName))
@@ -349,7 +349,7 @@ class NPCMoviePlayer(DirectObject.DirectObject):
             self.currentTrack = None
         self.ignoreAll()
         taskMgr.remove(self.uniqueId)
-        for toonHeadFrame in list(self.toonHeads.values()):
+        for toonHeadFrame in self.toonHeads.values():
             toonHeadFrame.destroy()
         while self.chars:
             self.__unloadChar(self.chars[0])

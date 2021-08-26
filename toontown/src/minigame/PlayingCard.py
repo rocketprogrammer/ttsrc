@@ -4,7 +4,7 @@ from direct.task import Task
 
 from toontown.toonbase import TTLocalizer
 
-from . import PlayingCardGlobals
+import PlayingCardGlobals
 
 class PlayingCardBase:
     """

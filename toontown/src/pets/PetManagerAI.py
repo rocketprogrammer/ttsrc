@@ -244,7 +244,7 @@ class PetManagerAI(DirectObject.DirectObject):
     def __doGenerateAfterDelete(self, task):
         # if a pet has been deleted, generate it in the new zone
         assert len(self._petsToGenerateAfterDeletion) > 0
-        petIds = list(self._petsToGenerateAfterDeletion.keys())
+        petIds = self._petsToGenerateAfterDeletion.keys()
         for petId in petIds:
             if petId not in simbase.air.doId2do:
                 zoneId = self._petsToGenerateAfterDeletion[petId]

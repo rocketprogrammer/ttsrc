@@ -1,13 +1,13 @@
 from direct.interval.IntervalGlobal import *
-from .BattleBase import *
-from .BattleProps import *
-from .BattleSounds import *
+from BattleBase import *
+from BattleProps import *
+from BattleSounds import *
 
-from . import MovieCamera
+import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
-from . import MovieUtil
-from . import MovieNPCSOS
-from .MovieUtil import calcAvgSuitPos
+import MovieUtil
+import MovieNPCSOS
+from MovieUtil import calcAvgSuitPos
 from direct.showutil import Effects
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieDrop')
@@ -80,7 +80,7 @@ def doDrops(drops):
         targets = drop['target']
         if (len(targets) == 1):
             suitId = targets[0]['suit'].doId
-            if (suitId in suitDropsDict):
+            if (suitDropsDict.has_key(suitId)):
                 suitDropsDict[suitId].append((drop, targets[0]))
             else:
                 suitDropsDict[suitId] = [(drop, targets[0])]
@@ -91,7 +91,7 @@ def doDrops(drops):
             # targets
             for target in targets:
                 suitId = target['suit'].doId
-                if (suitId in suitDropsDict):
+                if (suitDropsDict.has_key(suitId)):
                     otherDrops = suitDropsDict[suitId]
                     alreadyInList = 0
                     for oDrop in otherDrops:
@@ -101,7 +101,7 @@ def doDrops(drops):
                         suitDropsDict[suitId].append((drop, target))
                 else:
                     suitDropsDict[suitId] = [(drop, target)]
-    suitDrops = list(suitDropsDict.values())
+    suitDrops = suitDropsDict.values()
 
     # Sort the suits based on the number of drops per suit
     def compFunc(a, b):
@@ -324,9 +324,9 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased,
     toon = drop['toon']
     repeatNPC = 0
     battle = drop['battle']
-    if ('npc' in drop):
+    if (drop.has_key('npc')):
         toon = drop['npc']
-        if (toon in npcDrops):
+        if (npcDrops.has_key(toon)):
             repeatNPC = 1
         else:
             npcDrops[toon] = 1
@@ -575,7 +575,7 @@ def __dropObject(drop, delay, objName, level, alreadyDodged, alreadyTeased,
 def __createSuitTrack(drop, delay,level, alreadyDodged, alreadyTeased,
                       target, npcs):
     toon = drop['toon']
-    if ('npc' in drop):
+    if (drop.has_key('npc')):
         toon = drop['npc']
     battle = drop['battle']
     

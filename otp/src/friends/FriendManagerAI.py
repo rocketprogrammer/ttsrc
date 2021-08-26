@@ -133,7 +133,7 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
             invite = FriendManagerAI.invites[context]
         except:
             self.air.writeServerEvent('suspicious', avId, 'FriendManagerAI.inviteeFriendConsidering unknown context')
-            FriendManagerAI.notify.warning('Message for unknown context ' + repr(context))
+            FriendManagerAI.notify.warning('Message for unknown context ' + `context`)
             return
 
         if response == 1:
@@ -156,7 +156,7 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
             invite = FriendManagerAI.invites[context]
         except:
             self.air.writeServerEvent('suspicious', avId, 'FriendManagerAI.inviteeFriendResponse unknown context')
-            FriendManagerAI.notify.warning('Message for unknown context ' + repr(context))
+            FriendManagerAI.notify.warning('Message for unknown context ' + `context`)
             return
 
         if yesNoMaybe == 1:
@@ -340,7 +340,7 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         # If the invitee is presently being invited by someone else,
         # we don't even have to bother him.
-        if inviteeId in FriendManagerAI.invitees:
+        if FriendManagerAI.invitees.has_key(inviteeId):
             self.inviteeUnavailable(invite, 0)
             return
 
@@ -351,7 +351,7 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         # If the inviter is already involved in some other context,
         # that one is now void.
-        if inviterId in FriendManagerAI.inviters:
+        if FriendManagerAI.inviters.has_key(inviterId):
             self.cancelInvite(FriendManagerAI.inviters[inviterId])
 
         FriendManagerAI.inviters[inviterId] = invite
@@ -417,7 +417,7 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
             # Disallow this guy from asking again for the next ten
             # minutes or so.
 
-            if invite.inviteeId not in self.declineFriends1:
+            if not self.declineFriends1.has_key(invite.inviteeId):
                 self.declineFriends1[invite.inviteeId] = {}
             self.declineFriends1[invite.inviteeId][invite.inviterId] = yesNoMaybe
 
@@ -476,7 +476,7 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
         try:
             invite = FriendManagerAI.invites[context]
         except:
-            FriendManagerAI.notify.warning('Message for unknown context ' + repr(context))
+            FriendManagerAI.notify.warning('Message for unknown context ' + `context`)
             return
 
         if result:
@@ -556,12 +556,12 @@ class FriendManagerAI(DistributedObjectAI.DistributedObjectAI):
         # Now, is the invitee/inviter combination present in either
         # map?
         previous = None
-        if inviteeId in self.declineFriends1:
+        if self.declineFriends1.has_key(inviteeId):
             previous = self.declineFriends1[inviteeId].get(inviterId)
             if previous != None:
                 return previous
 
-        if inviteeId in self.declineFriends2:
+        if self.declineFriends2.has_key(inviteeId):
             previous = self.declineFriends2[inviteeId].get(inviterId)
             if previous != None:
                 return previous

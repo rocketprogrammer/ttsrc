@@ -107,14 +107,14 @@ class ToontownWebLauncher(WebLauncherBase):
                 dict[name] = int(value)
 
         self.secretNeedsParentPasswordKey = 1                
-        if 'secretsNeedsParentPassword' in dict:
+        if dict.has_key('secretsNeedsParentPassword'):
             self.secretNeedsParentPasswordKey = 1 and dict['secretsNeedsParentPassword']
         else:
             self.notify.warning('no secretNeedsParentPassword token in webAcctParams')
         self.notify.info('secretNeedsParentPassword = %d' % self.secretNeedsParentPasswordKey)
 
         self.chatEligibleKey = 0
-        if 'chatEligible' in dict:
+        if dict.has_key('chatEligible'):
             self.chatEligibleKey = 1 and dict['chatEligible']
         else:
             self.notify.warning('no chatEligible token in webAcctParams')

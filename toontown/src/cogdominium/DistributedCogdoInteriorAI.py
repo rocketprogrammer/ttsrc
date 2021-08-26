@@ -203,7 +203,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
 
     def __addToon(self, toonId):
         assert(self.notify.debug('addToon(%d)' % toonId))
-        if (toonId not in self.air.doId2do):
+        if (not self.air.doId2do.has_key(toonId)):
             self.notify.warning('addToon() - no toon for doId: %d' % toonId)
             return
 
@@ -213,7 +213,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
         self.accept(event, self.__handleUnexpectedExit, extraArgs=[toonId])
 
         self.toons.append(toonId)
-        assert(toonId not in self.responses)
+        assert(not self.responses.has_key(toonId))
         self.responses[toonId] = 0
 
     def __removeToon(self, toonId):
@@ -225,7 +225,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
         if self.toonIds.count(toonId):
             self.toonIds[self.toonIds.index(toonId)] = None
 
-        if toonId in self.responses:
+        if self.responses.has_key(toonId):
             del self.responses[toonId]
 
         # Ignore future exit events for the toon
@@ -242,7 +242,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
 
     def __allToonsResponded(self):
         for toon in self.toons:
-            assert(toon in self.responses)
+            assert(self.responses.has_key(toon))
             if (self.responses[toon] == 0):
                 return 0
         self.ignoreResponses = 1
@@ -334,7 +334,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
         if avatar != None:
             self.savedByMap[avId] = (avatar.getName(), avatar.dna.asTuple())
         
-        assert(avId in self.responses)
+        assert(self.responses.has_key(avId))
         self.responses[avId] += 1
         assert(self.notify.debug('toon: %d in suit interior' % avId))
         if (self.__allToonsResponded()):
@@ -360,7 +360,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
             assert(self.notify.debug('toons: %s toonIds: %s' % \
                         (self.toons, self.toonIds)))
             return
-        assert(toonId in self.responses)
+        assert(self.responses.has_key(toonId))
         self.responses[toonId] += 1
         assert(self.notify.debug('toon: %d done with elevator' % toonId))
         if (self.__allToonsResponded() and
@@ -387,7 +387,7 @@ class DistributedCogdoInteriorAI(DistributedObjectAI.DistributedObjectAI):
             assert(self.notify.debug('toons: %s toonIds: %s' % \
                         (self.toons, self.toonIds)))
             return
-        assert(toonId in self.responses)
+        assert(self.responses.has_key(toonId))
         self.responses[toonId] += 1
         assert(self.notify.debug('toon: %d done with joining reserves' % \
                                 toonId))

@@ -1,6 +1,6 @@
 from direct.interval.IntervalGlobal import *
 
-from . import MovieCamera
+import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
 from pandac.PandaModules import *

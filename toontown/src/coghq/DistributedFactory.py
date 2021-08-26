@@ -5,7 +5,7 @@ from direct.interval.IntervalGlobal import *
 import random
 from otp.level import DistributedLevel
 from direct.directnotify import DirectNotifyGlobal
-from . import FactoryBase, FactoryEntityCreator, FactorySpecs
+import FactoryBase, FactoryEntityCreator, FactorySpecs
 from otp.level import LevelSpec
 from otp.level import LevelConstants
 from toontown.toonbase import TTLocalizer
@@ -82,7 +82,7 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         firstSetZoneDoneEvent = self.cr.getNextSetZoneDoneEvent()
 
         def handleFirstSetZoneDone():
-            print('handleFirstSetZoneDone')
+            print 'handleFirstSetZoneDone'
             base.factoryReady = 1
             messenger.send('FactoryReady')
 
@@ -95,7 +95,7 @@ class DistributedFactory(DistributedLevel.DistributedLevel, FactoryBase.FactoryB
         def printPos(self=self):
             pos = base.localAvatar.getPos(self.getZoneNode(self.lastToonZone))
             h = base.localAvatar.getH(self.getZoneNode(self.lastToonZone))
-            print('factory pos: %s, h: %s, zone %s' % (repr(pos), h, self.lastToonZone))
+            print 'factory pos: %s, h: %s, zone %s' % (repr(pos), h, self.lastToonZone)
             posStr = 'X: %.3f' % pos[0] + '\nY: %.3f' % pos[1] + '\nZ: %.3f' % pos[2] + '\nH: %.3f' % h + '\nZone: %s' % str(self.lastToonZone)
             base.localAvatar.setChat(posStr, CFThought)
 

@@ -3,7 +3,7 @@ from pandac.PandaModules import VBase3
 
 from toontown.toonbase.ToonBaseGlobal import *
 
-from . import MazeData
+import MazeData
 
 # world space:
 #

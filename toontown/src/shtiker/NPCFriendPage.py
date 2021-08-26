@@ -1,4 +1,4 @@
-from . import ShtikerPage
+import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toon import NPCFriendPanel

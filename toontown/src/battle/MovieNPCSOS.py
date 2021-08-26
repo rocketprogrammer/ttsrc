@@ -1,13 +1,13 @@
 from direct.interval.IntervalGlobal import *
-from .BattleProps import *
-from .BattleSounds import *
+from BattleProps import *
+from BattleSounds import *
 
 from direct.directnotify import DirectNotifyGlobal
-from . import MovieCamera
+import MovieCamera
 import random
-from . import MovieUtil
-from . import BattleParticles
-from . import HealJokes
+import MovieUtil
+import BattleParticles
+import HealJokes
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toon import NPCToons
@@ -312,7 +312,7 @@ def doNPCTeleports(attacks):
     arrivals = Sequence()
     departures = Parallel()
     for attack in attacks:
-        if ('npcId' in attack):
+        if (attack.has_key('npcId')):
             npcId = attack['npcId']
             npc = NPCToons.createLocalNPC(npcId)
             if (npc != None):

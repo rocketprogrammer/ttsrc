@@ -55,7 +55,7 @@ class SettingsMgrUD(DistributedObjectGlobalUD, SettingsMgrBase):
     def _newSessionId(self):
         # unique URL-safe string
         self._sessionId = ''
-        for i in range(32):
+        for i in xrange(32):
             self._sessionId += random.choice(SettingsMgrUD.SessionIdAlphabet)
 
     def handleHTTPSettings(self, **kw):
@@ -67,7 +67,7 @@ class SettingsMgrUD(DistributedObjectGlobalUD, SettingsMgrBase):
         staleSession = (sessionId is not None) and (sessionId != self._sessionId)
         if not staleSession:
             self._newSessionId()
-            for settingName, valueStr in kw.items():
+            for settingName, valueStr in kw.iteritems():
                 try:
                     setting = self._getSetting(settingName)
                 except:
@@ -122,7 +122,7 @@ class SettingsMgrUD(DistributedObjectGlobalUD, SettingsMgrBase):
              <input type="submit" value="Restart Process">
              </p></form>
              <form action="settings" method="GET"><p>""" % (self._sessionId, self._sessionId, )
-        settingNames = list(self._settings.keys())
+        settingNames = self._settings.keys()
         settingNames.sort()
         page += "<table><caption>%s</caption><thead><tr><th scope=col>Setting</th><th scope=col>Value</th></tr></thead>\n" % self.getPageTitle()
         rowNum=-1

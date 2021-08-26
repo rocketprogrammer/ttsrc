@@ -160,7 +160,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         if self.releaseTrack:
             self.releaseTrack.finish()
             self.releaseTrack = None
-        flyTracks = list(self.flyBallTracks.values())
+        flyTracks = self.flyBallTracks.values()
         for track in flyTracks:
             track.finish()
 
@@ -731,7 +731,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
     def __updateBallPower(self, task):
         """Change the value of the power meter."""
         if not self.powerBar:
-            print("### no power bar!!!")
+            print "### no power bar!!!"
             return task.done
 
         newPower =  self.__getBallPower(globalClock.getFrameTime())
@@ -1079,24 +1079,24 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
     def __flyBallHit(self, entry):
         """Handle the flying golf ball hitting something in the world."""
         #import pdb; pdb.set_trace()
-        print(entry)
+        print entry
         pass
 
     def flyBallFinishedFlying(self, sequence):
         """Handle the flyball sequence finishing."""
-        if sequence in self.flyBallTracks:
+        if self.flyBallTracks.has_key(sequence):
             del self.flyBallTracks[sequence]
 
     def __finishFlyBallTrack(self, sequence):
         """Force the flyball sequence to finish prematurely."""
-        if sequence in self.flyBallTracks:
+        if self.flyBallTracks.has_key(sequence):
             flyBallTrack = self.flyBallTracks[sequence]
             del self.flyBallTracks[sequence]
             flyBallTrack.finish()
 
     def flyBallFinishedSplatting(self, sequence):
         """Handle the flyball splatt finishing."""
-        if sequence in self.splatTracks:
+        if self.splatTracks.has_key(sequence):
             del self.splatTracks[sequence]
 
     def __flyBallHit(self, entry):
@@ -1111,7 +1111,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
         sequence = int(entry.getFromNodePath().getNetTag('pieSequence'))
         self.__finishFlyBallTrack(sequence)
 
-        if sequence in self.splatTracks:
+        if self.splatTracks.has_key(sequence):
             splatTrack = self.splatTracks[sequence]
             del self.splatTracks[sequence]
             splatTrack.finish()
@@ -1134,7 +1134,7 @@ class DistributedGolfSpot(DistributedObject.DistributedObject, FSM.FSM):
 
         splat = Sequence(splat,
                          Func(self.flyBallFinishedSplatting, sequence))
-        assert sequence not in self.splatTracks
+        assert not self.splatTracks.has_key(sequence)
         self.splatTracks[sequence] = splat
         splat.start()
        

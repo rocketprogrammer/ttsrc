@@ -12,7 +12,7 @@ class DeleteManagerAI(DistributedObjectAI.DistributedObjectAI):
     def setInventory(self, newInventoryString):
         avId = self.air.getAvatarIdFromSender()
         # Make sure the avatar exists.
-        if avId in self.air.doId2do:
+        if self.air.doId2do.has_key(avId):
             # Find the avatar
             av = self.air.doId2do[avId]
             # Create a new inventory list

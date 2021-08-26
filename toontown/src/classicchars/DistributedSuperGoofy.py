@@ -1,15 +1,15 @@
 """DistributedSuperGoofy module: contains the DistributedSuperGoofy class"""
 
 from pandac.PandaModules import *
-from . import DistributedCCharBase
+import DistributedCCharBase
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.classicchars import DistributedGoofySpeedway
-from . import CharStateDatas
+import CharStateDatas
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from . import DistributedCCharBase
+import DistributedCCharBase
 
 class DistributedSuperGoofy(DistributedGoofySpeedway.DistributedGoofySpeedway):
     """DistributedSuperGoofy class"""

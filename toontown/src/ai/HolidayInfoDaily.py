@@ -35,12 +35,12 @@ class HolidayInfo_Daily(HolidayInfo_Base):
     def __init__(self, holidayClass, dateList, displayOnCalendar):
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in xrange(len(dateList)/2):
             start = dateElemIter.current()
-            end = next(dateElemIter)
+            end = dateElemIter.next()
 
             self.tupleList.append((start, end))
-            next(dateElemIter)
+            dateElemIter.next()
 
     #############################################################
     # Method: getNextHolidayTime
@@ -58,7 +58,7 @@ class HolidayInfo_Daily(HolidayInfo_Base):
                  localTime[2],  # day
                  )
         
-        for i in range(len(self.tupleList)):
+        for i in xrange(len(self.tupleList)):
             # Retrieve the Start/End Tuples for the next time
             # the holiday should be scheduled.
             startTuple, endTuple = self.currElemIter.peekNext()
@@ -84,7 +84,7 @@ class HolidayInfo_Daily(HolidayInfo_Base):
 
             # Iterate to the next time before we check validity
             # of the time.
-            next(self.currElemIter)
+            self.currElemIter.next()
             if (currTime < eTime):
                 return sTime
                 

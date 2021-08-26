@@ -1,5 +1,5 @@
 from direct.showbase.PythonUtil import Functor
-from . import LevelMgrBase
+import LevelMgrBase
 
 class LevelMgr(LevelMgrBase.LevelMgrBase):
     __module__ = __name__

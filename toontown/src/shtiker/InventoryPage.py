@@ -1,6 +1,6 @@
 """InventoryPage module: contains the InventoryPage class"""
 
-from . import ShtikerPage
+import ShtikerPage
 from toontown.toonbase import ToontownBattleGlobals
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *

@@ -4,9 +4,9 @@ from direct.interval.IntervalGlobal import *
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from otp.level import BasicEntities
-from . import MovingPlatform
+import MovingPlatform
 from direct.distributed import DistributedObject
-from . import SinkingPlatformGlobals
+import SinkingPlatformGlobals
 from direct.directnotify import DirectNotifyGlobal
 
 class DistributedSinkingPlatform(BasicEntities.DistributedNodePathEntity):
@@ -130,7 +130,7 @@ class DistributedSinkingPlatform(BasicEntities.DistributedNodePathEntity):
             ivalTime = duration
         duration = duration - ivalTime
         duration = max(0.0, duration)
-        print('ivalTime = %s' % ivalTime)
+        print 'ivalTime = %s' % ivalTime
         moveNode = self.platform
         self.moveIval = Sequence()
         if pause is not None:

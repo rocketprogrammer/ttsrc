@@ -1,5 +1,5 @@
 from otp.level import LevelMgr
-from . import FactoryUtil
+import FactoryUtil
 from direct.showbase.PythonUtil import Functor
 from toontown.toonbase import ToontownGlobals
 

@@ -1,6 +1,6 @@
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
-from .AIMsgTypes import *
+from AIMsgTypes import *
 from direct.showbase.PythonUtil import Functor
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.fsm import ClassicFSM
@@ -247,7 +247,7 @@ class AIRepository(ConnectionRepository):
             fastRepr(container, maxLen=1, strFactor=50)))
 
     def getPlayerAvatars(self):
-        return [i for i in list(self.doId2do.values())
+        return [i for i in self.doId2do.values()
                   if isinstance(i, DistributedPlayerAI)]
 
     def uniqueName(self, desc):
@@ -619,12 +619,12 @@ class AIRepository(ConnectionRepository):
                 # These tasks are ok
                 continue
             else:
-                print(taskMgr)
+                print taskMgr
                 self.notify.error("You can't leave otp until you clean up your tasks.")
 
         # Make sure there are no event hooks still hanging.
         if not messenger.isEmpty():
-            print(messenger)
+            print messenger
             self.notify.error("Messenger should not have any events in it.")
 
     ##### NoConnection #####
@@ -703,7 +703,7 @@ class AIRepository(ConnectionRepository):
         # Look up the dclass
         dclass = self.dclassesByNumber[classId]
         # Is it in our dictionary?
-        if doId in self.doId2do:
+        if self.doId2do.has_key(doId):
             self.notify.warning("Object Entered " + str(doId) +
                                 " re-entered without exiting")
         # Create a new distributed object
@@ -731,7 +731,7 @@ class AIRepository(ConnectionRepository):
         # Look up the dclass
         dclass = self.dclassesByNumber[classId]
         # Is it in our dictionary?
-        if doId in self.doId2do:
+        if self.doId2do.has_key(doId):
             self.notify.warning("Object Entered " + str(doId) +
                                 " re-entered without exiting")
         # Create a new distributed object
@@ -812,7 +812,7 @@ class AIRepository(ConnectionRepository):
         pass
 
     def _generateFromDatagram(self, parentId, zoneId, dclass, doId, di, addToTables=True):
-        if (doId in self.doId2do):
+        if (self.doId2do.has_key(doId)):
             # added to prevent objects already generated from being generated again (was
             # happening with some traded inventory objects, quests specfically)
             return self.doId2do[doId]
@@ -820,7 +820,7 @@ class AIRepository(ConnectionRepository):
         classDef = dclass.getClassDef()
         try:
             distObj = classDef(self)
-        except TypeError as e:
+        except TypeError, e:
             self.notify.error('%s (class %s, parentId %d, zoneId %d, doId %d)' % \
                               (e, dclass.getName(), parentId, zoneId, doId))
         distObj.dclass = dclass
@@ -1043,14 +1043,14 @@ class AIRepository(ConnectionRepository):
         avatarId is a 32 bit doId
         """
         assert self.notify.debugCall()
-        self.addConnectionToChannels((1<<32)+avatarId, listOfChannels)
+        self.addConnectionToChannels((1L<<32)+avatarId, listOfChannels)
 
     def removeAvatarFromChannels(self, avatarId, listOfChannels):
         """
         avatarId is a 32 bit doId
         """
         assert self.notify.debugCall()
-        self.removeConnectionToChannels((1<<32)+avatarId, listOfChannels)
+        self.removeConnectionToChannels((1L<<32)+avatarId, listOfChannels)
 
     def addConnectionToChannels(self, targetConnection, listOfChannels):
         """
@@ -1094,7 +1094,7 @@ class AIRepository(ConnectionRepository):
         dg.addUint32(contextId)
         dg.addUint32(parentDoId)
         dg.addUint32(contextId)
-        if isinstance(zoneIdList, list):
+        if isinstance(zoneIdList, types.ListType):
             # sort and remove repeated entries
             zIdSet = set(zoneIdList)
             for zoneId in zIdSet:
@@ -1138,7 +1138,7 @@ class AIRepository(ConnectionRepository):
         # Set the high bit to indicate that the interest is being governed by
         # the AI and not the client
         dg.addUint32(dObject.doId)
-        assert isinstance(fieldNameList, list)
+        assert isinstance(fieldNameList, types.ListType)
 
         dclass = dObject.dclass
         # sort and remove repeated entries as we discover the field
@@ -1193,7 +1193,7 @@ class AIRepository(ConnectionRepository):
     def allocateChannel(self):
         channel=self.channelAllocator.allocate()
         if channel==-1:
-            raise RuntimeError("channelAllocator.allocate() is out of channels")
+            raise RuntimeError, "channelAllocator.allocate() is out of channels"
         if self.channelAllocator.fractionUsed()>0.75:
             # There is some debate about how bad it is to run out of
             # channels.  Being ignorant about what exactly will happen
@@ -1209,7 +1209,7 @@ class AIRepository(ConnectionRepository):
             # of freed ids and sleep or flag an error as apropriate.  See him
             # for details (esp. if you want to write a cross-platform version
             # of said feature).
-            raise RuntimeError("Dangerously low on channels.")
+            raise RuntimeError, "Dangerously low on channels."
         # Sanity check
         assert (channel >= self.minChannel) and (channel <= self.maxChannel)
 
@@ -1219,12 +1219,12 @@ class AIRepository(ConnectionRepository):
                 self.debug_dictionary = {}
                 __builtins__["debug_dictionary"] = self.debug_dictionary
 
-            for id in   list(self.debug_dictionary.keys()):
-                if id not in self.doId2do:
-                    print("--------------------- Not In DOID table")
-                    print(id)
+            for id in   self.debug_dictionary.keys():
+                if not self.doId2do.has_key(id):
+                    print "--------------------- Not In DOID table"
+                    print id
                     #traceback.print_list(self.debug_dictionary[id])
-                    print(self.debug_dictionary[id])
+                    print self.debug_dictionary[id]
                     del self.debug_dictionary[id] # never report it again ..
 
             self.debug_dictionary[channel] = traceback.extract_stack(None,7)
@@ -1250,7 +1250,7 @@ class AIRepository(ConnectionRepository):
     def allocateZone(self):
         zoneId=self.zoneAllocator.allocate()
         if zoneId==-1:
-            raise RuntimeError("zoneAllocator.allocate() is out of zoneIds")
+            raise RuntimeError, "zoneAllocator.allocate() is out of zoneIds"
         # Sanity check
         assert (zoneId >= self.minZone) and (zoneId <= self.maxZone)
         return zoneId
@@ -1316,7 +1316,7 @@ class AIRepository(ConnectionRepository):
         # returns list of (obj, age of delete request), sorted by descending age
         response = []
         now = globalClock.getRealTime()
-        for obj, requestTime in list(self._requestDeletedDOs.values()):
+        for obj, requestTime in self._requestDeletedDOs.values():
             # calculate how long it has been since delete was requested
             age = now - requestTime
             index = 0
@@ -1403,14 +1403,14 @@ class AIRepository(ConnectionRepository):
         #                 (classId, context))
         if ownerChannel == 0 and ownerAvId is not None:
             ownerChannel = (1<<32) + ownerAvId
-        if classId in self.dclassesByNumber:
+        if self.dclassesByNumber.has_key(classId):
             dclass = self.dclassesByNumber[classId]
         else:
-            if classId in self.dclassesByName:
+            if self.dclassesByName.has_key(classId):
                 dclass = self.dclassesByName[classId]
-            elif classId+self.dcSuffix in self.dclassesByName:
+            elif self.dclassesByName.has_key(classId+self.dcSuffix):
                 dclass = self.dclassesByName[classId+self.dcSuffix]
-            elif classId+'AI' in self.dclassesByName:
+            elif self.dclassesByName.has_key(classId+'AI'):
                 dclass = self.dclassesByName[classId+'AI']
             else:
                 self.notify.warning("dclass not found %s"%(classId,))
@@ -1458,7 +1458,7 @@ class AIRepository(ConnectionRepository):
                             packer.packDefaultValue()
                         else:
                             if not field.packArgs(packer, value):
-                                raise Exception
+                                raise StandardError
                         packer.endPack()
                     else:
                         value = values.get(field.getName(), None)
@@ -1482,7 +1482,7 @@ class AIRepository(ConnectionRepository):
                 packer.endPack()
 
             if packer.hadError():
-                raise Exception
+                raise StandardError
 
             dg = Datagram(packer.getString())
             self.send(dg)
@@ -1493,7 +1493,7 @@ class AIRepository(ConnectionRepository):
 
     def handleDatagram(self, di):
         if self.notify.getDebug():
-            print("AIRepository received datagram:")
+            print "AIRepository received datagram:"
             di.getDatagram().dumpHex(ostream)
 
         channel=self.getMsgChannel()
@@ -1573,9 +1573,9 @@ class AIRepository(ConnectionRepository):
         datagram = PyDatagram()
         datagram.addServerHeader(
             stateServerId, self.ourChannel, STATESERVER_QUERY_ZONE_OBJECT_ALL)
-        numObjs = len(list(obj2ZoneDict.keys()))
+        numObjs = len(obj2ZoneDict.keys())
         datagram.addUint16(numObjs)
-        for objId, zoneIds in list(obj2ZoneDict.values()):
+        for objId, zoneIds in obj2ZoneDict.values():
             datagram.addUint32(objId)
             datagram.addUint16(len(zoneIds))
             for zoneId in zoneIds:
@@ -1748,7 +1748,7 @@ class AIRepository(ConnectionRepository):
                 self.queryObjectFieldIds(doId, fieldIds, context)
             else:
                 assert self.notify.error(
-                        "queryObjectFields invalid field in %s, %s"%(doId, repr(fieldNames)))
+                        "queryObjectFields invalid field in %s, %s"%(doId, `fieldNames`))
                 
         
     def requestDistributedObject(self, doId):
@@ -1854,7 +1854,7 @@ class AIRepository(ConnectionRepository):
         """
         only works on the dc updates from the client agent
         """
-        return self.getMsgSender() & 0xffffffff
+        return self.getMsgSender() & 0xffffffffL
 
     def getSenderReturnChannel(self):
         return self.getMsgSender()
@@ -1903,6 +1903,6 @@ class AIRepository(ConnectionRepository):
         if not self.AIRunningNetYield:
             ConnectionRepository.startReaderPollTask(self)
         else:                    
-            print('########## startReaderPollTask New ')
+            print '########## startReaderPollTask New '
             self.stopReaderPollTask()
             self.accept(CConnectionRepository.getOverflowEventName(),self.handleReaderOverflow)

@@ -6,8 +6,8 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 from direct.interval.IntervalGlobal import *
-from . import GardenGlobals
-from . import FlowerPhoto
+import GardenGlobals
+import FlowerPhoto
 
 class FlowerPanel(DirectFrame):
     """
@@ -175,8 +175,8 @@ class FlowerPanel(DirectFrame):
         assert self.notify.debugStateCall(self)
         # if we are browsing flower we must be awake
         messenger.send('wakeup')
-        self.photo.setSwimBounds(*self.swimBounds)
-        self.photo.setSwimColor(*self.swimColor)
+        apply(self.photo.setSwimBounds, self.swimBounds)
+        apply(self.photo.setSwimColor, self.swimColor)
 
         if code == GardenGlobals.FlowerItem:
             self.extraLabel.hide()

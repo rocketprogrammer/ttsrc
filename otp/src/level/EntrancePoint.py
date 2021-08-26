@@ -1,6 +1,6 @@
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
-from . import BasicEntities
+import BasicEntities
 from pandac import NodePath
 
 class EntrancePoint(BasicEntities.NodePathEntity):
@@ -31,7 +31,7 @@ class EntrancePoint(BasicEntities.NodePathEntity):
 
     def destroyEntrancePoint(self):
         if self.entranceId >= 0:
-            if self.entranceId in self.level.entranceId2entity:
+            if self.level.entranceId2entity.has_key(self.entranceId):
                 del self.level.entranceId2entity[self.entranceId]
 
     if __dev__:

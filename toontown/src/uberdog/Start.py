@@ -2,13 +2,13 @@
 Start the Toontown UberDog (Uber Distributed Object Globals server).
 """
 
-import builtins
+import __builtin__
 from direct.task.Task import Task
 
 class game:
     name = "uberDog"
     process = "server"
-builtins.game = game()
+__builtin__.game = game()
 
 import time
 import os
@@ -34,7 +34,7 @@ from toontown.coderedemption import TTCodeRedemptionConsts
 from toontown.uberdog.ToontownUberDog import ToontownUberDog
 from toontown.uberdog import PartiesUdConfig
 
-print("Initializing the Toontown UberDog (Uber Distributed Object Globals server)...")
+print "Initializing the Toontown UberDog (Uber Distributed Object Globals server)..."
 
 uber.mdip = uber.config.GetString("msg-director-ip", "localhost")
 uber.mdport = uber.config.GetInt("msg-director-port", 6666)

@@ -6,7 +6,7 @@ from otp.ai.AIBaseGlobal import *
 
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit import DistributedTutorialSuitAI
-from . import TutorialBattleManagerAI
+import TutorialBattleManagerAI
 
 class SuitPlannerTutorialAI:
     """
@@ -48,7 +48,7 @@ class SuitPlannerTutorialAI:
             #RAU made to kill the mem leak when you close the window in the middle of the battle tutorial
             cellId = self.battle.battleCellId
             battleMgr = self.battle.battleMgr
-            if cellId in battleMgr.cellId2battle:
+            if battleMgr.cellId2battle.has_key(cellId):
                 battleMgr.destroy(self.battle)
             
             self.battle = None

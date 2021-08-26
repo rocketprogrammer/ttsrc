@@ -2,7 +2,7 @@ from direct.showbase.ShowBaseGlobal import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleProps import *
 from direct.directnotify import DirectNotifyGlobal
-from . import DistributedGoon
+import DistributedGoon
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import MovingPlatform
 

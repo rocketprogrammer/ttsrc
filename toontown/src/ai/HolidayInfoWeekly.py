@@ -39,12 +39,12 @@ class HolidayInfo_Weekly(HolidayInfo_Base):
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
 
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in xrange(len(dateList)/2):
             start = dateElemIter.current()
-            end = next(dateElemIter)
+            end = dateElemIter.next()
 
             self.tupleList.append((start, end))
-            next(dateElemIter)
+            dateElemIter.next()
 
         self.tupleList.sort(cmpDates)
 

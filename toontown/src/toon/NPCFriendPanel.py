@@ -1,8 +1,8 @@
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-from . import NPCToons
-from . import ToonHead
-from . import ToonDNA
+import NPCToons
+import ToonHead
+import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
@@ -36,7 +36,7 @@ class NPCFriendPanel(DirectFrame):
         self.initialiseoptions(NPCFriendPanel)
         
     def update(self, friendDict, fCallable = 0):
-        friendList = list(friendDict.keys())
+        friendList = friendDict.keys()
         for i in range(8):
             card = self.cardList[i]
             try:

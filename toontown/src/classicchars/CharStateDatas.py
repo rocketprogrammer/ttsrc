@@ -9,7 +9,7 @@ from direct.fsm import StateData
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import *
 from direct.task import Task
-from . import CCharPaths
+import CCharPaths
 from toontown.toonbase import ToontownGlobals
 
 class CharNeutralState(StateData.StateData):

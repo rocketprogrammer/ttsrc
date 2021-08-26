@@ -2,7 +2,7 @@ from direct.interval.IntervalGlobal import *
 from direct.task.TaskManagerGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import TTLocalizer
-from . import DistributedBossCog, DistributedCashbotBossGoon, SuitDNA
+import DistributedBossCog, DistributedCashbotBossGoon, SuitDNA
 from toontown.toon import Toon
 from toontown.toon import ToonDNA
 from direct.fsm import FSM
@@ -150,7 +150,7 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 goon.request('Off')
 
     def __showFakeGoons(self, state):
-        print(self.fakeGoons)
+        print self.fakeGoons
         if self.fakeGoons:
             for goon in self.fakeGoons:
                 goon.request(state)
@@ -295,9 +295,9 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
           Point3(111, -287, 0), VBase3(165, 0, 0), Point3(101, -323, 0), VBase3(165, 0, 0)], [Point3(119, -315, 0), VBase3(357, 0, 0), Point3(121, -280, 0), VBase3(357, 0, 0)], [Point3(102, -320, 0), VBase3(231, 0, 0), Point3(127, -337, 0), VBase3(231, 0, 0)]]
         mainGoon = self.fakeGoons[0]
         goonLoop = Parallel()
-        print(self.fakeGoons)
+        print self.fakeGoons
         for i in range(1, self.numFakeGoons):
-            print(i)
+            print i
             goon = self.fakeGoons[i]
             goonLoop.append(Sequence(goon.posHprInterval(8, goonPosHprs[i][0], goonPosHprs[i][1]), goon.posHprInterval(8, goonPosHprs[i][2], goonPosHprs[i][3])))
 
@@ -438,17 +438,17 @@ class DistributedCashbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
                 goon.b_destroyGoon()
 
     def deactivateCranes(self):
-        for crane in list(self.cranes.values()):
+        for crane in self.cranes.values():
             crane.demand('Free')
 
     def hideBattleThreeObjects(self):
         for goon in self.goons:
             goon.demand('Off')
 
-        for safe in list(self.safes.values()):
+        for safe in self.safes.values():
             safe.demand('Off')
 
-        for crane in list(self.cranes.values()):
+        for crane in self.cranes.values():
             crane.demand('Off')
 
     def __doPhysics(self, task):

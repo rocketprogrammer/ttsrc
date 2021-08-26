@@ -8,7 +8,7 @@ class PyVec3:
     # interface is mostly patterned after Panda Vec3
 
     Epsilon = .0001
-    ScalarTypes = (float, int, int)
+    ScalarTypes = (types.FloatType, types.IntType, types.LongType)
 
     def __init__(self, *args):
         self.assign(*args)

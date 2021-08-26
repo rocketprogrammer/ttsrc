@@ -1,6 +1,6 @@
 from toontown.toonbase.ToontownGlobals import *
-from . import RegenTreasurePlannerAI
-from . import DistributedBRTreasureAI
+import RegenTreasurePlannerAI
+import DistributedBRTreasureAI
 
 class BRTreasurePlannerAI(RegenTreasurePlannerAI.RegenTreasurePlannerAI):
     def __init__(self, zoneId):

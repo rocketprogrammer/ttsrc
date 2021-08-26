@@ -5,7 +5,7 @@ from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
 from toontown.fishing import FishGlobals
-from . import GardenGlobals
+import GardenGlobals
 from direct.actor import Actor
 
 class DirectRegion(NodePath):
@@ -62,18 +62,18 @@ class DirectRegion(NodePath):
             cm = CardMaker('displayRegionCard')
             
             assert hasattr(self, "bounds")
-            cm.setFrame(*self.bounds)
+            apply(cm.setFrame, self.bounds)
             
             self.card = card = self.attachNewNode(cm.generate())
             assert hasattr(self, "color")
-            card.setColor(*self.color)
+            apply(card.setColor, self.color)
             
             newBounds=card.getTightBounds()
             ll=render2d.getRelativePoint(card, newBounds[0])
             ur=render2d.getRelativePoint(card, newBounds[1])
             newBounds=[ll.getX(), ur.getX(), ll.getZ(), ur.getZ()]
             # scale the -1.0..2.0 range to 0.0..1.0:
-            newBounds=[max(0.0, min(1.0, (x+1.0)/2.0)) for x in newBounds]
+            newBounds=map(lambda x: max(0.0, min(1.0, (x+1.0)/2.0)), newBounds)
 
             self.cDr = base.win.makeDisplayRegion(*newBounds)
             self.cDr.setSort(10)
@@ -151,8 +151,8 @@ class FlowerPhoto(NodePath):
         # scale the actor to the frame
         if not hasattr(self, "flowerDisplayRegion"):
             self.flowerDisplayRegion = DirectRegion(parent=self)
-            self.flowerDisplayRegion.setBounds(*self.swimBounds)
-            self.flowerDisplayRegion.setColor(*self.swimColor)
+            apply(self.flowerDisplayRegion.setBounds, self.swimBounds)
+            apply(self.flowerDisplayRegion.setColor, self.swimColor)
         frame = self.flowerDisplayRegion.load()
         pitch = frame.attachNewNode('pitch')
         rotate = pitch.attachNewNode('rotate')
@@ -164,7 +164,7 @@ class FlowerPhoto(NodePath):
         actor.setPos(-center[0], -center[1], -center[2])
 
         attrib = GardenGlobals.PlantAttributes[self.species]
-        if 'photoPos' in attrib:
+        if attrib.has_key('photoPos'):
             self.notify.debug('oldPos = %s' % actor.getPos())
             photoPos = attrib['photoPos']
             self.notify.debug('newPos = %s' % str(photoPos))

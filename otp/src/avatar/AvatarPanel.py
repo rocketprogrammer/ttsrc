@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.showbase import DirectObject
-from . import Avatar
+import Avatar
 from direct.distributed import DistributedObject
 
 class AvatarPanel(DirectObject.DirectObject):
@@ -42,7 +42,7 @@ class AvatarPanel(DirectObject.DirectObject):
 
             # If we have an actual DistributedObject for this avatar, use
             # that one instead of whatever we're given.
-            if self.avId in base.cr.doId2do:
+            if base.cr.doId2do.has_key(self.avId):
                 self.avatar = base.cr.doId2do[self.avId]
         else:
             self.avDisableName = None

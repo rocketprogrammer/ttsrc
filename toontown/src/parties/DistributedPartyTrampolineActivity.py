@@ -434,7 +434,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
             beanAnim.loop()
             self.beanAnims.append( beanAnim )
             self.beanDetails.append( (height, bean, guiBean, beanAnim) )
-        self.beansToCollect = list(range( self.numJellyBeans))
+        self.beansToCollect = range( self.numJellyBeans )
 
     def cleanupJellyBeans( self ):
         for bean in self.beans:

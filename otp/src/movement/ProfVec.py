@@ -32,35 +32,35 @@ CallInfo = 0
 Reps = 100000
 
 def nullLoop(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         pass
 def createNullClass(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = NullClass()
 def createSimpleClass(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = SimpleClass(1,2,3)
 def createArgsClass(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = ArgsClass(1,2,3)
 def createDerivedClass(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = DerivedClass(1,2,3)
 def createComplexClass(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = ComplexClass(1,2,3)
 def createFFIClass(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = FFIClass(1,2,3)
 def createPyVec3(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = PyVec3(1,2,3)
 def createVec3Direct(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = Vec3(None)
         v._Vec3__overloaded_constructor_float_float_float(1,2,3)
 def createVec3(n=Reps):
-    for i in range(n):
+    for i in xrange(n):
         v = Vec3(1,2,3)
 
 def doProfile(cmd, filename):

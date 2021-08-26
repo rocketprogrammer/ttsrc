@@ -1,15 +1,15 @@
 from direct.interval.IntervalGlobal import *
-from .BattleBase import *
-from .BattleProps import *
-from .BattleSounds import *
+from BattleBase import *
+from BattleProps import *
+from BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.suit.SuitDNA import *
 
 
-from . import MovieUtil
-from . import MovieCamera
+import MovieUtil
+import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
-from . import BattleParticles
+import BattleParticles
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 import random
@@ -68,17 +68,17 @@ def doSquirts(squirts):
                 if 1:
                     target = squirt['target'][0]
                     suitId = target['suit'].doId
-                    if (suitId in suitSquirtsDict):
+                    if (suitSquirtsDict.has_key(suitId)):
                         suitSquirtsDict[suitId].append(squirt)
                     else:
                         suitSquirtsDict[suitId] = [squirt]
             else:
                 suitId = squirt['target']['suit'].doId
-                if (suitId in suitSquirtsDict):
+                if (suitSquirtsDict.has_key(suitId)):
                     suitSquirtsDict[suitId].append(squirt)
                 else:
                     suitSquirtsDict[suitId] = [squirt]
-    suitSquirts = list(suitSquirtsDict.values())
+    suitSquirts = suitSquirtsDict.values()
 
     # Sort the suits based on the number of squirts per suit
     def compFunc(a, b):

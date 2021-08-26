@@ -2,7 +2,7 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from . import FishGlobals
+import FishGlobals
 from toontown.fishing import DistributedPondBingoManager
 from pandac.PandaModules import Vec3
 from direct.task import Task
@@ -76,7 +76,7 @@ class DistributedFishingPond(DistributedObject.DistributedObject):
         """
         self.notify.debug("checkTargets")
         if self.localToonSpot != None:
-            for target in list(self.targets.values()):
+            for target in self.targets.values():
                 targetPos = target.getPos(render)
                 distVec = Vec3(targetPos - self.localToonBobPos)
                 dist = distVec.length()
@@ -190,7 +190,7 @@ class DistributedFishingPond(DistributedObject.DistributedObject):
     def setLocalToonSpot(self, spot=None):
         self.localToonSpot = spot
 
-        if (spot is not None) and (spot.getDoId() not in self.visitedSpots):
+        if (spot is not None) and (not self.visitedSpots.has_key(spot.getDoId())):
             self.visitedSpots[spot.getDoId()] = spot            
             
     ############################################################
@@ -225,7 +225,7 @@ class DistributedFishingPond(DistributedObject.DistributedObject):
     # Output: None
     ############################################################
     def resetSpotGui(self):
-        for spot in list(self.visitedSpots.values()):
+        for spot in self.visitedSpots.values():
             spot.resetCastGui()
 
     ############################################################
@@ -239,7 +239,7 @@ class DistributedFishingPond(DistributedObject.DistributedObject):
     # Output: None
     ############################################################
     def setSpotGui(self):
-        for spot in list(self.visitedSpots.values()):
+        for spot in self.visitedSpots.values():
             spot.setCastGui()
     
 

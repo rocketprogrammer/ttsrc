@@ -2,7 +2,7 @@ from direct.gui.DirectGui import *
 from direct.directnotify.DirectNotifyGlobal import *
 from toontown.toonbase import ToontownGlobals
 from direct.showbase import DirectObject
-from . import CatalogItem
+import CatalogItem
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 from direct.showbase import PythonUtil

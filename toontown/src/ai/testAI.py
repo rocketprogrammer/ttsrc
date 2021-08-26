@@ -1,8 +1,8 @@
 
 # The AI side
-from .AIStart import *
+from AIStart import *
 start()
-from . import DistributedTestAI
+import DistributedTestAI
 dt = DistributedTestAI.DistributedTestAI(simbase.air)
 dt.setA(5)
 dt.setB("hello")

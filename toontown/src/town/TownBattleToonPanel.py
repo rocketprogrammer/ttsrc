@@ -217,7 +217,7 @@ class TownBattleToonPanel(DirectFrame):
         returnStr = ""
         # We want to traverse backwards, since suits and toons are
         # numbered from right to left.
-        targetList = list(range(numTargets))
+        targetList = range(numTargets)
         targetList.reverse()
         for i in targetList:
             if targetIndex == -1:

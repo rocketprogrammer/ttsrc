@@ -1,7 +1,7 @@
 
 from pandac.PandaModules import *
 
-from . import Playground
+import Playground
 from direct.task.Task import Task
 import random
 from direct.fsm import ClassicFSM, State

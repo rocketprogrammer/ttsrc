@@ -2,7 +2,7 @@
 
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
-from . import LoginTTAccount
+import LoginTTAccount
 
 
 class LoginWebPlayTokenAccount(LoginTTAccount.LoginTTAccount):
@@ -52,7 +52,7 @@ class LoginWebPlayTokenAccount(LoginTTAccount.LoginTTAccount):
         pass
 
     def getErrorCode(self):
-        if "response" not in self:
+        if not self.has_key("response"):
             return 0
         return self.response.getInt('errorCode', 0)
 

@@ -1,4 +1,4 @@
-from . import ActiveCell
+import ActiveCell
 from direct.directnotify import DirectNotifyGlobal
 
 class CrusherCell(ActiveCell.ActiveCell):

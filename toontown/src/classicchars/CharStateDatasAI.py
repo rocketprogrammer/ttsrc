@@ -10,8 +10,8 @@ import random
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
 
-from . import CCharChatter
-from . import CCharPaths
+import CCharChatter
+import CCharPaths
 
 class CharLonelyStateAI(StateData.StateData):
     """

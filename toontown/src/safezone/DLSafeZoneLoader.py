@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 
-from . import SafeZoneLoader
-from . import DLPlayground
+import SafeZoneLoader
+import DLPlayground
 
 class DLSafeZoneLoader(SafeZoneLoader.SafeZoneLoader):
     def __init__(self, hood, parentFSM, doneEvent):

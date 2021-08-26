@@ -8,7 +8,7 @@ from direct.fsm import FSM
 from direct.fsm import State
 from toontown.toonbase import TTLocalizer
 from toontown.battle import BattleParticles
-from . import Suit, SuitDNA
+import Suit, SuitDNA
 from toontown.battle import BattleProps
 from direct.showbase.PythonUtil import Functor
 import string, types
@@ -522,7 +522,7 @@ class BossCog(Avatar.Avatar):
             self.raised = 1
         elif anim == 'Fb_fall':
             ival = Parallel(ActorInterval(self, 'Fb_fall'), Sequence(SoundInterval(self.reelSfx, node=self), SoundInterval(self.deathSfx)))
-        elif isinstance(anim, bytes):
+        elif isinstance(anim, types.StringType):
             ival = ActorInterval(self, anim)
         else:
             ival = anim

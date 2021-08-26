@@ -202,7 +202,7 @@ class DistributedTreasure(DistributedObject.DistributedObject):
         self.avId = avId
 
         # Look up the avatar
-        if avId in self.cr.doId2do:
+        if self.cr.doId2do.has_key(avId):
             av = self.cr.doId2do[avId]
             self.av = av
         else:

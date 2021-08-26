@@ -9,7 +9,7 @@ import random
 from toontown.suit import SuitDNA
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit import DistributedSuitAI
-from . import SuitBuildingGlobals
+import SuitBuildingGlobals
 import types
 
 class SuitPlannerInteriorAI:
@@ -50,7 +50,7 @@ class SuitPlannerInteriorAI:
         else:
             self.dbg_defaultSuitType = SuitDNA.getSuitType(dbg_defaultSuitName)
 
-        if (isinstance(bldgLevel, bytes)):
+        if (isinstance(bldgLevel, types.StringType)):
             self.notify.warning('bldgLevel is a string!')
             bldgLevel = int(bldgLevel)
         self._genSuitInfos( numFloors, bldgLevel, bldgTrack )

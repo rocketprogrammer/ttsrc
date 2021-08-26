@@ -1,6 +1,6 @@
 from pandac.PandaModules import *
 
-from . import Playground
+import Playground
 import random
 from direct.task import Task
 

@@ -3,7 +3,7 @@ ToonBase module: defines constants that are global across Toontown, and
 may have meaning to several classes.
 """
 
-from . import TTLocalizer
+import TTLocalizer
 from otp.otpbase.OTPGlobals import *
 from direct.showbase.PythonUtil import Enum, invertDict
 from pandac.PandaModules import BitMask32, Vec4
@@ -561,7 +561,7 @@ factoryId2factoryType = {
 
 # Street names
 StreetNames = TTLocalizer.GlobalStreetNames
-StreetBranchZones = list(StreetNames.keys())
+StreetBranchZones = StreetNames.keys()
 
 # hood name list
 Hoods = ( DonaldsDock,
@@ -658,7 +658,7 @@ MinigamePlayerMatrix = {
 
 # we are releasing one minigame a week for the new minigames
 MinigameReleaseDates = {
-    IceGameId : (2008, 8, 0o5),
+    IceGameId : (2008, 8, 05),
     PhotoGameId : (2008,8,13),
     TwoDGameId : (2008,8,20),
     CogThiefGameId : (2008,8,27),

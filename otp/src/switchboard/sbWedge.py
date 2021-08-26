@@ -7,9 +7,9 @@ import sys
 from Pyro.errors import ConnectionClosedError
 from Pyro.errors import ProtocolError
 
-from .sbNode import sbNode
-from .sbLog import sbLog
-from . import sbConfig
+from sbNode import sbNode
+from sbLog import sbLog
+import sbConfig
 
 try:
     import badwordpy
@@ -71,7 +71,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
             self.sendEnterWedge()
             self.log.debug("Exit sendEnterWedge")
             self.sbConnected = True
-        except Exception as e:
+        except Exception,e:
             self.log.warning("Failed to connect to Switchboard.  Player friends are being faked.")
 
         self.onlinePlayers = 0
@@ -154,7 +154,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.recvEnterWedge(self.wedgeName)
-            except Exception as e:
+            except Exception,e:
                 self.log.warning("Error contacting my node (%s), node is None."%str(e))
                 self.node = None
 
@@ -205,7 +205,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
                                   "recvDeclineInvite"])
             self.log.info("-- Connected to sb.node.%s. --" % self.nodeName)
             self.sbConnected = True
-        except Exception as e:
+        except Exception,e:
             self.node = None
             self.sbConnected = False
             self.log.debug("Failed to locate sb.node.%s, node is None." % self.nodeName)
@@ -223,13 +223,13 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.recvEnterLocalPlayer(playerId,playerInfo)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in enterPlayer.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in enterPlayer.  Refreshing node."%str(e))
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Unknown error sending enterLocalPlayer to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     #app->wedge
@@ -238,13 +238,13 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.recvExitLocalPlayer(playerId)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in exitPlayer.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in exitPlayer.  Refreshing node."%str(e))
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending exitLocalPlayer to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     #app->wedge
@@ -253,13 +253,13 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.recvExitLocalAvatar(avatarId)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in exitAvatar.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in exitAvatar.  Refreshing node."%str(e))
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending exitLocalAvatar to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
 
@@ -299,26 +299,26 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.recvSecretRequest(playerId,parentUsername,parentPassword)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in sendSecretRequest.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in sendSecretRequest.  Refreshing node.")
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending secretRequest to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     def sendSecretRedeem(self,playerId,secret,parentUsername=None,parentPassword=None):
         if self.node:
             try:
                 self.node.recvSecretRedeem(playerId,secret,parentUsername,parentPassword)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in sendSecretRedeem.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in sendSecretRedeem.  Refreshing node.")
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending secretRedeem to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     #wedge->app, override
@@ -371,13 +371,13 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.sendWhisper(recipientId,senderId,msgText)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in sendWhisper.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in sendWhisper.  Refreshing node."%str(e))
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending whisper to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     #app->wedge
@@ -389,13 +389,13 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.sendWLWhisper(recipientId,senderId,msgText)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in sendWLWhisper.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in sendWLWhisper.  Refreshing node."%str(e))
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending WLwhisper to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
             
     #app->wedge
@@ -407,13 +407,13 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         if self.node:
             try:
                 self.node.sendSCWhisper(recipientId,senderId,msgText)
-            except ConnectionClosedError as e:
+            except ConnectionClosedError,e:
                 self.log.error("ConnectionClosedError in sendSCWhisper.  Refreshing node.")
                 self.updateNode()
-            except ProtocolError as e:
+            except ProtocolError,e:
                 self.log.error("ProtocolError (%s) in sendSCWhisper.  Refreshing node."%str(e))
                 self.updateNode()
-            except Exception as e:
+            except Exception,e:
                 self.log.error("Error sending SCwhisper to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
             
     #wedge->app, override
@@ -459,7 +459,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         try:
             self.servedMail += 1
             self.node.sendMail(recipientId,senderId,msgText)
-        except Exception as e:
+        except Exception,e:
             self.log.error("Error sending mail to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     def sendWLMail(self,recipientId,senderId,msgText):
@@ -469,7 +469,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         try:
             self.servedMail += 1
             self.node.sendSCMail(recipientId,senderId,msgText)
-        except Exception as e:
+        except Exception,e:
             self.log.error("Error sending mail to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     def sendSCMail(self,recipientId,senderId,msgText):
@@ -479,7 +479,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
         try:
             self.servedMailSC += 1
             self.node.sendSCMail(recipientId,senderId,msgText)
-        except Exception as e:
+        except Exception,e:
             self.log.error("Error sending mail to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
     #wedge->app, override
@@ -500,7 +500,7 @@ class sbWedge(Pyro.core.SynchronizedObjBase):
 
         try:
             self.node.deleteMail(accountId,messageId)
-        except Exception as e:
+        except Exception,e:
             self.log.error("Error sending mail to my node: %s" % ''.join(Pyro.util.getPyroTraceback(e)))
 
 

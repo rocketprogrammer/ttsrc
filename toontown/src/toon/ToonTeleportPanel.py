@@ -6,7 +6,7 @@ from direct.showbase import DirectObject
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.directnotify import DirectNotifyGlobal
-from . import ToonAvatarDetailPanel
+import ToonAvatarDetailPanel
 from toontown.toonbase import TTLocalizer
 from toontown.hood import ZoneUtil
 
@@ -219,7 +219,7 @@ class ToonTeleportPanel(DirectFrame):
         if (self.avId == myId):
             self.fsm.request('self')
 
-        elif self.avId in base.cr.doId2do:
+        elif base.cr.doId2do.has_key(self.avId):
             # The avatar is online, and in fact, nearby.
             self.fsm.request('checkAvailability')
 
@@ -415,7 +415,7 @@ class ToonTeleportPanel(DirectFrame):
             self.fsm.request('unknownHood', [hoodId])
 
         elif canonicalHoodId not in base.cr.hoodMgr.getAvailableZones():
-            print("hoodId %d not ready" % hoodId)
+            print "hoodId %d not ready" % hoodId
             # We haven't finished downloading this hood yet.
             self.fsm.request('unavailableHood', [hoodId])
 

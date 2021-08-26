@@ -4,8 +4,8 @@ from pandac.PandaModules import *
 from otp.login.HTTPUtil import *
 from direct.directnotify import DirectNotifyGlobal
 from otp.login import TTAccount
-from . import DateObject
-from . import TTDateObject
+import DateObject
+import TTDateObject
 import time
 
 class AccountServerDate:
@@ -50,14 +50,16 @@ class AccountServerDate:
         # make sure we got a valid response
         if response[0] != 'ACCOUNT SERVER DATE':
             self.notify.debug('invalid response header')
-            raise UnexpectedResponse("unexpected response, response=%s" % response)
+            raise UnexpectedResponse, \
+                  "unexpected response, response=%s" % response
 
         # grab the date
         try:
             epoch = int(response[1])
-        except ValueError as e:
+        except ValueError, e:
             self.notify.debug(str(e))
-            raise UnexpectedResponse("unexpected response, response=%s" % response)
+            raise UnexpectedResponse, \
+                  "unexpected response, response=%s" % response
 
         # since we're now dealing with birth-days, we need a precise day
         # value. Just use Pacific time for now; the rest of the world

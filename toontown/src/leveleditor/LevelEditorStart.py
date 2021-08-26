@@ -1,5 +1,5 @@
 from direct.directbase.DirectStart import *
-from . import LevelEditor
+import LevelEditor
 #base.le = LevelEditor.LevelEditor()
 # [gjeon] Don't use this yet
 # to start leveleditor use

@@ -1,11 +1,11 @@
 
-from .DistributedMinigameAI import *
-from .TagTreasurePlannerAI import *
+from DistributedMinigameAI import *
+from TagTreasurePlannerAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
 import random
-from . import TagGameGlobals
+import TagGameGlobals
 
 class DistributedTagGameAI(DistributedMinigameAI):
 

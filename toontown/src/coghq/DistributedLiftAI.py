@@ -4,7 +4,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-from . import LiftConstants
+import LiftConstants
 
 class DistributedLiftAI(DistributedEntityAI.DistributedEntityAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLiftAI')

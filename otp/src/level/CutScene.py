@@ -1,6 +1,6 @@
 from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
-from . import BasicEntities
+import BasicEntities
 from pandac.PandaModules import *
 from direct.showbase.ShowBaseGlobal import *
 from direct.interval.IntervalGlobal import *

@@ -2,7 +2,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-from . import Hood
+import Hood
 
 class CogHood(Hood.Hood):
 

@@ -3,8 +3,8 @@ class game:
     process = "ai"
 __builtins__["game"] = game()
 
-from . import RepairAvatars
-from . import DatabaseObject
+import RepairAvatars
+import DatabaseObject
 import time
 
 class NPCFriendsFixer(RepairAvatars.AvatarIterator):
@@ -18,7 +18,7 @@ class NPCFriendsFixer(RepairAvatars.AvatarIterator):
     def processAvatar(self, av, db):
         self.printSometimes(av)
         if hasattr(av, "maxNPCFriends") and av.maxNPCFriends < 8:
-            print("Fixing %s: %s" % (av.doId, av.name))
+            print "Fixing %s: %s" % (av.doId, av.name)
             av.b_setMaxNPCFriends(8)
             db2 = DatabaseObject.DatabaseObject(self.air, av.doId)
             db2.storeObject(av, ['setMaxNPCFriends'])
@@ -27,11 +27,11 @@ class NPCFriendsFixer(RepairAvatars.AvatarIterator):
     def printSometimes(self, av):
         now = time.time()
         if now - self.lastPrintTime > self.printInterval:
-            print("Avatar %d: %s" % (av.doId, av.name))
+            print "Avatar %d: %s" % (av.doId, av.name)
             self.lastPrintTime = now
 
 
-from . import UtilityStart
+import UtilityStart
 f = NPCFriendsFixer(simbase.air)
 f.start()
 run()

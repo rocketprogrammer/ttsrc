@@ -1,6 +1,6 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObjectAI
-from . import DistributedScavengerHuntTargetAI
+import DistributedScavengerHuntTargetAI
 
 class DistributedWinterCarolingTargetAI(DistributedScavengerHuntTargetAI.DistributedScavengerHuntTargetAI):
     """

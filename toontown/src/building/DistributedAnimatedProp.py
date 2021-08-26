@@ -80,7 +80,7 @@ class DistributedAnimatedProp(DistributedObject.DistributedObject):
         required dc field.
         """
         assert self.debugPrint("setPropId(%s)"%(propId,))
-        assert "propId" not in self.__dict__
+        assert not self.__dict__.has_key("propId")
         self.propId=propId
     
     def setAvatarInteract(self, avatarId):
@@ -88,7 +88,7 @@ class DistributedAnimatedProp(DistributedObject.DistributedObject):
         required dc field.
         """
         assert self.debugPrint("setAvatarInteract(%s)"%(avatarId,))
-        assert avatarId not in self.__dict__
+        assert not self.__dict__.has_key(avatarId)
         self.avatarId=avatarId
     
     def setOwnerDoId(self, ownerDoId):
@@ -96,7 +96,7 @@ class DistributedAnimatedProp(DistributedObject.DistributedObject):
         required dc field.
         """
         assert self.debugPrint("setOwnerDoId(%s)"%(ownerDoId,))
-        assert "ownerDoId" not in self.__dict__
+        assert not self.__dict__.has_key("ownerDoId")
         self.ownerDoId=ownerDoId
 
     def setState(self, state, timestamp):

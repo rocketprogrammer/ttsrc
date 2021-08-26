@@ -2,11 +2,10 @@ import sys, string, math, types
 import direct.gui.DirectGuiGlobals as DGG
 from direct.gui.DirectGui import *
 
-from .PieMenu import *
-from .ScrollMenu import *
+from PieMenu import *
+from ScrollMenu import *
 
-from .LevelEditorGlobals import *
-from functools import reduce
+from LevelEditorGlobals import *
 
 class LevelStyleManager:
     """Class which reads in style files and manages class variables"""
@@ -47,7 +46,7 @@ class LevelStyleManager:
         Create a dictionary of baseline styles for a neighborhood
         """
         filename = neighborhood + '_baseline_styles.txt'
-        print('Loading baseline styles from: ' + filename)
+        print 'Loading baseline styles from: ' + filename
         styleData = self.getStyleFileData(filename)
         return self.initializeBaselineStyleDictionary(styleData, neighborhood)
 
@@ -63,7 +62,7 @@ class LevelStyleManager:
             if l == 'baselineStyle':
                 # Start of new style, strip off first line then extract style
                 style, styleData = self.extractBaselineStyle(styleData)
-                style.name = code + '_baseline_style_' + repr(styleCount)
+                style.name = code + '_baseline_style_' + `styleCount`
                 # Store style in dictionary
                 styleDictionary[style.name] = style
                 styleCount = styleCount + 1
@@ -88,8 +87,8 @@ class LevelStyleManager:
                 # Note, endBaselineStyle line is *not* stripped off
                 return style, styleData
             else:
-                pair = list(map(string.strip, l.split(':')))
-                if pair[0] in style.__dict__:
+                pair = map(string.strip, l.split(':'))
+                if style.__dict__.has_key(pair[0]):
                     pair_0 = pair[0]
                     # Convert some numerical values
                     if (pair_0 == 'color'
@@ -107,8 +106,8 @@ class LevelStyleManager:
                     else:
                         style[pair_0] = pair[1]
                 else:
-                    print('extractBaselineStyle: Invalid Key')
-                    print(pair[0])
+                    print 'extractBaselineStyle: Invalid Key'
+                    print pair[0]
             styleData = styleData[1:]
         # No end of style found, return style data as is
         return style, None
@@ -121,9 +120,9 @@ class LevelStyleManager:
         newStyleMenu = hidden.attachNewNode(neighborhood + '_style_menu')
         radius = 0.7
         angle = deg2Rad(360.0/numItems)
-        keys = list(dictionary.keys())
+        keys = dictionary.keys()
         keys.sort()
-        styles = list(map(lambda x, d = dictionary: d[x], keys))
+        styles = map(lambda x, d = dictionary: d[x], keys)
         sf = 0.1
         aspectRatio = (base.direct.dr.getWidth()/float(base.direct.dr.getHeight()))
         for i in range(numItems):
@@ -180,7 +179,7 @@ class LevelStyleManager:
         Create a dictionary of wall styles for a neighborhood
         """
         filename = neighborhood + '_wall_styles.txt'
-        print('Loading wall styles from: ' + filename)
+        print 'Loading wall styles from: ' + filename
         styleData = self.getStyleFileData(filename)
         return self.initializeWallStyleDictionary(styleData, neighborhood)
 
@@ -196,7 +195,7 @@ class LevelStyleManager:
             if l == 'wallStyle':
                 # Start of new style, strip off first line then extract style
                 style, styleData = self.extractWallStyle(styleData)
-                style.name = code + '_wall_style_' + repr(styleCount)
+                style.name = code + '_wall_style_' + `styleCount`
                 # Store style in dictionary
                 styleDictionary[style.name] = style
                 styleCount = styleCount + 1
@@ -221,8 +220,8 @@ class LevelStyleManager:
                 # Note, endWallStyle line is *not* stripped off
                 return style, styleData
             else:
-                pair = list(map(string.strip, l.split(':')))
-                if pair[0] in style.__dict__:
+                pair = map(string.strip, l.split(':'))
+                if style.__dict__.has_key(pair[0]):
                     # Convert colors and count strings to numerical values
                     if ((string.find(pair[0],'_color') >= 0) or
                         (string.find(pair[0],'_count') >= 0)):
@@ -230,8 +229,8 @@ class LevelStyleManager:
                     else:
                         style[pair[0]] = pair[1]
                 else:
-                    print('getStyleDictionaryFromStyleData: Invalid Key')
-                    print(pair[0])
+                    print 'getStyleDictionaryFromStyleData: Invalid Key'
+                    print pair[0]
             styleData = styleData[1:]
         # No end of style found, return style data as is
         return style, None
@@ -244,9 +243,9 @@ class LevelStyleManager:
         newStyleMenu = hidden.attachNewNode(neighborhood + '_style_menu')
         radius = 0.7
         angle = deg2Rad(360.0/numItems)
-        keys = list(dictionary.keys())
+        keys = dictionary.keys()
         keys.sort()
-        styles = list(map(lambda x, d = dictionary: d[x], keys))
+        styles = map(lambda x, d = dictionary: d[x], keys)
         sf = 0.03
         aspectRatio = (base.direct.dr.getWidth()/float(base.direct.dr.getHeight()))
         for i in range(numItems):
@@ -322,11 +321,11 @@ class LevelStyleManager:
             typeKey = i + '_styles'
             self.attributeDictionary[typeKey] = {}
         for i in NUM_WALLS:
-            numWallKey = repr(i) + '_wall_styles'
+            numWallKey = `i` + '_wall_styles'
             self.attributeDictionary[numWallKey] = {}
         # Also sort height lists according to total height of the building
         for i in BUILDING_HEIGHTS:
-            heightKey = repr(i) + '_ft_wall_heights'
+            heightKey = `i` + '_ft_wall_heights'
             self.attributeDictionary[heightKey] = {}
         # Now distribute data for each neighborhood
         for neighborhood in self.NEIGHBORHOODS:
@@ -342,17 +341,17 @@ class LevelStyleManager:
                 typeAttributes[i] = LevelAttribute(typeAttrName)
             # Number of walls
             for i in NUM_WALLS:
-                styleAttrName = neighborhood + '_' + repr(i) + '_wall_styles'
+                styleAttrName = neighborhood + '_' + `i` + '_wall_styles'
                 numWallsAttributes[i] = LevelAttribute(styleAttrName)
             # Building height
             for i in BUILDING_HEIGHTS:
-                heightAttrName = neighborhood + '_' + repr(i) + '_ft_wall_heights'
+                heightAttrName = neighborhood + '_' + `i` + '_ft_wall_heights'
                 heightAttributes[i] = LevelAttribute(heightAttrName)
             # Sort through the styles and store in separate lists
             for style in styleDict[neighborhood].getList():
                 # Put in code for number of walls into building styles
                 heightType = string.strip(string.split(style.name, ':')[1])
-                heightList = list(map(string.atof, string.split(heightType, '_')))
+                heightList = map(string.atof, string.split(heightType, '_'))
                 numWalls = len(heightList)
                 # This one stores styles sorted by type
                 typeAttributes[heightType].add(style)
@@ -371,12 +370,12 @@ class LevelStyleManager:
                     typeAttributes[i])
             for i in NUM_WALLS:
                 # Styles
-                numWallKey = repr(i) + '_wall_styles'
+                numWallKey = `i` + '_wall_styles'
                 self.attributeDictionary[numWallKey][neighborhood] = (
                     numWallsAttributes[i])
             for i in BUILDING_HEIGHTS:
                 # Heights
-                heightKey = repr(i) + '_ft_wall_heights'
+                heightKey = `i` + '_ft_wall_heights'
                 self.attributeDictionary[heightKey][neighborhood] = (
                     heightAttributes[i])
 
@@ -385,7 +384,7 @@ class LevelStyleManager:
         Create a dictionary of wall styles for a neighborhood
         """
         filename = neighborhood + '_building_styles.txt'
-        print('Loading building styles from: ' + filename)
+        print 'Loading building styles from: ' + filename
         styleData = self.getStyleFileData(filename)
         return self.initializeBuildingStyleDictionary(styleData, neighborhood)
 
@@ -407,11 +406,11 @@ class LevelStyleManager:
                 bldgStyle = DNAFlatBuildingStyle(styleList = [])
                 # Extract height information found at end of line
                 heightCode = string.strip(string.split(l, ':')[1])
-                heightList = list(map(string.atof, string.split(heightCode, '_')))
+                heightList = map(string.atof, string.split(heightCode, '_'))
                 # Construct name for building style.  Tack on height code
                 # to be used later to split styles by heightCode
                 bldgStyle.name = (
-                    code + '_building_style_' + repr(styleCount) +
+                    code + '_building_style_' + `styleCount` +
                     ':' + heightCode)
                 # Increment counter
                 styleCount = styleCount + 1
@@ -425,7 +424,7 @@ class LevelStyleManager:
             elif l[:9] == 'wallStyle':
                 # Beginning of next wall style
                 wallStyle, styleData = self.extractWallStyle(styleData)
-                wallStyle.name = bldgStyle.name + '_wall_' + repr(wallCount)
+                wallStyle.name = bldgStyle.name + '_wall_' + `wallCount`
                 try:
                     height = heightList[wallCount]
                 except IndexError:
@@ -446,9 +445,9 @@ class LevelStyleManager:
         newStyleMenu = hidden.attachNewNode(neighborhood + '_style_menu')
         radius = 0.7
         angle = deg2Rad(360.0/numItems)
-        keys = list(dictionary.keys())
+        keys = dictionary.keys()
         keys.sort()
-        styles = list(map(lambda x, d = dictionary: d[x], keys))
+        styles = map(lambda x, d = dictionary: d[x], keys)
         sf = 0.02
         aspectRatio = (base.direct.dr.getWidth()/float(base.direct.dr.getHeight()))
         for i in range(numItems):
@@ -571,33 +570,33 @@ class LevelStyleManager:
                 self.printWallStyle(child)
 
     def printWallStyle(self, wall):
-        print('wall_texture: ' + wall.getCode())
+        print 'wall_texture: ' + wall.getCode()
         color = wall.getColor()
-        print(('wall_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
-               (color[0], color[1], color[2])))
+        print ('wall_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
+               (color[0], color[1], color[2]))
         for i in range(wall.getNumChildren()):
             child = wall.at(i)
             if DNAClassEqual(child, DNA_WINDOWS):
-                print('window_texture: ' + child.getCode())
+                print 'window_texture: ' + child.getCode()
                 color = child.getColor()
-                print(('window_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
-                       (color[0], color[1], color[2])))
+                print ('window_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
+                       (color[0], color[1], color[2]))
                 # MRM: Check for awnings here
             elif DNAClassEqual(child, DNA_DOOR):
-                print('door_texture: ' + child.getCode())
+                print 'door_texture: ' + child.getCode()
                 color = child.getColor()
-                print(('door_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
-                       (color[0], color[1], color[2])))
+                print ('door_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
+                       (color[0], color[1], color[2]))
             elif DNAClassEqual(child, DNA_FLAT_DOOR):
-                print('door_texture: ' + child.getCode())
+                print 'door_texture: ' + child.getCode()
                 color = child.getColor()
-                print(('door_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
-                       (color[0], color[1], color[2])))
+                print ('door_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
+                       (color[0], color[1], color[2]))
             elif DNAClassEqual(child, DNA_CORNICE):
-                print('cornice_texture: ' + child.getCode())
+                print 'cornice_texture: ' + child.getCode()
                 color = child.getColor()
-                print(('cornice_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
-                       (color[0], color[1], color[2])))
+                print ('cornice_color: Vec4(%.3f, %.3f, %.3f, 1.0)' %
+                       (color[0], color[1], color[2]))
 
     # COLOR PALETTE FUNCTIONS
     def createColorAttributes(self):
@@ -629,7 +628,7 @@ class LevelStyleManager:
 
     def createColorDictionary(self, neighborhood):
         filename = neighborhood + '_colors.txt'
-        print('Loading Color Palettes from: ' + filename)
+        print 'Loading Color Palettes from: ' + filename
         colorData = self.getStyleFileData(filename)
         return self.getColorDictionary(colorData)
 
@@ -640,17 +639,17 @@ class LevelStyleManager:
             dict[colorType] = DEFAULT_COLORS[:]
         # Add color information to appropriate sub-list
         for line in colorData:
-            pair = list(map(string.strip, line.split(':')))
+            pair = map(string.strip, line.split(':'))
             key = pair[0]
-            if key in dict:
+            if dict.has_key(key):
                 dict[key].append(eval(pair[1]))
             else:
-                print('LevelStyleManager.getColorDictionary key not found')
+                print 'LevelStyleManager.getColorDictionary key not found'
         return dict
 
     def createColorMenus(self, neighborhood, dictionary):
         menuDict = {}
-        keys = list(dictionary.keys())
+        keys = dictionary.keys()
         for key in keys:
             menuDict[key] = (
                 self.createColorMenu(neighborhood + key, dictionary[key]))
@@ -745,7 +744,7 @@ class LevelStyleManager:
                 attribute.setMenu(self.createDNAPieMenu(dnaType, dnaList,
                                                          sf = 0.125))
             else:
-                print('unknown attribute')
+                print 'unknown attribute'
             # Add it to the attributeDictionary
             self.attributeDictionary[dnaType + '_texture'] = attribute
 
@@ -896,21 +895,21 @@ class LevelStyleManager:
         """ Return specified attribute for current neighborhood """
         levelAttribute = self.attributeDictionary[attribute]
         # Get attribute for current neighborhood
-        if (type(levelAttribute) == dict):
+        if (type(levelAttribute) == types.DictionaryType):
             levelAttribute = levelAttribute[self.getEditMode()]
         return levelAttribute
 
     # UTILITY FUNCTIONS
     def hasAttribute(self, attribute):
         """ Return specified attribute for current neighborhood """
-        if attribute not in self.attributeDictionary:
+        if not self.attributeDictionary.has_key(attribute):
             return 0
         else:
             levelAttribute = self.attributeDictionary[attribute]
             # Get attribute for current neighborhood
-            if (type(levelAttribute) == dict):
+            if (type(levelAttribute) == types.DictionaryType):
                 editMode = self.getEditMode()
-                return editMode in levelAttribute
+                return levelAttribute.has_key(editMode)
             else:
                 return 1
 
@@ -964,7 +963,7 @@ class LevelAttribute:
     def setDict(self, dict):
         self._dict = dict
         # Create a list from the dictionary
-        self._list = list(dict.values())
+        self._list = dict.values()
         # Update count
         self.count = len(self._list)
         # Initialize current to first item
@@ -1041,9 +1040,9 @@ class DNAFlatBuildingStyle:
 def createHeightCode(heightList):
     def joinHeights(h1, h2):
         return '%s_%s' % (h1, h2)
-    hl = list(map(ROUND_INT, heightList))
+    hl = map(ROUND_INT, heightList)
     if len(hl) == 1:
-        return repr(hl[0])
+        return `hl[0]`
     return reduce(joinHeights, hl)
 
 def calcHeight(heightList):

@@ -465,7 +465,7 @@ class ChatManager(DirectObject.DirectObject):
         chatToToon = 1 #set to 0 to chat to player
         
         online = 0
-        if avatarId in self.cr.doId2do:
+        if self.cr.doId2do.has_key(avatarId):
             # The avatar is online, and in fact, nearby.
             online = 1
         elif self.cr.isFriend(avatarId):
@@ -493,7 +493,7 @@ class ChatManager(DirectObject.DirectObject):
         ## This is less true now, but still possible.
           
         if playerId:
-            if playerId in base.cr.playerFriendsManager.playerId2Info:
+            if base.cr.playerFriendsManager.playerId2Info.has_key(playerId):
                 playerInfo = base.cr.playerFriendsManager.playerId2Info.get(playerId)
                 playerName = playerInfo.playerName
                 online = 1

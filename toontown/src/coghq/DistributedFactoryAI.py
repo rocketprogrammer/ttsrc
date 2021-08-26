@@ -1,13 +1,13 @@
 from otp.level import DistributedLevelAI
 from direct.directnotify import DirectNotifyGlobal
-import pickle
-from . import LevelSuitPlannerAI
-from . import FactoryBase
+import cPickle
+import LevelSuitPlannerAI
+import FactoryBase
 from direct.task import Task
-from . import FactoryEntityCreatorAI
-from . import FactorySpecs
+import FactoryEntityCreatorAI
+import FactorySpecs
 from otp.level import LevelSpec
-from . import CogDisguiseGlobals
+import CogDisguiseGlobals
 from toontown.suit import DistributedFactorySuitAI
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals
 from toontown.coghq import DistributedBattleFactoryAI

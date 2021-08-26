@@ -3,7 +3,7 @@ import _mysql_exceptions
 import datetime
 #from otp.distributed import OtpDoGlobals
 #from direct.directnotify.DirectNotifyGlobal import directNotify
-from . import FriendManagerService_services
+import FriendManagerService_services
 
 
 class PlayerFriendsDB:
@@ -23,7 +23,7 @@ class PlayerFriendsDB:
 
     def getFriends(self,playerId):
         friends = self.soapProxy.getFriends(playerId)
-        return [[x._friendId,x._secret] for x in friends]
+        return map(lambda x:[x._friendId,x._secret],friends)
 
     def addFriendship(self,playerId1,playerId2,secretYesNo=1):
         self.soapProxy.makeFriends(playerId1,playerId2,secretYesNo)

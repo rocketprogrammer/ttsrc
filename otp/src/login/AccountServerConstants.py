@@ -1,10 +1,10 @@
 """AccountServerConstants.py: contains the AccountServerConstants class """
 
 from pandac.PandaModules import *
-from .RemoteValueSet import *
+from RemoteValueSet import *
 from direct.directnotify import DirectNotifyGlobal
-from . import TTAccount
-from . import HTTPUtil
+import TTAccount
+import HTTPUtil
 
 class AccountServerConstants(RemoteValueSet):
     notify = \

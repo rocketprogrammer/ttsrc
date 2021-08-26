@@ -1,16 +1,16 @@
 from toontown.toonbase.ToontownGlobals import *
-from .SuitBattleGlobals import *
+from SuitBattleGlobals import *
 from direct.interval.IntervalGlobal import *
-from .BattleBase import *
-from .BattleProps import *
+from BattleBase import *
+from BattleProps import *
 from toontown.suit.SuitDNA import *
-from .BattleBase import *
-from .BattleSounds import *
-from . import MovieCamera
+from BattleBase import *
+from BattleSounds import *
+import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
-from . import MovieUtil
+import MovieUtil
 from direct.particles import ParticleEffect
-from . import BattleParticles
+import BattleParticles
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 
@@ -2256,8 +2256,8 @@ def doReOrg(attack): # special, reassign toon parts; cringe, jump; jump
         # The head track pops off the head, plays with it a bit, puts it back on upside down,
         # fixes it, rotates it backwards, and then restores it
         headParts = toon.getHeadParts()
-        print('***********headParts pos=', headParts[0].getPos())
-        print('***********headParts hpr=', headParts[0].getHpr())
+        print '***********headParts pos=', headParts[0].getPos()
+        print '***********headParts hpr=', headParts[0].getHpr()
         headTracks = Parallel()
         for partNum in range(0, headParts.getNumPaths()):
             part = headParts.getPath(partNum)
@@ -2306,7 +2306,7 @@ def doReOrg(attack): # special, reassign toon parts; cringe, jump; jump
         arms = toon.findAllMatches('**/arms')
         sleeves = toon.findAllMatches('**/sleeves')
         hands = toon.findAllMatches('**/hands')
-        print('*************arms hpr=', arms[0].getHpr())
+        print '*************arms hpr=', arms[0].getHpr()
 
         for partNum in range(0, arms.getNumPaths()):
             chestTracks.append(getChestTrack(arms.getPath(partNum)))

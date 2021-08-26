@@ -3,7 +3,7 @@ from direct.showbase import DirectObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
 import random
-from . import TreasurePlannerAI
+import TreasurePlannerAI
 
 class RegenTreasurePlannerAI(TreasurePlannerAI.TreasurePlannerAI):
     notify = DirectNotifyGlobal.directNotify.newCategory(

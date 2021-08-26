@@ -1,4 +1,4 @@
-from . import CatalogItem
+import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toon import ToonDNA

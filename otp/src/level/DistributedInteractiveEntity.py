@@ -2,7 +2,7 @@ from direct.showbase.ShowBaseGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
-from . import DistributedEntity
+import DistributedEntity
 
 class DistributedInteractiveEntity(DistributedEntity.DistributedEntity):
     __module__ = __name__

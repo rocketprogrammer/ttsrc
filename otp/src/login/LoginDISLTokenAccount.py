@@ -3,7 +3,7 @@
 from direct.showbase.ShowBaseGlobal import *
 from direct.distributed.MsgTypes import *
 from direct.directnotify import DirectNotifyGlobal
-from . import LoginBase
+import LoginBase
 from direct.distributed.PyDatagram import PyDatagram
 
 

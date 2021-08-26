@@ -565,11 +565,11 @@ def __getWaypointList(paths):
         assert 0, "Unknown waypoint information"
 
 def getNodePos(node, paths):
-    assert node in paths
+    assert paths.has_key(node)
     return paths[node][0]
 
 def getAdjacentNodes(node, paths):
-    assert node in paths
+    assert paths.has_key(node)
     return paths[node][1]
 
 def getWayPoints(fromNode, toNode, paths, wpts = None):

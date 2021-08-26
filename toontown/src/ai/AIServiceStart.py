@@ -47,14 +47,14 @@ try:
         'max_objid=',
         'dcfile=',
         ])
-except Exception as e:
-    print(e)
-    print(helpString)
+except Exception, e:
+    print e
+    print helpString
     sys.exit(1)
 
 # Only four of the items are required
 if len(opts) < 4:
-    print(helpString)
+    print helpString
     sys.exit(1)
 
 # Default values
@@ -93,8 +93,8 @@ for opt in opts:
     elif (flag == '--dcfile'):
         dcFileNames.append(value)
     else:
-        print("Error: Illegal option: " + flag)
-        print(helpString)
+        print "Error: Illegal option: " + flag
+        print helpString
         sys.exit(1)
 
 if not dcFileNames:
@@ -140,11 +140,11 @@ nout.addSystemDebug()
 # We prefer writing the date on the same line as the starting message,
 # so we can more easily grep for a restart on a particular date in the
 # log files.
-print("\n\nStarting %s (number: %s) on %s port %s. %s %s" % (
+print "\n\nStarting %s (number: %s) on %s port %s. %s %s" % (
     districtName, districtNumber, mdip, mdport, 
-    time.asctime(time.localtime(time.time())), time.tzname[0]))
+    time.asctime(time.localtime(time.time())), time.tzname[0])
 
-print("Initializing...")
+print "Initializing..."
 
 from otp.ai.AIBaseGlobal import *
 from toontown.ai import ToontownAIRepository

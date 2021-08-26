@@ -70,7 +70,7 @@ class ModifiedIter:
     # Input: None
     # Output: returns the new current element
     #############################################################
-    def __next__(self):
+    def next(self):
         try:
             lastIdx = len(self._seq) - 1
             self._idx = ((lastIdx == self._idx) and [0] or [self._idx+1])[0]

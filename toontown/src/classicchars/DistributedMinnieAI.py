@@ -1,7 +1,7 @@
 """DistributedMinnieAI module: contains the DistributedMinnieAI class"""
 
 from otp.ai.AIBaseGlobal import *
-from . import DistributedCCharBaseAI
+import DistributedCCharBaseAI
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
@@ -9,7 +9,7 @@ from direct.task import Task
 import random
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from . import CharStateDatasAI
+import CharStateDatasAI
 
 class DistributedMinnieAI(DistributedCCharBaseAI.DistributedCCharBaseAI):
 
@@ -96,7 +96,7 @@ class DistributedMinnieAI(DistributedCCharBaseAI.DistributedCCharBaseAI):
         decides that it is finished and a new state should
         be transitioned into
         """
-        assert('status' in doneStatus)
+        assert(doneStatus.has_key('status'))
 
         if(self.transitionToCostume == 1):
             curWalkNode = self.walk.getDestNode()

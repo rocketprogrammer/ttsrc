@@ -4,12 +4,12 @@ from otp.otpbase.OTPLocalizer import SpeedChatStaticText, CustomSCStrings
 
 msgs = set()
 
-msgs.update(list(SpeedChatStaticText.values()))
-msgs.update(list(CustomSCStrings.values()))
+msgs.update(SpeedChatStaticText.values())
+msgs.update(CustomSCStrings.values())
 
-print('=== START SC STRINGS ===')
+print '=== START SC STRINGS ==='
 
 for msg in msgs:
     if len(msg):
-        print(msg)
+        print msg
     

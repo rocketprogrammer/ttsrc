@@ -3,9 +3,9 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from toontown.toonbase import ToontownGlobals
-from . import DistributedToon
+import DistributedToon
 from direct.distributed import DistributedObject
-from . import NPCToons
+import NPCToons
 from toontown.quest import Quests
 from direct.distributed import ClockDelta
 from toontown.quest import QuestParser
@@ -101,7 +101,7 @@ class DistributedNPCToonBase(DistributedToon.DistributedToon):
         self.setAnimState("neutral", 0.9, None, None)
         
         # TODO: make this a node path collection
-        npcOrigin = render.find("**/npc_origin_" + repr(self.posIndex))
+        npcOrigin = render.find("**/npc_origin_" + `self.posIndex`)
         
         # Now he's no longer parented to render, but no one minds.
         if not npcOrigin.isEmpty():

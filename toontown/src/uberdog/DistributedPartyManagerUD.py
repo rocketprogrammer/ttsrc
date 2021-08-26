@@ -399,7 +399,7 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
         endTime = partyInfoDict['endTime']
         activitiesStr = partyInfoDict['activities']
         formattedActivities = []
-        for i in range (len(activitiesStr) /4):
+        for i in xrange (len(activitiesStr) /4):
             oneActivity = (ord(activitiesStr[i*4]),
                            ord(activitiesStr[i*4 + 1]),
                            ord(activitiesStr[i*4 + 2]),
@@ -408,7 +408,7 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
             formattedActivities.append(oneActivity)
         decorStr = partyInfoDict['decorations']
         formattedDecors = []
-        for i in range( len(decorStr) / 4):
+        for i in xrange( len(decorStr) / 4):
             oneDecor = (ord(decorStr[i*4]),
                         ord(decorStr[i*4 + 1]),
                         ord(decorStr[i*4 + 2]),
@@ -649,7 +649,7 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
         # Check to see if this is a party that has finished
         if partyDict["statusId"] == PartyGlobals.PartyStatus.Started and newPartyStatus == PartyGlobals.PartyStatus.Finished:
             # It's over, send word to all the AIs so they can update for their public party gates
-            if partyDict["hostId"] in self.hostAvIdToAllPartiesInfo:
+            if self.hostAvIdToAllPartiesInfo.has_key(partyDict["hostId"]):
                 self.sendUpdateToAllAis("partyHasFinishedUdToAllAi", [partyDict["hostId"]])
                 del self.hostAvIdToAllPartiesInfo[partyDict["hostId"]]
         
@@ -856,7 +856,7 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
     def toonHasEnteredPartyAiToUd(self, hostId):
         """ This gets called when a toon enters a party. """
         DistributedPartyManagerUD.notify.debug("toonHasEnteredPartyAiToUd : someone entered hostIds %s party"%hostId)
-        if hostId in self.hostAvIdToAllPartiesInfo:
+        if self.hostAvIdToAllPartiesInfo.has_key(hostId):
             self.hostAvIdToAllPartiesInfo[hostId][3] += 1
             if self.hostAvIdToAllPartiesInfo[hostId][3] >= 0:
                 self.sendUpdateToAllAis("updateToPublicPartyCountUdToAllAi", [hostId, self.hostAvIdToAllPartiesInfo[hostId][3]])
@@ -864,7 +864,7 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
     def toonHasExitedPartyAiToUd(self, hostId):
         """ This gets called when a toon exits a party. """
         DistributedPartyManagerUD.notify.debug("toonHasExitedPartyAiToUd : someone exited hostIds %s party"%hostId)
-        if hostId in self.hostAvIdToAllPartiesInfo:
+        if self.hostAvIdToAllPartiesInfo.has_key(hostId):
             self.hostAvIdToAllPartiesInfo[hostId][3] -= 1
             if self.hostAvIdToAllPartiesInfo[hostId][3] >= 0:
                 self.sendUpdateToAllAis("updateToPublicPartyCountUdToAllAi", [hostId, self.hostAvIdToAllPartiesInfo[hostId][3]])
@@ -887,7 +887,7 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
                 activityIds.append(partyInfo["activities"][i])
         # we can not rely on globalClock.getRealTime() as that depends on when the process is started
         # and will definitely be different between the uberdog and AI
-        actualStartTime = int(time.time())
+        actualStartTime = long(time.time())
         self.hostAvIdToAllPartiesInfo[partyInfo["hostId"]] = [shardId, zoneId, partyInfo["isPrivate"], 0, hostName, activityIds,actualStartTime, partyId]
         self.sendUpdateToAllAis("updateToPublicPartyInfoUdToAllAi", [partyInfo["hostId"], actualStartTime, shardId, zoneId, partyInfo["isPrivate"], 0, hostName, activityIds, partyId])
         self.informInviteesPartyHasStarted(partyId)
@@ -929,10 +929,10 @@ class DistributedPartyManagerUD(DistributedObjectGlobalUD):
     def markAvatarOnline(self, avatarId):
         """Mark an avatar as online."""
 
-        if avatarId in self.isAvatarOnline:
+        if self.isAvatarOnline.has_key(avatarId):
             assert self.notify.debug(
                 "\n\nWe got a duplicate avatar online notice %s"%(avatarId,))
-        if avatarId and avatarId not in self.isAvatarOnline:
+        if avatarId and not self.isAvatarOnline.has_key(avatarId):
             self.isAvatarOnline[avatarId]=True
 
     def markAvatarOffline(self, avatarId):

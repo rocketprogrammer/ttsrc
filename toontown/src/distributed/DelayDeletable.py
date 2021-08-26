@@ -24,7 +24,7 @@ class DelayDeletable:
         if self.getDelayDeleteCount() == 0:
             self.cr._addDelayDeletedDO(self)
 
-        token = next(DelayDeletable.DelayDeleteSerialGen)
+        token = DelayDeletable.DelayDeleteSerialGen.next()
         self._token2delayDeleteName[token] = name
 
         assert self.notify.debug(
@@ -46,7 +46,7 @@ class DelayDeletable:
                 self.disableAnnounceAndDelete()
 
     def getDelayDeleteNames(self):
-        return list(self._token2delayDeleteName.values())
+        return self._token2delayDeleteName.values()
 
     def forceAllowDelayDelete(self):
         # Toontown has code that creates a DistributedObject manually and then

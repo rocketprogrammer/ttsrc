@@ -1,5 +1,5 @@
 from direct.distributed import DistributedObjectAI
-from . import MailboxGlobals
+import MailboxGlobals
 from toontown.catalog import CatalogItem
 from toontown.catalog import CatalogItemList
 from toontown.toonbase import ToontownGlobals

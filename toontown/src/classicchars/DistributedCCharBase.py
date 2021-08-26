@@ -13,8 +13,8 @@ from direct.controls.ControlManager import CollisionHandlerRayStart
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.TTLocalizer import Donald, DonaldDock, WesternPluto, Pluto
 from toontown.effects import DustCloud
-from . import CCharChatter
-from . import CCharPaths
+import CCharChatter
+import CCharPaths
 
 import string
 import copy
@@ -263,7 +263,7 @@ class DistributedCCharBase(DistributedChar.DistributedChar):
         return turnTracks
 
     def setChat(self, category, msg, avId):
-        if avId in self.cr.doId2do:
+        if self.cr.doId2do.has_key(avId):
             avatar = self.cr.doId2do[avId]
             chatter = CCharChatter.getChatter(self.getName(), self.getCCChatter())
             if category >= len(chatter):

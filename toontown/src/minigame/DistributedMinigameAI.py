@@ -6,12 +6,12 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.shtiker import PurchaseManagerAI
 from toontown.shtiker import NewbiePurchaseManagerAI
-from . import MinigameCreatorAI
+import MinigameCreatorAI
 from direct.task import Task
 import random
-from . import MinigameGlobals
+import MinigameGlobals
 from direct.showbase import PythonUtil
-from . import TravelGameGlobals
+import TravelGameGlobals
 from toontown.toonbase import ToontownGlobals
 
 # Codes to indicate avatar state
@@ -424,7 +424,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
             allAvatarsReady, handleTimeout)
 
         # some clients may already be ready
-        for avId in list(self.stateDict.keys()):
+        for avId in self.stateDict.keys():
             if self.stateDict[avId] == READY:
                 self.__barrier.clear(avId)
 
@@ -510,7 +510,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
             allAvatarsExited, handleTimeout)
 
         # process any toons that have already exited
-        for avId in list(self.stateDict.keys()):
+        for avId in self.stateDict.keys():
             if self.stateDict[avId] == EXITED:
                 self.__barrier.clear(avId)
 
@@ -602,7 +602,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
 
         votesArray = []
         for avId in self.avIdList:
-            if avId in votesToUse:
+            if votesToUse.has_key(avId):
                 votesArray.append(votesToUse[avId])
             else:
                 self.notify.warning('votesToUse=%s does not have avId=%d' % (votesToUse,avId))
@@ -780,7 +780,7 @@ class DistributedMinigameAI(DistributedObjectAI.DistributedObjectAI):
         """
         retval = []
         for avId in self.avIdList:
-            if avId in self.startingVotes:
+            if self.startingVotes.has_key(avId):
                 retval.append( self.startingVotes[avId])
             else:
                 self.notify.warning('how did this happen? avId=%d not in startingVotes %s' %

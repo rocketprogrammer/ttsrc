@@ -1,6 +1,6 @@
 
-from . import TownLoader
-from . import MMStreet
+import TownLoader
+import MMStreet
 from toontown.suit import Suit
 if __debug__:
     from direct.directnotify import DirectNotifyGlobal

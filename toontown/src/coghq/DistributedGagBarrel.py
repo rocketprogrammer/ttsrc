@@ -3,7 +3,7 @@ from direct.showbase.PandaObject import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
-from . import DistributedBarrelBase
+import DistributedBarrelBase
 
 class DistributedGagBarrel(DistributedBarrelBase.DistributedBarrelBase):
     __module__ = __name__

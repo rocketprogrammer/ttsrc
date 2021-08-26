@@ -1,17 +1,17 @@
 from direct.interval.IntervalGlobal import *
-from .BattleBase import *
-from .BattleProps import *
+from BattleBase import *
+from BattleProps import *
 from toontown.suit.SuitBase import *
 from toontown.toon.ToonDNA import *
-from .BattleSounds import *
+from BattleSounds import *
 
-from . import MovieCamera
+import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
-from . import MovieUtil
+import MovieUtil
 from toontown.toonbase import ToontownBattleGlobals
-from . import BattleParticles
-from . import BattleProps
-from . import MovieNPCSOS
+import BattleParticles
+import BattleProps
+import MovieNPCSOS
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieLures')
 
@@ -279,7 +279,7 @@ def __createMagnetMultiTrack(lure, magnet, pos, hpr, scale, isSmallMagnet=1):
 
 def __createHypnoGogglesMultiTrack(lure, npcs = []):
     toon = lure['toon']
-    if ('npc' in lure):
+    if (lure.has_key('npc')):
         toon = lure['npc']
     targets = lure['target']
     battle = lure['battle']

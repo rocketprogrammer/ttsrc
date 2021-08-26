@@ -23,7 +23,7 @@ class TTCRMAIRetryMgr(DirectObject):
             
     def addRedemption(self, avId, context, code):
         assert self.notify.debugCall()
-        serial = next(self._serialGen)
+        serial = self._serialGen.next()
         self._redemptions[serial] = ScratchPad(avId=avId, context=context, code=code, attemptNum=0)
         self._doRedemption(serial, True)
 

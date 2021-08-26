@@ -1,12 +1,12 @@
 """OptionsPage module: contains the OptionsPage class"""
 
 from pandac.PandaModules import *
-from . import ShtikerPage
+import ShtikerPage
 from toontown.toontowngui import TTDialog
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
-from . import DisplaySettingsDialog
+import DisplaySettingsDialog
 from direct.task import Task
 from otp.speedchat import SpeedChat
 from otp.speedchat import SCColorScheme
@@ -214,7 +214,7 @@ class OptionsPage(ShtikerPage.ShtikerPage):
             self.codesTabPage.enter()
             
         else:
-            raise Exception("OptionsPage::setMode - Invalid Mode %s" % (mode))
+            raise StandardError, "OptionsPage::setMode - Invalid Mode %s" % (mode)
 
             
 class OptionsTabPage(DirectFrame):

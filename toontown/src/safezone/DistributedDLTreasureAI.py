@@ -1,5 +1,5 @@
 
-from . import DistributedSZTreasureAI
+import DistributedSZTreasureAI
 
 class DistributedDLTreasureAI(DistributedSZTreasureAI.DistributedSZTreasureAI):
 

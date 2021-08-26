@@ -1,4 +1,4 @@
-from . import DistributedBarrelBaseAI
+import DistributedBarrelBaseAI
 from direct.directnotify import DirectNotifyGlobal
 from direct.task import Task
 

@@ -1,7 +1,7 @@
 from direct.showbase.ShowBaseGlobal import *
 from direct.interval.IntervalGlobal import *
 from toontown.battle.BattleProps import *
-from .GoonGlobals import *
+from GoonGlobals import *
 from direct.fsm import FSM
 from direct.distributed import ClockDelta
 from otp.level import BasicEntities
@@ -10,7 +10,7 @@ from direct.directnotify import DirectNotifyGlobal
 from toontown.coghq import DistributedCrushableEntity
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import MovingPlatform
-from . import Goon
+import Goon
 from otp.level import PathEntity
 import GoonDeath, random
 

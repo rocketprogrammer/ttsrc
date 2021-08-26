@@ -2,4 +2,4 @@
 """
 
 if simbase.wantPets:
-    from . import DistributedPetAI
+    import DistributedPetAI

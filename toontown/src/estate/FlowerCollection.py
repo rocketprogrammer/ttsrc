@@ -1,6 +1,6 @@
-from . import GardenGlobals
+import GardenGlobals
 from direct.directnotify import DirectNotifyGlobal
-from . import FlowerBase
+import FlowerBase
 
 class FlowerCollection:
     """

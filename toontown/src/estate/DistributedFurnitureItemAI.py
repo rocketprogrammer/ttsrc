@@ -6,8 +6,8 @@ from direct.distributed import ClockDelta
 from direct.fsm import State
 from toontown.catalog import CatalogItem
 import random
-from . import HouseGlobals
-from . import DistributedHouseItemAI
+import HouseGlobals
+import DistributedHouseItemAI
 from direct.distributed import DistributedSmoothNodeAI
 
 class DistributedFurnitureItemAI(DistributedHouseItemAI.DistributedHouseItemAI,

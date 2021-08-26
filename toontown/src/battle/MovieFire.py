@@ -1,16 +1,16 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-from .BattleBase import *
-from .BattleProps import *
-from .BattleSounds import *
+from BattleBase import *
+from BattleProps import *
+from BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.suit.SuitDNA import *
 
 from direct.directnotify import DirectNotifyGlobal
 import random
-from . import MovieCamera
-from . import MovieUtil
-from .MovieUtil import calcAvgSuitPos
+import MovieCamera
+import MovieUtil
+from MovieUtil import calcAvgSuitPos
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')
 
@@ -51,7 +51,7 @@ pieFlyTaskName = "MovieThrow-pieFly"
 
 
 def addHit (dict, suitId, hitCount):
-    if (suitId in dict):
+    if (dict.has_key(suitId)):
         dict[suitId] += hitCount
     else:
         dict[suitId] = hitCount
@@ -77,13 +77,13 @@ def doFires(fires):
     
     for fire in fires:
         suitId = fire['target']['suit'].doId
-        if (suitId in suitFiresDict):
+        if (suitFiresDict.has_key(suitId)):
             suitFiresDict[suitId].append(fire)
         else:
             suitFiresDict[suitId] = [fire]
         
     # A list of lists of throws grouped by suit
-    suitFires = list(suitFiresDict.values())
+    suitFires = suitFiresDict.values()
     # Sort the suits based on the number of throws per suit
     def compFunc(a, b):
         if (len(a) > len(b)):

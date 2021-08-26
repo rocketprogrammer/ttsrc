@@ -1,4 +1,4 @@
-import pickle as pickle
+import cPickle as pickle
 from otp.navigation.NavMesh import NavMesh
 import sys
 

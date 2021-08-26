@@ -2,7 +2,7 @@
 from otp.ai.AIBase import *
 from direct.directnotify import DirectNotifyGlobal
 from otp.level import DistributedEntityAI
-from . import SinkingPlatformGlobals
+import SinkingPlatformGlobals
 
 class DistributedSinkingPlatformAI(DistributedEntityAI.DistributedEntityAI):
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedSinkingPlatformAI")

@@ -3,7 +3,7 @@ from toontown.suit.Suit import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.actor import Actor
 from otp.avatar import Avatar
-from . import SuitDNA
+import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *
 from toontown.battle import SuitBattleGlobals

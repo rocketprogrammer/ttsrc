@@ -8,7 +8,7 @@ from direct.distributed.ClockDelta import *
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
-from . import DistributedEntityAI
+import DistributedEntityAI
 from direct.fsm import State
 
 

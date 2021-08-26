@@ -33,7 +33,7 @@ class MySQLAccountAvatarsDB(DBInterface):
             if __debug__:
                 self.notify.info("MySQL database '%s' did not exist, "
                                  "created a new one." % self.dbname)
-        except _mysql_exceptions.ProgrammingError as e:
+        except _mysql_exceptions.ProgrammingError, e:
             pass
 
         cursor.execute("USE %s" % self.dbname)
@@ -58,7 +58,7 @@ class MySQLAccountAvatarsDB(DBInterface):
             if __debug__:
                 self.notify.info("Table 'account_to_avatars' did not exist, "
                                  "created a new one.")
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             pass
 
     def connect(self):
@@ -150,7 +150,7 @@ class MySQLAccountAvatarsDB(DBInterface):
         try:
             cursor = MySQLdb.cursors.DictCursor(self.db)
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             if (e[0] == MySQLdb.constants.CR.SERVER_GONE_ERROR) or \
                (e[0] == MySQLdb.constants.CR.SERVER_LOST):
                 self.reconnect()
@@ -168,7 +168,7 @@ class MySQLAccountAvatarsDB(DBInterface):
         try:
             cursor = MySQLdb.cursors.DictCursor(self.db)
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             if (e[0] == MySQLdb.constants.CR.SERVER_GONE_ERROR) or \
                (e[0] == MySQLdb.constants.CR.SERVER_LOST):
                 self.reconnect()
@@ -186,7 +186,7 @@ class MySQLAccountAvatarsDB(DBInterface):
         try:
             cursor = MySQLdb.cursors.DictCursor(self.db)
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             if (e[0] == MySQLdb.constants.CR.SERVER_GONE_ERROR) or \
                (e[0] == MySQLdb.constants.CR.SERVER_LOST):
                 self.reconnect()
@@ -205,7 +205,7 @@ class MySQLAccountAvatarsDB(DBInterface):
         try:
             cursor = MySQLdb.cursors.DictCursor(self.db)
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             if (e[0] == MySQLdb.constants.CR.SERVER_GONE_ERROR) or \
                (e[0] == MySQLdb.constants.CR.SERVER_LOST):
                 self.reconnect()
@@ -225,7 +225,7 @@ class MySQLAccountAvatarsDB(DBInterface):
             cursor = MySQLdb.cursors.Cursor(self.db)
             cursor.execute(command)
             return cursor.fetchall()
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             if (e[0] == MySQLdb.constants.CR.SERVER_GONE_ERROR) or \
                (e[0] == MySQLdb.constants.CR.SERVER_LOST):
                 self.reconnect()
@@ -244,7 +244,7 @@ class MySQLAccountAvatarsDB(DBInterface):
         try:
             cursor = MySQLdb.cursors.Cursor(self.db)
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except _mysql_exceptions.OperationalError, e:
             if (e[0] == MySQLdb.constants.CR.SERVER_GONE_ERROR) or \
                (e[0] == MySQLdb.constants.CR.SERVER_LOST):
                 self.reconnect()

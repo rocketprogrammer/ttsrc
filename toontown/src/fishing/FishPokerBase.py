@@ -1,5 +1,5 @@
 
-from . import FishBase
+import FishBase
 from toontown.toonbase import TTLocalizer
 
 CARD_INDEX = 0
@@ -79,17 +79,17 @@ class FishPokerBase:
     def getCurrentValue(self):
         cards = {}
         noneList = []
-        for cardInfo in list(self.__cards.values()):
+        for cardInfo in self.__cards.values():
             card, locked = cardInfo
             if card is None:
                 noneList.append(1)
             else:
                 genus = card.getGenus()
-                if genus in cards:
+                if cards.has_key(genus):
                     cards[genus] += 1
                 else:
                     cards[genus] = 1
-        cardList = list(cards.values())
+        cardList = cards.values()
         cardList.sort()
         cardList.reverse()
         cardList.extend(noneList)

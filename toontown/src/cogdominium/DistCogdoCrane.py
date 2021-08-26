@@ -196,7 +196,7 @@ class DistCogdoCrane(DistributedObject.DistributedObject, FSM.FSM):
 
         arm = self.craneGame.craneArm.copyTo(self.crane)
 
-        assert(self.index not in self.craneGame.cranes)
+        assert(not self.craneGame.cranes.has_key(self.index))
         self.craneGame.cranes[self.index] = self
 
     def disable(self):

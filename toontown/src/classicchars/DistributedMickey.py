@@ -1,12 +1,12 @@
 """DistributedMickey module: contains the DistributedMickey class"""
 
 from pandac.PandaModules import *
-from . import DistributedCCharBase
+import DistributedCCharBase
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 #import MickeyChatter
-from . import CharStateDatas
+import CharStateDatas
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.hood import DGHood

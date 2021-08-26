@@ -2,7 +2,7 @@ from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 import random
 from toontown.hood import ZoneUtil
-from . import ToonDNA
+import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownBattleGlobals
@@ -54,7 +54,7 @@ def getrandomDNA(seed, gender):
 
 
 def createNPC(air, npcId, desc, zoneId, posIndex=0, questCallback=None):
-    from . import DistributedNPCToonAI, DistributedNPCClerkAI, DistributedNPCTailorAI, DistributedNPCBlockerAI, DistributedNPCFishermanAI, DistributedNPCPetclerkAI
+    import DistributedNPCToonAI, DistributedNPCClerkAI, DistributedNPCTailorAI, DistributedNPCBlockerAI, DistributedNPCFishermanAI, DistributedNPCPetclerkAI
     (canonicalZoneId, name, dnaType, gender, protected, type) = desc
     if type == NPC_REGULAR:
         npc = DistributedNPCToonAI.DistributedNPCToonAI(air, npcId, questCallback=questCallback)
@@ -71,7 +71,7 @@ def createNPC(air, npcId, desc, zoneId, posIndex=0, questCallback=None):
     elif type == NPC_PETCLERK:
         npc = DistributedNPCPetclerkAI.DistributedNPCPetclerkAI(air, npcId)
     else:
-        print('createNPC() error!!!')
+        print 'createNPC() error!!!'
     npc.setName(name)
     dna = ToonDNA.ToonDNA()
     if dnaType == 'r':
@@ -101,8 +101,8 @@ def createNpcsInZone(air, zoneId):
 
 
 def createLocalNPC(npcId):
-    from . import Toon
-    if npcId not in NPCToonDict:
+    import Toon
+    if not NPCToonDict.has_key(npcId):
         return None
     desc = NPCToonDict[npcId]
     (canonicalZoneId, name, dnaType, gender, protected, type) = desc
@@ -138,9 +138,9 @@ NPCToonDict = {20000: (-1, lnames[20000], 'r', 'm', 1, NPC_REGULAR), 999: (-1, l
 del lnames
 BlockerPositions = {TTLocalizer.Flippy: (Point3(207.4, 18.81, -0.475), 90.0)}
 zone2NpcDict = {}
-for (id, npcDesc) in list(NPCToonDict.items()):
+for (id, npcDesc) in NPCToonDict.items():
     zoneId = npcDesc[0]
-    if zoneId in zone2NpcDict:
+    if zone2NpcDict.has_key(zoneId):
         zone2NpcDict[zoneId].append(id)
     else:
         zone2NpcDict[zoneId] = [
@@ -175,14 +175,14 @@ def getBuildingTitle(zoneId):
 npcFriends = {2001: (ToontownBattleGlobals.HEAL_TRACK, 5, ToontownGlobals.MaxHpLimit, 5), 2132: (ToontownBattleGlobals.HEAL_TRACK, 5, 70, 4), 2121: (ToontownBattleGlobals.HEAL_TRACK, 5, 45, 3), 2011: (ToontownBattleGlobals.TRAP_TRACK, 4, 180, 5), 3007: (ToontownBattleGlobals.TRAP_TRACK, 4, 70, 4), 1001: (ToontownBattleGlobals.TRAP_TRACK, 4, 50, 3), 3112: (ToontownBattleGlobals.LURE_TRACK, 5, 0, 5), 1323: (ToontownBattleGlobals.LURE_TRACK, 5, 0, 3), 2308: (ToontownBattleGlobals.LURE_TRACK, 5, 0, 3), 4119: (ToontownBattleGlobals.SOUND_TRACK, 5, 80, 5), 4219: (ToontownBattleGlobals.SOUND_TRACK, 5, 50, 4), 4115: (ToontownBattleGlobals.SOUND_TRACK, 5, 40, 3), 1116: (ToontownBattleGlobals.DROP_TRACK, 5, 170, 5), 2311: (ToontownBattleGlobals.DROP_TRACK, 5, 100, 4), 4140: (ToontownBattleGlobals.DROP_TRACK, 5, 60, 3), 3137: (ToontownBattleGlobals.NPC_COGS_MISS, 0, 0, 4), 4327: (ToontownBattleGlobals.NPC_COGS_MISS, 0, 0, 4), 4230: (ToontownBattleGlobals.NPC_COGS_MISS, 0, 0, 4), 3135: (ToontownBattleGlobals.NPC_TOONS_HIT, 0, 0, 4), 2208: (ToontownBattleGlobals.NPC_TOONS_HIT, 0, 0, 4), 5124: (ToontownBattleGlobals.NPC_TOONS_HIT, 0, 0, 4), 2003: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, -1, 0, 5), 2126: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.HEAL_TRACK, 0, 3), 4007: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.TRAP_TRACK, 0, 3), 1315: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.LURE_TRACK, 0, 3), 5207: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.SQUIRT_TRACK, 0, 3), 3129: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.THROW_TRACK, 0, 3), 4125: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.SOUND_TRACK, 0, 3), 1329: (ToontownBattleGlobals.NPC_RESTOCK_GAGS, ToontownBattleGlobals.DROP_TRACK, 0, 3)}
 
 def getNPCTrack(npcId):
-    if npcId in npcFriends:
+    if npcFriends.has_key(npcId):
         return npcFriends[npcId][0]
     return None
     return
 
 
 def getNPCTrackHp(npcId):
-    if npcId in npcFriends:
+    if npcFriends.has_key(npcId):
         (track, level, hp, rarity) = npcFriends[npcId]
         return (track, hp)
     return (
@@ -191,7 +191,7 @@ def getNPCTrackHp(npcId):
 
 
 def getNPCTrackLevelHp(npcId):
-    if npcId in npcFriends:
+    if npcFriends.has_key(npcId):
         (track, level, hp, rarity) = npcFriends[npcId]
         return (track, level, hp)
     return (
@@ -200,7 +200,7 @@ def getNPCTrackLevelHp(npcId):
 
 
 def getNPCTrackLevelHpRarity(npcId):
-    if npcId in npcFriends:
+    if npcFriends.has_key(npcId):
         return npcFriends[npcId]
     return (
      None, None, None, None)

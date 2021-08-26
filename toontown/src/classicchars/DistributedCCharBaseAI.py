@@ -138,7 +138,7 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
         ////////////////////////////////////////////////////////////////////
         """
         now = globalClock.getRealTime()
-        if avId in self.nearbyAvatarInfoDict:
+        if self.nearbyAvatarInfoDict.has_key(avId):
             self.nearbyAvatarInfoDict[avId]['lastChatTime'] = now
             self.__interestingAvatarEventOccured()
 

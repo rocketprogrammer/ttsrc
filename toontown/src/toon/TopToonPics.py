@@ -1,6 +1,6 @@
 import sys
 import string
-import builtins
+import __builtin__
 from direct.directtools.DirectUtil import getFileData
 from direct.distributed.PyDatagram import PyDatagram
 from math import tan
@@ -8,9 +8,9 @@ from math import tan
 from pandac.PandaModules import *
 
 try:
-    builtins.launcher
+    __builtin__.launcher
 except AttributeError:
-    builtins.launcher = None
+    __builtin__.launcher = None
 
 def hexToColor(hexString, alpha = None):
     if alpha == None:
@@ -43,25 +43,25 @@ outputExtension = 'jpg'
 size = 50
 
 def printHelp():
-    print()
-    print('ppython TopToonPics.py [options]')
-    print('Options:')
-    print('  -a headAngle         Specify angle of toons head (default 10 deg)')
-    print('  -b BG color          Specify background color (default FFFFCC)')
-    print('  -B BG image          Specify file name for background image')
-    print('  -c Ring color        Specify ring color (default F0AA40)')
-    print('  -d outputDirectory   Specify directory for resulting images')
-    print('  -f FOV               Specify camera FOV')
-    print('  -F fillFactor        Specify percent of FOV to fill (1-100)')
-    print('  -i inputFile         Specify filename holding DNA strings')
-    print('  -l lookTarget        Specify look at target (head/body)')
-    print('  -nr                  Hide circular frame surrounding toon')
-    print('  -p head pitch        Specify pitch of toons head (default -1 deg)')
-    print('  -r roll              Specify camera roll')
-    print('  -s ring thickness    Specify thickness for outer ring (0 no-ring)')
-    print('  -e extension         Specify extension (and file type) of output')
-    print('  -S size              Specify the width/height of the images in pixes. Default is 50')
-    print('  -h                   Print this help message')
+    print
+    print 'ppython TopToonPics.py [options]'
+    print 'Options:'
+    print '  -a headAngle         Specify angle of toons head (default 10 deg)'
+    print '  -b BG color          Specify background color (default FFFFCC)'
+    print '  -B BG image          Specify file name for background image'
+    print '  -c Ring color        Specify ring color (default F0AA40)'
+    print '  -d outputDirectory   Specify directory for resulting images'
+    print '  -f FOV               Specify camera FOV'
+    print '  -F fillFactor        Specify percent of FOV to fill (1-100)'
+    print '  -i inputFile         Specify filename holding DNA strings'
+    print '  -l lookTarget        Specify look at target (head/body)'
+    print '  -nr                  Hide circular frame surrounding toon'
+    print '  -p head pitch        Specify pitch of toons head (default -1 deg)'
+    print '  -r roll              Specify camera roll'
+    print '  -s ring thickness    Specify thickness for outer ring (0 no-ring)'
+    print '  -e extension         Specify extension (and file type) of output'
+    print '  -S size              Specify the width/height of the images in pixes. Default is 50'
+    print '  -h                   Print this help message'
     sys.exit()
 
 for arg in sys.argv:
@@ -144,28 +144,28 @@ for arg in sys.argv:
     else:
         argFlag = None
 
-print("Input File: %s" % inputFile)
-print("Output Directory: %s" % outputDirectory)
-print("Look Target: %s" % lookAtTarget)
-print("Head Angle: %f" % headAngle)
-print("Pitch Angle: %f" % pitchAngle)
-print("Roll Angle: %f" % rollAngle)
-print("FOV: %f" % fov)
-print("FOV Fill Percent: %f" % (fillFactor * 100.0))
-print("Background Color: %s" % bgColor)
-print("Background Image: %s" % backgroundImage)
+print "Input File: %s" % inputFile
+print "Output Directory: %s" % outputDirectory
+print "Look Target: %s" % lookAtTarget
+print "Head Angle: %f" % headAngle
+print "Pitch Angle: %f" % pitchAngle
+print "Roll Angle: %f" % rollAngle
+print "FOV: %f" % fov
+print "FOV Fill Percent: %f" % (fillFactor * 100.0)
+print "Background Color: %s" % bgColor
+print "Background Image: %s" % backgroundImage
 if fHideRing:
-    print("No Ring")
+    print "No Ring"
 else:
-    print("Show Ring")
-    print("Ring Color: %s" % ringColor)
-    print("Ring Thickness: %f" % ringScale)
+    print "Show Ring"
+    print "Ring Color: %s" % ringColor
+    print "Ring Thickness: %f" % ringScale
 
 ConfigVariableInt('win-size').setStringValue('%d %d' % (size,size))
 
 from direct.directbase.DirectStart import *
-from .Toon import *
-from . import ToonDNA
+from Toon import *
+import ToonDNA
 
 frame = render2d.attachNewNode('frame')
 base.win.setClearColor(VBase4(0,0,0,0))
@@ -312,27 +312,27 @@ def snapPics():
     myBgColorAlpha = hexToColor(bgColor)[3]
     for topToonData in data:
         DNAString = topToonData[0].replace(' ', '')
-        print(DNAString)
+        print DNAString
         updateToon(DNAString)
         base.graphicsEngine.renderFrame()
         lookAtToon()
         base.graphicsEngine.renderFrame()
         imageName = outputDirectory + '/' + DNAString + "." + outputExtension
-        print(("Taking screenshot: " + imageName))
+        print ("Taking screenshot: " + imageName)
         if myBgColorAlpha == 1.0:
             base.win.saveScreenshot(Filename(imageName))
         else:
             myImage = PNMImage.PNMImage(size,size)        
             base.win.getScreenshot(myImage)
             myImage.addAlpha()
-            for y in range(size):
-                for x in range(size):
+            for y in xrange(size):
+                for x in xrange(size):
                     isOuterFramePixel = outerFrameImg.getRed(x,y)
                     if isOuterFramePixel:
                         myImage.setAlpha(x,y,myBgColorAlpha)
                     else:
                         myImage.setAlpha(x,y,1)
-            print(myImage)
+            print myImage
             myImage.write(Filename(imageName))
 
 snapPics()

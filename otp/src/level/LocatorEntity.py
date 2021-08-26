@@ -1,4 +1,4 @@
-from . import Entity, BasicEntities
+import Entity, BasicEntities
 from pandac import NodePath
 from direct.directnotify import DirectNotifyGlobal
 

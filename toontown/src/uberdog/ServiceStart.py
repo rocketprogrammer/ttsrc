@@ -1,13 +1,13 @@
 """
 Start the Toontown UberDog (Uber Distributed Object Globals server).
 """
-import builtins
+import __builtin__
 from direct.task.Task import Task
 
 class game:
     name = "uberDog"
     process = "server"
-builtins.game = game()
+__builtin__.game = game()
 
 import time
 import os
@@ -51,14 +51,14 @@ try:
                                  'mysqlhost=',
                                  'crDbName=',
                                  ])
-except Exception as e:
-    print(e)
-    print(helpString)
+except Exception, e:
+    print e
+    print helpString
     sys.exit(1)
 
 # Only four of the items are required
 if len(opts) < 4:
-    print(helpString)
+    print helpString
     sys.exit(1)
 
 # Default values
@@ -129,8 +129,8 @@ for opt in opts:
     elif (flag == '--crDbName'):
         crDbName = value    
     else:
-        print("Error: Illegal option: " + flag)
-        print(helpString)
+        print "Error: Illegal option: " + flag
+        print helpString
         sys.exit(1)
 
 # date_hour_sequence.log will be added to the logfile name by RotatingLog():
@@ -168,10 +168,10 @@ nout.addSystemDebug()
 # We prefer writing the date on the same line as the starting message,
 # so we can more easily grep for a restart on a particular date in the
 # log files.
-print("\n\nStarting Uberdog on %s port %s. %s %s" % \
-      (uber.mdip, uber.mdport, time.asctime(time.localtime(time.time())), time.tzname[0]))
+print "\n\nStarting Uberdog on %s port %s. %s %s" % \
+      (uber.mdip, uber.mdport, time.asctime(time.localtime(time.time())), time.tzname[0])
 
-print("Initializing the Toontown UberDog (Uber Distributed Object Globals server)...")
+print "Initializing the Toontown UberDog (Uber Distributed Object Globals server)..."
 
 from toontown.uberdog.ToontownUberDog import ToontownUberDog
 from direct.showbase.PythonUtil import *

@@ -33,12 +33,12 @@ class HolidayInfo_Yearly(HolidayInfo_Base):
         """
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in xrange(len(dateList)/2):
             start = dateElemIter.current()
-            end = next(dateElemIter)
+            end = dateElemIter.next()
 
             self.tupleList.append((start, end))
-            next(dateElemIter)
+            dateElemIter.next()
 
         self.tupleList.sort(cmpDates)
 
@@ -73,7 +73,7 @@ class HolidayInfo_Yearly(HolidayInfo_Base):
         sCurrYear = time.localtime()[0]
         eCurrYear = sCurrYear
 
-        for i in range(len(self.tupleList)):
+        for i in xrange(len(self.tupleList)):
             sMonth = self.currElemIter.current()[0][0]
             nMonth = self.currElemIter.peekNext()[0][0]
 
@@ -151,7 +151,7 @@ class HolidayInfo_Yearly(HolidayInfo_Base):
                 sTime = self.getTime((sCurrYear,), startTuple)
                 eTime = self.getTime((eCurrYear,), endTuple)
 
-            next(self.currElemIter)
+            self.currElemIter.next()
             if (currTime < eTime):
                 return sTime
 

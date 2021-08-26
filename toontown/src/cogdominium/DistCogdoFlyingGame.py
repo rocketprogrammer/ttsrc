@@ -23,8 +23,7 @@ from toontown.minigame.DistributedMinigame import DistributedMinigame
 from toontown.minigame import ArrowKeys
 from toontown.toonbase import ToontownTimer
 
-from . import CogdoFlyingGameGlobals
-import importlib
+import CogdoFlyingGameGlobals
 
 def loadMockup(fileName, dmodelsAlt="coffin"):
     try:
@@ -49,7 +48,7 @@ class DistCogdoFlyingGame(DistributedMinigame):
         self.game = CogdoFlyingGame(self)
 
     def codeReload(self):
-        importlib.reload(CogdoFlyingGameGlobals)
+        reload(CogdoFlyingGameGlobals)
 
     def load(self):
         DistributedMinigame.load(self)
@@ -61,7 +60,7 @@ class DistCogdoFlyingGame(DistributedMinigame):
         del self.game
         self.ignore("onCodeReload")
 
-        print("Unload Distributed Game")
+        print "Unload Distributed Game"
 
         DistributedMinigame.unload(self)
 
@@ -779,7 +778,7 @@ class CogdoFlyingInputManager:
         self.arrowKeys.disable()
 
     def destroy(self):
-        print("Destroying CogdoFlyingInputManager")
+        print "Destroying CogdoFlyingInputManager"
         self.disable()
         self.arrowKeys.destroy()
         self.arrowKeys = None

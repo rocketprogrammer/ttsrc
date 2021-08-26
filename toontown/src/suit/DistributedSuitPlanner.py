@@ -1,6 +1,6 @@
 from direct.showbase.ShowBaseGlobal import *
 from direct.distributed import DistributedObject
-from . import SuitPlannerBase
+import SuitPlannerBase
 from toontown.toonbase import ToontownGlobals
 
 class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBase.SuitPlannerBase):
@@ -58,7 +58,7 @@ class DistributedSuitPlanner(DistributedObject.DistributedObject, SuitPlannerBas
 
         cnode = CollisionNode('battleCells')
         cnode.setCollideMask(BitMask32.allOff())
-        for (zoneId, cellPos) in list(self.battlePosDict.items()):
+        for (zoneId, cellPos) in self.battlePosDict.items():
             cnode.addSolid(CollisionSphere(cellPos, 9))
             text = '%s' % zoneId
             self.__makePathVizText(text, cellPos[0], cellPos[1], cellPos[2] + 9, (

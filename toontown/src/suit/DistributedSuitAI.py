@@ -7,16 +7,16 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 
 from otp.avatar import DistributedAvatarAI
-from . import SuitTimings
+import SuitTimings
 from direct.task import Task
-from . import SuitPlannerBase
-from . import SuitBase
-from . import SuitDialog
-from . import SuitDNA
+import SuitPlannerBase
+import SuitBase
+import SuitDialog
+import SuitDNA
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import SuitBattleGlobals
 from toontown.building import FADoorCodes
-from . import DistributedSuitBaseAI
+import DistributedSuitBaseAI
 from toontown.hood import ZoneUtil
 import random
 
@@ -312,7 +312,7 @@ class DistributedSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
         
         if self.notify.getDebug():
             self.notify.debug("Leg list:")
-            print(self.legList)
+            print self.legList
 
         idx1 = self.startPoint.getIndex()
         idx2 = self.endPoint.getIndex()

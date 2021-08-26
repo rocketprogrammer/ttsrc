@@ -66,7 +66,7 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
         self.notify.debug("generateInit")
         DistributedPartyActivity.generateInit(self)
         
-        self.keyCodes = KeyCodes(patterns = list(self.dancePatternToAnims.keys()))
+        self.keyCodes = KeyCodes(patterns = self.dancePatternToAnims.keys())
         self.gui = KeyCodesGui(self.keyCodes)
         self.__initOrthoWalk()
         self.activityFSM = DanceActivityFSM(self)
@@ -141,7 +141,7 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
             
         self.__destroyOrthoWalk()
         
-        for toonId in list(self.dancingToonFSMs.keys()):
+        for toonId in self.dancingToonFSMs.keys():
             self.dancingToonFSMs[toonId].destroy()
             del self.dancingToonFSMs[toonId]
         del self.dancingToonFSMs
@@ -162,7 +162,7 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
         """This will be called if an avatar exits unexpectedly"""
         self.notify.debug("handleToonDisabled avatar " + str(toonId) + " disabled")
         # clean up any references to the disabled avatar before he disappears
-        if toonId in self.dancingToonFSMs:
+        if self.dancingToonFSMs.has_key(toonId):
             self.dancingToonFSMs[toonId].request("cleanup")
             self.dancingToonFSMs[toonId].destroy()
             del self.dancingToonFSMs[toonId]
@@ -293,7 +293,7 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
         Called when toon is allowed to enter dance floor.
         """
         self.notify.debug("handleToonJoined( toonId=%d, h=%.2f )" %(toonId, h))
-        if toonId in base.cr.doId2do:
+        if base.cr.doId2do.has_key(toonId):
             toonFSM = PartyDanceActivityToonFSM(toonId, self, h)
             toonFSM.request("Init")
             self.dancingToonFSMs[toonId] = toonFSM
@@ -324,7 +324,7 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
         self.finishRules()
         
     def __localEnableControls(self):
-        if base.localAvatar.doId not in self.dancingToonFSMs:
+        if not self.dancingToonFSMs.has_key(base.localAvatar.doId):
             self.notify.debug("no dancing FSM for local avatar, not enabling controls")
             return
         self.accept(KeyCodes.PATTERN_MATCH_EVENT, self.__doDanceMove)
@@ -514,11 +514,11 @@ class DistributedPartyDanceActivityBase(DistributedPartyActivity):
         """
         From AI, it sets a dancing toon's FSM
         """
-        if toonId != base.localAvatar.doId and toonId in self.dancingToonFSMs:
+        if toonId != base.localAvatar.doId and self.dancingToonFSMs.has_key(toonId):
             self._requestToonState(toonId, state, anim)
             
     def _requestToonState(self, toonId, state, anim):
-        if toonId in self.dancingToonFSMs:
+        if self.dancingToonFSMs.has_key(toonId):
             state = ToonDancingStates.getString(state)
             curState = self.dancingToonFSMs[toonId].getCurrentOrNextState()
             assert(self.notify.debug("requestToonState toonId=%s, state=%s, anim=%s" % (toonId, state, anim)))

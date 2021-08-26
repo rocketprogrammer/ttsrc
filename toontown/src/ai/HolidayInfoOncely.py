@@ -44,12 +44,12 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
         # Implicit in this definition, if a holiday has 1 phase date, there are 2 phases
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in xrange(len(dateList)/2):
             start = dateElemIter.current()
-            end = next(dateElemIter)
+            end = dateElemIter.next()
 
             self.tupleList.append((start, end))
-            next(dateElemIter)
+            dateElemIter.next()
 
         self.tupleList.sort(cmpDates)
         self.phaseDates = None
@@ -97,7 +97,7 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
         """
         result = None
 
-        for i in range(len(self.tupleList)):
+        for i in xrange(len(self.tupleList)):
             if i == 0:
                 # we need to setup currElem properly if we start
                 # in the middle of a oncely holiday with multiple starts
@@ -120,7 +120,7 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
                 # we are waiting for the next pair of start,end times to arrive
                 result = startNextTime
                 break;            
-            next(self.currElemIter)
+            self.currElemIter.next()
         return result
     
     #############################################################

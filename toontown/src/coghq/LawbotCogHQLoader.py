@@ -1,16 +1,16 @@
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
-from . import CogHQLoader
+import CogHQLoader
 from toontown.toonbase import ToontownGlobals
 from direct.gui import DirectGui
 from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
 from direct.fsm import State
-from . import StageInterior
-from . import LawbotHQExterior
-from . import LawbotHQBossBattle
-from . import LawbotOfficeExterior
+import StageInterior
+import LawbotHQExterior
+import LawbotHQBossBattle
+import LawbotOfficeExterior
 
 # Used to compensate for scaling of Cog tunnel sign's
 # original aspect ratio of 1125x813 to a uniform ratio,

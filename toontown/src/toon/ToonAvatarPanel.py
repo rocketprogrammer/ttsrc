@@ -2,17 +2,17 @@ from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.showbase import DirectObject
-from . import ToonHead
+import ToonHead
 from toontown.friends import FriendHandle
-from . import LaffMeter
+import LaffMeter
 from otp.avatar import Avatar
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.friends import ToontownFriendSecret
-from . import ToonAvatarDetailPanel
-from . import AvatarPanelBase
+import ToonAvatarDetailPanel
+import AvatarPanelBase
 from toontown.toontowngui import TTDialog
 from otp.otpbase import OTPGlobals
 
@@ -149,7 +149,7 @@ class ToonAvatarPanel(AvatarPanelBase.AvatarPanelBase):
                 )
         
         # The friends button is diabled for transient (player only) friends that are not in our cr        
-        if base.cr.playerFriendsManager.askTransientFriend(self.avId) and self.avId not in base.cr.doId2do:
+        if base.cr.playerFriendsManager.askTransientFriend(self.avId) and not base.cr.doId2do.has_key(self.avId):
             self.friendButton['state'] = DGG.DISABLED
 
         # The friends button is also disabled for people we are ignoring

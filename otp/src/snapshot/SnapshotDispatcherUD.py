@@ -6,7 +6,7 @@ from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.http.WebRequest import WebRequestDispatcher
 
 from direct.task import Task
-import queue
+import Queue
 import socket
 
 #--------------------------------------------------
@@ -48,7 +48,7 @@ class SnapshotDispatcherUD(DistributedObjectGlobalUD):
         self.numServedAtLastLog = 0
 
         # Unassigned work
-        self.jobQueue = queue.Queue()
+        self.jobQueue = Queue.Queue()
 
         # If the queue gets longer than this, log warnings
         self.maxSafeJobQueueLength = 1000
@@ -238,7 +238,7 @@ class SnapshotDispatcherUD(DistributedObjectGlobalUD):
             return
         try:
             job = self.jobQueue.get_nowait()
-        except queue.Empty:
+        except Queue.Empty:
             # No work to give!  Do nothing.
             return
 

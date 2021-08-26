@@ -1,13 +1,13 @@
 from direct.interval.IntervalGlobal import *
-from .BattleProps import *
-from .BattleSounds import *
+from BattleProps import *
+from BattleSounds import *
 
 from direct.directnotify import DirectNotifyGlobal
-from . import MovieCamera
+import MovieCamera
 import random
-from . import MovieUtil
-from . import BattleParticles
-from . import HealJokes
+import MovieUtil
+import BattleParticles
+import HealJokes
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.pets import Pet, PetTricks
@@ -105,7 +105,7 @@ def __healJuggle(heal):
     petProxyId = heal['petId']
     pet = Pet.Pet()
     gender = 0
-    if petProxyId in base.cr.doId2do:
+    if base.cr.doId2do.has_key(petProxyId):
         petProxy = base.cr.doId2do[petProxyId]
         if (petProxy == None):
             return

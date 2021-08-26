@@ -1,9 +1,9 @@
 from direct.directnotify import DirectNotifyGlobal
 import random
 from direct.task import Task
-from . import DistributedFireworkShowAI
+import DistributedFireworkShowAI
 from toontown.ai import HolidayBaseAI
-from . import FireworkShow
+import FireworkShow
 from toontown.toonbase.ToontownGlobals import DonaldsDock, ToontownCentral, \
     TheBrrrgh, MinniesMelodyland, DaisyGardens, OutdoorZone, GoofySpeedway, DonaldsDreamland
 import time
@@ -73,7 +73,7 @@ class FireworkManagerAI(HolidayBaseAI.HolidayBaseAI):
         Warns and returns 0 if a show was already running in this zone.
         There can only be one show per zone.
         """
-        if zone in self.fireworkShows:
+        if self.fireworkShows.has_key(zone):
             self.notify.warning("startShow: already running a show in zone: %s" % (zone))
             return 0        
         self.notify.debug("startShow: zone: %s showType: %s" % (zone, showType))
@@ -95,7 +95,7 @@ class FireworkManagerAI(HolidayBaseAI.HolidayBaseAI):
         Stop a firework show in this zone.
         Returns 1 if it did stop a show, warns and returns 0 if there is not one
         """
-        if zone not in self.fireworkShows:
+        if not self.fireworkShows.has_key(zone):
             self.notify.warning("stopShow: no show running in zone: %s" % (zone))
             return 0
         self.notify.debug("stopShow: zone: %s" % (zone))
@@ -111,7 +111,7 @@ class FireworkManagerAI(HolidayBaseAI.HolidayBaseAI):
         Returns number of shows stopped by this command.
         """
         numStopped = 0
-        for zone, show in list(self.fireworkShows.items()):
+        for zone, show in self.fireworkShows.items():
             self.notify.debug("stopAllShows: zone: %s" % (zone))
             show.requestDelete()
             numStopped += 1
@@ -122,5 +122,5 @@ class FireworkManagerAI(HolidayBaseAI.HolidayBaseAI):
         """
         Is there currently a show running in this zone?
         """
-        return zone in self.fireworkShows
+        return self.fireworkShows.has_key(zone)
         

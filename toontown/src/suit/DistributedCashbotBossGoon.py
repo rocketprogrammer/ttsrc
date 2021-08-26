@@ -3,12 +3,12 @@ from direct.interval.IntervalGlobal import *
 from direct.task.TaskManagerGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.directnotify import DirectNotifyGlobal
-from . import GoonGlobals
+import GoonGlobals
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from toontown.coghq import DistributedCashbotBossObject
 from direct.showbase import PythonUtil
-from . import DistributedGoon
+import DistributedGoon
 
 class DistributedCashbotBossGoon(DistributedGoon.DistributedGoon, DistributedCashbotBossObject.DistributedCashbotBossObject):
     __module__ = __name__

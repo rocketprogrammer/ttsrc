@@ -3,7 +3,7 @@ from direct.gui.DirectGui import *
 from direct.showbase import PandaObject
 from otp.avatar import Avatar
 from direct.distributed import DistributedObject
-from . import SuitDNA
+import SuitDNA
 from toontown.toonbase import TTLocalizer
 from otp.avatar import AvatarPanel
 from toontown.friends import FriendsListPanel

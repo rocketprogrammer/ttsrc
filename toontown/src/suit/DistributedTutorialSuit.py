@@ -2,7 +2,7 @@ from direct.showbase.ShowBaseGlobal import *
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.directnotify import DirectNotifyGlobal
-from . import DistributedSuitBase
+import DistributedSuitBase
 
 class DistributedTutorialSuit(DistributedSuitBase.DistributedSuitBase):
     __module__ = __name__

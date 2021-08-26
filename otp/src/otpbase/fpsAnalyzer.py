@@ -4,7 +4,7 @@ numbers together and writes a handful of .csv files, suitable for
 importing into Excel. """
 
 import time
-import pickle
+import cPickle
 
 class Sample:
     def __init__(self, line, columns):
@@ -18,7 +18,7 @@ class Sample:
 
             # Store the cpuSpeed as an integer value in MHz, so it
             # will be more concrete.
-            self.cpuSpeed = [int(float(s) * 1000 + 0.5) for s in cs]
+            self.cpuSpeed = map(lambda s: int(float(s) * 1000 + 0.5), cs)
         else:
             self.osInfo = ('?', 0, 0, 0, 0)
             self.cpuSpeed = (0, 0)
@@ -63,7 +63,7 @@ class Sample:
             self.processMemory or 0, self.pageFileUsage or 0,
             self.physicalMemory or 0, self.pageFaultCount or 0,
             '%s.%d.%d.%d' % self.osInfo,
-            '%0.03f,%0.03f' % [s / 1000.0 for s in self.cpuSpeed])
+            '%0.03f,%0.03f' % map(lambda s: s / 1000.0, self.cpuSpeed))
 
         file.write('%s|client-fps|AIServer:%s|%s|%s\n' % (
             date, self.serverId, self.avId, info))
@@ -180,18 +180,18 @@ class Analyzer:
 
         file = open('card_performance.csv', 'w')
 
-        deviceList = list(quickCards.keys())
+        deviceList = quickCards.keys()
         deviceList.sort()
         for deviceTuple in deviceList:
             options = quickCards[deviceTuple]
-            codes = list(options.keys())
+            codes = options.keys()
             codes.sort()
             for gameOptionsCode in codes:
                 totFps, count = options[gameOptionsCode]
                 avgFps = totFps / count
-                print('%s, %s, %s, %s' % (
+                print >> file, '%s, %s, %s, %s' % (
                     self.__formatDevice(deviceTuple),
-                    gameOptionsCode, avgFps, count), file=file)
+                    gameOptionsCode, avgFps, count)
             
     def readText(self, filename, firstLine = 0, lastLine = None):
         """ Reads the client-fps lines from the indicated logfile into
@@ -251,12 +251,12 @@ class Analyzer:
         
         assert filename.endswith('.pkl')
         file = open(filename, 'wb')
-        pickle.dump(self, file, pickle.HIGHEST_PROTOCOL)
+        cPickle.dump(self, file, cPickle.HIGHEST_PROTOCOL)
 
     def readPickle(self, filename):
         assert filename.endswith('.pkl')
         file = open(filename, 'rb')
-        obj = pickle.load(file)
+        obj = cPickle.load(file)
         assert obj.__class__ == self.__class__
         self.__dict__ = obj.__dict__
     
@@ -310,7 +310,7 @@ class Analyzer:
 
             self.hardware.setdefault((player, session.getHardware()), []).append(session)
 
-        self.players = list(playerDict.values())
+        self.players = playerDict.values()
         for player in self.players:
             player.calcFrameRate()
 
@@ -367,7 +367,7 @@ class Analyzer:
         cpuSpeedTrue = {}
         cpuSpeedEffective = {}
         cpuPowersave = {}
-        for tuple, sessions in list(self.hardware.items()):
+        for tuple, sessions in self.hardware.items():
             player = tuple[0]
             session = sessions[0]
             if session.vendorId != None:
@@ -421,11 +421,11 @@ class Analyzer:
     def reportData(self, filename, dict, formatKey, calcValue):
         file = open(filename, 'w')
         
-        items = list(dict.items())
+        items = dict.items()
         items.sort()
         for key, samples in items:
-            print('%s, %s' % (
-                formatKey(key), calcValue(samples)), file=file)
+            print >> file, '%s, %s' % (
+                formatKey(key), calcValue(samples))
 
     def __formatDevice(self, tuple):
         vendorId, deviceId = tuple
@@ -511,7 +511,7 @@ class Analyzer:
 
     def __averageFps(self, samples):
         return '%s, %s' % (
-            sum([s.fps for s in samples]) / len(samples), len(samples))
+            sum(map(lambda s: s.fps, samples)) / len(samples), len(samples))
 
     def __countPlayers(self, players):
         """ Returns total number of players whose avg fps is less than
@@ -519,8 +519,8 @@ class Analyzer:
         25, and total number of players whose avg fps is more than
         25. """
 
-        numLow = sum([p.lowFps for p in players])
-        numHigh = sum([p.highFps for p in players])
+        numLow = sum(map(lambda p: p.lowFps, players))
+        numHigh = sum(map(lambda p: p.highFps, players))
         numMed = len(players) - numLow - numHigh
 
         return '%s, %s, %s' % (numLow, numMed, numHigh)

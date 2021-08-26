@@ -301,7 +301,7 @@ class BoardingGroupShow:
         queue.sortEntries()
         if queue.getNumEntries():
             # Go through all the collision entries
-            for entryNum in range(queue.getNumEntries()):
+            for entryNum in xrange(queue.getNumEntries()):
                 entry = queue.getEntry(entryNum)
                 hitObject = entry.getIntoNodePath()            
                 # This collision ray might collide against another toon standing in front of it

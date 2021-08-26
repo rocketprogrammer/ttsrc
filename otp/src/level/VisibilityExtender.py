@@ -1,4 +1,4 @@
-from . import Entity
+import Entity
 
 class VisibilityExtender(Entity.Entity):
     __module__ = __name__

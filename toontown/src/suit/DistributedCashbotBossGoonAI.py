@@ -2,13 +2,13 @@ from pandac.PandaModules import *
 from direct.task.TaskManagerGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from . import GoonGlobals
+import GoonGlobals
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from toontown.coghq import DistributedCashbotBossObjectAI
 from direct.showbase import PythonUtil
-from . import DistributedGoonAI
+import DistributedGoonAI
 import math
 import random
 

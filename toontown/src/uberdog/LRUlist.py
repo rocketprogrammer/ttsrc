@@ -43,7 +43,7 @@ class LRUlist:
         
     def getData(self, indexKey):
         
-        if indexKey in self.dataDictionary:
+        if self.dataDictionary.has_key(indexKey):
         #if a datum exists
             _returnData = self.dataDictionary[indexKey]
             self.removeData(indexKey)

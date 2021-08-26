@@ -1,7 +1,7 @@
 """RingAction.py: contains the RingAction class"""
 
 from direct.directnotify import DirectNotifyGlobal
-from . import RingTrack
+import RingTrack
 
 """
 see RingTrack.py

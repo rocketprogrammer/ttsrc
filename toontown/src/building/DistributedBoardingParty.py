@@ -12,7 +12,7 @@ from toontown.toontowngui import TTDialog
 from toontown.hood import ZoneUtil
 from toontown.toontowngui import TeaserPanel
 from direct.interval.IntervalGlobal import *
-from . import BoardingGroupShow
+import BoardingGroupShow
 
 class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPartyBase.BoardingPartyBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBoardingParty')
@@ -86,7 +86,7 @@ class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPart
         self.notify.debug("postgroupInfo")
         isMyGroup = 0
         removedMemberIdList = []
-        if leaderId in self.groupListDict:
+        if self.groupListDict.has_key(leaderId):
             oldGroupEntry = self.groupListDict[leaderId]
         else:
             oldGroupEntry = [[],[],[]]
@@ -119,7 +119,7 @@ class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPart
         if (newGroupEntry[0]) == [0] or (not newGroupEntry[0]): # if the new memberList is empty
             dgroup = self.groupListDict.pop(leaderId)
             for memberId in dgroup[0]:
-                if memberId in self.avIdDict:
+                if self.avIdDict.has_key(memberId):
                     self.avIdDict.pop(memberId)
         
         if isMyGroup:
@@ -419,17 +419,17 @@ class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPart
         isMyGroup = 0
         if (localAvatar.doId == quitterId) or (localAvatar.doId == leaderId):
             isMyGroup = 1
-        if leaderId in self.groupListDict:
+        if self.groupListDict.has_key(leaderId):
             if leaderId == localAvatar.doId:
                 isMyGroup = 1
-                if leaderId in self.avIdDict:
+                if self.avIdDict.has_key(leaderId):
                     self.avIdDict.pop(leaderId)
             dgroup = self.groupListDict.pop(leaderId)
             
             for memberId in memberList:
                 if memberId == localAvatar.doId:
                     isMyGroup = 1
-                if memberId in self.avIdDict:
+                if self.avIdDict.has_key(memberId):
                     self.avIdDict.pop(memberId)
         
         if isMyGroup:
@@ -541,7 +541,7 @@ class DistributedBoardingParty(DistributedObject.DistributedObject, BoardingPart
         place = base.cr.playGame.getPlace()
         if place:
             if not (place.getState() == 'elevator'):
-                if localAvatar.doId in self.avIdDict:
+                if self.avIdDict.has_key(localAvatar.doId):
                     leaderId = self.avIdDict[localAvatar.doId]
                     self.sendUpdate("requestLeave", [leaderId])
         

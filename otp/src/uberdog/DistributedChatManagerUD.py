@@ -73,7 +73,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
     def delete(self):
         assert self.notify.debugCall()
         self.ignoreAll()
-        for i in list(self.asyncRequests.values()):
+        for i in self.asyncRequests.values():
             i.delete()
         self.asyncRequests={}
         DistributedObjectGlobalUD.delete(self)
@@ -84,10 +84,10 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         assert self.notify.debugCall()
         assert accountId
         self.air.writeServerEvent('accountOnline', accountId, '')
-        if accountId in self.isAccountOnline:
+        if self.isAccountOnline.has_key(accountId):
             assert self.notify.debug(
                 "\n\nWe got a duplicate account online notice %s"%(accountId,))
-        if accountId and accountId not in self.isAccountOnline:
+        if accountId and not self.isAccountOnline.has_key(accountId):
             self.isAccountOnline[accountId]=None
             ## self.asyncRequests[accountId]=self.accountOnlineAsyncRequest(accountId)
 
@@ -108,7 +108,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
             ## self.notify.warning(
                 ## "Got a request from an avatar (%s) that is not online"%
                 ## accountId)
-        elif avatarId in self.asyncRequests:
+        elif self.asyncRequests.has_key(avatarId):
             # The timeout on the client might be too low or we may be being
             # attacked.
             self.notify.warning(
@@ -148,7 +148,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         if not accountId:
             assert self.notify.debugCall("accountId:%s (zero!)"%(accountId,))
             return
-        if accountId not in self.isAccountOnline:
+        if not self.isAccountOnline.has_key(accountId):
             assert self.notify.debugCall("accountId:%s (not online!)"%(accountId,))
             return
         assert self.notify.debugCall("accountId:%s"%(accountId,))
@@ -161,7 +161,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         #    assert self.notify.debug("Unknown location for %s"%(accountId,))
 
         if uber.wantSwitchboardHacks:
-            print("DistributedChatManagerUD->Switchboard: %s" % message)
+            print "DistributedChatManagerUD->Switchboard: %s" % message
             self.sb.sendWhisper(1,2,message)
 
         ## chatPermissions=self.isAvatarOnline.get(accountId)
@@ -209,7 +209,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         accountId = self.air.getAccountIdFromSender()
         assert self.notify.debugCall("accountId:%s"%(accountId,))
         if self.checkAvatarId(avatarId):
-            chatPermissions=accountId in self.isAccountOnline
+            chatPermissions=self.isAccountOnline.has_key(accountId)
             if chatPermissions is not None:
                 self.sendWhisperFrom(accountId, toId, message)
             else:
@@ -218,7 +218,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
     def sendWhisperFrom(self, fromId, toId, message):
         assert self.notify.debugCall()
         if uber.wantSwitchboardHacks:
-            print("Sending whisper to %d: %s" % (toId,message))
+            print "Sending whisper to %d: %s" % (toId,message)
             self.sendUpdateToAvatarId(toId, "whisperFrom", [fromId, message])
         else:
             self.sendUpdateToChannel(toId, "whisperFrom", [fromId, msgIndex])
@@ -228,7 +228,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         accountId = self.air.getAccountIdFromSender()
         assert self.notify.debugCall("accountId:%s"%(accountId,))
         if self.checkAvatarId(avatarId):
-            chatPermissions=accountId in self.isAccountOnline
+            chatPermissions=self.isAccountOnline.has_key(accountId)
             if chatPermissions is not None:
                 self.sendWhisperSCFrom(accountId, toId, message)
             else:
@@ -243,11 +243,11 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         if not accountId:
             assert self.notify.debugCall("accountId:%s (zero!)"%(accountId,))
             return
-        if accountId not in self.isAccountOnline:
+        if not self.isAccountOnline.has_key(accountId):
             assert self.notify.debugCall("accountId:%s (not online!)"%(accountId,))
             return
         assert self.notify.debugCall("accountId:%s"%(accountId,))
-        chatPermissions=accountId in self.isAccountOnline
+        chatPermissions=self.isAccountOnline.has_key(accountId)
         if chatPermissions is not None:
             self.sendWhisperSCCustomFrom(accountId, toId, message)
         else:
@@ -262,11 +262,11 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         if not accountId:
             assert self.notify.debugCall("accountId:%s (zero!)"%(accountId,))
             return
-        if accountId not in self.isAccountOnline:
+        if not self.isAccountOnline.has_key(accountId):
             assert self.notify.debugCall("accountId:%s (not online!)"%(accountId,))
             return
         assert self.notify.debugCall("accountId:%s"%(accountId,))
-        chatPermissions=accountId in self.isAccountOnline
+        chatPermissions=self.isAccountOnline.has_key(accountId)
         if chatPermissions is not None:
             self.sendWhisperSCEmoteFrom(accountId, toId, message)
         else:
@@ -286,7 +286,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         if not accountId:
             assert self.notify.debugCall("accountId:%s (zero!)"%(accountId,))
             return
-        if accountId not in self.isAccountOnline:
+        if not self.isAccountOnline.has_key(accountId):
             assert self.notify.debugCall("accountId:%s (not online!)"%(accountId,))
             return
         assert self.notify.debugCall("accountId:%s"%(accountId,))
@@ -307,7 +307,7 @@ class DistributedChatManagerUD(DistributedObjectGlobalUD):
         if not accountId:
             assert self.notify.debugCall("accountId:%s (zero!)"%(accountId,))
             return
-        if accountId not in self.isAccountOnline:
+        if not self.isAccountOnline.has_key(accountId):
             assert self.notify.debugCall("accountId:%s (not online!)"%(accountId,))
             return
         assert self.notify.debugCall("accountId:%s"%(accountId,))

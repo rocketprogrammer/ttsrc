@@ -1,6 +1,6 @@
 """ShtikerPage module: contains the ShtikerPage class"""
 
-from . import ShtikerBook
+import ShtikerBook
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *

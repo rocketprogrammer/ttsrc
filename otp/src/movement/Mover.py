@@ -4,7 +4,7 @@ from direct.directnotify import DirectNotifyGlobal
 from otp.movement.PyVec3 import PyVec3
 
 from direct.showbase import PythonUtil
-import builtins
+import __builtin__
 
 class Mover(CMover):
 
@@ -38,7 +38,7 @@ class Mover(CMover):
             self.pscInt = PStatCollector(Mover.PSCInt)
 
     def destroy(self):
-        for name, impulse in list(self.impulses.items()):
+        for name, impulse in self.impulses.items():
             Mover.notify.debug('removing impulse: %s' % name)
             self.removeImpulse(name)
 
@@ -72,11 +72,11 @@ class Mover(CMover):
         if Mover.Profile and (not profile):
             # profile
             def func(doMove=self.move):
-                for i in range(10000):
+                for i in xrange(10000):
                     doMove(dt, profile=1)
-            builtins.func = func
+            __builtin__.func = func
             PythonUtil.startProfile(cmd='func()', filename='profile', sorts=['cumulative'], callInfo=0)
-            del builtins.func
+            del __builtin__.func
             return
 
         if Mover.Pstats:
@@ -90,7 +90,7 @@ class Mover(CMover):
             self.pscPy.start()
 
         # now do Python impulses
-        for impulse in list(self.impulses.values()):
+        for impulse in self.impulses.values():
             impulse._process(self.getDt())
 
         if Mover.Pstats:

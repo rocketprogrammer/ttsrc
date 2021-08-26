@@ -3,7 +3,7 @@ from direct.showbase.ShowBaseGlobal import *
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from otp.level import BasicEntities
-from . import DistributedSwitchBase, MovingPlatform
+import DistributedSwitchBase, MovingPlatform
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM

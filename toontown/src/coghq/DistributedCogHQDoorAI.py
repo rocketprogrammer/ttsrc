@@ -7,7 +7,7 @@ from direct.fsm import ClassicFSM
 from toontown.building import DistributedDoorAI
 from direct.fsm import State
 from toontown.toonbase import ToontownGlobals
-from . import CogDisguiseGlobals
+import CogDisguiseGlobals
 from toontown.building import FADoorCodes
 from toontown.building import DoorTypes
 from toontown.toonbase import ToontownAccessAI
@@ -58,10 +58,10 @@ class DistributedCogHQDoorAI(DistributedDoorAI.DistributedDoorAI):
         avatarID = self.air.getAvatarIdFromSender()
         assert(self.notify.debug("  avatarID:%s" % (str(avatarID),)))
         
-        if avatarID in self.avatarsWhoAreEntering:
+        if self.avatarsWhoAreEntering.has_key(avatarID):
             del self.avatarsWhoAreEntering[avatarID]
 
-        if avatarID not in self.avatarsWhoAreExiting:
+        if not self.avatarsWhoAreExiting.has_key(avatarID):
             dept = ToontownGlobals.cogHQZoneId2deptIndex(self.destinationZone)
             self.avatarsWhoAreExiting[avatarID]=1
             self.sendUpdate("avatarExit", [avatarID])

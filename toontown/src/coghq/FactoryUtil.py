@@ -1,7 +1,7 @@
 from direct.showbase.ShowBaseGlobal import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToontownGlobals
-from . import MovingPlatform
+import MovingPlatform
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
 

@@ -1,5 +1,5 @@
 from direct.directnotify import DirectNotifyGlobal
-from . import HoodDataAI
+import HoodDataAI
 from toontown.toonbase import ToontownGlobals
 from toontown.coghq import DistributedFactoryElevatorExtAI
 from toontown.coghq import DistributedCogHQDoorAI

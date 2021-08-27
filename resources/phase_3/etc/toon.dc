@@ -1,11 +1,4 @@
-keyword required;
-keyword broadcast;
-keyword ram;
-keyword db;
 keyword p2p;
-keyword clsend;
-keyword ownsend;
-keyword airecv;
 
 from direct.distributed import DistributedObject/AI/UD
 from direct.distributed import DistributedNode/AI/UD
@@ -146,7 +139,7 @@ dclass DistributedSmoothNode : DistributedNode {
 
 dclass DistributedToon : DistributedSmoothNode {
   setName(string) required broadcast ram db;
-  setDNAString(blob) required broadcast ownrecv db;
+  setDNAString(blob) required broadcast ram db;
   setMaxBankMoney(int16 = 1000) required broadcast ram db;
   setBankMoney(int16 = 0) required broadcast ram db;
   setMaxMoney(int16 = 40) required broadcast ram db;
@@ -172,7 +165,7 @@ dclass DistributedToon : DistributedSmoothNode {
 
   setFriendsList(uint32uint8array = {}) required p2p db;
 
-  setDefaultShard(uint32 = 201000000) required p2p db;
+  setDefaultShard(uint32 = 200000000) required p2p db;
   setDefaultZone(uint16 = 2000) required p2p db;
   setShtickerBook(blob = {}) required p2p db;
   setZonesVisited(uint16array = { 2000 }) required p2p db;
@@ -285,27 +278,27 @@ dclass Account
 // This is for internal server usa only...
 
   // the 6 avatars a person has
-  uint32array ACCOUNT_AV_SET = [0,0,0,0,0,0] required db;
+  ACCOUNT_AV_SET( uint32array = [0,0,0,0,0,0]) required db;
   // some old records have this no longer tracked
-  string BIRTH_DATE db;
+  BIRTH_DATE( string );
   // this is the swid... or external name..
-  string BLAST_NAME db;
+  BLAST_NAME( string="" );
   // date of creation in local machine time
-  string CREATED db;
+  CREATED(string="" );
   // the name for the account  ( no longer tracked )
-  string FIRST_NAME db;
+  FIRST_NAME(string="" );
   // the last time this person account connected to game
-  string LAST_LOGIN db;
+  LAST_LOGIN(string="" );
   // No Longer Tracked
-  string LAST_NAME db;
+  LAST_NAME( string="" );
   // total time this account has been loged in ..
-  string PLAYED_MINUTES db;
+  PLAYED_MINUTES( string="" );
   // total time this account has been loged in this period
-  string PLAYED_MINUTES_PERIOD db;
-  //string PASSWD db;
+  PLAYED_MINUTES_PERIOD( string="" );
+  //PASSWD( string );
   // the 6 houses a person has
-  uint32[] HOUSE_ID_SET db;
-  uint32 ESTATE_ID db;
+  HOUSE_ID_SET( uint32array ) db;
+  ESTATE_ID( uint32 ) db;
 };
 
 dclass DistributedCCharBase : DistributedObject {
@@ -381,10 +374,10 @@ dclass DistributedTrolley : DistributedObject {
 dclass DistributedSuitPlanner : DistributedObject {
   // tell the client-side suit planner which zone it exists in
   setZoneId(uint16 zoneId) required broadcast ram;
-  suitListQuery() airecv clsend;
-  suitListResponse(uint8array suitList);
-  buildingListQuery() airecv clsend;
-  buildingListResponse(uint8array buildingList);
+  suitListQuery() p2p clsend;
+  suitListResponse(uint8array suitList) p2p;
+  buildingListQuery() p2p clsend;
+  buildingListResponse(uint8array buildingList) p2p;
 };
 
 dclass DistributedSuit : DistributedObject {
@@ -831,16 +824,16 @@ dclass SafeZoneManager : DistributedObject {
 
 dclass TutorialManager : DistributedObject {
   // Players who want a tutorial send this.
-  requestTutorial() airecv clsend;
+  requestTutorial() p2p clsend;
   // Players who don't want a tutorial send this.
-  rejectTutorial() airecv clsend;
+  rejectTutorial() p2p clsend;
   // This is how the manager puts a player into the tutorial
   enterTutorial(uint16 branchZone,
                 uint16 streetZone,
                 uint16 shopZone,
-                uint16 hqZone);
-  allDone() airecv clsend;
-  toonArrived() airecv clsend;
+                uint16 hqZone) p2p;
+  allDone() p2p clsend;
+  toonArrived() p2p clsend;
 };
 
 //dclass DistributedTutorial : DistributedObject {
@@ -1005,16 +998,16 @@ dclass DistributedDoor : DistributedObject {
   setDoorIndex(uint8 doorIndex) required broadcast ram;
 
   // Answers the question: Where does this door go?
-  setOtherZoneIdAndDoId(uint32 zoneId, uint32 doId);
+  setOtherZoneIdAndDoId(uint32 zoneId, uint32 doId) p2p;
 
   // This client wants to go though the door:
-  requestEnter() airecv clsend;
+  requestEnter() p2p clsend;
 
   // The client can ask to leave the door:
-  requestExit() airecv clsend;
+  requestExit() p2p clsend;
 
   // Tell the toon they may not enter:
-  rejectEnter(int8 reason);
+  rejectEnter(int8 reason) p2p;
 
   // Tell all nearby that a toon is entering the door queue:
   toonEnter(uint32 avatarID) broadcast;
@@ -1055,9 +1048,9 @@ dclass DistributedNPCToonBase : DistributedNode {
   setPageNumber(int16 paragraph, int8 pageNumber, int16 timestamp) broadcast ram clsend;
 
   // These let the server know when toons show up and leave
-  avatarEnter() airecv clsend;
+  avatarEnter() p2p clsend;
   // Free an avatar that is requesting interaction, but needs to be denied
-  freeAvatar();
+  freeAvatar() p2p;
 };
 
 dclass DistributedNPCToon : DistributedNPCToonBase {

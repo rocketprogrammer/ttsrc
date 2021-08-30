@@ -98,13 +98,6 @@ class AIDistrict(AIRepository):
     def getGameDoId(self):
         self.notify.error('derived must override')
 
-    def sendShardInfo(self):
-        dg = PyDatagram()
-        dg.addServerHeader(self.serverId, self.ourChannel, STATESERVER_UPDATE_SHARD)
-        dg.addString(self.districtName)
-        dg.addUint32(self._population)
-        self.send(dg)
-
     def incrementPopulation(self):
         self._population += 1
 
@@ -112,7 +105,6 @@ class AIDistrict(AIRepository):
         if __dev__:
             assert self._population > 0
         self._population = max(0, self._population - 1)
-        self.sendShardInfo()
 
     def getPopulation(self):
         if simbase.fakeDistrictPopulations:

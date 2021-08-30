@@ -1020,3 +1020,11 @@ class ToontownAIRepository(AIDistrict):
                                   (globalId, OtpDoGlobals.OTP_DO_ID_TOONTOWN_PARTY_MANAGER))
             # Let the dclass finish the job
             do.dclass.receiveUpdate(do, di)
+
+    def sendShardInfo(self):
+        dg = PyDatagram()
+        dg.addServerHeader(self.serverId, self.ourChannel, STATESERVER_UPDATE_SHARD)
+        dg.addString(self.districtName)
+        dg.addUint32(self._population)
+        dg.addUint32(self.getWelcomeValleyCount())
+        self.send(dg)

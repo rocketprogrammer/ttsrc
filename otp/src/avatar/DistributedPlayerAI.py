@@ -61,9 +61,11 @@ class DistributedPlayerAI(DistributedAvatarAI.DistributedAvatarAI,
 
     def _doPlayerEnter(self):
         self.incrementPopulation()
+        simbase.air.sendShardInfo()
 
     def _doPlayerExit(self):
         self.decrementPopulation()
+        simbase.air.sendShardInfo()
 
     # override if you don't want to affect the population count for a
     # particular PlayerAI

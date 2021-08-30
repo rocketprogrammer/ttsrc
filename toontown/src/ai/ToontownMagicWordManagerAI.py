@@ -1967,11 +1967,11 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         mgr = self.air.welcomeValleyManager
 
         if hood == mgr.newHood:
-            return "%s N" % (hood[0].zoneId)
+            return "%s N" % (hood.zoneId)
         elif hood in mgr.removingHoods:
-            return "%s R" % (hood[0].zoneId)
+            return "%s R" % (hood.zoneId)
         else:
-            return "%s" % (hood[0].zoneId)
+            return "%s" % (hood.zoneId)
 
     def doWelcome(self, word, av, zoneId, senderId):
         """Handle the ~welcome magic word, for managing Welcome Valley."""

@@ -101,3 +101,6 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
         if simbase.air.doId2do.get(avId):
             onShard = True
         self.sendUpdateToAvatarId(senderId,"confirmAvOnShard",[avId, onShard])
+
+    def d_friendsNotify(self, avId, status):
+        self.sendUpdate("friendsNotify", [avId, status])

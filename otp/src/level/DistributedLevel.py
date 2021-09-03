@@ -8,13 +8,13 @@ from toontown.distributed.ToontownMsgTypes import *
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
 from direct.distributed import DistributedObject
-import Level
-import LevelConstants
+from . import Level
+from . import LevelConstants
 from direct.directnotify import DirectNotifyGlobal
-import EntityCreator
+from . import EntityCreator
 from direct.gui import OnscreenText
 from direct.task import Task
-import LevelUtil
+from . import LevelUtil
 import random
 
 class DistributedLevel(DistributedObject.DistributedObject,
@@ -176,7 +176,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
 
             def setSpecBlob(specBlob, blobSender=blobSender, self=self):
                 blobSender.sendAck()
-                from LevelSpec import LevelSpec
+                from .LevelSpec import LevelSpec
                 spec = eval(specBlob)
                 if spec is None:
                     spec = self.candidateSpec
@@ -205,7 +205,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
         # make sure the zoneNums from the model match the zoneNums from
         # the zone entities
         modelZoneNums = self.zoneNums
-        specZoneNums = self.zoneNum2zoneId.keys()
+        specZoneNums = list(self.zoneNum2zoneId.keys())
         if not sameElements(modelZoneNums, specZoneNums):
             self.reportModelSpecSyncError(
                 'model zone nums (%s) do not match spec zone nums (%s)' %
@@ -281,7 +281,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
         # find the zones in the model and fix them up
         self.zoneNum2node = LevelUtil.getZoneNum2Node(self.geom)
 
-        self.zoneNums = self.zoneNum2node.keys()
+        self.zoneNums = list(self.zoneNum2node.keys())
         self.zoneNums.sort()
         self.zoneNumDict = list2dict(self.zoneNums)
         DistributedLevel.notify.debug('zones from model: %s' % self.zoneNums)
@@ -293,7 +293,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
     def fixupLevelModel(self):
         # fix up the floor collisions for walkable zones *before*
         # any entities get put under the model
-        for zoneNum,zoneNode in self.zoneNum2node.items():
+        for zoneNum,zoneNode in list(self.zoneNum2node.items()):
             # don't do this to the uberzone
             if zoneNum == LevelConstants.UberZoneEntId:
                 continue
@@ -396,12 +396,12 @@ class DistributedLevel(DistributedObject.DistributedObject,
 
             # if this parent doesn't already have another child pending,
             # do some setup
-            if not self.parent2pendingChildren.has_key(parentId):
+            if parentId not in self.parent2pendingChildren:
                 self.parent2pendingChildren[parentId] = []
 
                 # do the reparent(s) once the parent is initialized
                 def doReparent(parentId=parentId, self=self, wrt=wrt):
-                    assert self.parent2pendingChildren.has_key(parentId)
+                    assert parentId in self.parent2pendingChildren
                     parent=self.getEntity(parentId)
                     for child in self.parent2pendingChildren[parentId]:
                         DistributedLevel.notify.debug(
@@ -624,7 +624,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
         removedZoneNums = []
         allVZ = dict(visibleZoneNums)
         allVZ.update(self.curVisibleZoneNums)
-        for vz,dummy in allVZ.items():
+        for vz,dummy in list(allVZ.items()):
             new = vz in visibleZoneNums
             old = vz in self.curVisibleZoneNums
             if new and old:
@@ -653,7 +653,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
         # frame, whether or not the visibility is different from what
         # we already have
         if vizZonesChanged or self.fForceSetZoneThisFrame:
-            self.setVisibility(visibleZoneNums.keys())
+            self.setVisibility(list(visibleZoneNums.keys()))
             self.fForceSetZoneThisFrame = 0
 
         self.curZoneNum = zoneNum
@@ -688,7 +688,7 @@ class DistributedLevel(DistributedObject.DistributedObject,
         # zones' viz lists
         del self.curVisibleZoneNums[LevelConstants.UberZoneEntId]
         # Make sure every zone is visible
-        for vz,dummy in self.curVisibleZoneNums.items():
+        for vz,dummy in list(self.curVisibleZoneNums.items()):
             self.showZone(vz)
         # Redo visibility using current zone num
         self.updateVisibility()

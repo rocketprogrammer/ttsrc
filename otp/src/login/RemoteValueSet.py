@@ -1,8 +1,8 @@
 """RemoteValueSet.py: contains the RemoteValueSet class"""
 
 from direct.directnotify import DirectNotifyGlobal
-import TTAccount
-import HTTPUtil
+from . import TTAccount
+from . import HTTPUtil
 
 class RemoteValueSet:
     """
@@ -55,7 +55,7 @@ class RemoteValueSet:
             # '1' means only make one split (the first one, from the left)
             try:
                 name, value = line.split('=', 1)
-            except ValueError, e:
+            except ValueError as e:
                 errMsg = 'unexpected response: %s' % response
                 self.notify.warning(errMsg)
                 onUnexpectedResponse(errMsg)
@@ -72,7 +72,7 @@ class RemoteValueSet:
 
         # make sure we got all of the expected fields
         for name in expectedFields:
-            if not self.dict.has_key(name):
+            if name not in self.dict:
                 errMsg = "missing expected field '%s'" % name
                 self.notify.warning(errMsg)
                 onUnexpectedResponse(errMsg)
@@ -82,7 +82,7 @@ class RemoteValueSet:
         return "RemoteValueSet:%s" % str(self.dict)
 
     def hasKey(self, key):
-        return self.dict.has_key(key)
+        return key in self.dict
 
     # accessors
     # If 'name' is not found, and you provide a 'default' value,

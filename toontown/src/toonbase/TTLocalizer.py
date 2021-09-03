@@ -7,7 +7,7 @@ to use in the game.
 
 # Do not import panda modules because it is not downloaded until Phase 3
 # This file is in phase 2
-from pandac.libpandaexpressModules import *
+from panda3d.core import *
 import string
 import types
 
@@ -15,12 +15,12 @@ try:
     # Client
     # The Launcher will define config in the builtin namespace
     # before importing this file
-    language = getConfigExpress().GetString("language", "english")
-    checkLanguage = getConfigExpress().GetBool("check-language", 0)
+    language = ConfigVariableString("language", "english").value
+    checkLanguage = ConfigVariableBool("check-language", 0).value
 except:
     # AI
-    language = simbase.config.GetString("language", "english")
-    checkLanguage = simbase.config.GetBool("check-language", 0)
+    language = config.GetString("language", "english")
+    checkLanguage = config.GetBool("check-language", 0)
 
 # Ask what language we are running in. Returns a string.
 def getLanguage():
@@ -28,9 +28,9 @@ def getLanguage():
 
 print(("TTLocalizer: Running in language: %s" % (language)))
 if language == 'english':
-    _languageModule = "toontown.toonbase.TTLocalizer" + string.capitalize(language)
+    _languageModule = "toontown.toonbase.TTLocalizer" + language.capitalize()
 else:
-    checkLanguage = 1 
+    checkLanguage = 1
     _languageModule = "toontown.toonbase.TTLocalizer_" + language
 
 print(("from " + _languageModule + " import *"))

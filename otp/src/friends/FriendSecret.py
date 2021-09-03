@@ -788,7 +788,7 @@ class FriendSecret(DirectFrame, StateData.StateData):
 
     def __rejectAccountSecret(self, reason):
         assert self.notify.debugCall()
-        print "## rejectAccountSecret: reason = ", reason
+        print("## rejectAccountSecret: reason = ", reason)
         self.ignore(OTPGlobals.PlayerFriendNewSecretEvent)
         self.ignore(OTPGlobals.PlayerFriendRejectNewSecretEvent)
         # TODO: handle more reasons
@@ -901,7 +901,7 @@ class FriendSecret(DirectFrame, StateData.StateData):
 
     def __rejectUseAccountSecret(self, reason):
         assert self.notify.debugCall("reason = %s" % reason)
-        print "## rejectUseAccountSecret: reason = ", reason
+        print("## rejectUseAccountSecret: reason = ", reason)
         self.ignore(OTPGlobals.PlayerFriendUpdateEvent)
         self.ignore(OTPGlobals.PlayerFriendRejectUseSecretEvent)
 

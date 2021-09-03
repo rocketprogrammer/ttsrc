@@ -1,7 +1,7 @@
 import string
 import md5
 import subprocess
-import cPickle as pickle
+import pickle as pickle
 import time
 import os
 
@@ -79,7 +79,7 @@ class NavigationManager(object):
             node = np.node()
 
             if node.getIntoCollideMask() & OTPGlobals.WallBitmask != BitMask32.allOff():
-                for i in xrange(node.getNumSolids()):
+                for i in range(node.getNumSolids()):
                     s = node.getSolid(i)
                     
                     monsterData.append( str(s) )
@@ -154,7 +154,7 @@ class NavigationManager(object):
 
                 assert self.notify.debug("Farming rows out to %s slaves:" % numProcs)
 
-                for i in xrange(numProcs):
+                for i in range(numProcs):
                     if rowsLeft < rowsPerProc*2:
                         assert i == numProcs-1
                         todo = rowsLeft
@@ -225,13 +225,13 @@ def gogogo():
 def randomlookups():
     import random
     import time
-    mesh = simbase.air.navMgr.meshes.values()[0]
+    mesh = list(simbase.air.navMgr.meshes.values())[0]
 
     assert self.notify.debug("Timing lookups...")
 
     routeList = []
 
-    for i in xrange(1000000):
+    for i in range(1000000):
         routeList.append((random.randint(0,mesh.numNodes-1),random.randint(0,mesh.numNodes-1)))
 
     t1 = time.time()
@@ -252,15 +252,15 @@ def randomlookups():
 
 def routelookups():
     import time
-    mesh = simbase.nm.meshes.values()[0]
+    mesh = list(simbase.nm.meshes.values())[0]
     assert self.notify.debug("Timing lookups...")
 
     t1 = time.time()
 
     i = 0
 
-    for i in xrange(mesh.numNodes):
-        for j in xrange(mesh.numNodes):
+    for i in range(mesh.numNodes):
+        for j in range(mesh.numNodes):
             route = mesh.pathTable.findRoute(i,j)
 
     t2 = time.time()
@@ -277,14 +277,14 @@ def intersectiontest():
     s = set()
     t = set()
 
-    for i in xrange(0,2500):
+    for i in range(0,2500):
         s.add(i)
-    for i in xrange(2000,4000):
+    for i in range(2000,4000):
         t.add(i)
 
     t1 = time.time()
 
-    for i in xrange(1000000):
+    for i in range(1000000):
         s.intersection(t)
 
     t2 = time.time()
@@ -300,7 +300,7 @@ def addtest():
 
     t1 = time.time()
 
-    for i in xrange(1000000):
+    for i in range(1000000):
         s.add(i)
 
     t2 = time.time()
@@ -312,14 +312,14 @@ def addtest():
 def findNodeTest():
     import time
 
-    mesh = simbase.nm.meshes.values()[0]
+    mesh = list(simbase.nm.meshes.values())[0]
     pr = simbase.air.doFind("Port Royal")
 
     mesh.makeNodeLocator(pr)
 
     t1 = time.time()
 
-    for i in xrange(10000):
+    for i in range(10000):
         pId = mesh.findNodeFromPos(pr, 0.5, 0.5)
 
     t2 = time.time()

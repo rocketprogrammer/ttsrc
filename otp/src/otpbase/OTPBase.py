@@ -4,7 +4,7 @@ OTPBase module: contains the OTPBase class
 
 from direct.showbase.ShowBase import ShowBase
 from pandac.PandaModules import Camera, TPLow, VBase4, ColorWriteAttrib, Filename, getModelPath, NodePath
-import OTPRender
+from . import OTPRender
 import time
 import math
 import re
@@ -282,7 +282,7 @@ class OTPBase(ShowBase):
 
         # Now set the pixel zoom according to the average feet per
         # second the camera has moved over the past history seconds.
-        dist = sum(map(lambda pair: pair[1], self.pixelZoomCamMovedList))
+        dist = sum([pair[1] for pair in self.pixelZoomCamMovedList])
         speed = dist / self.pixelZoomCamHistory
 
         if speed < 5:

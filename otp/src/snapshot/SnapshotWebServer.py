@@ -29,7 +29,7 @@ class SnapshotWebServer(object):
         except:
             return "Error parsing argument avatarId.  Gimme an integer!"
         
-        print "getSnapshot %s" % avatarId
+        print("getSnapshot %s" % avatarId)
 
         self.requestQueue.put_nowait(avatarId)
 

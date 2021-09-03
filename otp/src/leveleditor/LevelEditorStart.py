@@ -1,4 +1,4 @@
-import LevelEditor
+from . import LevelEditor
 
 base.le = LevelEditor.LevelEditor()
 # You should define LevelEditor instance as

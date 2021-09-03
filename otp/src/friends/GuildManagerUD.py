@@ -1,4 +1,4 @@
-from itertools import izip
+
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from otp.distributed import OtpDoGlobals
 from otp.ai import AIMsgTypes
@@ -100,14 +100,14 @@ class GuildManagerUD(DistributedObjectGlobalUD):
     def tallyFunction(self,funcName):
         if funcName not in self.funcTally:
             self.funcTally[funcName] = 1
-            funcs = self.funcTally.keys()
+            funcs = list(self.funcTally.keys())
             funcs.sort()
             self.notify.info("funcs tallied: %s" % funcs)
         else:
             self.funcTally[funcName] += 1
 
     def logFuncTally(self,task):
-        funcs = self.funcTally.keys()
+        funcs = list(self.funcTally.keys())
         funcs.sort()
         str = ["%s" % self.funcTally[f] for f in funcs]
         str = string.join(str," ")
@@ -127,7 +127,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
     def delete(self):
         assert self.notify.debugCall()
         self.ignoreAll()
-        for i in self.asyncRequests.values():
+        for i in list(self.asyncRequests.values()):
             i.delete()
         DistributedObjectGlobalUD.delete(self)
 
@@ -193,7 +193,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
         if guildInfo:
             if 0:
                 # alternate coolness
-                guildmates, haveData = izip(*guildInfo)
+                guildmates, haveData = zip(*guildInfo)
             else:
                 guildmates = [x[0] for x in guildInfo]
                 haveData = [x[1] for x in guildInfo]
@@ -233,7 +233,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
         that list.
         """
         finishedLists = []
-        for player,guildInfo in self.pendingSends.iteritems():
+        for player,guildInfo in self.pendingSends.items():
             send = True
             for infoItem in guildInfo:
                 [(guildId,avId,rank), haveData] = infoItem
@@ -294,7 +294,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
 
         self.db.removeMember(avatarId, gId, rank)
 
-        for recipientId in self.pendingSends.keys():
+        for recipientId in list(self.pendingSends.keys()):
             info = self.pendingSends.get(recipientId,[])
             newInfo = []
             rep = False
@@ -319,7 +319,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
             # queue us a member list send
             haveData = [(avId in self.avatarName) for guildId,avId,rank in guildfolk]
 
-            self.pendingSends[avatarId] = [[x,y] for x,y in izip(guildfolk,haveData)]
+            self.pendingSends[avatarId] = [[x,y] for x,y in zip(guildfolk,haveData)]
 
             if False not in haveData:
                 self._sendFinishedLists(avatarId)
@@ -531,7 +531,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
             self.air.writeServerEvent('requestGuildInvite', avatarId, '%s|%s' % (otherAvatarId, name))
 
             guildid, guildname, guildrank, change = self.db.queryStatus(avatarId)
-            print "DEBUG, query came back: ", guildid, " ", guildname
+            print("DEBUG, query came back: ", guildid, " ", guildname)
             otherguild, othername, otherrank, otherchange = self.db.queryStatus(otherAvatarId)
 
             if guildrank < GUILDRANK_OFFICER:
@@ -578,7 +578,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
             self.air.send(dg)
 
     def testThis(self, args):
-        print "DEBUG: sending setValue and getValuesRespondTo"
+        print("DEBUG: sending setValue and getValuesRespondTo")
 
         dcfile = self.air.getDcFile()
         dclass = dcfile.getClassByName('LeaderBoard')
@@ -599,7 +599,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
     def getValuesResponce(self, contest, stuff):
         # This should automatically get called in response by the dclass object
         # No additional catch/subscribe required
-        print "DEBUG: GuildManagerUD:getValuesResponce"
+        print("DEBUG: GuildManagerUD:getValuesResponce")
         import pdb; pdb.set_trace();
 
     def getTopTenResponce(self, contest, stuff):
@@ -728,7 +728,7 @@ class GuildManagerUD(DistributedObjectGlobalUD):
         
         try:
             results = self.db.redeemToken(token, avatarId)
-        except Exception,e:
+        except Exception as e:
             if e.args[0] == "INVALID_TOKEN":
                 guildName = '***ERROR - GUILD CODE INVALID***'
                 self.sendTokenRedeemMessage(requestId, guildName)

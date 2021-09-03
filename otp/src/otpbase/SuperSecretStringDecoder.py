@@ -9,4 +9,4 @@ def decode(s):
 
 if __name__ == '__main__':
     data = sys.stdin.readline()
-    print decode(data)
+    print(decode(data))

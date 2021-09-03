@@ -1,4 +1,4 @@
-from sbWedge import sbWedge
+from .sbWedge import sbWedge
 import sys
 import getopt
 
@@ -13,7 +13,7 @@ try:
                                'bwdictpath='
                                ])
 except getopt.GetoptError:
-    print "Please pass a wedge name with --name=."
+    print("Please pass a wedge name with --name=.")
     sys.exit(1)
 
 #defaults
@@ -41,11 +41,11 @@ for o,a in opts:
     elif o == "--bwdictpath":
         bwdictpath = a
     else:
-        print "Error: Illegal option: " + o
+        print("Error: Illegal option: " + o)
         sys.exit(1)        
 
 if wedgename == "":
-    print "Please pass a wedge name with --name=."
+    print("Please pass a wedge name with --name=.")
     sys.exit(2)
     
 

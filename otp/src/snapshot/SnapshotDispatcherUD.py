@@ -1,12 +1,11 @@
 import direct
-from libdirect import HttpRequest
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from otp.ai import AIMsgTypes
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.http.WebRequest import WebRequestDispatcher
 
 from direct.task import Task
-import Queue
+import queue
 import socket
 
 #--------------------------------------------------
@@ -48,7 +47,7 @@ class SnapshotDispatcherUD(DistributedObjectGlobalUD):
         self.numServedAtLastLog = 0
 
         # Unassigned work
-        self.jobQueue = Queue.Queue()
+        self.jobQueue = queue.Queue()
 
         # If the queue gets longer than this, log warnings
         self.maxSafeJobQueueLength = 1000
@@ -238,7 +237,7 @@ class SnapshotDispatcherUD(DistributedObjectGlobalUD):
             return
         try:
             job = self.jobQueue.get_nowait()
-        except Queue.Empty:
+        except queue.Empty:
             # No work to give!  Do nothing.
             return
 

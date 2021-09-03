@@ -82,7 +82,7 @@ class UberDog(AIRepository):
         if obj is not None:
             assert obj.__class__.__name__ == (dclassName + self.dcSuffix)
             method = getattr(obj, fieldName)
-            apply(method, args)
+            method(*args)
         else:
             self.sendUpdateToDoId(dclassName, fieldName, doId, args, channelId)
 
@@ -93,7 +93,7 @@ class UberDog(AIRepository):
         if obj is not None:
             assert obj.__class__.__name__ == dclassName
             method = getattr(obj, fieldName)
-            apply(method, args)
+            method(*args)
         else:
             self.sendUpdateToGlobalDoId(dclassName, fieldName, doId, args)
 
@@ -321,8 +321,8 @@ class UberDog(AIRepository):
         """
         assert False, 'JCW: Testing for obsolete functions. If this crashes, let Josh know'
         doId=distributedObject.getDoId()
-        assert not self.doId2doCache.has_key(doId)
-        if not self.doId2doCache.has_key(doId):
+        assert doId not in self.doId2doCache
+        if doId not in self.doId2doCache:
             self.doId2doCache[doId]=distributedObject
             self.handleGotDo(distributedObject)
 
@@ -335,12 +335,12 @@ class UberDog(AIRepository):
         will also remove the handled calls from the pending set.
         """
         assert False, 'JCW: Testing for obsolete functions. If this crashes, let Josh know'
-        assert self.doId2doCache.has_key(doId)
+        assert doId in self.doId2doCache
         pending=self.pending.get(doId)
         if pending is not None:
             del self.pending[doId]
             for i in pending:
-                apply(i[0], i[2])
+                i[0](*i[2])
 
     def deleteObject(self, doId):
         """

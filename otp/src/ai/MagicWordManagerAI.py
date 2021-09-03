@@ -1,4 +1,4 @@
-from AIBaseGlobal import *
+from .AIBaseGlobal import *
 from pandac.PandaModules import *
 from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
@@ -6,7 +6,6 @@ from otp.otpbase import OTPGlobals
 from direct.showbase import PythonUtil, GarbageReport, ContainerReport, MessengerLeakDetector
 from direct.showbase import ContainerLeakDetector
 from direct.showbase.PythonUtil import Functor, DelayedCall, formatTimeCompact
-import fpformat
 import string
 import time
 import re
@@ -42,7 +41,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         self.notify.info("%s (%s) just said the magic word: %s" % (sender, signature, word))
         self.air.writeServerEvent('magic-word', senderId, "%s|%s|%s" % (sender, signature, word))
-        if self.air.doId2do.has_key(avId):
+        if avId in self.air.doId2do:
             av = self.air.doId2do[avId]
 
             try:
@@ -115,7 +114,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         elif wordIs("~who all"):
             str = ''
-            for obj in self.air.doId2do.values():
+            for obj in list(self.air.doId2do.values()):
                 if hasattr(obj, "accountName"):
                     str += '%s %s\n' % (obj.accountName, obj.name)
             if not str:
@@ -205,7 +204,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
 
         elif wordIs('~ud'):
             # Execute an arbitrary Python command on the ud.
-            print word
+            print(word)
             channel,command = re.match("~ud ([0-9]+) (.+)", word).groups()
             channel = int(channel)
             if(simbase.air.doId2do.get(channel)):
@@ -247,11 +246,11 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
                 type2count.setdefault(tn, 0)
                 type2count[tn] += 1
             count2type = invertDictLossless(type2count)
-            counts = count2type.keys()
+            counts = list(count2type.keys())
             counts.sort()
             counts.reverse()
             for count in counts:
-                print '%s: %s' % (count, count2type[count])
+                print('%s: %s' % (count, count2type[count]))
             self.down_setMagicWordResponse(senderId, '~aiobjecthg complete')
 
         elif wordIs('~aicrash'):
@@ -399,11 +398,11 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.down_setMagicWordResponse(senderId, 'logging AI distributed object count...')
 
         elif wordIs('~aitaskmgr'):
-            print taskMgr
+            print(taskMgr)
             self.down_setMagicWordResponse(senderId, 'logging AI taskMgr...')
 
         elif wordIs('~aijobmgr'):
-            print jobMgr
+            print(jobMgr)
             self.down_setMagicWordResponse(senderId, 'logging AI jobMgr...')
 
         elif wordIs('~aijobtime'):
@@ -447,7 +446,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.down_setMagicWordResponse(senderId, response)
 
         elif wordIs('~aimessenger'):
-            print messenger
+            print(messenger)
             self.down_setMagicWordResponse(senderId, 'logging AI messenger...')
 
         elif wordIs('~requestdeleted'):
@@ -522,7 +521,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
     def __execMessage(self, message):
         if not self.ExecNamespace:
             # Import some useful variables into the ExecNamespace initially.
-            exec 'from pandac.PandaModules import *' in globals(), self.ExecNamespace
+            exec('from pandac.PandaModules import *', globals(), self.ExecNamespace)
             #self.importExecNamespace()
 
         # Now try to evaluate the expression using ChatInputNormal.ExecNamespace as
@@ -535,7 +534,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             # "import math".  These aren't expressions, so eval()
             # fails, but they can be exec'ed.
             try:
-                exec message in globals(), self.ExecNamespace
+                exec(message, globals(), self.ExecNamespace)
                 return 'ok'
             except:
                 exception = sys.exc_info()[0]
@@ -593,5 +592,5 @@ def magicWord(mw, av=None, zoneId=0, senderId=0):
         av = FakeAv(senderId)
     simbase.air.magicWordManager.doMagicWord(mw, av, zoneId, senderId)
 
-import __builtin__
-__builtin__.magicWord = magicWord
+import builtins
+builtins.magicWord = magicWord

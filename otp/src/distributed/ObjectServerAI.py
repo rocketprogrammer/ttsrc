@@ -27,8 +27,8 @@ class ObjectServerAI(DistributedObjectAI):
     def setDcHash(self, dcHash):
         self.dcHash=dcHash
         if dcHash != self.air.hashVal:
-            print "\nBad DC Version compare -- hash value mismatch (district %s, otp_server %s)"%(
-                (self.air.hashVal, dcHash))
+            print("\nBad DC Version compare -- hash value mismatch (district %s, otp_server %s)"%(
+                (self.air.hashVal, dcHash)))
             sys.exit()
         else:
-            print "DC hash matches."
+            print("DC hash matches.")

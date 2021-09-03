@@ -25,7 +25,7 @@ class MoverGroup(CMoverGroup):
         self._name2pyMovers[name] = mover
     def remove(self, name):
         self.removeCMover(name)
-        if (self._name2pyMovers.has_key(name)):
+        if (name in self._name2pyMovers):
             del self._name2pyMovers[name]
 
     def move(self, dt=-1):
@@ -36,8 +36,8 @@ class MoverGroup(CMoverGroup):
         # process all the Py impulses first
         if Mover.Pstats:
             self.pscPy.start()
-        for mover in self._name2pyMovers.values():
-            for impulse in mover.impulses.values():
+        for mover in list(self._name2pyMovers.values()):
+            for impulse in list(mover.impulses.values()):
                 impulse._process(dt)
         if Mover.Pstats:
             self.pscPy.stop()
@@ -50,6 +50,6 @@ class MoverGroup(CMoverGroup):
             self.pscCppInt.stop()
 
     def broadcastPositionUpdates(self):
-        for mover in self._name2pyMovers.itervalues():
+        for mover in self._name2pyMovers.values():
             mover._posHprBroadcast()
             

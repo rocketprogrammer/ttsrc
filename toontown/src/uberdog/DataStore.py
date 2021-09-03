@@ -2,7 +2,6 @@ from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import ConfigVariableBool
 from direct.task import Task
 
-from string import maketrans
 import pickle
 import os
 import sys
@@ -37,9 +36,9 @@ class DataStore:
         return newTypes
 
     notify = DirectNotifyGlobal.directNotify.newCategory('DataStore')
-    
+
     wantAnyDbm = ConfigVariableBool('want-ds-anydbm',1).getValue()
-    
+
     def __init__(self,filepath,writePeriod = 300, writeCountTrigger = 100):
         """
         filepath is where the data for this store will be held on the disk.
@@ -62,7 +61,7 @@ class DataStore:
             self.notify.debug('anydbm default module used: %s ' % dbm._defaultmod.__name__)
 
         self.open()
-        
+
     def readDataFromFile(self):
         """
         Looks for a backup data file, ie. A file that only exists
@@ -91,7 +90,7 @@ class DataStore:
             except dbm.error:
                 self.notify.warning('Cannot open anydbm database at: %s.' % \
                                     (self.filepath,))
-                
+
         else:
             try:
                 # Try to open the backup file:
@@ -119,7 +118,7 @@ class DataStore:
                 self.data = data
             else:
                 self.data = {}
-        
+
     def writeDataToFile(self):
         """
         Attempt to store the contents of self.data to disk.
@@ -138,11 +137,11 @@ class DataStore:
                     backuppath = self.filepath+ '.bu'
                     if os.path.exists(self.filepath):
                         os.rename(self.filepath,backuppath)
-                        
+
                     outfile = open(self.filepath, 'w')
                     pickle.dump(self.data,outfile)
                     outfile.close()
-                        
+
                     if os.path.exists(backuppath):
                         os.remove(backuppath)
                 except EnvironmentError:
@@ -150,7 +149,7 @@ class DataStore:
         else:
             self.notify.warning('No data to write. Aborting sync.')
 
-        
+
     def syncTask(self,task):
         """
         This task is responsible for synchronizing the data in memory with
@@ -163,7 +162,7 @@ class DataStore:
             data in memory.
         """
         task.timeElapsed += globalClock.getDt()
-        
+
         if task.timeElapsed > self.writePeriod:
             if self.writeCount:
                 self.writeDataToFile()
@@ -189,7 +188,7 @@ class DataStore:
         Clear the update status of the data.
         """
         self.writeCount = 0
-        
+
     def close(self):
         """
         Syncs the RAM data with the disk.
@@ -208,21 +207,21 @@ class DataStore:
         Loads the data from disk into RAM.
         Starts the periodic update task.
         """
-        self.close()        
-        self.readDataFromFile()        
+        self.close()
+        self.readDataFromFile()
         self.resetWriteCount()
-        
+
         taskMgr.remove('%s-syncTask'%(self.className,))
         t = taskMgr.add(self.syncTask,'%s-syncTask'%(self.className,))
         t.timeElapsed = 0.0
-        
+
     def reset(self):
         """
         Destroys the store's data and opens a blank store.
         """
         self.destroy()
         self.open()
-        
+
     def destroy(self):
         """
         Closes the store.
@@ -231,7 +230,7 @@ class DataStore:
         self.close()
         if self.wantAnyDbm:
             lt = time.asctime(time.localtime())
-            trans = maketrans(': ','__')
+            trans = ': '.maketrans('__')
             t = lt.translate(trans)
             head, tail = os.path.split(self.filepath)
             newFileName = 'UDStoreBak'+t

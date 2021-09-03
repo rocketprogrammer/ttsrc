@@ -1,7 +1,7 @@
 """LevelUtil module: contains Level utility funcs"""
 
 import string
-import LevelConstants
+from . import LevelConstants
 
 def getZoneNum2Node(levelModel, logFunc=lambda str:str):
     """ given model, returns dict of ZoneNumber -> ZoneNode """

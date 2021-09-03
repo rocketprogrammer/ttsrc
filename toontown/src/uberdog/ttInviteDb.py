@@ -17,7 +17,7 @@ class ttInviteDb:
     """Based on sbMaildb.py in $OTP/src/switchboard."""
 
     notify = DirectNotifyGlobal.directNotify.newCategory("ttInviteDb")
-    
+
     def __init__(self,host,port,user,passwd,db):
         self.sqlAvailable = True
         self.host = host
@@ -43,14 +43,14 @@ class ttInviteDb:
         #temp hack for initial dev, create DB structure if it doesn't exist already
         cursor = self.db.cursor()
         try:
-            cursor.execute("CREATE DATABASE `%s`"%self.dbname)
+            cursor.execute("CREATE DATABASE IF NOT EXISTS `%s`"%self.dbname)
             if __debug__:
                 self.notify.info("Database '%s' did not exist, created a new one!"%self.dbname)
         except _mysql_exceptions.ProgrammingError as e:
             # self.notify.info('%s' % str(e))
             pass
         except _mysql_exceptions.OperationalError as e:
-            self.notify.info('%s' % str(e))            
+            self.notify.info('%s' % str(e))
             pass
 
         cursor.execute("USE `%s`"%self.dbname)
@@ -70,7 +70,7 @@ class ttInviteDb:
                 CREATE TABLE ttInviteStatus(
                   statusId      TINYINT NOT NULL,
                   description   VARCHAR(20) NOT NULL,
-                  lastupdate    TIMESTAMP  NOT NULL 
+                  lastupdate    TIMESTAMP  NOT NULL
                                       DEFAULT   CURRENT_TIMESTAMP
                                       ON UPDATE CURRENT_TIMESTAMP,
                   PRIMARY KEY (statusId),
@@ -84,15 +84,15 @@ class ttInviteDb:
                     cursor.execute(\
                         "INSERT INTO ttInviteStatus(statusId, description) VALUES (%d, '%s')" %
                     (index, PartyGlobals.InviteStatus.getString(index)))
-                    
-            # TODO is it better to do a show tables than to do a try create Table except block?        
+
+            # TODO is it better to do a show tables than to do a try create Table except block?
             cursor.execute("""
-            CREATE TABLE ttInvite (
-              inviteId           BIGINT     NOT NULL AUTO_INCREMENT,            
+            CREATE TABLE IF NOT EXISTS ttInvite (
+              inviteId           BIGINT     NOT NULL AUTO_INCREMENT,
               partyId            BIGINT     NOT NULL,
               guestId            BIGINT     NOT NULL,
               statusId           TINYINT    NOT NULL DEFAULT 0,
-              lastupdate         TIMESTAMP  NOT NULL 
+              lastupdate         TIMESTAMP  NOT NULL
                                  DEFAULT   CURRENT_TIMESTAMP
                                  ON UPDATE CURRENT_TIMESTAMP,
 
@@ -100,14 +100,14 @@ class ttInviteDb:
               INDEX idx_guestId (guestId),
               INDEX idx_partyId(partyId),
               FOREIGN KEY (partyId) REFERENCES ttParty(partyId) ON DELETE CASCADE
-            ) 
-            ENGINE=InnoDB 
-            DEFAULT CHARSET=utf8;            
+            )
+            ENGINE=InnoDB
+            DEFAULT CHARSET=utf8;
             """)
             if __debug__:
                 self.notify.info("Table ttInvite did not exist, created a new one!")
         except _mysql_exceptions.OperationalError as e:
-            pass            
+            pass
 
         try:
             cursor = self.db.cursor()
@@ -143,7 +143,7 @@ class ttInviteDb:
         if not self.sqlAvailable:
             self.notify.debug("sqlAvailable was false when calling getInvites")
             return ()
-        
+
         cursor = MySQLdb.cursors.DictCursor(self.db)
         try:
             cursor.execute("USE `%s`"%self.dbname)
@@ -151,7 +151,7 @@ class ttInviteDb:
             res = cursor.fetchall()
             self.notify.debug("Select was successful in ttInvitedb, returning %s" % str(res))
             return res
-        
+
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
                 self.notify.warning("Error on getInvites retry, giving up:\n%s" % str(e))
@@ -179,7 +179,7 @@ class ttInviteDb:
 
             cursor.execute(ttSQL.putInviteINSERT,
                            (partyId, inviteeId))
-            self.db.commit() 
+            self.db.commit()
 
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
@@ -211,7 +211,7 @@ class ttInviteDb:
                 self.notify.warning("%d tried to delete party %d which didn't exist or wasn't his!" % (accountId,messageId))
 
             self.db.commit()
-                
+
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
                 self.notify.warning("Error in deleteInviteByParty retry, giving up:\n%s" % str(e))
@@ -225,13 +225,13 @@ class ttInviteDb:
                 self.deleteMail(accountId,messageId,True)
         except Exception as e:
             self.notify.warning("Unknown error in deleteInviteByParty, giving up:\n%s" % str(e))
-            return            
+            return
 
     def getReplies(self,partyId,isRetry=False):
         if not self.sqlAvailable:
             self.notify.debug("sqlAvailable was false when calling getParty")
             return ()
-        
+
         cursor = MySQLdb.cursors.DictCursor(self.db)
         try:
             cursor.execute("USE `%s`"%self.dbname)
@@ -239,7 +239,7 @@ class ttInviteDb:
             res = cursor.fetchall()
             #self.notify.debug("Select was successful in ttInvitedb, returning %s" % str(res))
             return res
-        
+
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
                 self.notify.warning("Error on getReplies retry, giving up:\n%s" % str(e))
@@ -267,7 +267,7 @@ class ttInviteDb:
         if not self.sqlAvailable:
             self.notify.debug("sqlAvailable was false when calling getParty")
             return ()
-        
+
         cursor = MySQLdb.cursors.DictCursor(self.db)
         try:
             cursor.execute("USE `%s`"%self.dbname)
@@ -275,7 +275,7 @@ class ttInviteDb:
             res = cursor.fetchall()
             #self.notify.debug("Select was successful in ttInvitedb, returning %s" % str(res))
             return res
-        
+
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
                 self.notify.warning("Error on getOneInvite retry, giving up:\n%s" % str(e))
@@ -295,7 +295,7 @@ class ttInviteDb:
         if not self.sqlAvailable:
             self.notify.debug("sqlAvailable was false when calling getParty")
             return ()
-        
+
         cursor = MySQLdb.cursors.DictCursor(self.db)
         try:
             cursor.execute("USE `%s`"%self.dbname)
@@ -304,7 +304,7 @@ class ttInviteDb:
             res = cursor.fetchall()
             #self.notify.debug("Select was successful in ttInvitedb, returning %s" % str(res))
             return res
-        
+
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
                 self.notify.warning("Error on updateInvite retry, giving up:\n%s" % str(e))
@@ -318,14 +318,14 @@ class ttInviteDb:
                 return self.updateInvite( newStatus, inviteKey, True)
         except Exception as e:
             self.notify.warning("Unknown error in updateInvite, giving up:\n%s" % str(e))
-            return ()                
-    
+            return ()
+
 
     def getInviteesOfParty(self, inviteKey, isRetry = False):
         if not self.sqlAvailable:
             self.notify.debug("sqlAvailable was false when calling getParty")
             return ()
-        
+
         cursor = MySQLdb.cursors.DictCursor(self.db)
         try:
             cursor.execute("USE `%s`"%self.dbname)
@@ -333,7 +333,7 @@ class ttInviteDb:
             res = cursor.fetchall()
             #self.notify.debug("Select was successful in ttInvitedb, returning %s" % str(res))
             return res
-        
+
         except _mysql_exceptions.OperationalError as e:
             if isRetry == True:
                 self.notify.warning("Error on getInviteesOfParty retry, giving up:\n%s" % str(e))

@@ -1,6 +1,6 @@
 """SCSettings.py: contains the SCSettings class"""
 
-from SCColorScheme import SCColorScheme
+from .SCColorScheme import SCColorScheme
 from otp.otpbase import OTPLocalizer
 
 class SCSettings:

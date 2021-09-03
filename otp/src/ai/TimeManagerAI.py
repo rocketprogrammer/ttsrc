@@ -1,4 +1,4 @@
-from AIBaseGlobal import *
+from .AIBaseGlobal import *
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.task import Task

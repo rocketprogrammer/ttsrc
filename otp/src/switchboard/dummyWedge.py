@@ -5,7 +5,7 @@ import time
 import sys
 import socket
 
-from sbWedge import sbWedge
+from .sbWedge import sbWedge
 
 class dummySocketWedge(sbWedge):
     def __init__(self):
@@ -19,7 +19,7 @@ class dummySocketWedge(sbWedge):
 
 while True:
     try:
-        print "Starting"
+        print("Starting")
         sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         sock.bind(('',8989))
         sock.listen(5)
@@ -34,7 +34,7 @@ while True:
             data = clisock.recv(1)
             s = s + data
             if data == "\n":
-                print s,
+                print(s, end=' ')
                 sys.stdout.flush()
                 clisock.sendall(s)
                 s = ""
@@ -43,5 +43,5 @@ while True:
 
         clisock.close()
         sock.close()
-    except Exception,e:
-        print e
+    except Exception as e:
+        print(e)

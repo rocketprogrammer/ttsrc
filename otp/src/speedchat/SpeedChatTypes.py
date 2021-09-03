@@ -1,19 +1,19 @@
 """SpeedChatTypes.py: SpeedChat types """
 
-from SCObject import SCObject
+from .SCObject import SCObject
 
-from SCMenu import SCMenu
+from .SCMenu import SCMenu
 
-from SCElement import SCElement
-from SCMenuHolder import SCMenuHolder
-from SCTerminal import SCTerminal
+from .SCElement import SCElement
+from .SCMenuHolder import SCMenuHolder
+from .SCTerminal import SCTerminal
 
-from SCCustomMenu import SCCustomMenu
-from SCEmoteMenu import SCEmoteMenu
+from .SCCustomMenu import SCCustomMenu
+from .SCEmoteMenu import SCEmoteMenu
 
-from SCStaticTextTerminal import SCStaticTextTerminal
-from SCGMTextTerminal import SCGMTextTerminal
-from SCCustomTerminal import SCCustomTerminal
-from SCEmoteTerminal import SCEmoteTerminal
+from .SCStaticTextTerminal import SCStaticTextTerminal
+from .SCGMTextTerminal import SCGMTextTerminal
+from .SCCustomTerminal import SCCustomTerminal
+from .SCEmoteTerminal import SCEmoteTerminal
 
-from SCColorScheme import SCColorScheme
+from .SCColorScheme import SCColorScheme

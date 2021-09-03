@@ -1,7 +1,7 @@
 """LevelMgr module: contains the LevelMgr class"""
 
 from direct.showbase.PythonUtil import Functor
-import LevelMgrBase
+from . import LevelMgrBase
 
 class LevelMgr(LevelMgrBase.LevelMgrBase):
     """This class manages editable client-side level attributes"""

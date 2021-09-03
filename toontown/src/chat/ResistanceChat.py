@@ -79,7 +79,7 @@ def validateId(textId):
     # Returns true if the id is valid, false otherwise.
     if textId < 0:
         return 0
-    
+
     menuIndex, itemIndex = decodeId(textId)
     if menuIndex not in resistanceDict:
         return 0
@@ -101,11 +101,11 @@ def getItemText(textId):
     value = resistanceDict[menuIndex]['values'][itemIndex]
     text = resistanceDict[menuIndex]['itemText']
     if menuIndex is RESISTANCE_TOONUP:
-        if value is -1:
+        if value == -1:
             value = TTL.ResistanceToonupItemMax
     elif menuIndex is RESISTANCE_RESTOCK:
         value = resistanceDict[menuIndex]['extra'][itemIndex]
-        
+
     return text % str(value)
 
 def getChatText(textId):
@@ -131,7 +131,7 @@ def doEffect(textId, speakingToon, nearbyToons):
     # Plays the particle effect of the resistance chat out of
     # speakingToon, and briefly colors all involved toons, so they can
     # tell what's up.
-    
+
     menuIndex, itemIndex = decodeId(textId)
     itemValue = getItemValue(textId)
 
@@ -216,4 +216,4 @@ def doEffect(textId, speakingToon, nearbyToons):
                  Sequence(Wait(0.2), recolorToons),
                  autoFinish = 1)
     i.start()
-    
+

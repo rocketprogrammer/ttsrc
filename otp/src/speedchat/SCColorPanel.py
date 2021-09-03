@@ -1,4 +1,4 @@
-from SCColorScheme import SCColorScheme
+from .SCColorScheme import SCColorScheme
 from direct.tkwidgets.Valuator import *
 
 colors = {}
@@ -6,7 +6,7 @@ panels = {}
 
 def scRgbPanel(callback, title, initColor):
     def getScaledColor(color, s):
-        return tuple(map(lambda x: x*s, color))
+        return tuple([x*s for x in color])
     sInitColor = getScaledColor(initColor, 255.)
     vgp = ValuatorGroupPanel(title=title,
                              dim=3,
@@ -55,7 +55,7 @@ def scRgbPanel(callback, title, initColor):
         colors['frameColor'] = cs.getFrameColor()
 
         # update the panels
-        for panelName in colors.keys():
+        for panelName in list(colors.keys()):
             p = panels[panelName].component('valuatorGroup')
             c = colors[panelName]
             p.component('valuator0').set(math.floor(c[0]*255))
@@ -84,7 +84,7 @@ def adjustSCColors():
         'rolloverColor': cs.getRolloverColor(),
         'frameColor': cs.getFrameColor(),
         }
-    for colorName in colors.keys():
+    for colorName in list(colors.keys()):
         def handleCallback(color, colorName=colorName):
             global colors
             colors[colorName] = tuple(color)

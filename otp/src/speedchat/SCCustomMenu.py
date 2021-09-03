@@ -1,7 +1,7 @@
 """SCCustomMenu.py: contains the SCCustomMenu class"""
 
-from SCMenu import SCMenu
-from SCCustomTerminal import SCCustomTerminal
+from .SCMenu import SCMenu
+from .SCCustomTerminal import SCCustomTerminal
 from otp.otpbase.OTPLocalizer import CustomSCStrings
 
 class SCCustomMenu(SCMenu):
@@ -26,5 +26,5 @@ class SCCustomMenu(SCMenu):
             return
 
         for msgIndex in lt.customMessages:
-            if CustomSCStrings.has_key(msgIndex):
+            if msgIndex in CustomSCStrings:
                 self.append(SCCustomTerminal(msgIndex))

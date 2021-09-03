@@ -62,7 +62,7 @@ class EmailInvite:
 
         # Now send the message
         outbound = msg.as_string()
-        print 'The ougoing message is: %s' % (outbound)
+        print('The ougoing message is: %s' % (outbound))
 
         try:
              self.mailServer.sendmail(fromAddr, [toAddr], outbound)

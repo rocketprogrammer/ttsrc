@@ -1,7 +1,7 @@
 """instantiate global ShowBase object"""
 
 
-from AIBase import *
+from .AIBase import *
 
 # guard against AI files being imported on the client
 assert game.process != 'client'

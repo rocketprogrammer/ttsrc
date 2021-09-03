@@ -1,10 +1,8 @@
 # python imports
-import fpformat
 import string
 import time
 import random
 import datetime
-from sets import Set
 
 # panda3d imports
 from pandac.PandaModules import *

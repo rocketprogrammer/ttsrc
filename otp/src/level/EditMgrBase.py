@@ -1,6 +1,6 @@
 """EditMgrBase module: contains the EditMgrBase class"""
 
-import Entity
+from . import Entity
 from direct.directnotify import DirectNotifyGlobal
 
 class EditMgrBase(Entity.Entity):

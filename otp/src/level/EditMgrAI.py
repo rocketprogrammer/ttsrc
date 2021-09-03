@@ -1,9 +1,9 @@
 """EditMgrAI module: contains the EditMgrAI class"""
 
-import EditMgrBase
+from . import EditMgrBase
 if __dev__:
     from direct.showbase.PythonUtil import list2dict
-    import EditorGlobals
+    from . import EditorGlobals
 
 class EditMgrAI(EditMgrBase.EditMgrBase):
     """This class handles AI-side editor-specific functionality"""
@@ -26,8 +26,8 @@ class EditMgrAI(EditMgrBase.EditMgrBase):
             while not idChosen:
                 # linear search for an unused entId starting with the
                 # last-allocated id
-                for id in xrange(self.lastAllocatedEntId, allocRange[1]):
-                    print id
+                for id in range(self.lastAllocatedEntId, allocRange[1]):
+                    print(id)
                     if not id in entIdDict:
                         idChosen = 1
                         break

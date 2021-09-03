@@ -140,7 +140,7 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
 
     def initCogInfo(self):
         """For each cog, initialize the info about him."""
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             self.cogInfo[cogIndex] = {
                 'pos' : Point3(CogThiefGameGlobals.CogStartingPositions[cogIndex]),
                 'goal' : CTGG.NoGoal,
@@ -150,7 +150,7 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
 
     def initBarrelInfo(self):
         """For each barrel, initialize the info about him."""
-        for barrelIndex in xrange(CogThiefGameGlobals.NumBarrels):
+        for barrelIndex in range(CogThiefGameGlobals.NumBarrels):
             self.barrelInfo[barrelIndex] = {
                 'pos' : Point3(CogThiefGameGlobals.BarrelStartingPositions[barrelIndex]),
                 'carriedBy' : CTGG.BarrelOnGround,
@@ -224,10 +224,10 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
         #self.chaseToon(0, avId)
         #self.chaseBarrel(0, 0)
         delayTimes = []
-        for cogIndex in xrange(self.getNumCogs()):
+        for cogIndex in range(self.getNumCogs()):
             delayTimes.append(cogIndex *1.0)
         random.shuffle(delayTimes)
-        for cogIndex in xrange(self.getNumCogs()):        
+        for cogIndex in range(self.getNumCogs()):        
             self.doMethodLater(delayTimes[cogIndex], self.chooseSuitGoal,
                                self.uniqueName('choseSuitGoal-%d-' % cogIndex),
                                extraArgs = [cogIndex])            
@@ -357,7 +357,7 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
         # for now choose the nearest one and run to it
         shortestDistance = 10000
         shortestReturnIndex = -1
-        for retIndex in xrange(len(CTGG.CogReturnPositions)):
+        for retIndex in range(len(CTGG.CogReturnPositions)):
             retPos = CTGG.CogReturnPositions[retIndex]
             distance = (cogPos - retPos).length()
             if distance < shortestDistance:
@@ -462,7 +462,7 @@ class DistributedCogThiefGameAI(DistributedMinigameAI.DistributedMinigameAI):
     def getNumBarrelsStolen(self):
         """Return the number of stolen barrels."""
         numStolen = 0
-        for barrel in self.barrelInfo.values():
+        for barrel in list(self.barrelInfo.values()):
             if barrel['stolen']:
                 numStolen += 1
         return numStolen

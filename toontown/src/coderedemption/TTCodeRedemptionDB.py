@@ -5,7 +5,7 @@ if __name__ == '__main__':
     import sys
     stdOut = sys.stdout
     sys.stdout = sys.stderr
-    print 'code redemption subprocess starting...'
+    print('code redemption subprocess starting...')
 
     import direct
     from pandac.PandaModules import *
@@ -59,7 +59,7 @@ class TTDBCursorBase:
             self.notify.debug('execute:\n%s' % u2ascii(args[0]))
         try:
             cursorBase.execute(self, *args, **kArgs)
-        except _mysql_exceptions.OperationalError, e:
+        except _mysql_exceptions.OperationalError as e:
             if self._connection.getErrorCode(e) in TTDBCursorBase.ConnectionProblems:
                 # force a reconnect
                 TTCRDBConnection.db = None
@@ -175,7 +175,7 @@ class TTCRDBConnection(DBInterface):
                                                           port=self._port,
                                                           user=self._user,
                                                           passwd=self._passwd)
-            except _mysql_exceptions.OperationalError,e:
+            except _mysql_exceptions.OperationalError as e:
                 """
                 self.notify.warning("Failed to connect to MySQL at %s:%d. Retrying in %s seconds."%(
                     self._host,self._port,self.RetryPeriod))
@@ -200,7 +200,7 @@ class TTCRDBConnection(DBInterface):
         cursor = self.getCursor()
         try:
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError, e:
+        except _mysql_exceptions.OperationalError as e:
             if self.getErrorCode(e) == MySQLErrors.TableAlreadyExists:
                 # table already exists
                 pass
@@ -215,7 +215,7 @@ class TTCRDBConnection(DBInterface):
             try:
                 cursor.execute("CREATE DATABASE %s" % self._dbName)
                 self.notify.info("database %s did not exist, created new one" % self._dbName)
-            except _mysql_exceptions.ProgrammingError, e:
+            except _mysql_exceptions.ProgrammingError as e:
                 if self.getErrorCode(e) == MySQLErrors.DbAlreadyExists:
                     # db already exists
                     pass
@@ -292,11 +292,11 @@ class TTCRDBConnection(DBInterface):
             if self.WantTableLocking:
                 if len(self._tableLocks):
                     cmd = 'LOCK TABLES '
-                    for table, lock in self._tableLocks.iteritems():
+                    for table, lock in self._tableLocks.items():
                         cmd += '%s %s, ' % (table, lock)
                     cmd = cmd[:-2] + ';'
                     self.getCursor().execute(cmd)
-        except TryAgainLater,e:
+        except TryAgainLater as e:
             self.notify.warning('failed to acquire table lock(s), retrying in %s seconds') % (
                 self.TableLockRetryPeriod, )
             self.request(self.WaitForRetryLocking)
@@ -363,8 +363,8 @@ class TTCodeRedemptionDBTester(Job):
 
     def getRandomSamples(self, callback, numSamples):
         samples = []
-        for i in xrange(numSamples):
-            samples.append(int(random.random() * ((1L<<32)-1)))
+        for i in range(numSamples):
+            samples.append(int(random.random() * ((1<<32)-1)))
         callback(samples)
 
     @classmethod
@@ -389,7 +389,7 @@ class TTCodeRedemptionDBTester(Job):
     def _getUnusedLotName(self):
         lotNames = self._db.getLotNames()
         while 1:
-            lotName = '%s%s' % (self.TestLotName, int(random.random() * ((1L<<32)-1)))
+            lotName = '%s%s' % (self.TestLotName, int(random.random() * ((1<<32)-1)))
             if lotName not in lotNames:
                 break
         return lotName
@@ -399,7 +399,7 @@ class TTCodeRedemptionDBTester(Job):
             code = ''
             length = random.randrange(4, 16)
             manualCharIndex = random.randrange(length)
-            for i in xrange(length):
+            for i in range(length):
                 if i == manualCharIndex:
                     charSet = TTCodeDict.ManualOnlyCharacters
                 else:
@@ -413,8 +413,8 @@ class TTCodeRedemptionDBTester(Job):
         return code
 
     def _getUnusedUtf8ManualCode(self):
-        chars = u'\u65e5\u672c\u8a9e'
-        code = unicode('', 'utf-8')
+        chars = '\u65e5\u672c\u8a9e'
+        code = str('', 'utf-8')
         while 1:
             code += random.choice(chars)
             if not self._db.codeExists(code):
@@ -761,7 +761,7 @@ class TTCodeRedemptionDBTester(Job):
 
                 break
 
-            except TryAgainLater, e:
+            except TryAgainLater as e:
                 self.notify.warning('caught TryAgainLater exception during self-test, retrying')
                 retryStartT = globalClock.getRealTime()
                 while globalClock.getRealTime() < (retryStartT + retryDelay):
@@ -869,7 +869,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         if not self._initializedSV.get():
             try:
                 TTCodeRedemptionDBTester.cleanup(self)
-            except TryAgainLater, e:
+            except TryAgainLater as e:
                 pass
             else:
                 self._initializedSV.set(True)
@@ -1064,7 +1064,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
                 continue
                 
             # r in [0,1) but truly random (non-repeatable)
-            r = randSamples.pop(0) / float(1L<<32)
+            r = randSamples.pop(0) / float(1<<32)
             assert 0. <= r < 1.
             # this produces the 1 in N chance of guessing a correct code
             # each code is given a chunk of code space, of size N, and the actual value of the
@@ -1279,12 +1279,12 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         if justCode:
             codes = []
             for row in rows:
-                code = unicode(row['code'], 'utf-8')
+                code = str(row['code'], 'utf-8')
                 codes.append(code)
             result = codes
         else:
             for row in rows:
-                row['code'] = unicode(row['code'], 'utf-8')
+                row['code'] = str(row['code'], 'utf-8')
             result = rows
         return result
 
@@ -1302,7 +1302,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             self.notify.info('committing cached manual code redemption counts to DB')
         conn = TTCRDBConnection(self)
         cursor = conn.getDictCursor()
-        for key in self._manualCode2outstandingRedemptions.iterkeys():
+        for key in self._manualCode2outstandingRedemptions.keys():
             code, lotName = key
             count = self._manualCode2outstandingRedemptions[key]
             self._updateRedemptionCount(cursor, code, True, None, lotName, count)
@@ -1312,7 +1312,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
     def _updateRedemptionsTask(self, task):
         try:
             self.commitOutstandingRedemptions()
-        except TryAgainLater, e:
+        except TryAgainLater as e:
             pass
         return Task.again
 
@@ -1348,7 +1348,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             # client hack prevention:
             # safe; code is between quotes and can only contain letters, numbers and dashes
             cursor.execute(
-                unicode("""
+                str("""
                 SELECT code FROM code_set_%s WHERE code='%s';
                 """, 'utf-8') % (lotName, code)
                 )
@@ -1396,7 +1396,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         # client hack prevention:
         # safe; code is between quotes and can only contain letters, numbers and dashes
         cursor.execute(
-            unicode("""
+            str("""
             SELECT %s, %s FROM code_set_%s INNER JOIN lot
             WHERE lot.lot_id=code_set_%s.lot_id AND CODE='%s';
             """, 'utf-8') % (self.RewardTypeFieldName, self.RewardItemIdFieldName, lotName, lotName, code)
@@ -1432,7 +1432,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         cursor = conn.getDictCursor()
 
         cursor.execute(
-            unicode("""
+            str("""
             SELECT redemptions FROM code_set_%s WHERE code='%s';
             """, 'utf-8') % (lotName, code)
             )
@@ -1484,7 +1484,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             # client hack prevention:
             # safe; code is between quotes and can only contain letters, numbers and dashes
             cursor.execute(
-                unicode("""
+                str("""
                 SELECT redemptions FROM code_set_%s INNER JOIN lot WHERE
                 code_set_%s.lot_id=lot.lot_id AND code='%s' AND ((expiration IS NULL) OR (CURDATE()<=expiration));
                 """, 'utf-8') % (lotName, lotName, code)
@@ -1517,7 +1517,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         # client hack prevention:
         # safe; code is between quotes and can only contain letters, numbers and dashes
         cursor.execute(
-            unicode("""
+            str("""
             UPDATE code_set_%s SET redemptions=redemptions+%s%s WHERE code='%s';
             """, 'utf-8') % (lotName, count, choice(manualCode, '', ', av_id=%s' % avId), code)
             )
@@ -1586,7 +1586,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
                     )
 
             for row in rows:
-                code = unicode(row['code'], 'utf-8')
+                code = str(row['code'], 'utf-8')
                 codes.append(code)
 
         conn.destroy()
@@ -1666,7 +1666,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             if len(rows):
                 conn.destroy()
                 row = rows[0]
-                row['code'] = unicode(row['code'], 'utf-8')
+                row['code'] = str(row['code'], 'utf-8')
                 return row
 
         self.notify.error('code \'%s\' not found' % u2ascii(code))
@@ -1677,7 +1677,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         proc.stdin.write('test' + '\n')
         result = proc.stdout.readline()
-        print 'main process: %s' % repr(result)
+        print('main process: %s' % repr(result))
         while result[-1] in ('\r', '\n'):
             result = result[:-1]
         if (result == 'testtest'):

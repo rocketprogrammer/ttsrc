@@ -1,4 +1,4 @@
-import AnimatedProp
+from . import AnimatedProp
 from direct.actor import Actor
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
@@ -96,7 +96,7 @@ class GenericAnimatedProp(AnimatedProp.AnimatedProp):
             self.visId = visId
             self.hoodId = ZoneUtil.getCanonicalHoodId(visId)
             self.notify.debug("calcHoodId %d from %s" % (self.hoodId,fullString))
-        except Exception, generic:
+        except Exception as generic:
             if  not ('Editor' in fullString):
                 self.notify.warning("calcHoodId couldn't parse %s using 0" % fullString)
             self.hoodId = 0

@@ -102,7 +102,7 @@ class DistributedHouseDoor(DistributedDoor.DistributedDoor):
 
     def getBuilding(self, allowEmpty=False):
         # Once we find it, we store it, so we don't have to find it again.
-        if (not self.__dict__.has_key('building')):
+        if ('building' not in self.__dict__):
             if self.doorType == DoorTypes.INT_STANDARD:
                 #if ZoneUtil.isInterior(self.zoneId):
                 # building interior.

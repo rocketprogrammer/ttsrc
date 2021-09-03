@@ -1,23 +1,23 @@
 from direct.directnotify import DirectNotifyGlobal
-import CatalogItem
-import CatalogItemList
-from CatalogFurnitureItem import CatalogFurnitureItem, nextAvailableBank, getAllBanks, nextAvailableCloset, getAllClosets
-from CatalogAnimatedFurnitureItem import CatalogAnimatedFurnitureItem
-from CatalogClothingItem import CatalogClothingItem, getAllClothes
-from CatalogChatItem import CatalogChatItem, getChatRange
-from CatalogEmoteItem import CatalogEmoteItem
-from CatalogWallpaperItem import CatalogWallpaperItem, getWallpapers
-from CatalogFlooringItem import CatalogFlooringItem, getFloorings
-from CatalogMouldingItem import CatalogMouldingItem, getAllMouldings
-from CatalogWainscotingItem import CatalogWainscotingItem, getAllWainscotings
-from CatalogWindowItem import CatalogWindowItem
-from CatalogPoleItem import nextAvailablePole, getAllPoles
-from CatalogPetTrickItem import CatalogPetTrickItem, getAllPetTricks
-from CatalogGardenItem import CatalogGardenItem
-from CatalogToonStatueItem import CatalogToonStatueItem
-from CatalogRentalItem import CatalogRentalItem
-from CatalogGardenStarterItem import CatalogGardenStarterItem
-from CatalogNametagItem import CatalogNametagItem
+from . import CatalogItem
+from . import CatalogItemList
+from .CatalogFurnitureItem import CatalogFurnitureItem, nextAvailableBank, getAllBanks, nextAvailableCloset, getAllClosets
+from .CatalogAnimatedFurnitureItem import CatalogAnimatedFurnitureItem
+from .CatalogClothingItem import CatalogClothingItem, getAllClothes
+from .CatalogChatItem import CatalogChatItem, getChatRange
+from .CatalogEmoteItem import CatalogEmoteItem
+from .CatalogWallpaperItem import CatalogWallpaperItem, getWallpapers
+from .CatalogFlooringItem import CatalogFlooringItem, getFloorings
+from .CatalogMouldingItem import CatalogMouldingItem, getAllMouldings
+from .CatalogWainscotingItem import CatalogWainscotingItem, getAllWainscotings
+from .CatalogWindowItem import CatalogWindowItem
+from .CatalogPoleItem import nextAvailablePole, getAllPoles
+from .CatalogPetTrickItem import CatalogPetTrickItem, getAllPetTricks
+from .CatalogGardenItem import CatalogGardenItem
+from .CatalogToonStatueItem import CatalogToonStatueItem
+from .CatalogRentalItem import CatalogRentalItem
+from .CatalogGardenStarterItem import CatalogGardenStarterItem
+from .CatalogNametagItem import CatalogNametagItem
 from direct.actor import Actor
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
@@ -1609,11 +1609,11 @@ class CatalogGenerator:
         if callable(item):
             item = item(avatar, duplicateItems)
 
-        if isinstance(item, types.TupleType):
+        if isinstance(item, tuple):
             # Unpack a 2-tuple into a (chooseCount, list).
             chooseCount, item = item
 
-        if isinstance(item, types.IntType):
+        if isinstance(item, int):
             # If the item is a MetaItem, it's really a list.
             item = MetaItems[item]
 
@@ -1669,7 +1669,7 @@ class CatalogGenerator:
 
         # Now put the items into sorted order, which will collect
         # similar items together for the user's convenience.
-        items = sched.keys()
+        items = list(sched.keys())
         items.sort()
 
         for item in items:
@@ -1682,7 +1682,7 @@ class CatalogGenerator:
             seriesDict = {}
             self.__determineSeries(seriesDict, weeklist)
             self.__determineSeries(seriesDict, maybeWeeklist)
-            seriesList = seriesDict.keys()
+            seriesList = list(seriesDict.keys())
             seriesList.sort()
             series = str(seriesList)[1:-1]
 
@@ -1712,7 +1712,7 @@ class CatalogGenerator:
 
     def __determineSeries(self, seriesDict, weeklist):
         for week in weeklist:
-            if isinstance(week, types.IntType):
+            if isinstance(week, int):
                 # If the week is an integer, it's the week number (as
                 # opposed to a string, which represents a season).
                 series = ((week - 1) / ToontownGlobals.CatalogNumWeeksPerSeries) + 1
@@ -1776,12 +1776,12 @@ class CatalogGenerator:
                     self.notify.warning("Don't know how to interpret function " % (repr(name)))
                     item = None
 
-            elif isinstance(item, types.TupleType):
+            elif isinstance(item, tuple):
                 # A tuple is (chooseCount, list).  We don't care about
                 # the chooseCount here.
                 item = item[1]
 
-            if isinstance(item, types.IntType):
+            if isinstance(item, int):
                 # If the item is a MetaItem, it's really a list.
                 item = MetaItems[item]
 
@@ -1797,7 +1797,7 @@ class CatalogGenerator:
                     self.__recordScheduleItem(sched, None, weekCode, i)
 
     def __recordScheduleItem(self, sched, weekCode, maybeWeekCode, item):
-        if not sched.has_key(item):
+        if item not in sched:
             sched[item] = [[], []]
 
         #if item == CatalogWallpaperItem(2900) or item == CatalogWallpaperItem(2210):

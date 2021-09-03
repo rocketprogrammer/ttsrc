@@ -8,8 +8,8 @@ from toontown.coghq import DistributedCashbotBossTreasureAI
 from toontown.battle import BattleExperienceAI
 from toontown.chat import ResistanceChat
 from direct.fsm import FSM
-import DistributedBossCogAI
-import SuitDNA
+from . import DistributedBossCogAI
+from . import SuitDNA
 import random
 import math
 
@@ -298,16 +298,16 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 treasure.d_setReject()
 
     def __recycleTreasure(self, treasure):
-        if self.grabbingTreasures.has_key(treasure.doId):
+        if treasure.doId in self.grabbingTreasures:
             del self.grabbingTreasures[treasure.doId]
             self.recycledTreasures.append(treasure)
 
     def deleteAllTreasures(self):
-        for treasure in self.treasures.values():
+        for treasure in list(self.treasures.values()):
             treasure.requestDelete()
         self.treasures = {}
 
-        for treasure in self.grabbingTreasures.values():
+        for treasure in list(self.grabbingTreasures.values()):
             taskMgr.remove(treasure.uniqueName('recycleTreasure'))
             treasure.requestDelete()
         self.grabbingTreasures = {}

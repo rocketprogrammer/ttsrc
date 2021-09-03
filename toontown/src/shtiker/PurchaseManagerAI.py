@@ -1,7 +1,7 @@
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
-from PurchaseManagerConstants import *
+from .PurchaseManagerConstants import *
 import copy
 from direct.task.Task import Task
 
@@ -53,7 +53,7 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
                 self.playerStates[i] = PURCHASE_NO_CLIENT_STATE
                 self.playersReported[i] = PURCHASE_CANTREPORT_STATE
             # Player is in dictionary
-            elif self.air.doId2do.has_key(avId):
+            elif avId in self.air.doId2do:
                 if avId not in self.getInvolvedPlayerIds():
                     # either we are a normal purchaseMgr with some newbies, or
                     # we're a newbie purchaseMgr with non-newbies; either way,
@@ -72,7 +72,7 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
         # more processing for the toons that we 'own'
         for avId in self.getInvolvedPlayerIds():
             # 0 means no player, 1, 2, and 3 are suits.
-            if avId > 3 and self.air.doId2do.has_key(avId):
+            if avId > 3 and avId in self.air.doId2do:
                 self.acceptOnce(self.air.getAvatarExitEvent(avId),
                                 self.__handleUnexpectedExit,
                                 extraArgs=[avId])
@@ -174,7 +174,7 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
                                       (avId, ))
             return
         if self.receivingButtons:
-            if self.air.doId2do.has_key(avId):
+            if avId in self.air.doId2do:
                 av = self.air.doId2do[avId]
                 if avIndex == None:
                     self.air.writeServerEvent('suspicious', avId, 'PurchaseManager.requestExit not on list')
@@ -213,7 +213,7 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId, 'PurchaseManager.requestPlayAgain: unknown avatar')
             return
         if self.receivingButtons:
-            if self.air.doId2do.has_key(avId):
+            if avId in self.air.doId2do:
                 av = self.air.doId2do[avId]
                 avIndex = self.findAvIndex(avId)
                 if avIndex == None:
@@ -254,7 +254,7 @@ class PurchaseManagerAI(DistributedObjectAI.DistributedObjectAI):
     def setInventory(self, blob, newMoney, done):
         avId = self.air.getAvatarIdFromSender()
         if self.receivingInventory:
-            if self.air.doId2do.has_key(avId):
+            if avId in self.air.doId2do:
                 av = self.air.doId2do[avId]
                 avIndex = self.findAvIndex(avId)
                 if avIndex == None:

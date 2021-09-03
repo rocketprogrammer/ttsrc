@@ -284,7 +284,7 @@ class CogThief(DirectObject):
         
         if not hasattr(self.game, 'barrels'):
             return
-        if not self.goalId in xrange(len(self.game.barrels)):
+        if not self.goalId in range(len(self.game.barrels)):
             return
 
         if not self.lastThinkTime:
@@ -583,7 +583,7 @@ class CogThief(DirectObject):
 
         self.clearVisibleList();        
 
-        for cogIndex in self.game.cogInfo.keys():
+        for cogIndex in list(self.game.cogInfo.keys()):
             if cogIndex == self.cogIndex:
                 continue
 

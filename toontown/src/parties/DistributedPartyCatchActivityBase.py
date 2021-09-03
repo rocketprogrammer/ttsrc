@@ -2,6 +2,7 @@ import math
 from direct.directnotify import DirectNotifyGlobal
 from toontown.minigame.DropScheduler import ThreePhaseDropScheduler
 from toontown.parties import PartyGlobals
+from functools import reduce
 
 class DistributedPartyCatchActivityBase:
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPartyCatchActivityBase")
@@ -163,8 +164,8 @@ class DistributedPartyCatchActivityBase:
                      'anvil' : 1,
                      }
         # normalize the probabilities to [0..1]
-        probSum = reduce(lambda x, y: x + y, typeProbs.values())
-        for key in typeProbs.keys():
+        probSum = reduce(lambda x, y: x + y, list(typeProbs.values()))
+        for key in list(typeProbs.keys()):
             typeProbs[key] = float(typeProbs[key]) / probSum
 
         scheduler = ThreePhaseDropScheduler(

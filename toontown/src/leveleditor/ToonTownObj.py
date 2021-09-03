@@ -4,7 +4,7 @@ Base class for toontown objects
 import random
 from pandac.PandaModules import *
 from direct.leveleditor import ObjectGlobals as OG
-from LevelStyleManager import *
+from .LevelStyleManager import *
 
 DNA_TYPE_DICT = {
     'cornice': DNA_CORNICE,

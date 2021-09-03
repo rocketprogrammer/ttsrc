@@ -1,9 +1,9 @@
-import __builtin__
+import builtins
 
 class game:
     name = "toontown"
     process = "ai"
-__builtin__.game = game()
+builtins.game = game()
 
 # NOTE: this file is not used in production. See AIServiceStart.py
 
@@ -11,10 +11,10 @@ import time
 import os
 import sys
 
-print "Initializing..."
+print("Initializing...")
 
 from otp.ai.AIBaseGlobal import *
-import ToontownAIRepository
+from . import ToontownAIRepository
 from direct.showbase import PythonUtil
 
 # Clear the default model extension for AI developers, so they'll know
@@ -34,7 +34,7 @@ simbase.esport = simbase.config.GetInt("event-server-port", 4343)
 districtType = 0
 serverId = simbase.config.GetInt("district-ssid", 20100000)
 
-for i in xrange(1, 20+1):
+for i in range(1, 20+1):
     # always set up for i==1, then take the first district above 1 (if any)
     if i==1 or os.getenv("want_district_%s" % i):
         if i==1:
@@ -65,7 +65,7 @@ for i in xrange(1, 20+1):
         if i != 1:
             break
 
-print "-"*30, "creating toontown district %s" % districtNumber, "-"*30
+print("-"*30, "creating toontown district %s" % districtNumber, "-"*30)
 
 simbase.air = ToontownAIRepository.ToontownAIRepository(
         simbase.mdip,

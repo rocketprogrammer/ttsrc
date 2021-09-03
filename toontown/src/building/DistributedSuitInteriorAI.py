@@ -1,7 +1,7 @@
 from toontown.toonbase.ToontownBattleGlobals import *
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
-from ElevatorConstants import *
+from .ElevatorConstants import *
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
@@ -10,7 +10,7 @@ from direct.fsm import State
 from toontown.battle import DistributedBattleBldgAI
 from toontown.battle import BattleBase
 from direct.task import Timer
-import DistributedElevatorIntAI
+from . import DistributedElevatorIntAI
 import copy
 
 class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
@@ -150,7 +150,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
 
     def __addToon(self, toonId):
         assert(self.notify.debug('addToon(%d)' % toonId))
-        if (not self.air.doId2do.has_key(toonId)):
+        if (toonId not in self.air.doId2do):
             self.notify.warning('addToon() - no toon for doId: %d' % toonId)
             return
 
@@ -160,7 +160,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         self.accept(event, self.__handleUnexpectedExit, extraArgs=[toonId])
 
         self.toons.append(toonId)
-        assert(not self.responses.has_key(toonId))
+        assert(toonId not in self.responses)
         self.responses[toonId] = 0
 
     def __removeToon(self, toonId):
@@ -171,7 +171,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         if self.toonIds.count(toonId):
             self.toonIds[self.toonIds.index(toonId)] = None
 
-        if self.responses.has_key(toonId):
+        if toonId in self.responses:
             del self.responses[toonId]
 
         # Ignore future exit events for the toon
@@ -188,7 +188,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
 
     def __allToonsResponded(self):
         for toon in self.toons:
-            assert(self.responses.has_key(toon))
+            assert(toon in self.responses)
             if (self.responses[toon] == 0):
                 return 0
         self.ignoreResponses = 1
@@ -280,7 +280,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
         if avatar != None:
             self.savedByMap[avId] = (avatar.getName(), avatar.dna.asTuple())
         
-        assert(self.responses.has_key(avId))
+        assert(avId in self.responses)
         self.responses[avId] += 1
         assert(self.notify.debug('toon: %d in suit interior' % avId))
         if (self.__allToonsResponded()):
@@ -306,7 +306,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
             assert(self.notify.debug('toons: %s toonIds: %s' % \
                         (self.toons, self.toonIds)))
             return
-        assert(self.responses.has_key(toonId))
+        assert(toonId in self.responses)
         self.responses[toonId] += 1
         assert(self.notify.debug('toon: %d done with elevator' % toonId))
         if (self.__allToonsResponded() and
@@ -333,7 +333,7 @@ class DistributedSuitInteriorAI(DistributedObjectAI.DistributedObjectAI):
             assert(self.notify.debug('toons: %s toonIds: %s' % \
                         (self.toons, self.toonIds)))
             return
-        assert(self.responses.has_key(toonId))
+        assert(toonId in self.responses)
         self.responses[toonId] += 1
         assert(self.notify.debug('toon: %d done with joining reserves' % \
                                 toonId))

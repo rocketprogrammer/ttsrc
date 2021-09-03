@@ -6,21 +6,21 @@ from direct.distributed.ClockDelta import *
 from direct.directtools.DirectGeometry import CLAMP
 from direct.task import Task
 from otp.avatar import DistributedAvatar
-import Suit
+from . import Suit
 from toontown.toonbase import ToontownGlobals
 from toontown.battle import DistributedBattle
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-import SuitTimings
-import SuitBase
-import DistributedSuitPlanner
+from . import SuitTimings
+from . import SuitBase
+from . import DistributedSuitPlanner
 from direct.directnotify import DirectNotifyGlobal
-import SuitDialog
+from . import SuitDialog
 from toontown.battle import BattleProps
 from toontown.distributed.DelayDeletable import DelayDeletable
 import math
 import copy
-import DistributedSuitBase
+from . import DistributedSuitBase
 from otp.otpbase import OTPLocalizer
 import random
 
@@ -440,7 +440,7 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         # future, we're probably just out of sync in general.  Nothing
         # will be reported accurately until we get back in sync.
         if messageAge < -(chug + 0.5) or messageAge > (chug + 1.0):
-            print "Apparently out of sync with AI by %0.2f seconds.  Suggest resync!" % (messageAge)
+            print("Apparently out of sync with AI by %0.2f seconds.  Suggest resync!" % (messageAge))
             return
 
         localElapsed = now - self.pathStartTime
@@ -453,13 +453,13 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         if abs(timeDiff) > 0.2:
             # We disagree about where the suit is along the path.
             # This could be because we paused the AI or the client.
-            print "%s (%d) appears to be %0.2f seconds out of sync along its path.  Suggest '~cogs sync'." % (self.getName(), self.getDoId(), timeDiff)
+            print("%s (%d) appears to be %0.2f seconds out of sync along its path.  Suggest '~cogs sync'." % (self.getName(), self.getDoId(), timeDiff))
             return
 
         # Verify the suit's calculated (x, y) position.  This ensures
         # our path agrees with that from the AI.
         if self.legList == None:
-            print "%s (%d) doesn't have a legList yet." % (self.getName(), self.getDoId())
+            print("%s (%d) doesn't have a legList yet." % (self.getName(), self.getDoId()))
             return
         
         netPos = Point3(x, y, 0.0)
@@ -469,8 +469,8 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         calcDelta = Vec3(netPos - calcPos)
         diff = calcDelta.length()
         if diff > 4.0:
-            print "%s (%d) is %0.2f feet from the AI computed path!" % (self.getName(), self.getDoId(), diff)
-            print "Probably your DNA files are out of sync."
+            print("%s (%d) is %0.2f feet from the AI computed path!" % (self.getName(), self.getDoId(), diff))
+            print("Probably your DNA files are out of sync.")
             return
 
         # Now verify the suit's actual position.
@@ -479,11 +479,11 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase, DelayDeletable):
         localDelta = Vec3(netPos - localPos)
         diff = localDelta.length()
         if diff > 10.0:
-            print "%s (%d) in state %s is %0.2f feet from its correct position!" % (self.getName(), self.getDoId(), self.fsm.getCurrentState().getName(), diff)
-            print "Should be at (%0.2f, %0.2f), but is at (%0.2f, %0.2f)." % (x, y, localPos[0], localPos[1])
+            print("%s (%d) in state %s is %0.2f feet from its correct position!" % (self.getName(), self.getDoId(), self.fsm.getCurrentState().getName(), diff))
+            print("Should be at (%0.2f, %0.2f), but is at (%0.2f, %0.2f)." % (x, y, localPos[0], localPos[1]))
             return
 
-        print "%s (%d) is in the correct position." % (self.getName(), self.getDoId())
+        print("%s (%d) is in the correct position." % (self.getName(), self.getDoId()))
 
     def denyBattle(self):
         DistributedSuitBase.DistributedSuitBase.denyBattle(self)

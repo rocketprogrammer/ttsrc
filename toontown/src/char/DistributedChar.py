@@ -1,7 +1,7 @@
 """DistributedChar module: contains the DistributedChar class"""
 
 from otp.avatar import DistributedAvatar
-import Char
+from . import Char
 
 class DistributedChar(DistributedAvatar.DistributedAvatar, Char.Char):
     """DistributedChar class:"""

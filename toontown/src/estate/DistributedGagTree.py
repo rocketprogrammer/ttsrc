@@ -5,8 +5,8 @@ from direct.showbase import PythonUtil
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
-import GardenGlobals
-import HouseGlobals
+from . import GardenGlobals
+from . import HouseGlobals
 from direct.task import Task
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals

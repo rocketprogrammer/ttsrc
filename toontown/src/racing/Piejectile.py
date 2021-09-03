@@ -56,7 +56,7 @@ class Piejectile(DirectObject, FlyingGag):
         self.rotP = randFloat(-90,90)
         self.rotR = randFloat(-90,90)
         
-        print("generating Pie %s" % (self.name))
+        print(("generating Pie %s" % (self.name)))
 
         self.ownerKart = base.cr.doId2do.get(base.race.kartMap.get(sourceId,None),None)
         if(targetId != 0):
@@ -89,7 +89,7 @@ class Piejectile(DirectObject, FlyingGag):
         self.reparentTo(render)
     
     def delete(self):
-        print "removing piejectile"
+        print("removing piejectile")
 
         taskMgr.remove(self.taskName)
         self.__undoCollisions()

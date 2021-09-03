@@ -19,10 +19,10 @@ class TTTester:
             self.errStrings.append(errMsg)
 
     def printResults(self):
-        print "================================================"
-        print "%s tests, %s failures" % (self.tests, len(self.errStrings))
+        print("================================================")
+        print("%s tests, %s failures" % (self.tests, len(self.errStrings)))
         for i in range(len(self.errStrings)):
-            print "- %s" % (self.errStrings[i])
+            print("- %s" % (self.errStrings[i]))
 
     def runTest(self, test, shouldFail, errMsg):
         """ test is the test condition; it should be a functor that
@@ -35,7 +35,7 @@ class TTTester:
         """
         result = test()
         if result:
-            print 'result:' + result
+            print('result:' + result)
         
         # the test may have failed, but that might be what we wanted
         passed = 0

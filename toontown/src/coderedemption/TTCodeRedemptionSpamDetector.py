@@ -39,7 +39,7 @@ class TTCodeRedemptionSpamDetector:
 
     def _cullTrackers(self, task=None):
         # remove records for avIds that have gone long enough without spamming
-        avIds = self._avId2tracker.keys()
+        avIds = list(self._avId2tracker.keys())
         for avId in avIds:
             tracker = self._avId2tracker.get(avId)
             if tracker.isExpired():
@@ -123,8 +123,8 @@ if __dev__:
             self._detector = None
             
         def _thresholdTest(self):
-            avId = self._idGen.next()
-            for i in xrange(Settings.DetectThreshold+1):
+            avId = next(self._idGen)
+            for i in range(Settings.DetectThreshold+1):
                 self._detector.codeSubmitted(avId)
                 if i < Settings.DetectThreshold:
                     assert not self._detector.avIsBlocked(avId)
@@ -133,8 +133,8 @@ if __dev__:
             self.notify.info('threshold test passed.')
                     
         def _timeoutTest(self):
-            avId = self._idGen.next()
-            for i in xrange(Settings.DetectThreshold+1):
+            avId = next(self._idGen)
+            for i in range(Settings.DetectThreshold+1):
                 self._detector.codeSubmitted(avId)
             assert self._detector.avIsBlocked(avId)
             self._timeoutTestStartT = globalClock.getRealTime()
@@ -153,7 +153,7 @@ if __dev__:
         
         def _timeoutLateTest(self, avId, task=None):
             assert not self._detector.avIsBlocked(avId)
-            for i in xrange(Settings.DetectThreshold+1):
+            for i in range(Settings.DetectThreshold+1):
                 self._detector.codeSubmitted(avId)
             assert self._detector.avIsBlocked(avId)
             self._timeoutLateTestStartT = globalClock.getRealTime()

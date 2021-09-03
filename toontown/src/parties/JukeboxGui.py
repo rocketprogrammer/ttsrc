@@ -208,14 +208,14 @@ class JukeboxGui(DirectObject):
             # Add the new party songs first, these are in Phase 13
             phase = 13
             tunes = self.phaseToMusicData[13]
-            for filename, info, in tunes.items():
+            for filename, info, in list(tunes.items()):
                 self.addToSongList(info[0], phase, filename, info[1])
             
             # Add the songs automatically:
-            for phase, tunes in self.phaseToMusicData.items():
+            for phase, tunes in list(self.phaseToMusicData.items()):
                 if phase == 13:
                     continue
-                for filename, info, in tunes.items():
+                for filename, info, in list(tunes.items()):
                     self.addToSongList(info[0], phase, filename, info[1])
         self._windowFrame.show()
         

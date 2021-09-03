@@ -9,13 +9,13 @@ from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-import MinigameRulesPanel
+from . import MinigameRulesPanel
 from direct.task.Task import Task
 from toontown.toon import Toon
 from direct.showbase import RandomNumGen
 from toontown.toonbase import TTLocalizer
 import random
-import MinigameGlobals
+from . import MinigameGlobals
 from direct.showbase import PythonUtil
 from toontown.toon import TTEmote
 from otp.avatar import Emote
@@ -336,22 +336,22 @@ class DistributedMinigame(DistributedObject.DistributedObject):
                     self.uniqueName('random-netplugpull'))
 
     def doRandomAbort(self, task):
-        print ("*** DOING RANDOM MINIGAME ABORT AFTER %.2f SECONDS ***" %
-               self.randomAbortDelay)
+        print(("*** DOING RANDOM MINIGAME ABORT AFTER %.2f SECONDS ***" %
+               self.randomAbortDelay))
         self.d_requestExit()
         return Task.done
 
     def doRandomDisconnect(self, task):
-        print ("*** DOING RANDOM MINIGAME DISCONNECT AFTER %.2f SECONDS ***" %
-               self.randomDisconnectDelay)
+        print(("*** DOING RANDOM MINIGAME DISCONNECT AFTER %.2f SECONDS ***" %
+               self.randomDisconnectDelay))
         # this is a message that clients cannot send;
         # get booted off the server intentionally
         self.sendUpdate('setGameReady')
         return Task.done
 
     def doRandomNetworkPlugPull(self, task):
-        print ('*** DOING RANDOM MINIGAME NETWORK-PLUG-PULL AFTER '
-               '%.2f SECONDS ***' % self.randomNetPlugPullDelay)
+        print(('*** DOING RANDOM MINIGAME NETWORK-PLUG-PULL AFTER '
+               '%.2f SECONDS ***' % self.randomNetPlugPullDelay))
         base.cr.pullNetworkPlug()
         return Task.done
 
@@ -455,7 +455,7 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         # assert that all of the remote toons are present
         for avId in self.remoteAvIdList:
             # make sure we have this avatar in our dictionary
-            if not self.cr.doId2do.has_key(avId):
+            if avId not in self.cr.doId2do:
                 # well gollee, the toon is already gone!
                 # end the minigame
                 self.notify.warning("BASE: toon %s already left or has not "
@@ -555,7 +555,7 @@ class DistributedMinigame(DistributedObject.DistributedObject):
         """
 
         # If it is an avatar, look it up in the doid2do
-        if self.cr.doId2do.has_key(avId):
+        if avId in self.cr.doId2do:
             return self.cr.doId2do[avId]
         # I do not know what this avId is
         else:

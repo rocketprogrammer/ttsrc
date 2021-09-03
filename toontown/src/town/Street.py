@@ -437,7 +437,7 @@ class Street(BattlePlace.BattlePlace):
         zoneId = requestStatus["zoneId"]
         
         if avId != -1:
-            if not base.cr.doId2do.has_key(avId):
+            if avId not in base.cr.doId2do:
                 # We're trying to teleport to a toon who isn't here
                 # any more.  Forget it, and bail to the safezone.
                 handle = base.cr.identifyFriend(avId)
@@ -479,7 +479,7 @@ class Street(BattlePlace.BattlePlace):
         # If the request comes from a battle, let the battle handle
         # the teleport animation sequence, otherwise use the distributed
         # toon version
-        if (requestStatus.has_key('battle')):
+        if ('battle' in requestStatus):
             self.__teleportOutDone(requestStatus)
         else:
             BattlePlace.BattlePlace.enterTeleportOut(self, requestStatus,

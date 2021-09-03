@@ -3,7 +3,7 @@ from direct.showbase.AppRunnerGlobal import appRunner
 from pandac.PandaModules import PandaSystem
 
 if not appRunner:
-    print "Not running in a web environment; using dummyAppRunner."
+    print("Not running in a web environment; using dummyAppRunner.")
     from direct.p3d.AppRunner import dummyAppRunner
     appRunner = dummyAppRunner()
 
@@ -15,12 +15,12 @@ if not appRunner:
 if int(appRunner.tokenDict.get('download', '0')):
     # When the download token is set, it means we only want to use
     # this p3d file to download the required files, and then exit.
-    print "Download token set; not running launcher."
+    print("Download token set; not running launcher.")
     import sys
     sys.exit(0)
 
 else:
     launcher = ToontownWebLauncher(appRunner)
     
-    print "Reached end of StartToontownLauncher.py."
+    print("Reached end of StartToontownLauncher.py.")
     base.run()

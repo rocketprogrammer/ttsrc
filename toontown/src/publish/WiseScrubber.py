@@ -22,22 +22,22 @@ Required:
 
 try:
     opts, pargs = getopt.getopt(sys.argv[1:], 'h')
-except Exception, e:
+except Exception as e:
     # User passed in a bad option, print the error and the help, then exit
-    print e
-    print helpString
+    print(e)
+    print(helpString)
     sys.exit(1)
 
 for opt in opts:
     flag, value = opt
     if (flag == '-h'):
-        print helpString
+        print(helpString)
         sys.exit(1)
     else:
-        print 'illegal option: ' + flag
+        print('illegal option: ' + flag)
 
 if (not (len(pargs) == 1)):
-    print 'Must specify a persistDirectory'
+    print('Must specify a persistDirectory')
     sys.exit(1)
 else:
     persistDirectory = pargs[0]
@@ -89,7 +89,7 @@ def mainFunc():
     """
     
     # Lookup the line about InstallLauncher, prepend the new md5 at the list of md5's
-    notify.info('number of lines in launcherdb = ' + `len(lines)`)
+    notify.info('number of lines in launcherdb = ' + repr(len(lines)))
     for i in range (0, len(lines)):
         if (lines[i].find('InstallLauncher.exe') > -1):
             # add the new md5 in there
@@ -141,7 +141,7 @@ def getHighestVersion(persistFilename):
 
 def fileVer(filename, version):
     # Return the name of the versioned file
-    return Filename(filename.cStr() + '.v' + `version`)
+    return Filename(filename.cStr() + '.v' + repr(version))
 
 def compFile(filename):
     # Return the name of the compressed file
@@ -197,7 +197,7 @@ def generatePatch(persistFilename, newFilename, newHash):
 def copyFile(fromFilename, toFilename):
     notify.debug('Copying %s to %s' % (fromFilename.cStr(), toFilename.cStr()))
     shutil.copy(fromFilename.toOsSpecific(), toFilename.toOsSpecific())
-    os.chmod(toFilename.toOsSpecific(), 0666)
+    os.chmod(toFilename.toOsSpecific(), 0o666)
     
 def moveFile(fromFilename, toFilename):
     notify.debug('Moving %s to %s' % (fromFilename.cStr(), toFilename.cStr()))

@@ -45,11 +45,11 @@ class MovingBlock(DirectObject.DirectObject, NodePath):
 
     def __handleOnFloor(self, collEntry):
         if (collEntry.getIntoNode().getName() == self.name):
-            print ('on floor %s' % (self.name))
+            print(('on floor %s' % (self.name)))
             base.localAvatar.b_setParent(self.token)
 
     def __handleOffFloor(self, collEntry):
         if (collEntry.getIntoNode().getName() == self.name):
-            print ('off floor %s' % (self.name))
+            print(('off floor %s' % (self.name)))
             base.localAvatar.b_setParent(ToontownGlobals.SPRender)
 

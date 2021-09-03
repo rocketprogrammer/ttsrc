@@ -167,12 +167,12 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
             impact = vel[1]
         
             if impact >= self.getMinImpact():
-                print "hit! %s" % (impact)
+                print("hit! %s" % (impact))
                 self.hitBossSoundInterval.start()
                 self.doHitBoss(impact)
             else:
                 self.touchedBossSoundInterval.start()
-                print "--not hard enough: %s" % (impact)
+                print("--not hard enough: %s" % (impact))
 
     def doHitBoss(self, impact):
         # Derived classes can override this to do something specific
@@ -187,7 +187,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
     def fellOut(self):
         # Override in a derived class to do the right thing when the
         # object falls out of the world.
-        raise StandardError, 'fellOut unimplented'
+        raise Exception('fellOut unimplented')
 
     def getMinImpact(self):
         # This method returns the minimum impact, in feet per second,
@@ -275,7 +275,7 @@ class DistributedCashbotBossObject(DistributedSmoothNode.DistributedSmoothNode, 
         # state transitions after the object has been disabled or
         # deleted, or before it has been fully generated.
         if self.boss == None:
-            raise FSM.RequestDenied, request
+            raise FSM.RequestDenied(request)
 
         return FSM.FSM.defaultFilter(self, request, args)
 

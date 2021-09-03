@@ -68,7 +68,7 @@ class HolidayDecorator:
                 transform = loader.holidayPropTransforms.get(index, TransformState.makeIdentity())
                 # Position relative to empty node path *just in case* render not top of scene graph
                 newNP.setTransform(NodePath(), transform)
-                newNP.setTag('transformIndex', `index`)
+                newNP.setTag('transformIndex', repr(index))
             s = Sequence(Wait(wait),
                          np.colorScaleInterval(tFadeOut, Vec4(1, 1, 1, 0),
                                                startColorScale = Vec4(1, 1, 1, 1),

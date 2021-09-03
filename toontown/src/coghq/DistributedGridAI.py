@@ -9,7 +9,7 @@
     SDN: All objects currently take up a 2x2 area of the grid.  This is because
     the grid was originally designed with crates in mind.  this should be changed.
 """
-from CrateGlobals import *
+from .CrateGlobals import *
 from otp.level import DistributedEntityAI
 from direct.directnotify import DirectNotifyGlobal
 
@@ -296,8 +296,8 @@ class DistributedGridAI(DistributedEntityAI.DistributedEntityAI):
                         str += '[.]'
                     else:
                         str += ' . '
-            print str + ("  : %d" % i)
-        print ""
+            print(str + ("  : %d" % i))
+        print("")
             
                 
                     

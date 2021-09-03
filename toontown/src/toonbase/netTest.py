@@ -8,7 +8,7 @@
 
 #cr.fsm.request("connect", ["206.18.93.17", 6667])
 
-from ToonBaseGlobal import *
+from .ToonBaseGlobal import *
 from toontown.distributed import ToontownClientRepository
 import os
 from pandac.PandaModules import Filename

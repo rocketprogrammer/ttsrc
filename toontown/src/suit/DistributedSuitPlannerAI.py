@@ -8,14 +8,14 @@ class which handles management of all suits within a single neighborhood.
 from otp.ai.AIBaseGlobal import *
 
 from direct.distributed import DistributedObjectAI
-import SuitPlannerBase
-import DistributedSuitAI
+from . import SuitPlannerBase
+from . import DistributedSuitAI
 from toontown.battle import BattleManagerAI
 from direct.task import Task
 from direct.directnotify import DirectNotifyGlobal
-import SuitDNA
+from . import SuitDNA
 from toontown.battle import SuitBattleGlobals
-import SuitTimings
+from . import SuitTimings
 from toontown.toon import NPCToons
 from toontown.building import HQBuildingAI
 from toontown.hood import ZoneUtil
@@ -558,7 +558,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
             # adjust building populations wrt Cogdos
             if not hasattr(self.__class__, 'CogdoPopAdjusted'):
                 self.__class__.CogdoPopAdjusted = True
-                for index in xrange(len(self.SuitHoodInfo)):
+                for index in range(len(self.SuitHoodInfo)):
                     hoodInfo = self.SuitHoodInfo[index]
                     hoodInfo[self.SUIT_HOOD_INFO_BMIN] = int(.5 + (self.CogdoPopFactor *
                                                              hoodInfo[self.SUIT_HOOD_INFO_BMIN]))
@@ -735,7 +735,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
             if p < 0:
                 self.notify.warning("No landmark building for (%s) in zone %d" % (repr(p), self.zoneId))
 
-            elif self.buildingFrontDoors.has_key(blockNumber):
+            elif blockNumber in self.buildingFrontDoors:
                 self.notify.warning("Multiple front doors for building %d in zone %d" % (blockNumber, self.zoneId))
 
             else:
@@ -746,7 +746,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
             if p < 0:
                 self.notify.warning("No landmark building for (%s) in zone %d" % (repr(p), self.zoneId))
 
-            elif self.buildingSideDoors.has_key(blockNumber):
+            elif blockNumber in self.buildingSideDoors:
                 self.buildingSideDoors[blockNumber].append(p)
             else:
                 self.buildingSideDoors[blockNumber] = [p]
@@ -758,9 +758,9 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                 # Move to the next one
                 continue
             blockNumber = bldg.getBlock()[0]
-            if not self.buildingFrontDoors.has_key(blockNumber):
+            if blockNumber not in self.buildingFrontDoors:
                 self.notify.warning("No front door for building %d in zone %d" % (blockNumber, self.zoneId))
-            if not self.buildingSideDoors.has_key(blockNumber):
+            if blockNumber not in self.buildingSideDoors:
                 self.notify.warning("No side door for building %d in zone %d" % (blockNumber, self.zoneId))
                 
 
@@ -775,7 +775,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         and debug output.
         """
         for suit in self.suitList:
-            if count.has_key(suit.track):
+            if suit.track in count:
                 count[suit.track] += 1
             else:
                 count[suit.track] = 1
@@ -792,7 +792,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         if self.buildingMgr:
             for building in self.buildingMgr.getBuildings():
                 if building.isSuitBuilding():
-                    if count.has_key(building.track):
+                    if building.track in count:
                         count[building.track] += 1
                     else:
                         count[building.track] = 1
@@ -814,7 +814,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                 if building.isSuitBuilding():
                     # buildingHeight is numFloors - 1
                     height = building.numFloors - 1
-                    if count.has_key(height):
+                    if height in count:
                         count[height] += 1
                     else:
                         count[height] = 1
@@ -828,7 +828,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         formats the result as a string.
         """
         result = " "
-        for track, num in count.items():
+        for track, num in list(count.items()):
             result += " %s:%d" % (track, num)
 
         return result[2:]
@@ -888,7 +888,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                     point.getIndex(), p.getIndex())
                 zoneId = int(self.extractGroupName(zoneName))
 
-                if self.zoneIdToPointMap.has_key(zoneId):
+                if zoneId in self.zoneIdToPointMap:
                     self.zoneIdToPointMap[zoneId].append(point)
                 else:
                     self.zoneIdToPointMap[zoneId] = [point]
@@ -905,7 +905,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         """
 
         pointList = []
-        if self.buildingSideDoors.has_key(blockNumber):
+        if blockNumber in self.buildingSideDoors:
             for doorPoint in self.buildingSideDoors[blockNumber]:
                 # given the door point, find the street points in
                 # front of it.
@@ -919,7 +919,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                         pointList.append(point)
                     i -= 1
 
-        if self.buildingFrontDoors.has_key(blockNumber):
+        if blockNumber in self.buildingFrontDoors:
             doorPoint = self.buildingFrontDoors[blockNumber]
             points = self.dnaStore.getAdjacentPoints(doorPoint)
 
@@ -982,7 +982,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
             bn = random.choice(blockNumbers)
             blockNumbers.remove(bn)
 
-            if self.buildingSideDoors.has_key(bn):
+            if bn in self.buildingSideDoors:
                 for doorPoint in self.buildingSideDoors[bn]:
                     # given the door point, find the street points in
                     # front of it.
@@ -1211,7 +1211,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
             suit.attemptingTakeover = 1
 
             blockNumber = toonBlockTakeover
-            if self.buildingFrontDoors.has_key(blockNumber):
+            if blockNumber in self.buildingFrontDoors:
                 possibles.append((blockNumber, self.buildingFrontDoors[blockNumber]))
         elif suit.attemptingTakeover:
 
@@ -1223,7 +1223,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                 extZoneId, intZoneId = building.getExteriorAndInteriorZoneId()
             
                 if not NPCToons.isZoneProtected(intZoneId):
-                    if self.buildingFrontDoors.has_key(blockNumber):
+                    if blockNumber in self.buildingFrontDoors:
                         possibles.append((blockNumber, self.buildingFrontDoors[blockNumber]))
         else:
             # We have all of the suit buildings that match our DNA
@@ -1234,7 +1234,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                 for blockNumber in self.buildingMgr.getSuitBlocks():
                     track = self.buildingMgr.getBuildingTrack(blockNumber)
                     if track == suit.track and \
-                       self.buildingSideDoors.has_key(blockNumber):
+                       blockNumber in self.buildingSideDoors:
                         for doorPoint in self.buildingSideDoors[blockNumber]:
                             possibles.append((blockNumber, doorPoint))
 
@@ -1612,7 +1612,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         totalBuildings = 0
         targetSuitBuildings = 0
         actualSuitBuildings = 0
-        for sp in self.air.suitPlanners.values():
+        for sp in list(self.air.suitPlanners.values()):
             totalBuildings += len(sp.frontdoorPointList)
             targetSuitBuildings += sp.targetNumSuitBuildings
             if sp.buildingMgr:
@@ -1628,7 +1628,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
             # handing out more.
             numReassigned = 0
                 
-            for sp in self.air.suitPlanners.values():
+            for sp in list(self.air.suitPlanners.values()):
                 if sp.buildingMgr:
                     numBuildings = len(sp.buildingMgr.getSuitBlocks())
                 else:
@@ -1674,7 +1674,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         # world, so we can try to balance the world by preferring the
         # rarer tracks.
         numPerTrack = {'c': 0, 'l': 0, 'm': 0, 's':0}
-        for sp in self.air.suitPlanners.values():
+        for sp in list(self.air.suitPlanners.values()):
             sp.countNumBuildingsPerTrack(numPerTrack)
             numPerTrack['c'] += sp.pendingBuildingTracks.count('c')
             numPerTrack['l'] += sp.pendingBuildingTracks.count('l')
@@ -1683,7 +1683,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
 
         # Also count up the number of each height of building.
         numPerHeight = {0:0, 1: 0 , 2: 0, 3: 0, 4: 0,}
-        for sp in self.air.suitPlanners.values():
+        for sp in list(self.air.suitPlanners.values()):
             sp.countNumBuildingsPerHeight(numPerHeight)
             numPerHeight[0] += sp.pendingBuildingHeights.count(0)
             numPerHeight[1] += sp.pendingBuildingHeights.count(1)
@@ -1757,7 +1757,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                 # Get the DistributedSuitPlannerAI associated with this zone.
                 zoneId = currHoodInfo[ self.SUIT_HOOD_INFO_ZONE ]
 
-                if self.air.suitPlanners.has_key(zoneId):
+                if zoneId in self.air.suitPlanners:
                     sp = self.air.suitPlanners[zoneId]
                 
                     # How many suit buildings does this zone already have?
@@ -1848,7 +1848,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
                 # Get the DistributedSuitPlannerAI associated with this zone.
                 zoneId = currHoodInfo[ self.SUIT_HOOD_INFO_ZONE ]
 
-                if self.air.suitPlanners.has_key(zoneId):
+                if zoneId in self.air.suitPlanners:
                     sp = self.air.suitPlanners[zoneId]
                 
                     # How many suit buildings does this zone already have?
@@ -1980,7 +1980,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         self.notify.debug('requestBattle() - zone: %d suit: %d toon: %d' % \
                 (zoneId, suit.doId, toonId))
         canonicalZoneId = ZoneUtil.getCanonicalZoneId(zoneId)
-        if not self.battlePosDict.has_key(canonicalZoneId):
+        if canonicalZoneId not in self.battlePosDict:
             # If the zone doesn't have a battle cell, brush off the toon.
             return 0
         
@@ -1995,13 +1995,13 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         # Then set our battleID right up here, to lock out any further requests from getting triggered.
         if toon:
             if hasattr(toon, "doId"):
-                print ("Setting toonID ", toonId)
+                print(("Setting toonID ", toonId))
                 toon.b_setBattleId(toonId)
                 
         pos = self.battlePosDict[canonicalZoneId]
         interactivePropTrackBonus = -1
         if simbase.config.GetBool("props-buff-battles", True) and \
-           self.cellToGagBonusDict.has_key(canonicalZoneId) :
+           canonicalZoneId in self.cellToGagBonusDict :
             tentativeBonusTrack  = self.cellToGagBonusDict[canonicalZoneId]
             # next double check if the holiday for it to buff has started
             trackToHolidayDict = { ToontownBattleGlobals.SQUIRT_TRACK: ToontownGlobals.HYDRANTS_BUFF_BATTLES,
@@ -2178,14 +2178,14 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         """
         # remove any old reference of the suit from the zones list
         #
-        if self.zoneInfo.has_key( oldZone ) and \
+        if oldZone in self.zoneInfo and \
            suit in self.zoneInfo[ oldZone ]:
             self.zoneInfo[ oldZone ].remove( suit )
 
         # add the suit to the appropriate zone if one was given
         #
         if newZone != None:
-            if not self.zoneInfo.has_key( newZone ):
+            if newZone not in self.zoneInfo:
                 self.zoneInfo[ newZone ] = []
             self.zoneInfo[ newZone ].append( suit )
 
@@ -2208,7 +2208,7 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         self.countNumBuildingsPerTrack(buildingDict)
         buildingList = [0, 0, 0, 0]
         for dept in SuitDNA.suitDepts:
-            if buildingDict.has_key(dept):
+            if dept in buildingDict:
                 buildingList[SuitDNA.suitDepts.index(dept)] = buildingDict[dept]
         self.sendUpdateToAvatarId( self.air.getAvatarIdFromSender(), 'buildingListResponse', [ buildingList ] )
         
@@ -2227,8 +2227,8 @@ class DistributedSuitPlannerAI(DistributedObjectAI.DistributedObjectAI,
         # now randomly choose a type of suit based on the level, any given
         # type of suit can only be one of 5 levels
         if type == None:
-            typeChoices = range(max(level - 4, 1),
-                                min(level, self.MAX_SUIT_TYPES) + 1)
+            typeChoices = list(range(max(level - 4, 1),
+                                min(level, self.MAX_SUIT_TYPES) + 1))
             type = random.choice(typeChoices)
         else:
             # if our type is already specified, we might need to

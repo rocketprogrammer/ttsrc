@@ -2,7 +2,7 @@
 AnimBuilding object
 """
 
-from AnimPropObj import *
+from .AnimPropObj import *
 
 class AnimBuildingObj(AnimPropObj):
     def __init__(self, editor, animBuildingType, dna=None, nodePath=None):

@@ -1,18 +1,18 @@
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
+from .BattleBase import *
+from .BattleProps import *
+from .BattleSounds import *
 
-import MovieUtil
-import MovieCamera
+from . import MovieUtil
+from . import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownBattleGlobals
 from direct.actor import Actor
 from direct.particles import ParticleEffect
-import BattleParticles
-import BattleProps
-import MovieNPCSOS
-from MovieSound import createSuitResetPosTrack
+from . import BattleParticles
+from . import BattleProps
+from . import MovieNPCSOS
+from .MovieSound import createSuitResetPosTrack
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieTrap')
 
@@ -33,7 +33,7 @@ def doTraps(traps):
         targets = trap['target']
         if (len(targets) == 1):
             suitId = targets[0]['suit'].doId
-            if (suitTrapsDict.has_key(suitId)):
+            if (suitId in suitTrapsDict):
                 suitTrapsDict[suitId].append(trap)
             else:
                 suitTrapsDict[suitId] = [trap]
@@ -43,7 +43,7 @@ def doTraps(traps):
             # however, to avoid tossing too many traps
             for target in targets:
                 suitId = target['suit'].doId
-                if (not suitTrapsDict.has_key(suitId)):
+                if (suitId not in suitTrapsDict):
                     suitTrapsDict[suitId] = [trap]
                     break
             if trap['level'] == UBER_GAG_LEVEL_INDEX:
@@ -56,7 +56,7 @@ def doTraps(traps):
                         hasUberTrapConflict = True
                     
 
-    suitTrapLists = suitTrapsDict.values()
+    suitTrapLists = list(suitTrapsDict.values())
 
     mtrack = Parallel()
     for trapList in suitTrapLists:
@@ -371,7 +371,7 @@ def __createThrownTrapMultiTrack(trap, propList, propName, propPos=None,
 def __createPlacedTrapMultiTrack(trap, prop, propName, propPos=None,
                                  propHpr=None, explode=0, visibleOnlyForThisSuitId = None):
     toon = trap['toon']
-    if (trap.has_key('npc')):
+    if ('npc' in trap):
         toon = trap['npc']
     level = trap['level']
     battle = trap['battle']
@@ -510,7 +510,7 @@ def __trapTrapdoor(trap, trapProps, explode):
     """ __trapTrapdoor(trap)
     """
     toon = trap['toon']
-    if (trap.has_key('npc')):
+    if ('npc' in trap):
         toon = trap['npc']
     targets = trap['target']
     for target in targets:
@@ -535,7 +535,7 @@ def __trapTrain(trap, trapProps, explode):
     Do some funky stuff since we want to place only 1 train track, not 4
     """
     toon = trap['toon']
-    if (trap.has_key('npc')):
+    if ('npc' in trap):
         toon = trap['npc']
     targets = trap['target']
     battle = trap['battle']
@@ -622,7 +622,7 @@ def __createPlacedGroupTrapTrack(trap, prop, propName, centerSuit,propPos=None,
     mainly to make the train track appear.  We only want one, and parented to the battle
     """
     toon = trap['toon']
-    if (trap.has_key('npc')):
+    if ('npc' in trap):
         toon = trap['npc']
     level = trap['level']
     battle = trap['battle']

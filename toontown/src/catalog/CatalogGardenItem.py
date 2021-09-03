@@ -1,4 +1,4 @@
-import CatalogItem
+from . import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from otp.otpbase import OTPLocalizer
@@ -200,8 +200,8 @@ class CatalogGardenItem(CatalogItem.CatalogItem):
             result = True
         # make the Toon Statue special, requiring 639 skill
         if not result and \
-           GardenGlobals.Specials.has_key(self.gardenIndex) and \
-           GardenGlobals.Specials[self.gardenIndex].has_key('minSkill'):
+           self.gardenIndex in GardenGlobals.Specials and \
+           'minSkill' in GardenGlobals.Specials[self.gardenIndex]:
             minSkill = GardenGlobals.Specials[self.gardenIndex]['minSkill']
             if  avatar.shovelSkill < minSkill:
                 result = True

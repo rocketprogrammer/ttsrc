@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys
-import RepairAvatars
+from . import RepairAvatars
 
 class CatalogAdjuster(RepairAvatars.AvatarIterator):
     def __init__(self, air, adjustmentMinutes):
@@ -35,18 +35,18 @@ class CatalogAdjuster(RepairAvatars.AvatarIterator):
             self.numChanged += 1
 
     def done(self):
-        print "done, %s avatars visited, %s changed." % (self.numVisited, self.numChanged)
+        print("done, %s avatars visited, %s changed." % (self.numVisited, self.numChanged))
         sys.exit(0)
 
 def usage():
-    print ""
-    print "DelayCatalog.py <days>"
-    print ""
-    print "This Python script is meant to be run on a live database to "
-    print "adjust all of the catalog delivery dates into the future by "
-    print "a certain number of days, to compensate for the catalog system "
-    print "being offline for a length of time."
-    print ""
+    print("")
+    print("DelayCatalog.py <days>")
+    print("")
+    print("This Python script is meant to be run on a live database to ")
+    print("adjust all of the catalog delivery dates into the future by ")
+    print("a certain number of days, to compensate for the catalog system ")
+    print("being offline for a length of time.")
+    print("")
 
 def main(argv):
     if len(argv) != 2:
@@ -61,10 +61,10 @@ def main(argv):
 
     adjustmentMinutes = int(numDays * 24 * 60)
 
-    print "Adjusting catalog deliveries by %s days, or %s minutes." % (
-        numDays, adjustmentMinutes)
+    print("Adjusting catalog deliveries by %s days, or %s minutes." % (
+        numDays, adjustmentMinutes))
 
-    import UtilityStart
+    from . import UtilityStart
     adj = CatalogAdjuster(simbase.air, adjustmentMinutes)
     adj.start()
     run()

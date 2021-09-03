@@ -2,7 +2,7 @@ from otp.ai.AIBaseGlobal import *
 
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import SuitBattleGlobals
-import DistributedSuitBaseAI
+from . import DistributedSuitBaseAI
 
 
 class DistributedTutorialSuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):

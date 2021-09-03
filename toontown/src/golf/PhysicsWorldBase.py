@@ -9,7 +9,7 @@ from toontown.minigame import ArrowKeys
 from direct.showbase import PythonUtil
 from direct.task import Task
 from direct.distributed.ClockDelta import *
-import BuildGeometry
+from . import BuildGeometry
 from toontown.golf import GolfGlobals
 import random, time
 
@@ -210,7 +210,7 @@ class PhysicsWorldBase:
     def getCycleTime(self, doprint = 0):
         cycleTime = (globalClock.getRealTime() + self.timingCycleOffset) % self.timingCycleLength
         if doprint:
-            print ("Get Cycle Time %s" % (cycleTime))
+            print(("Get Cycle Time %s" % (cycleTime)))
         return cycleTime
         
     def setTimeIntoCycle(self, time, doprint = 0):

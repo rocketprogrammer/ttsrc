@@ -8,7 +8,7 @@ from direct.distributed.ClockDelta import *
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
-import DistributedAnimatedPropAI
+from . import DistributedAnimatedPropAI
 from direct.task.Task import Task
 from direct.fsm import State
 

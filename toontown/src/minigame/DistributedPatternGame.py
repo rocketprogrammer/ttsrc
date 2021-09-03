@@ -3,17 +3,17 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.toonbase import ToontownTimer
-import PatternGameGlobals
+from . import PatternGameGlobals
 from toontown.toon import ToonHead
 from toontown.char import CharDNA
 from toontown.char import Char
-import ArrowKeys
+from . import ArrowKeys
 import random
 from toontown.toonbase import ToontownGlobals
 import string
@@ -270,7 +270,7 @@ class DistributedPatternGame(DistributedMinigame):
         # or other toons, they are popped out and put in arrowDict.
         # Therefore both self.arrows and self.arrowDict may have stuff in
         # them, so clean em!
-        for x in self.arrowDict.values():
+        for x in list(self.arrowDict.values()):
             x[0].removeNode()
             x[1].removeNode()
             if len(x) == 3:
@@ -1180,7 +1180,7 @@ class DistributedPatternGame(DistributedMinigame):
     def enterCleanup(self):
         self.notify.debug("enterCleanup")
 
-        for track in self.animTracks.values():
+        for track in list(self.animTracks.values()):
             if track and track.isPlaying():
                 track.pause()
         del self.animTracks

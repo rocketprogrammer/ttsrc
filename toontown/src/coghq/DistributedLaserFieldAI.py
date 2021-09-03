@@ -239,7 +239,7 @@ class DistributedLaserFieldAI(BattleBlockerAI.BattleBlockerAI,
         
             
     def addSuit(self, suit):
-        print("Adding Suit %s" % (suit.doId))
+        print(("Adding Suit %s" % (suit.doId)))
         #import pdb; pdb.set_trace()
         BattleBlockerAI.BattleBlockerAI.addSuit(self, suit)
         

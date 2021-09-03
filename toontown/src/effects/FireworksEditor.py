@@ -1,12 +1,12 @@
 """ Fireworks Editor/Control Panel module """
 from direct.tkwidgets.AppShell import *
 from direct.showbase.TkGlobal import *
-from FireworkGlobals import *
+from .FireworkGlobals import *
 from direct.interval.IntervalGlobal import *
-from tkFileDialog import *
-from tkMessageBox import askyesno
+from tkinter.filedialog import *
+from tkinter.messagebox import askyesno
 from direct.tkwidgets import VectorWidgets
-import Fireworks
+from . import Fireworks
 from direct.tkwidgets import Slider
 from direct.task import Task
 import Types
@@ -17,7 +17,7 @@ MAX_AMP = 100
 
 ttmodelsDirectory = Filename.expandFrom("$TTMODELS")
 
-UppercaseColorNames = map(string.upper, ColorNames)
+UppercaseColorNames = list(map(string.upper, ColorNames))
 
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "$TTMODELS/src/dna"))
         
@@ -124,7 +124,7 @@ class FireworksShow:
         return self.fwDict.get(ID, None)
 
     def removeFirework(self, ID):
-        if self.fwDict.has_key(ID):
+        if ID in self.fwDict:
             del(self.fwDict[ID])
 
     def getSortedList(self):
@@ -138,7 +138,7 @@ class FireworksShow:
             else:
                 return 0
         # Sort the firework show by start time
-        fwList = self.fwDict.values()
+        fwList = list(self.fwDict.values())
         fwList.sort(sortFW)
         return fwList
 
@@ -198,10 +198,10 @@ class FireworksShow:
         return max(self.minDuration, musicDuration, fwDuration)
 
     def printShow(self):
-        print '('
+        print('(')
         for fw in self.getShow():
-            print '    %s,' % (fwTuple2Str(fw))
-        print ')'        
+            print('    %s,' % (fwTuple2Str(fw)))
+        print(')')        
 
     def saveShow(self, fireworksFilename):
         fname = Filename(fireworksFilename)
@@ -227,11 +227,11 @@ class FireworksShow:
                     self.setMusicFile(l[11:].strip())
                 elif (l[:11] == 'FIREWORKS: '):
                     fwStr = l[11:].strip()
-                    print fwStr
+                    print(fwStr)
                     fw = self.fireworkFromString(fwStr, currentT)
                     currentT = fw.getStartTime()
                     if not fw:
-                        print 'ERROR Parsing fireworks string'
+                        print('ERROR Parsing fireworks string')
                         self.clearShow()
                         break
 
@@ -244,7 +244,7 @@ class FireworksShow:
         fwStr = fwStr[lParen + 1: rParen]
         # If its a valid line, split on separator and
         # strip leading/trailing whitespace from each element
-        data = map(string.strip, fwStr.split(','))
+        data = list(map(string.strip, fwStr.split(',')))
         # Try to convert string to firework data
         Z = 50
         Z2 = 70
@@ -257,7 +257,7 @@ class FireworksShow:
             x = eval(data[FW_POS_X])
             y = eval(data[FW_POS_Y])
             z = eval(data[FW_POS_Z])
-        except ValueError, IndexError:
+        except ValueError as IndexError:
             return None
         return self.createFirework(startT, style, Point3(x,y,z),
                                    color1, color2, amp)
@@ -368,7 +368,7 @@ class FireworksShow:
         fwList = self.getSortedList()
         for fw in fwList:
             if fw.getStyle() in excludeList:
-                print 'Excluding', styleNames[fw.getStyle()]
+                print('Excluding', styleNames[fw.getStyle()])
                 continue
             currT = fw.getStartTime()
             if currT < startT:

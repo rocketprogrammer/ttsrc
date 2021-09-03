@@ -5,7 +5,7 @@ TTSCSingingMenu.py: contains the TTSCSingingMenu class
 from direct.showbase import PythonUtil
 from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
-from TTSCSingingTerminal import TTSCSingingTerminal
+from .TTSCSingingTerminal import TTSCSingingTerminal
 from otp.otpbase import OTPLocalizer
 
 #this is the structure of the racing menu
@@ -38,7 +38,7 @@ class TTSCSingingMenu(SCMenu):
             lt = base.localAvatar
         except:
             return 
-        for count in xrange(len(SingingMenuGuide)):
+        for count in range(len(SingingMenuGuide)):
             section = SingingMenuGuide[count]
             if section[0] == -1:
                 # This is not a submenu but a terminal!
@@ -46,12 +46,12 @@ class TTSCSingingMenu(SCMenu):
                     emote = None
                     # If the type of the phrase is a dictionary there must be an emote attached to it.
                     if (type(phrase) == type({})):
-                        assert len(phrase.keys()) == 1
-                        item = phrase.keys()[0]
+                        assert len(list(phrase.keys())) == 1
+                        item = list(phrase.keys())[0]
                         emote = phrase[item]
                         phrase = item
                     if phrase not in OTPLocalizer.SpeedChatStaticText:
-                        print ('warning: tried to link a singing phrase %s which does not seem to exist' % phrase)
+                        print(('warning: tried to link a singing phrase %s which does not seem to exist' % phrase))
                         break
                     terminal = TTSCSingingTerminal(phrase)                    
                     if emote is not None:

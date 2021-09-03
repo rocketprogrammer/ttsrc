@@ -75,7 +75,7 @@ class PetCollider(Impulse.Impulse):
         return 'petFeeler-%s' % self._getSerialNum()
         
     def handleCollision(self, collEntry):
-        print 'collision!'
+        print('collision!')
         #print 'collision: %s' % collEntry
         #import pdb
         #pdb.set_trace()

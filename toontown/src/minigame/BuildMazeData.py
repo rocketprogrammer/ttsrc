@@ -207,9 +207,9 @@ fwritelines(
     f,
     ['"""' + outputFile + ': GENERATED FILE, DO NOT EDIT"""',
      '',
-     'CELL_WIDTH = ' + `CELL_WIDTH`,
+     'CELL_WIDTH = ' + repr(CELL_WIDTH),
      '',
-     'mazeNames = ' + `mazeNames`,
+     'mazeNames = ' + repr(mazeNames),
      '',
      'mazeData = {}'
     ])
@@ -218,12 +218,12 @@ processedMazes = []
 for mazeGroup in mazeNames:
     for mazeName in mazeGroup:
         if mazeName in processedMazes:
-            print mazeName + " already added"
+            print(mazeName + " already added")
             continue
         else:
             processedMazes.append(mazeName)
     
-        print "analyzing " + mazeName + "..."
+        print("analyzing " + mazeName + "...")
         maze = loader.loadModel(mazeName)
         maze.reparentTo(root)
         maze.setPos(0,0,0)
@@ -242,22 +242,22 @@ for mazeGroup in mazeNames:
         fwrite(f,'')
         fwrite(f,'mazeData["' + mazeName + '"] = {}')
         fwrite(f,'data = mazeData["' + mazeName + '"]')
-        fwrite(f,'data["width"] = ' + `mazeWidth`)
-        fwrite(f,'data["height"] = ' + `mazeHeight`)
-        fwrite(f,'data["originX"] = ' + `originX`)
-        fwrite(f,'data["originY"] = ' + `originY`)
+        fwrite(f,'data["width"] = ' + repr(mazeWidth))
+        fwrite(f,'data["height"] = ' + repr(mazeHeight))
+        fwrite(f,'data["originX"] = ' + repr(originX))
+        fwrite(f,'data["originY"] = ' + repr(originY))
     
         fwrite(f,'data["collisionTable"] = [')
         for y in range(mazeHeight):
             f.write('  [')
             for x in range(mazeWidth):
-                f.write(`collisionTable[y][x]` + ',')
+                f.write(repr(collisionTable[y][x]) + ',')
             f.write('],\n')
         f.write('  ]\n')
 
         fwrite(f,'data["treasurePosList"] = [')
         for pos in treasurePosList:
-            f.write(`pos` + ',\n')
+            f.write(repr(pos) + ',\n')
         f.write('  ]\n')
 
 f.close()

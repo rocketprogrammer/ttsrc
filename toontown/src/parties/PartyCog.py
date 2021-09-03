@@ -23,7 +23,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.battle.BattleProps import globalPropPool
 from toontown.battle.BattleSounds  import globalBattleSoundCache
 
-import PartyGlobals
+from . import PartyGlobals
 
 
 class PartyCogManager:

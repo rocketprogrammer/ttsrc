@@ -56,8 +56,8 @@ BossbotCountryClubConnectorRooms = ('phase_12/models/bossbotHQ/Connector_Tunnel_
 
 # dict of roomId to spec Python module
 CashbotMintSpecModules = {}
-for roomName, roomId in BossbotCountryClubRoomName2RoomId.items():
-    exec 'from toontown.coghq import %s' % roomName
+for roomName, roomId in list(BossbotCountryClubRoomName2RoomId.items()):
+    exec('from toontown.coghq import %s' % roomName)
     CashbotMintSpecModules[roomId] = eval(roomName)
 
 ## until cogs are entities...
@@ -72,7 +72,7 @@ CogSpecModules = {
     }
 
 roomId2numBattles = {}
-for roomName, roomId in BossbotCountryClubRoomName2RoomId.items():
+for roomName, roomId in list(BossbotCountryClubRoomName2RoomId.items()):
     if roomName not in CogSpecModules:
         roomId2numBattles[roomId] = 0
     else:

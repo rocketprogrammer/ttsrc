@@ -80,7 +80,7 @@ class DistributedMoleFieldAI(DistributedEntityAI.DistributedEntityAI,
         """Handle the client whacking a mole."""
         # TODO check with self.schedule if it really is a valid mole whack
         validMoleWhack = False
-        if self.whackedMoles.has_key(moleIndex):
+        if moleIndex in self.whackedMoles:
             if self.whackedMoles[moleIndex] < popupNum:
                 validMoleWhack = True
         else:

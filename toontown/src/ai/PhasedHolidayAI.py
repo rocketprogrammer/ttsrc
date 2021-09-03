@@ -87,7 +87,7 @@ class PhasedHolidayAI(HolidayBaseAI.HolidayBaseAI):
                 self.notify.error("holiday %d, phaseDate=%s not in between start and end times" %
                                   (self.holidayId, phaseDate))
         # check the phase dates are ascending
-        for index in xrange( len(self.phaseDates) -1):
+        for index in range( len(self.phaseDates) -1):
             if not (self.phaseDates[index] < self.phaseDates[index +1]):
                     self.notify.error("phaseDate=%s coming before phaseDate=%s" %
                                       (self.phaseDates[index], self.phaseDates[index+1]))

@@ -18,7 +18,7 @@ class DistCogdoFlyingGameAI(DistributedMinigameAI):
             self.DistCogdoFlyingGameAI_initialized = 1
             DistributedMinigameAI.__init__(self, air, id)
 
-            print "FLYING COGDO GAME AI CREATED!"
+            print("FLYING COGDO GAME AI CREATED!")
 
     def areAllPlayersReady(self):
         ready = True

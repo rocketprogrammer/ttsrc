@@ -2,13 +2,13 @@ from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from direct.showbase.PythonUtil import nonRepeatingRandomList
-import DistributedGagAI
-import DistributedProjectileAI
+from . import DistributedGagAI
+from . import DistributedProjectileAI
 from direct.task import Task
 import random
 import time
-import Racer
-import RaceGlobals
+from . import Racer
+from . import RaceGlobals
 from direct.distributed.ClockDelta import *
 from toontown.toonbase import TTLocalizer
 
@@ -356,7 +356,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
         if self.isDeleted():
             return
 
-        for racer in self.racers.values():
+        for racer in list(self.racers.values()):
             avId = racer.avId
 
             # racers can be tagged to 'not allow timeout'
@@ -495,7 +495,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
 
     def racerLeft(self, avIdFromClient):
         avId=self.air.getAvatarIdFromSender()
-        if(self.racers.has_key(avId) and avId==avIdFromClient):
+        if(avId in self.racers and avId==avIdFromClient):
              self.notify.debug("Removing %d from race %d" % (avId, self.doId))
              #Clear out the players kart
              racer=self.racers[avId]
@@ -526,7 +526,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
 
     def hasGag(self, slot, type, index):
         avId=self.air.getAvatarIdFromSender()
-        print "has gag"
+        print("has gag")
         if index < 0 or index > (len(self.gagList) - 1): #check for cheaters
             self.air.writeServerEvent('suspicious', avId, 'Player checking for non-existant karting gag index %s type %s index %s' % (slot, type, index))
             self.notify.warning("somebody is trying to check for a non-existant karting gag %s %s %s! avId: %s" % (slot, type, index, avId))
@@ -588,7 +588,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
 
                 # see if anyone's close
                 someoneIsClose = False
-                for racer in self.racers.values():
+                for racer in list(self.racers.values()):
                     if (not racer.exited) and (not racer.finished):
                         if (me.lapT - racer.lapT) < 0.15:
                             someoneIsClose = True
@@ -687,7 +687,7 @@ class DistributedRaceAI(DistributedObjectAI.DistributedObjectAI):
 
     def everyoneDone(self):
         done = True
-        for racer in self.racers.values():
+        for racer in list(self.racers.values()):
             if (not racer.exited and (not racer.avId in self.playersFinished) and
                 (not racer.avId in self.kickedAvIds)):
                 # there is a racer who hasn't exited and who hasn't finished

@@ -3,10 +3,10 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
 from direct.distributed import ClockDelta
 from direct.distributed import DistributedObjectAI
-import DistributedFurnitureItemAI
+from . import DistributedFurnitureItemAI
 from direct.task.Task import Task
 from direct.fsm import State
-from BankGlobals import *
+from .BankGlobals import *
 
 class DistributedBankAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI):
 

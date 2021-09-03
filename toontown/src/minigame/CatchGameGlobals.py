@@ -51,7 +51,7 @@ for type in DropObjectTypes:
 #   Name2DOTypeId['apple'] == some number
 #   DOTypeId2Name[some number] == 'apple'
 Name2DOTypeId = {}
-names = Name2DropObjectType.keys()
+names = list(Name2DropObjectType.keys())
 names.sort()
 for i in range(len(names)):
     Name2DOTypeId[names[i]] = i

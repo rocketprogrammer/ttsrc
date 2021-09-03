@@ -37,13 +37,13 @@ class DistributedDataStoreManagerUD(DistributedObjectGlobalUD):
     def __getFilePath(self,storeId):
         #import pdb; pdb.set_trace()
         return '%s/TUDS-%s'%(self.serverDataFolder,
-                             `storeId`)
+                             repr(storeId))
 
     def __str__(self):
-        outStr = self.__class__.__name__ + ' - ' + `len(self.stores)` + ' Stores\n'
+        outStr = self.__class__.__name__ + ' - ' + repr(len(self.stores)) + ' Stores\n'
         outStr += '-'*40 + '\n'
-        for id in self.stores.keys():
-            outStr += `id` + '\t:  ' + self.stores[id].className + '\n'
+        for id in list(self.stores.keys()):
+            outStr += repr(id) + '\t:  ' + self.stores[id].className + '\n'
         return outStr
 
     # From AI
@@ -81,13 +81,13 @@ class DistributedDataStoreManagerUD(DistributedObjectGlobalUD):
         store = self.stores.pop(storeId,None)
         if store:
             if self.enableDestroyStore:
-                self.notify.debug('Destroying %s.' % `DataStoreGlobals.getStoreClass(storeId)`)
+                self.notify.debug('Destroying %s.' % repr(DataStoreGlobals.getStoreClass(storeId)))
                 store.destroy()
             else:
-                self.notify.debug('Closing %s.' % `DataStoreGlobals.getStoreClass(storeId)`)
+                self.notify.debug('Closing %s.' % repr(DataStoreGlobals.getStoreClass(storeId)))
                 store.close()
         else:
-            self.notify.debug('%s not present on uberdog.' % `DataStoreGlobals.getStoreClass(storeId)`)
+            self.notify.debug('%s not present on uberdog.' % repr(DataStoreGlobals.getStoreClass(storeId)))
             
     def queryStore(self,storeId,query,retry = False):
         """

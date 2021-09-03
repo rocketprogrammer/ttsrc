@@ -12,7 +12,7 @@ from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.racing.RaceGlobals import  *
 from toontown.toonbase.TTLocalizer import *
-import cPickle
+import pickle
 
 class DistributedLeaderBoardAI(DistributedObjectAI.DistributedObjectAI):
     """
@@ -77,12 +77,12 @@ class DistributedLeaderBoardAI(DistributedObjectAI.DistributedObjectAI):
     def getDisplay(self):
         '''
         '''
-        return cPickle.dumps(self.subscriptionDict[self.curIndex], 1)
+        return pickle.dumps(self.subscriptionDict[self.curIndex], 1)
 
 
     def sendNewDisplay(self):
         self.notify.debug("sendNewDisplay: sending updated lb info to client")
-        self.sendUpdate("setDisplay", [cPickle.dumps(self.subscriptionDict[self.subscriptionList[self.curIndex]], 1)])
+        self.sendUpdate("setDisplay", [pickle.dumps(self.subscriptionDict[self.subscriptionList[self.curIndex]], 1)])
 
     def start(self):
         '''

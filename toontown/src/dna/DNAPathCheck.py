@@ -75,7 +75,7 @@ def lookupDNAFileName(filename):
     return dnaFile.cStr()
 
 for file in dnaFiles:
-    print ("Checking file: %s" % (file))
+    print(("Checking file: %s" % (file)))
     dnaStore = DNAStorage()
     file = lookupDNAFileName(file)
     dnaData = loadDNAFileAI(dnaStore, file, CSDefault)
@@ -93,13 +93,13 @@ for file in dnaFiles:
     allPoints = streetPointList + frontdoorPointList + sidedoorPointList
     numPoints = len(allPoints)
     if numPoints == 0:
-        print ("No points found in file: %s" % (file))
+        print(("No points found in file: %s" % (file)))
         continue
     count = 0
     startTime = time.time()
     for point1 in allPoints:
         count += 1
-        print ("Checking point index: %s,  %s/%s" % (point1.getIndex(), count, numPoints))
+        print(("Checking point index: %s,  %s/%s" % (point1.getIndex(), count, numPoints)))
         for point2 in allPoints:
             if point1 != point2:
                 minPathLen = 40
@@ -110,7 +110,7 @@ for file in dnaFiles:
     endTime = time.time()
     dt = endTime - startTime
     totalPaths = numPoints * numPoints
-    print ("Computed %s paths in %s seconds. Avg %s sec/path" %
-           (totalPaths, dt, dt/float(totalPaths)))
+    print(("Computed %s paths in %s seconds. Avg %s sec/path" %
+           (totalPaths, dt, dt/float(totalPaths))))
 
 pprint.pprint(errors)

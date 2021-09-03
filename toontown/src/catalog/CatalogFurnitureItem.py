@@ -1,5 +1,5 @@
-import CatalogAtticItem
-import CatalogItem
+from . import CatalogAtticItem
+from . import CatalogItem
 import random
 from toontown.toonbase import TTLocalizer
 
@@ -49,7 +49,7 @@ BankToMoney = {
     1340 : 10000,
     }
 MoneyToBank = {}
-for bankId, maxMoney in BankToMoney.items():
+for bankId, maxMoney in list(BankToMoney.items()):
     MoneyToBank[maxMoney] = bankId
 MaxBankId = 1340
 
@@ -66,10 +66,10 @@ ClosetToClothes = {
     516 : 25,
     }
 ClothesToCloset = {}
-for closetId, maxClothes in ClosetToClothes.items():
+for closetId, maxClothes in list(ClosetToClothes.items()):
     # There is not a 1-to-1 mapping like the banks since there are boys
     # and girls closets, so we'll store a bank Id tuple.
-    if not ClothesToCloset.has_key(maxClothes):
+    if maxClothes not in ClothesToCloset:
         ClothesToCloset[maxClothes] = (closetId,)
     else:
         ClothesToCloset[maxClothes] += (closetId,)
@@ -1028,7 +1028,7 @@ class CatalogFurnitureItem(CatalogAtticItem.CatalogAtticItem):
             if self.colorOption == None:
                 # The user hasn't picked a color option; choose a
                 # random one.
-                option = random.choice(type[FTColorOptions].values())
+                option = random.choice(list(type[FTColorOptions].values()))
             else:
                 # Use the user's specified color option.
                 option = type[FTColorOptions].get(self.colorOption)
@@ -1090,7 +1090,7 @@ def nextAvailableBank(avatar, duplicateItems):
 
 def getAllBanks():
     list = []
-    for bankId in BankToMoney.keys():
+    for bankId in list(BankToMoney.keys()):
         list.append(CatalogFurnitureItem(bankId))
     return list
 
@@ -1128,7 +1128,7 @@ def nextAvailableCloset(avatar, duplicateItems):
 
 def getAllClosets():
     list = []
-    for closetId in ClosetsToClothes.keys():
+    for closetId in list(ClosetsToClothes.keys()):
         list.append(CatalogFurnitureItem(closetId))
     return list
 

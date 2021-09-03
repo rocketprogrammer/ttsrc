@@ -1,15 +1,15 @@
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
-import BattleParticles
+from .BattleBase import *
+from .BattleProps import *
+from .BattleSounds import *
+from . import BattleParticles
 
-from RewardPanel import *
+from .RewardPanel import *
 
-import MovieCamera
+from . import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
-import MovieUtil
-import MovieNPCSOS
+from . import MovieUtil
+from . import MovieNPCSOS
 from toontown.toonbase import ToontownBattleGlobals
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieSound')
@@ -213,7 +213,7 @@ def __doSoundsLevel(sounds, delay, hitCount, npcs):
     for sound in sounds:
         #soundfn_array(
         toon = sound['toon']
-        if (sound.has_key('npc')):
+        if ('npc' in sound):
             toon = sound['npc']
         level = sound['level']
         targets = sound['target']

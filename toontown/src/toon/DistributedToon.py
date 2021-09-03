@@ -11,8 +11,8 @@ from otp.avatar import DistributedPlayer
 from otp.avatar import Avatar, DistributedAvatar
 from otp.speedchat import SCDecoders
 from otp.chat import TalkAssistant
-import Toon
-import GMUtils
+from . import Toon
+from . import GMUtils
 from direct.task.Task import Task
 from direct.distributed import DistributedSmoothNode
 from direct.distributed import DistributedObject
@@ -23,15 +23,15 @@ from toontown.distributed.DelayDeletable import DelayDeletable
 from direct.showbase import PythonUtil
 from toontown.catalog import CatalogItemList
 from toontown.catalog import CatalogItem
-import TTEmote
+from . import TTEmote
 from toontown.shtiker.OptionsPage import speedChatStyles
 from toontown.fishing import FishCollection
 from toontown.fishing import FishTank
 from toontown.suit import SuitDNA
 from toontown.coghq import CogDisguiseGlobals
 from toontown.toonbase import TTLocalizer
-import Experience
-import InventoryNew
+from . import Experience
+from . import InventoryNew
 from toontown.speedchat import TTSCDecoders
 from toontown.chat import ToonChatGarbler
 from toontown.chat import ResistanceChat
@@ -436,7 +436,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
     def getNearbyPlayers(self, radius, includeSelf=True):
         nearbyToons = []
         toonIds = self.cr.getObjectsOfExactClass(DistributedToon)
-        for toonId, toon in toonIds.items():
+        for toonId, toon in list(toonIds.items()):
             if toon is not self:
                 dist = toon.getDistance(self)
                 if dist < radius:
@@ -529,7 +529,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         """ Retrieves the values from the owner's prc file (see setAsGM) if the avatar is an admin """
         # make sure it's a valid UTF-8 string
         try:
-            unicode(tagString, 'utf-8')
+            str(tagString, 'utf-8')
         except UnicodeDecodeError:
             self.sendUpdate('logSuspiciousEvent', ['invalid GM name tag: %s from %s' % (tagString, self.doId)])
             return
@@ -1634,9 +1634,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         return [self.trackProgressId, self.trackProgress]
 
     def getTrackProgressAsArray(self, maxLength = 15):
-        shifts = map(operator.rshift, maxLength * [self.trackProgress], \
-                     range(maxLength - 1, -1, -1))
-        digits = map(operator.mod, shifts, maxLength * [2])
+        shifts = list(map(operator.rshift, maxLength * [self.trackProgress], \
+                     list(range(maxLength - 1, -1, -1))))
+        digits = list(map(operator.mod, shifts, maxLength * [2]))
         digits.reverse()
         return digits
        
@@ -1880,7 +1880,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
             tossTrack = None
 
         lastPieTrack = Sequence()
-        if self.pieTracks.has_key(sequence):
+        if sequence in self.pieTracks:
             lastPieTrack = self.pieTracks[sequence]
             del self.pieTracks[sequence]
             
@@ -1923,11 +1923,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         pie.start(startTime)
 
     def pieFinishedFlying(self, sequence):
-        if self.pieTracks.has_key(sequence):
+        if sequence in self.pieTracks:
             del self.pieTracks[sequence]
 
     def pieFinishedSplatting(self, sequence):
-        if self.splatTracks.has_key(sequence):
+        if sequence in self.splatTracks:
             del self.splatTracks[sequence]
 
     def pieSplat(self, x, y, z, sequence, pieCode, timestamp32):
@@ -1946,11 +1946,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
             return
 
         lastPieTrack = Sequence()
-        if self.pieTracks.has_key(sequence):
+        if sequence in self.pieTracks:
             lastPieTrack = self.pieTracks[sequence]
             del self.pieTracks[sequence]
 
-        if self.splatTracks.has_key(sequence):
+        if sequence in self.splatTracks:
             lastSplatTrack = self.splatTracks[sequence]
             del self.splatTracks[sequence]
             lastSplatTrack.finish()
@@ -1993,10 +1993,10 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
 
     def cleanupPies(self):
         # Make sure the pie is not in our hand or flying through the air.
-        for track in self.pieTracks.values():
+        for track in list(self.pieTracks.values()):
             track.finish()
         self.pieTracks = {}
-        for track in self.splatTracks.values():
+        for track in list(self.splatTracks.values()):
             track.finish()
         self.splatTracks = {}
         self.cleanupPieInHand()
@@ -2730,7 +2730,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
     def getMyTrees(self):
         treeDict = self.cr.getObjectsOfClass(DistributedGagTree.DistributedGagTree)
         trees = []
-        for tree in treeDict.values():
+        for tree in list(treeDict.values()):
             if tree.getOwnerId() == self.doId:
                 trees.append(tree)
 
@@ -3118,7 +3118,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         """Set the mail"""
         DistributedToon.partyNotify.debug( "setMail called with %d mail items" % len(mail) )
         self.mail = []
-        for i in xrange(len(mail)):
+        for i in range(len(mail)):
             oneMailItem = mail[i]
             newMail = SimpleMailBase(*oneMailItem)
             self.mail.append(newMail)
@@ -3152,7 +3152,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         This does not include invites we've already rejected."""
         DistributedToon.partyNotify.debug("setInvites called passing in %d invites." % len(invites))
         self.invites = []
-        for i in xrange(len(invites)):
+        for i in range(len(invites)):
             oneInvite=invites[i]
             newInvite = InviteInfo(*oneInvite)
             self.invites.append(newInvite)
@@ -3225,7 +3225,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         """Handle uberdog telling us our hosted parties."""
         DistributedToon.partyNotify.debug("setHostedParties called passing in %d parties." % len(hostedParties))
         self.hostedParties = []
-        for i in xrange(len(hostedParties)):
+        for i in range(len(hostedParties)):
             hostedInfo = hostedParties[i]
             newParty = PartyInfo(*hostedInfo)
             self.hostedParties.append(newParty)
@@ -3235,7 +3235,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         """Handle uberdog telling us details of parties we are invited to."""
         DistributedToon.partyNotify.debug("setPartiesInvitedTo called passing in %d parties." % len(partiesInvitedTo))
         self.partiesInvitedTo = []
-        for i in xrange(len(partiesInvitedTo)):
+        for i in range(len(partiesInvitedTo)):
             partyInfo = partiesInvitedTo[i]
             newParty = PartyInfo(*partyInfo)
             self.partiesInvitedTo.append(newParty)
@@ -3247,7 +3247,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         # It is possible to get an invite to a party so far in the future that it gets filtered out
         # hence returning None is a valid result
         result = None
-        for i in xrange(len(self.partiesInvitedTo)):
+        for i in range(len(self.partiesInvitedTo)):
             partyInfo = self.partiesInvitedTo[i]
             if partyInfo.partyId == partyId:
                 result = partyInfo
@@ -3267,7 +3267,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer,
         """Handle uberdog telling us replies to our hosted parties."""
         DistributedToon.partyNotify.debug("setPartyReplies called passing in %d parties." % len(replies))
         self.partyReplyInfoBases = []
-        for i in xrange(len(replies)):
+        for i in range(len(replies)):
             partyReply = replies[i]
             repliesForOneParty = PartyReplyInfoBase(*partyReply)
             self.partyReplyInfoBases.append(repliesForOneParty)

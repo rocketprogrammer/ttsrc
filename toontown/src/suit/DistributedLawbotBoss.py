@@ -12,9 +12,9 @@ from direct.fsm import State
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
-import DistributedBossCog
+from . import DistributedBossCog
 from toontown.toonbase import TTLocalizer
-import SuitDNA
+from . import SuitDNA
 from toontown.toon import Toon
 from toontown.battle import BattleBase
 from direct.directutil import Mopath
@@ -1478,7 +1478,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         for toonId in self.involvedToons: 
             toon = self.cr.doId2do.get(toonId)
             if toon:
-                if self.cannons.has_key(index):
+                if index in self.cannons:
                     cannon = self.cannons[index]
                     cannonSeq = cannon.generateCannonAppearTrack(toon)
                     multiCannons.append(cannonSeq)
@@ -1623,7 +1623,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
             del self.juryTimer
             self.juryTimer = None
 
-        for chair in self.chairs.values():
+        for chair in list(self.chairs.values()):
             chair.stopCogsFlying()
             
 
@@ -3103,7 +3103,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         self.involvedToons.sort()        
         for toonId in self.involvedToons:
-            if self.cannons.has_key(index):
+            if index in self.cannons:
                 cannon = self.cannons[index]
                 toon = self.cr.doId2do.get(toonId)
 
@@ -3213,7 +3213,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         run through all the chairs we have and count how many are toons
         """
         self.numToonJurorsSeated = 0
-        for key in self.chairs.keys():
+        for key in list(self.chairs.keys()):
             chair = self.chairs[key]
             if chair.state == 'ToonJuror' or \
                (chair.state == None and chair.newState == 'ToonJuror'):
@@ -3280,7 +3280,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
 
         if gotError:
             st = StackTrace()
-            print st
+            print(st)
             return
 
         
@@ -3363,7 +3363,7 @@ class DistributedLawbotBoss(DistributedBossCog.DistributedBossCog, FSM.FSM):
         how many jurors were seated by a certain cannon
         """
         retVal = 0
-        for chair in self.chairs.values():
+        for chair in list(self.chairs.values()):
             if chair.state == "ToonJuror":
                 if chair.toonJurorIndex == cannonIndex:
                     retVal +=1

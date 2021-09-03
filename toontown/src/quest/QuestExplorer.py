@@ -1,4 +1,4 @@
-from Quests import *
+from .Quests import *
 from direct.showbase.TkGlobal import *
 from direct.showbase.DirectObject import DirectObject
 from direct.tkwidgets.Tree import *
@@ -187,7 +187,7 @@ class QuestExplorerItem(TreeItem):
 
     def GetSubList(self):
         if self.quest == -1:
-            nextQuests = Tier2QuestsDict.keys()
+            nextQuests = list(Tier2QuestsDict.keys())
         elif self.quest <= self.maxTier:
             nextQuests = getStartingQuests(self.quest)
         else:
@@ -195,11 +195,11 @@ class QuestExplorerItem(TreeItem):
         if nextQuests == None:
             return []
         else:
-            return map(QuestExplorerItem, nextQuests)
+            return list(map(QuestExplorerItem, nextQuests))
 
 def exploreQuests(quest = -1):
     # Pop open a hierarchical viewer to explore quest system
-    import QuestExplorer
+    from . import QuestExplorer
     tl = TkGlobal.Toplevel()
     tl.title('Explore Quests')
     qe = QuestExplorer.QuestExplorer(parent = tl, quest = quest)

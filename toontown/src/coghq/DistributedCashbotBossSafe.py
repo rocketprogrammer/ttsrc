@@ -3,7 +3,7 @@ from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from otp.otpbase import OTPGlobals
-import DistributedCashbotBossObject
+from . import DistributedCashbotBossObject
 
 class DistributedCashbotBossSafe(DistributedCashbotBossObject.DistributedCashbotBossObject):
 
@@ -65,7 +65,7 @@ class DistributedCashbotBossSafe(DistributedCashbotBossObject.DistributedCashbot
             self.collisionNode.setIntoCollideMask(ToontownGlobals.PieBitmask | OTPGlobals.WallBitmask)
             self.collisionNode.setFromCollideMask(ToontownGlobals.PieBitmask)
 
-        assert(not self.boss.safes.has_key(self.index))
+        assert(self.index not in self.boss.safes)
         self.boss.safes[self.index] = self
 
         self.setupPhysics('safe')

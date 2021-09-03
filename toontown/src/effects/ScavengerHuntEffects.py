@@ -44,7 +44,7 @@ class ScavengerHuntEffect:
             
             def countUp(t,startVal, endVal):
                 beanCountStr = startVal + t*(endVal-startVal)
-                self.countLabel['text'] = '+'+`int(beanCountStr)`
+                self.countLabel['text'] = '+'+repr(int(beanCountStr))
                 
             def setCountColor(color):
                 self.countLabel['text_fg'] = color

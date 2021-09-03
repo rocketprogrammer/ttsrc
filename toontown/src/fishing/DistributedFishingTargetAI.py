@@ -2,7 +2,7 @@ from direct.distributed import DistributedNodeAI
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
-import FishingTargetGlobals
+from . import FishingTargetGlobals
 import random
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals

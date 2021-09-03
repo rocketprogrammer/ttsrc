@@ -3,8 +3,8 @@ AnimProp object
 """
 
 import glob, os
-from ToonTownObj import *
-from LevelEditorGlobals import importModule
+from .ToonTownObj import *
+from .LevelEditorGlobals import importModule
 
 class AnimPropObj(ToonTownObj):
     def __init__(self, editor, animPropType, dna=None, nodePath=None):
@@ -22,7 +22,7 @@ class AnimPropObj(ToonTownObj):
     def createAnimatedProp(self):
         objDef = self.editor.objectPalette.findItem(self.animPropType)
         if objDef is None or\
-           not objDef.properties.has_key('anims'):
+           'anims' not in objDef.properties:
             return
         animNameList = objDef.properties['anims'][4]
         

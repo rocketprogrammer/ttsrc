@@ -692,7 +692,7 @@ class DistributedPartyTeamActivityAI(DistributedPartyActivityAI):
         
         self.cleanupRequestLater()
         
-        for toonId, reward in self.toonIdsToJellybeanRewards.items():
+        for toonId, reward in list(self.toonIdsToJellybeanRewards.items()):
             if reward > 0:
                 self.sendUpdateToAvatarId(
                     toonId,

@@ -204,7 +204,7 @@ class DistributedMint(DistributedObject.DistributedObject):
     def warpToRoom(self, roomId):
         # returns False if invalid roomId
         # find a room with the right id
-        for i in xrange(len(self.rooms)):
+        for i in range(len(self.rooms)):
             room = self.rooms[i]
             if room.roomId == roomId:
                 break

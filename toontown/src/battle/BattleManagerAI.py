@@ -1,4 +1,4 @@
-import DistributedBattleAI
+from . import DistributedBattleAI
 from direct.directnotify import DirectNotifyGlobal
 
 class BattleManagerAI:
@@ -23,10 +23,10 @@ class BattleManagerAI:
     def cellHasBattle(self, cellId):
         """ cellHasBattle(cellId)
         """
-        return (self.cellId2battle.has_key(cellId))
+        return (cellId in self.cellId2battle)
 
     def getBattle(self, cellId):
-        if self.cellId2battle.has_key(cellId):
+        if cellId in self.cellId2battle:
             return self.cellId2battle[cellId]
         return None
 
@@ -34,7 +34,7 @@ class BattleManagerAI:
                   finishCallback=None, maxSuits=4, interactivePropTrackBonus = -1):
         """ newBattle(zoneId, pos, suit, toonId, finishCallback, maxSuits)
         """
-        if self.cellId2battle.has_key(cellId):
+        if cellId in self.cellId2battle:
             # if a battle already exists here, don't create a new one,
             # but instead make the suit join the battle or fly away.
 
@@ -63,7 +63,7 @@ class BattleManagerAI:
     def requestBattleAddSuit(self, cellId, suit):
         """ requestBattleAddSuit(zoneId, suit)
         """
-        assert(self.cellId2battle.has_key(cellId))
+        assert(cellId in self.cellId2battle)
         return (self.cellId2battle[cellId].suitRequestJoin(suit))
 
     def destroy(self, battle):
@@ -71,6 +71,6 @@ class BattleManagerAI:
         """
         cellId = battle.battleCellId
         self.notify.debug('BattleManager - destroying battle %d' % cellId)
-        assert(self.cellId2battle.has_key(cellId))
+        assert(cellId in self.cellId2battle)
         del self.cellId2battle[cellId]
         battle.requestDelete()

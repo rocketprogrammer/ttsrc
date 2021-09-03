@@ -249,11 +249,11 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
         # TODO detect if someone is dead center
         averagePos = [Point3(0,0,0), Point3(0,0,0), Point3(0,0,0), Point3(0,0,0)]
         divisor = 0
-        for avId in self.avatarEndingPositions.keys():
+        for avId in list(self.avatarEndingPositions.keys()):
             divisor += 1
             oneClientEndingPositions = self.avatarEndingPositions[avId]
             avIndex = self.avIdList.index(avId)
-            for index in xrange(len(oneClientEndingPositions)):
+            for index in range(len(oneClientEndingPositions)):
                 pos = oneClientEndingPositions[index]
                 averagePos[index] += Point3(pos[0], pos[1], pos[2])
                 self.notify.debug('index = %d averagePos = %s' % (index,averagePos))
@@ -316,7 +316,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
         
         self.scoresAsList = []
         totalPointsAdded = 0
-        for index in xrange(len(self.avIdList)):
+        for index in range(len(self.avIdList)):
             # since the center is at 0,0,0 just query the length
             pos = Point3(*self.finalEndingPositions[index])
             pos.setZ(0)
@@ -328,7 +328,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
             self.notify.debug('length = %s points=%s avId=%d' % (length, points, avId))
             avId = self.avIdList[index]
             bonusIndex = 0
-            for sortIndex in xrange(len(sortedByDistance)):
+            for sortIndex in range(len(sortedByDistance)):
                 if sortedByDistance[sortIndex][0] == avId:
                     bonusIndex = sortIndex
             bonusIndex += 4 - len(self.avIdList)
@@ -400,7 +400,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
     def waitClientsChoicesTimeout(self, task):
         self.notify.debug("waitClientsChoicesTimeout: did not hear from all clients")
         # Anybody who did not choose gets a 0 for their input
-        for avId in self.avatarChoices.keys():
+        for avId in list(self.avatarChoices.keys()):
             if self.avatarChoices[avId] == (-1,0):
                 self.avatarChoices[avId] = (0,0)
 
@@ -447,7 +447,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
         """
         Returns true if all avatars playing have chosen their votes
         """
-        for avId in self.avatarChoices.keys():
+        for avId in list(self.avatarChoices.keys()):
             choice = self.avatarChoices[avId]
             if (choice[0] == -1) and not (self.stateDict[avId] == DistributedMinigameAI.EXITED):
                 return False
@@ -497,7 +497,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
         # we're getting strange AI crashes where a toon claims
         # a treasure, and the toon is not listed in the scoreDict
         avId = self.air.getAvatarIdFromSender()
-        if not self.scoreDict.has_key(avId):
+        if avId not in self.scoreDict:
             self.notify.warning(
                 'PROBLEM: avatar %s called claimTreasure(%s) '
                 'but he is not in the scoreDict: %s. avIdList is: %s' %
@@ -528,7 +528,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
         # we're getting strange AI crashes where a toon claims
         # a penalty, and the toon is not listed in the scoreDict
         avId = self.air.getAvatarIdFromSender()
-        if not self.scoreDict.has_key(avId):
+        if avId not in self.scoreDict:
             self.notify.warning(
                 'PROBLEM: avatar %s called claimPenalty(%s) '
                 'but he is not in the scoreDict: %s. avIdList is: %s' %
@@ -554,7 +554,7 @@ class DistributedIceGameAI(DistributedMinigameAI.DistributedMinigameAI):
     def checkScores(self):
         """Force everyone to have at least a score of at least 1."""
         self.scoresAsList = []
-        for index in xrange(len(self.avIdList)):
+        for index in range(len(self.avIdList)):
             # since the center is at 0,0,0 just query the length
             avId = self.avIdList[index]
             if self.scoreDict[avId]  < 0:

@@ -53,14 +53,14 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
         return self.hp
 
     #----------------------------------
-    
+
     def b_setLocationName(self, locationName):
         self.d_setLocationName(locationName)
         self.setLocationName(locationName)
 
     def d_setLocationName(self, locationName):
         pass
-    
+
     def setLocationName(self, locationName):
         self.locationName = locationName
 
@@ -68,7 +68,7 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
         return self.locationName
 
     #----------------------------------
-    
+
     def b_setActivity(self, activity):
         self.d_setActivity(activity)
         self.setActivity(activity)
@@ -83,7 +83,7 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
         return self.activity
 
     #----------------------------------
-    
+
     def toonUp(self, num):
         # The default toonup is HP recharge.  If other games want
         # a more involved toonup, they can redefine this function
@@ -94,10 +94,13 @@ class DistributedAvatarAI(DistributedNodeAI.DistributedNodeAI):
 
     def getRadius(self):
         return OTPGlobals.AvatarDefaultRadius
-        
+
     def checkAvOnShard(self, avId):
         senderId = self.air.getAvatarIdFromSender()
         onShard = False
         if simbase.air.doId2do.get(avId):
             onShard = True
         self.sendUpdateToAvatarId(senderId,"confirmAvOnShard",[avId, onShard])
+
+    def d_friendsNotify(self, avId, status):
+        self.sendUpdate("friendsNotify", [avId, status])

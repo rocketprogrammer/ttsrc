@@ -5,6 +5,7 @@ from direct.distributed.ClockDelta import *
 from otp.avatar import DistributedAvatarAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
+import functools
 
 class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
     """
@@ -123,7 +124,7 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
             else:
                 return 1
 
-        self.nearbyAvatars.sort(nAv_compare)
+        self.nearbyAvatars.sort(key=functools.cmp_to_key(nAv_compare))
 
     def getNearbyAvatars(self):
         return self.nearbyAvatars
@@ -223,13 +224,13 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
 
     def walkSpeed(self):
         return 0.1
-        
+
     def handleHolidays(self):
-        self.CCChatter = 0        
+        self.CCChatter = 0
         if hasattr(simbase.air, "holidayManager"):
-            if ToontownGlobals.CRASHED_LEADERBOARD in simbase.air.holidayManager.currentHolidays:            
-                self.CCChatter = ToontownGlobals.CRASHED_LEADERBOARD 
-            elif ToontownGlobals.CIRCUIT_RACING_EVENT in simbase.air.holidayManager.currentHolidays:            
+            if ToontownGlobals.CRASHED_LEADERBOARD in simbase.air.holidayManager.currentHolidays:
+                self.CCChatter = ToontownGlobals.CRASHED_LEADERBOARD
+            elif ToontownGlobals.CIRCUIT_RACING_EVENT in simbase.air.holidayManager.currentHolidays:
                 self.CCChatter = ToontownGlobals.CIRCUIT_RACING_EVENT
             elif ToontownGlobals.WINTER_CAROLING in simbase.air.holidayManager.currentHolidays:
                 self.CCChatter = ToontownGlobals.WINTER_CAROLING
@@ -259,7 +260,7 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
     def getCCChatter(self):
         self.handleHolidays()
         return self.CCChatter
-        
+
     #################################################################
     # This function is used to call it's counterpart on the client
     # end to fade the character away

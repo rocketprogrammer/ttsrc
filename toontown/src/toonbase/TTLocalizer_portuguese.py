@@ -683,7 +683,7 @@ QuestsItemDict = {
     3025 : ["Agulha de Tricô", "Agulhas de Tricô", "uma "],
     3026 : ["Álibi", "Álibis", "um "],
     3027 : ["Termômetro Externo", "Termômetros Externos", "um "],
-    
+
     #Dreamland Quests
     6001 : ["Plano do "+lCashbotHQ, "Planos do "+lCashbotHQ, "algum "],
     6002 : ["Vara de pescar", "Varas de pescar", "uma "],
@@ -2426,7 +2426,7 @@ groupInviteMessage = "%s quer que você entre em seu grupo"
 
 # Report Panel
 ReportPanelTitle = "Denunciar um Jogador"
-ReportPanelBody = "Este recurso enviará uma denúncia completa a um Moderador. Em vez de denunciar, você pode optar pelo seguinte:\n\n  - Teleportar-se para outra região\n  - Usar \"Ignorar\" no painel do Toon\n\nQuer mesmo denunciar %s para um Moderador?" 
+ReportPanelBody = "Este recurso enviará uma denúncia completa a um Moderador. Em vez de denunciar, você pode optar pelo seguinte:\n\n  - Teleportar-se para outra região\n  - Usar \"Ignorar\" no painel do Toon\n\nQuer mesmo denunciar %s para um Moderador?"
 ReportPanelBodyFriends = "Este recurso enviará uma denúncia completa a um Moderador. Em vez de denunciar, você pode optar pelo seguinte:\n\n  - Teleportar-se para outra região\n  - Romper sua amizade\n\nQuer mesmo denunciar %s para um Moderador?\n\n(Isso também vai romper sua amizade)"
 ReportPanelCategoryBody = "Você está prestes a denunciar %s. Um Moderador será alertado sobre sua reclamação e tomará medidas apropriadas contra quem estiver quebrando as regras. Escolha o motivo pelo qual está denunciando %s:"
 ReportPanelBodyPlayer = "Este recurso ainda está sendo desenvolvido e será disponibilizado em breve. Enquanto isso, você pode fazer o seguinte:\n\n  - Vá até o DXD e termine a amizade por lá.\n – Conte aos pais ou responsáveis o que está acontecendo."
@@ -2503,7 +2503,7 @@ PetMoodAdjectives = {
 SpokenMoods = {
     'neutral': 'neutro',
     'hunger': 'Eu\estou cansado de Balinhas! Que tal me dar uma fatia de torta?',
-    'boredom': 'Você não\ achou que eu entenderia, hein?', 
+    'boredom': 'Você não\ achou que eu entenderia, hein?',
     'excitement': 'Toontástico!',
     'sadness': 'Eu quero ser rabisco de qualidade',
     'restlessness': 'Eu\estou tãooo inquieto',
@@ -3862,7 +3862,7 @@ KartMinLaff = "Você precisa de %s pontos de risada para poder andar neste carte
 # DistributedElevatorExt.py
 CogsIncExt = ", Ltda."
 CogsIncModifier = "%s" + CogsIncExt
-CogsInc = string.upper(Cogs) + CogsIncExt
+CogsInc = Cogs.upper() + CogsIncExt
 
 # DistributedKnockKnockDoor.py
 DoorKnockKnock = "Toc, toc."
@@ -3898,11 +3898,11 @@ KnockKnockContestJokes = {
             41:["Dewey",
             "Dewemos ir detonar mais alguns Cogs?"],
             40:["Minnie",
-            "Minnie-pessoas falaram comigo, e isso está me enlouquecendo!"], 
+            "Minnie-pessoas falaram comigo, e isso está me enlouquecendo!"],
 ##            25:["Biscuit25 (Biscoito25)",
 ##            "Biscuitos (Biscoitos) me mordam, os Cogs vêm aí!"],
             27:["Disguise",
-            "A Disguisetante perseguição aos Cogs!"]}, 
+            "A Disguisetante perseguição aos Cogs!"]},
 
     2300: ["Justa",
            "Justa gora peguei uns dois pedaços de Cogs, pronto!"],
@@ -4380,7 +4380,7 @@ VampireMickeyChatter = (
         "Gostou da minha capa?",
         "Assustei você?  Foi a melhor brincadeira da minha vida!",
         "Espero que esteja curtindo nossa festa de Halloween!",
-        "Assombroso, está escuro como a noite!", 
+        "Assombroso, está escuro como a noite!",
         ],
         [ # Goodbyes
         "Vou olhar as decorações curiosas de Halloween.",
@@ -4664,7 +4664,7 @@ AFDonaldChatter = (
         "De onde surgiram repentinamente todos esses carros barulhentos?",
         "Vou para Melodilândia ver a %s!" % Minnie,
         ]
-    )    
+    )
 
 CLGoofySpeedwayChatter = (
         [ # Greetings
@@ -4673,9 +4673,9 @@ CLGoofySpeedwayChatter = (
         "Ohoh, que bom ver você %!",
         "Olá!  Perdoe minhas roupas sujas, estava consertando aquele Quadro de Pontuação quebrado.",
         ],
-        [ # Comments        
+        [ # Comments
         "É bom que o Quadro de Pontuação esteja funcionando logo, pois o Fim de Semana do Grande Prêmio está chegando!",
-        "Alguém quer comprar um kart meio usado? Ele já apareceu no Quadro de Pontuação!", 
+        "Alguém quer comprar um kart meio usado? Ele já apareceu no Quadro de Pontuação!",
         "O Fim de Semana do Grande do Prêmio está chegando, é melhor começar a treinar.",
         "O Fim de Semana do Grande Prêmio será de sexta-feira, 22, a segunda-feira, 25 de maio!",
         "Preciso de uma escada para descer aquele kart.",
@@ -4699,16 +4699,16 @@ CLGoofySpeedwayChatter = (
         "É hora de dar uma cochilada. Vou para a Sonholândia sonhar com a vitória no Grande Prêmio.",
         ]
     )
-        
+
 
 GPGoofySpeedwayChatter = (
         [ # Greetings
         "Bem-vindo ao "+lGoofySpeedway+".",
-        "Bem-vindo ao Fim de Semana do Grande Prêmio!", 
+        "Bem-vindo ao Fim de Semana do Grande Prêmio!",
         "Oi, meu nome é "+Goofy+". Qual é o seu?",
         "Ohoh, que bom ver você %!",
         ],
-        [ # Comments                
+        [ # Comments
         "Você está na expectativa do Fim de Semana do Grande Prêmio?",
         "A boa notícia é que o Quadro de Pontuação está pronto.",
         "Conseguimos consertar o Quadro de Pontuação bem na hora do Fim de Semana do Grande Prêmio!",
@@ -4729,7 +4729,7 @@ GPGoofySpeedwayChatter = (
         "Boa sorte no Grande Prêmio!",
         "Vou participar da próxima corrida do Grande Prêmio!",
         "Ohoh, acho que a próxima corrida já vai começar!",
-        "Puxa, é melhor verificar o novo Quadro de Pontuação e garantir que esteja funcionando bem!", 
+        "Puxa, é melhor verificar o novo Quadro de Pontuação e garantir que esteja funcionando bem!",
         ]
     )
 
@@ -4961,8 +4961,8 @@ EventsPageNewsTabTitle = "Notícias"
 EventsPageNewsDownloading= "Recuperando Notícias..."
 EventsPageNewsUnavailable = "Tico e Teco brincando com a impressora da gráfica. Notícias não disponíveis."
 EventsPageNewsPaperTitle = "TOONTOWN TIMES (GAZETA DE TOONTOWN)"
-EventsPageNewsLeftSubtitle = "Ainda só por 1 balinha" 
-EventsPageNewsRightSubtitle = "Tiragem de nove mil toonplares" 
+EventsPageNewsLeftSubtitle = "Ainda só por 1 balinha"
+EventsPageNewsRightSubtitle = "Tiragem de nove mil toonplares"
 
 # InvitationSelection.py
 SelectedInvitationInformation = "%s tem uma festa em %s às %s, Hora de Toontown."
@@ -5044,7 +5044,7 @@ PartyJukeboxNowPlaying = "A música que você escolheu já está tocando na juke
 # Jukebox Music
 MusicEncntrGeneralBg = "Encontro Com Cogs"
 MusicTcSzActivity = "Mistureba de Toontorial"
-MusicTcSz = "Passeando Juntos" 
+MusicTcSz = "Passeando Juntos"
 MusicCreateAToon = "Novo Toon na Cidade"
 MusicTtTheme = "O Tema de Toontown"
 MusicMinigameRace = "Devagar e Firme"
@@ -5103,7 +5103,7 @@ MusicBossbotCeoV1 = "Rodeado de Chefes"
 MusicPartyOriginalTheme = "Hora da Festa"
 MusicPartyPolkaDance = "Polca de Festa"
 MusicPartySwingDance = "Balanço de Festa"
-MusicPartyWaltzDance = "Valsa de Festa" 
+MusicPartyWaltzDance = "Valsa de Festa"
 MusicPartyGenericThemeJazzy = "Jazz de Festa"
 MusicPartyGenericTheme = "Jingle de Festa"
 
@@ -5147,7 +5147,7 @@ PartyActivityNameDict = {
         "description" : "Pegue balinhas e salte o mais alto possível!"
     },
     3 : {
-        "generic" : "Pescaria de Festa", 
+        "generic" : "Pescaria de Festa",
         "invite" : "Pescaria de Festa",
         "editor" : "Pescaria de Festa",
         "description" : "Pegue as frutas para ganhar feijões! Desvie-se das bigornas!"
@@ -5187,7 +5187,7 @@ PartyActivityNameDict = {
         "invite" : "uma Pista de Dança de 20 passos",
         "editor" : "Pista de Dança de 20",
         "description" : "Mostre seus 20 passos de dança ao estilo toon!"
-    },    
+    },
 }
 
 # Note : This dictionary is used to show the names of the decorations in various
@@ -5219,7 +5219,7 @@ PartyDecorationNameDict = {
         "description" : "Presentes para todos os Toons!",
     },
     6 : {
-        "editor" : "Língua de Sogra", 
+        "editor" : "Língua de Sogra",
         "description" : "Esse apito é muito estridente! Serpenteante!",
     },
     7 : {
@@ -5766,7 +5766,7 @@ TownBattleRun = "Voltar correndo para o pátio?"
 
 # TownBattleChooseAvatarPanel.py
 TownBattleChooseAvatarToonTitle = "QUAL TOON?"
-TownBattleChooseAvatarCogTitle = "QUAL " + string.upper(Cog) + "?"
+TownBattleChooseAvatarCogTitle = "QUAL " + Cog.upper() + "?"
 TownBattleChooseAvatarBack = "VOLTAR"
 
 #firecogpanel
@@ -6525,25 +6525,25 @@ NametagTypeName = "Crachá"
 # Make sure numbers match up to CatalogItemTypes.py
 CatalogItemTypeNames = {
     0 : "INVALID_ITEM",
-    1 : FurnitureTypeName, 
-    2 : ChatTypeName, 
-    3 : ClothingTypeName, 
-    4 : EmoteTypeName, 
+    1 : FurnitureTypeName,
+    2 : ChatTypeName,
+    3 : ClothingTypeName,
+    4 : EmoteTypeName,
     5 : "WALLPAPER_ITEM",
     6 : "WindowViewTypeName",
     7 : "FLOORING_ITEM",
     8 : "MOULDING_ITEM",
     9 : "WAINSCOTING_ITEM",
-    10: PoleTypeName, 
-    11: PetTrickTypeName, 
-    12: BeanTypeName, 
-    13: GardenTypeName, 
-    14: RentalTypeName, 
-    15: GardenStarterTypeName, 
-    16: NametagTypeName, 
+    10: PoleTypeName,
+    11: PetTrickTypeName,
+    12: BeanTypeName,
+    13: GardenTypeName,
+    14: RentalTypeName,
+    15: GardenStarterTypeName,
+    16: NametagTypeName,
     17: "TOON_STATUE_ITEM",
-    18: "ANIMATED_FURNITURE_ITEM",    
-}   
+    18: "ANIMATED_FURNITURE_ITEM",
+}
 
 
 # Make sure this is in sync with ToonDNA.ShirtStyles
@@ -6579,7 +6579,7 @@ ShirtStylesDescriptions = {
     'gss7' : "bordado de flor (especial)",
     'gss8' : "colarinho feminino com 2 bolsos ",
     'gss9' : "colete de brim (especial)",
-    'gss10' : "camponesa", 
+    'gss10' : "camponesa",
     'gss11' : "camponesa com meia listra",
     'gss12' : "camiseta de futebol (especial)",
     'gss13' : "com corações",
@@ -6587,7 +6587,7 @@ ShirtStylesDescriptions = {
     'gss15' : "com flores",
 
     # -------------------------------------------------------------------------
-    # Special Catalog-only shirts. 
+    # Special Catalog-only shirts.
     # -------------------------------------------------------------------------
     # yellow hooded - Series 1
     'c_ss1' : "amarela com capuz - Série 1",
@@ -6610,7 +6610,7 @@ ShirtStylesDescriptions = {
     'c_ss9' : "camisa de vaqueiro 4 : Série 4",
     'c_ss10' : "camisa de vaqueiro 5 : Série 4",
     'c_ss11' : "camisa de vaqueiro 6 : Série 4",
-    
+
     # Special Holiday-themed shirts.
     'hw_ss1' : "Fantasma de Halloween",
     'hw_ss2' : "Abóbora de Halloween",
@@ -6637,13 +6637,13 @@ ShirtStylesDescriptions = {
     'tc_ss7' : "Concurso de Camiseta, Camisa de Corrida",
     'j4_ss1' : "Bandeira de 4 de julho",
     'j4_ss2' : "Fogos de Artifício de 4 de julho",
-    'c_ss12' : "Catálogo série 7, Verde com botões de amarelos", 
-    'c_ss13' : "Catálogo série 7, Roxo com flor grande", 
+    'c_ss12' : "Catálogo série 7, Verde com botões de amarelos",
+    'c_ss13' : "Catálogo série 7, Roxo com flor grande",
 
-    'pj_ss1' : "Camisa de Pijama de banana azul", 
+    'pj_ss1' : "Camisa de Pijama de banana azul",
     'pj_ss2' : "Camisa de Pijama de chifre vermelho",
     'pj_ss3' : "Camisa de Pijama de óculos roxos",
-    
+
     # Special award clothes
     'sa_ss1' : "Camisa Listrada",
     'sa_ss2' : "Camisa de Pesca 1",
@@ -6728,7 +6728,7 @@ BottomStylesDescriptions = {
     'wh_bs2' : 'Shorts de Feriado de Inverno Estilo 2',
     'wh_bs3' : 'Shorts de Feriado de Inverno Estilo 3',
     'wh_bs4' : 'Shorts de Feriado de Inverno Estilo 4',
-    
+
     # -------------------------------------------------------------------------
     # Girl styles (shorts and skirts)
     # -------------------------------------------------------------------------
@@ -6741,7 +6741,7 @@ BottomStylesDescriptions = {
     'gsk5' : 'estampa de flor',
     'gsk6' : '2 bolsos (especial)',
     'gsk7' : 'saia de brim',
-    
+
     # shorts
     # -------------------------------------------------------------------------
     'gsh1' : 'básico com bolsos',
@@ -6773,7 +6773,7 @@ BottomStylesDescriptions = {
     'wh_gsk2' : 'Saia de Feriado de Inverno Estilo 2',
     'wh_gsk3' : 'Saia de Feriado de Inverno Estilo 3',
     'wh_gsk4' : 'Saia de Feriado de Inverno Estilo 4',
-    
+
     'sa_bs1' : "Shorts de Pesca",
     'sa_bs2' : "Shorts de Jardinagem",
     'sa_bs3' : "Shorts de Festa",
@@ -6881,9 +6881,9 @@ FurnitureNames = {
   430 : "Lareira",
   440 : "Lareira-maçã",
   450 : "Lareira Irlandesa",
-  460 : "Lareira Irlandesa Acesa", 
+  460 : "Lareira Irlandesa Acesa",
   470 : "Lareira Acesa",
-  480 : "Lareira Circular Acesa", 
+  480 : "Lareira Circular Acesa",
   490 : "Lareira Acesa",
   491 : "Lareira Acesa",
   492 : "Lareira em Forma de Maçã Acesa",
@@ -6921,7 +6921,7 @@ FurnitureNames = {
   960 : "Mesinha-barril",
   970 : "Planta cáctus",
   980 : "Tenda",
-  990 : "O Fan (Leque) de Julieta", 
+  990 : "O Fan (Leque) de Julieta",
   1000 : "Tapete grande",
   1010 : "Tapete redondo",
   1015 : "Tapete redondo",
@@ -7347,7 +7347,7 @@ CatalogPurchaseGiftItemAvailable = "Ótimo!  %s pode começar a usar o seu prese
 CatalogPurchaseItemOnOrder = "Parabéns! O produto será entregue em sua caixa de correio em breve."
 CatalogPurchaseGiftItemOnOrder = "Ótimo! O seu presente para %s será entregue na caixa de correio dele."
 CatalogAnythingElse = "Deseja mais alguma coisa hoje?"
-CatalogPurchaseClosetFull = "O seu armário está cheio. Apesar disso, você pode comprar este item, mas se comprar, terá que excluir alguma coisa do seu armário para liberar espaço para o novo item, quando ele chegar.\n\nQuer comprar este item mesmo assim?" 
+CatalogPurchaseClosetFull = "O seu armário está cheio. Apesar disso, você pode comprar este item, mas se comprar, terá que excluir alguma coisa do seu armário para liberar espaço para o novo item, quando ele chegar.\n\nQuer comprar este item mesmo assim?"
 CatalogAcceptClosetFull = "O seu armário está cheio. Entre em casa e exclua alguma coisa do seu armário para liberar espaço para o item antes de retirá-lo da caixa de correio."
 CatalogAcceptShirt = "Você está vestindo agora a sua nova camisa. O que você estava vestindo antes foi transferido para o seu armário."
 CatalogAcceptShorts = "Você está vestindo agora o seu novo short. O que você estava vestindo antes foi transferido para o seu armário."
@@ -7489,8 +7489,8 @@ NPCToonNames = {
     2014 : "Vendedora Elétrica",
     2015 : "Vendedor Molenga",
     # NPCPartyPerson
-    2016 : "Planejador de Festa Abóbora", 
-    2017 : "Planejadora de Festa Polly", 
+    2016 : "Planejador de Festa Abóbora",
+    2017 : "Planejadora de Festa Polly",
 
     2018: 'Doutor Surlee',
     2019: 'Doutor Dimm',
@@ -7605,8 +7605,8 @@ NPCToonNames = {
     1010 : "Vendedora Ron-ron",
     1011 : "Vendedora Blup",
     # NPCPartyPerson
-    1012 : "Planejador de Festa Pickles", 
-    1013 : "Planejador de Festa Patty", 
+    1012 : "Planejador de Festa Pickles",
+    1013 : "Planejador de Festa Patty",
 
     # Barnacle Blvd.
     1101 : "Levi Legal",
@@ -7718,8 +7718,8 @@ NPCToonNames = {
     3011 : "Vendedora Glub",
     3012 : "Vendedor Kiko",
     # NPCPartyPerson
-    3013 : "Planejador de Festa Pedro", 
-    3014 : "Planejador de Festa Penny", 
+    3013 : "Planejador de Festa Pedro",
+    3014 : "Planejador de Festa Penny",
 
     # Walrus Way
     3101 : "Seu Leão",
@@ -7849,8 +7849,8 @@ NPCToonNames = {
     4011 : "Vendedor Nilton",
     4012 : "Vendedora Flor do Nordeste",
     # NPCPartyPerson
-    4013 : "Planejador de Festa Preston", 
-    4014 : "Planejadora de Festa Penélope", 
+    4013 : "Planejador de Festa Preston",
+    4014 : "Planejadora de Festa Penélope",
 
     # Alto Ave.
     4101 : "Tom",
@@ -7987,8 +7987,8 @@ NPCToonNames = {
     5010 : "Vendedor Tony Grana",
     5011 : "Vendedor Duda Madeira",
     # NPCPartyPerson
-    5012 : "Planejador de Festa Pierce", 
-    5013 : "Planejadora de Festa Peggy", 
+    5012 : "Planejador de Festa Pierce",
+    5013 : "Planejadora de Festa Peggy",
 
     # Elm Street
     5101 : "Sérgio",
@@ -8109,8 +8109,8 @@ NPCToonNames = {
     9013 : "Vendedora Gata na Lata",
     9014 : "Vendedor Cara Mujo",
     # NPCPartyPerson
-    9015 : "Planejador de Festa Pebbles (Pedregulho)", 
-    9016 : "Planejadora de Festa Pérola", 
+    9015 : "Planejador de Festa Pebbles (Pedregulho)",
+    9016 : "Planejadora de Festa Pérola",
 
     # Lullaby Lane
     9101 : "Marcelo",
@@ -9901,7 +9901,7 @@ StatuaryToonWave = "Estátua da Onda Toon"
 StatuaryToonVictory = "Estátua da Vitória Toon"
 StatuaryToonCrossedArms = 'Estátua da Autoridade Toon'
 StatuaryToonThinking = 'Estátua do Abraço Toon'
-StatuaryMeltingSnowman =' Boneco de neve Derretendo' 
+StatuaryMeltingSnowman =' Boneco de neve Derretendo'
 StatuaryGardenAccelerator = "Fertilizante Instantâneo"
 #see GardenGlobals.py for corresponding FlowerColors
 FlowerColorStrings = ['Vermelha','Laranja','Violeta','Azul','Rosa','Amarela','Branca','Verde']
@@ -10073,7 +10073,7 @@ def getRecipeBeanText(beanTuple):
                 retval += ", %s" % BeanColorWords[beanTuple[index]]
 
     return retval
-    
+
 GardenTextMagicBeans = "Balas Mágicas"
 GardenTextMagicBeansB = "Outras Balas"
 GardenSpecialDiscription = "Este texto deveria explicar como usar certo especial do jardim"
@@ -10564,7 +10564,7 @@ ChinesePage2 = "Os jogadores se alternam movendo qualquer pedra de sua própria 
 
 CheckersPage1 = "O objetivo das Damas é deixar o oponente sem poder fazer jogadas. Para isso, você pode capturar todas as suas peças, ou bloqueá-las para que não ele não possa movê-las."
 CheckersPage2 = "Os jogadores se alternam movendo qualquer pedra de sua própria cor. Uma peça pode se mover para um quadrado diagonal à frente. Uma peça só pode se mover para um quadrado que não esteja ocupado por outra peça. As damas seguem as mesmas regras, mas podem se mover para trás."
-CheckersPage3 = "Para capturar uma peça do oponente, você deve saltar sobre ela diagonalmente para o quadrado vazio depois dela. Se você puder fazer alguma captura em sua vez, terá de fazê-la. Você pode combinar capturas, desde que seja com a mesma peça." 
+CheckersPage3 = "Para capturar uma peça do oponente, você deve saltar sobre ela diagonalmente para o quadrado vazio depois dela. Se você puder fazer alguma captura em sua vez, terá de fazê-la. Você pode combinar capturas, desde que seja com a mesma peça."
 CheckersPage4 = "Uma peça se torna dama quando chegar à última linha do tabuleiro. Uma peça que acaba de se tornar dama não pode saltar de novo até o próximo turno. Além disso, damas podem se mover para todas as direções e podem mudar de direção ao saltar."
 
 

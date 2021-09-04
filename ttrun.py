@@ -9,7 +9,7 @@ codes["otp"] = [1, None]
 codes["toontown"] = [1, None]
 
 def generate(path, module):
-    print((path, module))
+    print(path, module)
 
     for file in os.listdir(path):
         if os.path.isdir(os.path.join(path, file)):
@@ -21,13 +21,11 @@ def generate(path, module):
             else:
                 codes[".".join(module + [file[:-3]])] = [0, os.path.join(path, file)]
 
-
 class Importer:
     @classmethod
     def find_module(cls, fullname, path=None):
         if fullname in codes:
             return cls
-
 
     @classmethod
     def load_module(cls, fullname):
@@ -51,8 +49,8 @@ class Importer:
             module.__package__ = ".".join(fullname.split(".")[:-1])
 
         if code[1]:
-            with open(code[1], "r") as file:
-                exec(compile(file.read() + "\n", codes[fullname][1], "exec"), module.__dict__)
+            with open(code[1], "rb") as file:
+                exec(compile(file.read() + b"\n", codes[fullname][1], "exec"), module.__dict__)
 
         return module
 
@@ -81,6 +79,8 @@ if __name__ == "__main__":
 
     loadPrcFileData("", "msg-director-ip 127.0.0.1")
     loadPrcFileData("", "event-server-ip 127.0.0.1")
+
+    loadPrcFileData("", "language portuguese")
 
     try:
         if "-ai" in sys.argv:

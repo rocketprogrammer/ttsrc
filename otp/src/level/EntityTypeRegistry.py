@@ -3,11 +3,12 @@
 from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 import types
-import AttribDesc
-import EntityTypeDesc
+from . import AttribDesc
+from . import EntityTypeDesc
 from direct.showbase.PythonUtil import mostDerivedLast
 import os
 import string
+import importlib
 
 class EntityTypeRegistry:
     notify = DirectNotifyGlobal.directNotify.newCategory('EntityTypeRegistry')
@@ -18,9 +19,9 @@ class EntityTypeRegistry:
 
         # compute the hash of the source modules as of the time of creation
         hv = HashVal()
-        import EntityTypes
-        reload(EntityTypes)
-        reload(self.entTypeModule)
+        from . import EntityTypes
+        importlib.reload(EntityTypes)
+        importlib.reload(self.entTypeModule)
 
         # Convert a pyc or pyo to a py
         # If the client runs genPyCode -n then ihooks will not be installed
@@ -53,8 +54,8 @@ class EntityTypeRegistry:
 
         # get a list of the EntityTypeDesc classes in the type module
         classes = []
-        for key, value in entityTypeModule.__dict__.items():
-            if type(value) is types.ClassType:
+        for key, value in list(entityTypeModule.__dict__.items()):
+            if type(value) is type:
                 if issubclass(value, EntityTypeDesc.EntityTypeDesc):
                     classes.append(value)
 
@@ -64,8 +65,8 @@ class EntityTypeRegistry:
         # make sure that derived classes come after bases
         mostDerivedLast(classes)
         for c in classes:
-            if c.__dict__.has_key('type'):
-                if self.entTypeName2typeDesc.has_key(c.type):
+            if 'type' in c.__dict__:
+                if c.type in self.entTypeName2typeDesc:
                     # a more-derived class is replacing a less-derived class
                     # to implement a particular entity type
                     EntityTypeRegistry.notify.debug(
@@ -77,7 +78,7 @@ class EntityTypeRegistry:
         # create mapping of entity output types to list of concrete entity
         # typenames with that output type
         self.output2typeNames = {}
-        for typename, typeDesc in self.entTypeName2typeDesc.items():
+        for typename, typeDesc in list(self.entTypeName2typeDesc.items()):
             if typeDesc.isConcrete():
                 if hasattr(typeDesc, 'output'):
                     outputType = typeDesc.output
@@ -87,7 +88,7 @@ class EntityTypeRegistry:
         # create list of permanent entity typenames (entity types that cannot
         # be inserted or removed in the editor)
         self.permanentTypeNames = []
-        for typename, typeDesc in self.entTypeName2typeDesc.items():
+        for typename, typeDesc in list(self.entTypeName2typeDesc.items()):
             if typeDesc.isPermanent():
                 assert typeDesc.isConcrete()
                 self.permanentTypeNames.append(typename)
@@ -96,16 +97,16 @@ class EntityTypeRegistry:
         # of entity typenames are concrete and are of that type or derive
         # from that type
         self.typeName2derivedTypeNames = {}
-        for typename, typeDesc in self.entTypeName2typeDesc.items():
+        for typename, typeDesc in list(self.entTypeName2typeDesc.items()):
             typenames = []
-            for tn, td in self.entTypeName2typeDesc.items():
+            for tn, td in list(self.entTypeName2typeDesc.items()):
                 if td.isConcrete():
                     if issubclass(td.__class__, typeDesc.__class__):
                         typenames.append(tn)
             self.typeName2derivedTypeNames[typename] = typenames
 
     def getAllTypeNames(self):
-        return self.entTypeName2typeDesc.keys()
+        return list(self.entTypeName2typeDesc.keys())
 
     def getTypeDesc(self, entTypeName):
         """returns EntityTypeDesc instance for concrete Entity type"""

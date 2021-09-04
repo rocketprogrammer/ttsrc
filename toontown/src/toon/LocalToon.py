@@ -57,9 +57,9 @@ from toontown.battle import Fanfare
 from toontown.parties import PartyGlobals
 
 from toontown.toon import ElevatorNotifier
-import DistributedToon
-import Toon
-import LaffMeter
+from . import DistributedToon
+from . import Toon
+from . import LaffMeter
 
 # Checks whether we want to display the news page
 # which uses Awesomium to render HTML
@@ -976,7 +976,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         self.localTossPie(power)
 
     def localPresentPie(self, time):
-        import TTEmote
+        from . import TTEmote
         from otp.avatar import Emote
 
         self.__stopPresentPie()
@@ -1022,7 +1022,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def __stopPresentPie(self):
         if self.__presentingPie:
-            import TTEmote 
+            from . import TTEmote 
             from otp.avatar import Emote
             Emote.globalEmote.releaseBody(self)        
             messenger.send('end-pie')
@@ -1086,11 +1086,11 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             tossTrack = self.tossTrack
             self.tossTrack = None
             tossTrack.finish()
-        if self.pieTracks.has_key(sequence):
+        if sequence in self.pieTracks:
             pieTrack = self.pieTracks[sequence]
             del self.pieTracks[sequence]
             pieTrack.finish()
-        if self.splatTracks.has_key(sequence):
+        if sequence in self.splatTracks:
             splatTrack = self.splatTracks[sequence]
             del self.splatTracks[sequence]
             splatTrack.finish()
@@ -1134,7 +1134,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         pie = Sequence(pie,
                        Func(base.cTrav.removeCollider, pieBubble),
                        Func(self.pieFinishedFlying, sequence))
-        assert not self.pieTracks.has_key(sequence)
+        assert sequence not in self.pieTracks
         self.pieTracks[sequence] = pie
         pie.start()
 
@@ -1145,7 +1145,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.__piePowerMeter.hide()
 
     def __finishPieTrack(self, sequence):
-        if self.pieTracks.has_key(sequence):
+        if sequence in self.pieTracks:
             pieTrack = self.pieTracks[sequence]
             del self.pieTracks[sequence]
             pieTrack.finish()
@@ -1161,7 +1161,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         sequence = int(entry.getFromNodePath().getNetTag('pieSequence'))
         self.__finishPieTrack(sequence)
 
-        if self.splatTracks.has_key(sequence):
+        if sequence in self.splatTracks:
             splatTrack = self.splatTracks[sequence]
             del self.splatTracks[sequence]
             splatTrack.finish()
@@ -1186,7 +1186,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
         splat = Sequence(splat,
                          Func(self.pieFinishedSplatting, sequence))
-        assert not self.splatTracks.has_key(sequence)
+        assert sequence not in self.splatTracks
         self.splatTracks[sequence] = splat
         splat.start()
                         
@@ -1606,7 +1606,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
                  #"\nP: %.3f" % hpr[1] + "\nR: %.3f" % hpr[2]
 
         # print to log too
-        print "Current position=",strPos.replace('\n', ', ')
+        print("Current position=",strPos.replace('\n', ', '))
 
         self.setChatAbsolute(strPos, CFThought | CFTimeout)
 
@@ -2254,7 +2254,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             state = place.fsm.getCurrentState()
             if state.getName() != self.lastPlaceState:
                 #PRINT is okay in this case because this is magic word thing
-                print("Place State Change From %s to %s" % (self.lastPlaceState, state.getName()))
+                print(("Place State Change From %s to %s" % (self.lastPlaceState, state.getName())))
                 self.lastPlaceState = state.getName()#[:]
         return Task.cont
         
@@ -2665,7 +2665,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             
     def b_setAnimState(self, animName, animMultiplier=1.0, callback = None, extraArgs=[]):
         if self.wantStatePrint:
-            print("Local Toon Anim State %s" % (animName))
+            print(("Local Toon Anim State %s" % (animName)))
         DistributedToon.DistributedToon.b_setAnimState(self, animName, animMultiplier, callback, extraArgs)
             
     def swimTimeoutAction(self):
@@ -2684,13 +2684,13 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         base.cr.gameFSM.request('closeShard', ['afkTimeout'])
         
     def sbFriendAdd(self, id, info):
-        print "sbFriendAdd"
+        print("sbFriendAdd")
         
     def sbFriendUpdate(self, id, info):
-        print "sbFriendUpdate"
+        print("sbFriendUpdate")
         
     def sbFriendRemove(self, id):
-        print "sbFriendRemove"
+        print("sbFriendRemove")
 
     def addGolfPage( self ):
         """

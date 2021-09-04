@@ -1,5 +1,5 @@
 from direct.gui.DirectGui import *
-import CatalogItemPanel
+from . import CatalogItemPanel
 NUM_ITEMS_SHOWN = 3
 
 class CatalogGui:

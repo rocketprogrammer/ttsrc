@@ -3,14 +3,14 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 from direct.directtools.DirectGeometry import CLAMP
 from otp.avatar import DistributedAvatar
-import Suit
+from . import Suit
 from toontown.toonbase import ToontownGlobals
 from toontown.battle import DistributedBattle
 from direct.fsm import ClassicFSM
 from direct.fsm import State
-import SuitTimings, SuitBase, DistributedSuitPlanner
+from . import SuitTimings, SuitBase, DistributedSuitPlanner
 from direct.directnotify import DirectNotifyGlobal
-import SuitDialog
+from . import SuitDialog
 from toontown.battle import BattleProps
 import math, copy, DistributedSuitBase
 STAND_OUTSIDE_DOOR = 2.5
@@ -154,15 +154,15 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase):
         chug = globalClock.getRealTime() - now
         messageAge = now - globalClockDelta.networkToLocalTime(timestamp, now)
         if messageAge < -(chug + 0.5) or messageAge > chug + 1.0:
-            print 'Apparently out of sync with AI by %0.2f seconds.  Suggest resync!' % messageAge
+            print('Apparently out of sync with AI by %0.2f seconds.  Suggest resync!' % messageAge)
             return
         localElapsed = now - self.pathStartTime
         timeDiff = localElapsed - (elapsed + messageAge)
         if abs(timeDiff) > 0.2:
-            print "%s (%d) appears to be %0.2f seconds out of sync along its path.  Suggest '~cogs sync'." % (self.getName(), self.getDoId(), timeDiff)
+            print("%s (%d) appears to be %0.2f seconds out of sync along its path.  Suggest '~cogs sync'." % (self.getName(), self.getDoId(), timeDiff))
             return
         if self.legList == None:
-            print "%s (%d) doesn't have a legList yet." % (self.getName(), self.getDoId())
+            print("%s (%d) doesn't have a legList yet." % (self.getName(), self.getDoId()))
             return
         netPos = Point3(x, y, 0.0)
         leg = self.legList.getLeg(currentLeg)
@@ -171,17 +171,17 @@ class DistributedSuit(DistributedSuitBase.DistributedSuitBase):
         calcDelta = Vec3(netPos - calcPos)
         diff = calcDelta.length()
         if diff > 4.0:
-            print '%s (%d) is %0.2f feet from the AI computed path!' % (self.getName(), self.getDoId(), diff)
-            print 'Probably your DNA files are out of sync.'
+            print('%s (%d) is %0.2f feet from the AI computed path!' % (self.getName(), self.getDoId(), diff))
+            print('Probably your DNA files are out of sync.')
             return
         localPos = Point3(self.getX(), self.getY(), 0.0)
         localDelta = Vec3(netPos - localPos)
         diff = localDelta.length()
         if diff > 10.0:
-            print '%s (%d) in state %s is %0.2f feet from its correct position!' % (self.getName(), self.getDoId(), self.fsm.getCurrentState().getName(), diff)
-            print 'Should be at (%0.2f, %0.2f), but is at (%0.2f, %0.2f).' % (x, y, localPos[0], localPos[1])
+            print('%s (%d) in state %s is %0.2f feet from its correct position!' % (self.getName(), self.getDoId(), self.fsm.getCurrentState().getName(), diff))
+            print('Should be at (%0.2f, %0.2f), but is at (%0.2f, %0.2f).' % (x, y, localPos[0], localPos[1]))
             return
-        print '%s (%d) is in the correct position.' % (self.getName(), self.getDoId())
+        print('%s (%d) is in the correct position.' % (self.getName(), self.getDoId()))
         return
 
     def denyBattle(self):

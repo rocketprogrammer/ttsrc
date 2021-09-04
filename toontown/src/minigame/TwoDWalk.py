@@ -1,6 +1,6 @@
 """ TwoDWalk.py: contains the TwoDWalk class """
 
-from OrthoWalk import *
+from .OrthoWalk import *
 
 class TwoDWalk(OrthoWalk):
     """

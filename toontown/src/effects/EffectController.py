@@ -47,7 +47,7 @@ class EffectController:
         if lod != None:
             try:
                 self.createTrack(lod)
-            except TypeError, e:
+            except TypeError as e:
                 raise TypeError('Error loading %s effect.' % self.__class__.__name__)
         else:
             self.createTrack()        
@@ -87,7 +87,7 @@ class EffectController:
         if lod != None:
             try:
                 self.createTrack(lod)
-            except TypeError, e:
+            except TypeError as e:
                 raise TypeError('Error loading %s effect.' % self.__class__.__name__)
         else:
             self.createTrack()        

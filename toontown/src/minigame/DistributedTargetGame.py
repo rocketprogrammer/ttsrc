@@ -3,21 +3,21 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
-import ArrowKeys
-import TargetGameGlobals
+from . import ArrowKeys
+from . import TargetGameGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 import math
 from math import *
 import random
 import random
-import RubberBand
-import FogOverlay
+from . import RubberBand
+from . import FogOverlay
 
 def circleX(angle, radius, centerX, centerY):
     x = radius * cos(angle) + centerX
@@ -644,7 +644,7 @@ class DistributedTargetGame(DistributedMinigame):
         if not self.hasLocalToon: return
         random.seed(targetSeed)
         self.pattern = TargetGameGlobals.difficultyPatterns[self.getSafezoneId()]
-        print ("seed %s" % (targetSeed))
+        print(("seed %s" % (targetSeed)))
         self.setupTargets()
         
     def setupTargets(self):
@@ -1417,7 +1417,7 @@ class DistributedTargetGame(DistributedMinigame):
         # toon/toon collisions were set up in setGameReady
         if not self.isSinglePlayer():
             # get rid of remote toon collisions
-            for np in self.remoteToonCollNPs.values():
+            for np in list(self.remoteToonCollNPs.values()):
                 np.removeNode()
             del self.remoteToonCollNPs
 

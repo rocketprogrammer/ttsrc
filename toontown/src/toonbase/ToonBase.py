@@ -4,9 +4,9 @@
 from otp.otpbase import OTPBase
 from otp.otpbase import OTPLauncherGlobals
 from direct.showbase.PythonUtil import *
-import ToontownGlobals
+from . import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
-import ToontownLoader
+from . import ToontownLoader
 from direct.gui import DirectGuiGlobals
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
@@ -109,7 +109,7 @@ class ToonBase(OTPBase.OTPBase):
         # error code to 12.  But if we terminate for any other reason
         # without giving Python a chance to catch the error, it will
         # remain exit code 11: sudden death without Python cleanup.
-        if __builtins__.has_key("launcher") and launcher:
+        if "launcher" in __builtins__ and launcher:
             launcher.setPandaErrorCode(11)
         
         # Set our max dt so avatars with a low frame rate will

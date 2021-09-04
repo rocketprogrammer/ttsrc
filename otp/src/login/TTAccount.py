@@ -5,22 +5,22 @@ from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import PythonUtil
 from otp.otpbase import OTPLocalizer
-import HTTPUtil
-import RemoteValueSet
+from . import HTTPUtil
+from . import RemoteValueSet
 import copy
 
 accountServer = ''
 accountServer = launcher.getAccountServer()
-print "TTAccount: accountServer from launcher: ", (accountServer)
+print("TTAccount: accountServer from launcher: ", (accountServer))
         
 configAccountServer = base.config.GetString('account-server', '')
 if configAccountServer:
     accountServer = configAccountServer
-    print "TTAccount: overriding accountServer from config: ", (accountServer)
+    print("TTAccount: overriding accountServer from config: ", (accountServer))
 
 if not accountServer:
     accountServer = "https://toontown.go.com"
-    print "TTAccount: default accountServer: ", (accountServer)
+    print("TTAccount: default accountServer: ", (accountServer))
 
 accountServer = URLSpec(accountServer, 1)
 
@@ -113,7 +113,7 @@ class TTAccount:
 
             # some other error, pass it back
             return (0, errorMsg)
-        except TTAccountException, e:
+        except TTAccountException as e:
             # connection error, bad response, etc.
             # pass it back
             return (0, str(e))
@@ -151,7 +151,7 @@ class TTAccount:
 
             # some other error, pass it back
             return (0, errorMsg)
-        except TTAccountException, e:
+        except TTAccountException as e:
             # connection error, bad response, etc.
             # pass it back
             return (0, str(e))
@@ -186,7 +186,7 @@ class TTAccount:
 
             # some other error, pass it back
             return (0, errorMsg)
-        except TTAccountException, e:
+        except TTAccountException as e:
             # connection error, bad response, etc.
             # pass it back
             return (0, str(e))
@@ -261,8 +261,8 @@ class TTAccount:
 
         # rename some fields
         dict = self.accountData.dict
-        for fieldName in dict.keys():
-            if fieldNameMap.has_key(fieldName):
+        for fieldName in list(dict.keys()):
+            if fieldName in fieldNameMap:
                 dict[fieldNameMap[fieldName]] = dict[fieldName]
                 del dict[fieldName]
 
@@ -344,7 +344,7 @@ class TTAccount:
         self.notify.debug("TTAccount.talk()")
 
         # ensure that data contains nothing but strings
-        for key in data.keys():
+        for key in list(data.keys()):
             data[key] = str(data[key])
 
         # assert that 'data' contains all the required data
@@ -354,33 +354,33 @@ class TTAccount:
                          'authenticateParentPasswordNewStyle',
                          'authenticateDeleteNewStyle'):
             assert PythonUtil.contains(
-                data.keys(),
+                list(data.keys()),
                 ('accountName',
                  'password'))
         elif operation == 'authenticateParentUsernameAndPassword':
             assert PythonUtil.contains(
-                data.keys(),
+                list(data.keys()),
                 ('accountName',
                  'parentUsername',
                  'parentPasswordNewStyle',
                  'userid'))
         elif operation == 'forgotPassword':
-            assert data.has_key('accountName') or data.has_key('email')
+            assert 'accountName' in data or 'email' in data
         elif operation == 'setParentPassword':
             assert PythonUtil.contains(
-                data.keys(),
+                list(data.keys()),
                 ('accountName',
                  'password',
                  'parentPassword',))
         elif operation == 'setSecretChat':
             assert PythonUtil.contains(
-                data.keys(),
+                list(data.keys()),
                 ('accountName',
                  'password',
                  'chat',))
         elif operation == 'create':
             assert PythonUtil.contains(
-                data.keys(),
+                list(data.keys()),
                 ('accountName',
                  'password',
                  #'dobYear',
@@ -391,14 +391,14 @@ class TTAccount:
                  ))
         elif operation == 'purchase':
             # is this a password change or a purchase op?
-            if data.has_key('newPassword'):
+            if 'newPassword' in data:
                 assert PythonUtil.contains(
-                    data.keys(),
+                    list(data.keys()),
                     ('accountName',
                      'password'))
             else:
                 assert PythonUtil.contains(
-                    data.keys(),
+                    list(data.keys()),
                     ('accountName',
                      'password',
                      'email', 
@@ -449,7 +449,7 @@ class TTAccount:
             url.setPath('/%s.php' % (op2Php[operation]))
         body = ''
 
-        if data.has_key('accountName'):
+        if 'accountName' in data:
             if operation not in newWebOperations:
                 # name is put on url for documentation only
                 url.setQuery('n=%s' % (URLSpec.quote(data['accountName'])))
@@ -489,8 +489,8 @@ class TTAccount:
         # populate a map of serverField:value pairs so that we
         # can add the fields in alphabetical order
         outBoundFields = {}
-        for fieldName in data.keys():
-            if not serverFields.has_key(fieldName):
+        for fieldName in list(data.keys()):
+            if fieldName not in serverFields:
                 if not fieldName in ignoredFields:
                     # unknown field name
                     self.notify.error(
@@ -499,7 +499,7 @@ class TTAccount:
                 outBoundFields[serverFields[fieldName]] = data[fieldName]
 
         # add the fields to the body in alphabetical order
-        orderedFields = outBoundFields.keys()
+        orderedFields = list(outBoundFields.keys())
         orderedFields.sort()
         for fieldName in orderedFields:
             if len(body):
@@ -606,7 +606,7 @@ class TTAccount:
 
             # some other error, pass it back
             return (0, errorMsg)
-        except TTAccountException, e:
+        except TTAccountException as e:
             # connection error, bad response, etc.
             # pass it back
             return (0, str(e))

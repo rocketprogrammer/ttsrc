@@ -46,12 +46,12 @@ class HolidayInfo_Relatively(HolidayInfo_Base):
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
 
         dateElemIter = ModifiedIter(dateList)
-        for i in xrange(len(dateList)/2):
+        for i in range(len(dateList)/2):
             start = dateElemIter.current()
-            end = dateElemIter.next()
+            end = next(dateElemIter)
 
             self.tupleList.append((start, end))
-            dateElemIter.next()
+            next(dateElemIter)
 
         self.tupleList.sort(cmpDates)
         self.weekDaysInMonth = []                       # A matrix of the number of times a weekday repeats in a month
@@ -147,7 +147,7 @@ class HolidayInfo_Relatively(HolidayInfo_Base):
         sCurrYear = time.localtime()[0]
         eCurrYear = sCurrYear
                 
-        for i in xrange(len(self.tupleList)):
+        for i in range(len(self.tupleList)):
             startTuple, endTuple = self.getUpdatedTuples(self.currElemIter.peekNext())
             sMonth = startTuple[0]
             nMonth = endTuple[0]
@@ -221,7 +221,7 @@ class HolidayInfo_Relatively(HolidayInfo_Base):
                 sTime = self.getTime((sCurrYear,), startTuple)
                 eTime = self.getTime((eCurrYear,), endTuple)
 
-            self.currElemIter.next()
+            next(self.currElemIter)
             if (currTime < eTime):
                 return sTime
 

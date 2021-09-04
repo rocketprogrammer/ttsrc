@@ -1,7 +1,7 @@
 from toontown.estate import DistributedStatuaryAI
 from direct.directnotify import DirectNotifyGlobal
 from otp.ai.AIBase import *
-import GardenGlobals
+from . import GardenGlobals
 
 class DistributedToonStatuaryAI(DistributedStatuaryAI.DistributedStatuaryAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedToonStatuaryAI')

@@ -4,9 +4,9 @@ from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.interval.IntervalGlobal import *
 from direct.directnotify import DirectNotifyGlobal
-import Maze
-import MazeData
-import MazeGameGlobals
+from . import Maze
+from . import MazeData
+from . import MazeGameGlobals
 from direct.showbase import RandomNumGen
 from toontown.suit import Suit
 from toontown.suit import SuitDNA
@@ -51,7 +51,7 @@ class MazeSuit(DirectObject):
         self.suit.delete()
         
     def uniqueName(self, str):
-        return str + `self.serialNum`
+        return str + repr(self.serialNum)
 
     def gameStart(self, gameStartTime):
         self.gameStartTime = gameStartTime
@@ -236,7 +236,7 @@ class MazeSuit(DirectObject):
         if curTic < self.nextThinkTic:
             return []
         else:
-            r = range(self.nextThinkTic, curTic+1, self.ticPeriod)
+            r = list(range(self.nextThinkTic, curTic+1, self.ticPeriod))
             # store the last tic for which update() will be called this frame
             # this way, we only create a maximum of one move track per
             # frame per suit

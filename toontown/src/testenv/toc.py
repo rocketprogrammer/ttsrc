@@ -14,7 +14,7 @@ import random
 import sys
 import time
 
-import thread
+import _thread
 import threading
 
 
@@ -63,19 +63,19 @@ class TocTalk:
                 try:
                         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 except:
-                        raise TOCError, "FATAL:  Couldn't create a socket"
+                        raise TOCError("FATAL:  Couldn't create a socket")
 
                 # make the connection
                 try:
                         self._socket.connect( TOC_SERV )
                 except:
-                        raise TOCDisconnectError, "FATAL: Could not connect to TOC Server"
+                        raise TOCDisconnectError("FATAL: Could not connect to TOC Server")
                 
                 buf  = "FLAPON\r\n\r\n"
                 bsent = self._socket.send(buf)
 
-                if bsent <> len(buf):
-                        raise TOCError, "FATAL: Couldn't send FLAPON!"
+                if bsent != len(buf):
+                        raise TOCError("FATAL: Couldn't send FLAPON!")
 
         def start_log_in(self):
                 ep = self.pwdenc()
@@ -108,7 +108,7 @@ class TocTalk:
                 data = "".join(ditems)
 
                 if len(data) >= 2048:
-                        raise TOCError, "TOC data with protocol overhead cannot exceed 2048 bytes."
+                        raise TOCError("TOC data with protocol overhead cannot exceed 2048 bytes.")
 
                 self.derror( "SEND : \'%r\'" % data )
                 
@@ -119,10 +119,10 @@ class TocTalk:
                 self._tsem.release()
 
 
-                if bsent <> len(data):
+                if bsent != len(data):
                         #maybe make less severe later
                         # I've never seen this happen.. have you??
-                        raise TOCError, "FATAL: Couldn't send all data to TOC Server\n"
+                        raise TOCError("FATAL: Couldn't send all data to TOC Server\n")
 
                 self._seq = self._seq + 1
 
@@ -236,7 +236,7 @@ class TocTalk:
 
         def err_disconnect(self):
                 self.werror( "INFO: Disconnected!\n" )
-                raise TOCDisconnectError, "FATAL: We seem to have been disconnected from the TOC server.\n"
+                raise TOCDisconnectError("FATAL: We seem to have been disconnected from the TOC server.\n")
 
         # our event handling
         def c_ERROR(self,id,data):
@@ -249,19 +249,19 @@ class TocTalk:
                         dt = int(data) # let's get an int outta it
                 
                 if dt == 980:
-                        raise TOCError, "FATAL: Couldn't sign on; Incorrect nickname/password combination"
+                        raise TOCError("FATAL: Couldn't sign on; Incorrect nickname/password combination")
 
                 elif dt == 981:
-                        raise TOCError, "FATAL: Couldn't sign on; The AIM service is temporarily unavailable"
+                        raise TOCError("FATAL: Couldn't sign on; The AIM service is temporarily unavailable")
 
                 elif dt == 982:
-                        raise TOCError, "FATAL: Couldn't sign on; Your warning level is too high"
+                        raise TOCError("FATAL: Couldn't sign on; Your warning level is too high")
 
                 elif dt == 983:
-                        raise TOCError, "FATAL: Couldn't sign on; You have been connecting and disconnecting too frequently"
+                        raise TOCError("FATAL: Couldn't sign on; You have been connecting and disconnecting too frequently")
 
                 elif dt == 989:
-                        raise TOCError, "FATAL: Couldn't sign on; An unknown error occurred"
+                        raise TOCError("FATAL: Couldn't sign on; An unknown error occurred")
 
                 # ... etc etc etc
                 else:
@@ -375,8 +375,8 @@ class BotManager:
                 self.bots = {}
 
         def addBot(self,bot,botref,go=1,reconnect=1,delay=30):
-                if self.bots.has_key(botref):
-                        raise BotManagerError, "That botref is already registered"
+                if botref in self.bots:
+                        raise BotManagerError("That botref is already registered")
 
                 self.bots[botref] = bot
                 self.bots[botref]._reconnect = reconnect
@@ -385,24 +385,24 @@ class BotManager:
                         self.botGo(botref)
 
         def botGo(self,botref):
-                if not self.bots.has_key(botref):
-                        raise BotManagerError, "That botref has not been registered"
-                thread.start_new_thread(self._dispatcher,(self.bots[botref],))
+                if botref not in self.bots:
+                        raise BotManagerError("That botref has not been registered")
+                _thread.start_new_thread(self._dispatcher,(self.bots[botref],))
 
         def botStop(self,botref):
-                if not self.bots.has_key(botref):
-                        raise BotManagerError, "That botref has not been registered"
+                if botref not in self.bots:
+                        raise BotManagerError("That botref has not been registered")
                 self.bots[botref]._running = 0
                 self.bots[botref]._socket.close()
 
         def botPause(self,botref,val=1):
-                if not self.bots.has_key(botref):
-                        raise BotManagerError, "That botref has not been registered"
+                if botref not in self.bots:
+                        raise BotManagerError("That botref has not been registered")
                 self.bots[botref]._ignore = val
 
         def getBot(self,botref):
-                if not self.bots.has_key(botref):
-                        raise BotManagerError, "That botref has not been registered"
+                if botref not in self.bots:
+                        raise BotManagerError("That botref has not been registered")
                 return self.bots[botref]
                 
 
@@ -419,7 +419,7 @@ class BotManager:
                                 time.sleep(bot._delay) # then we reconnect
                         else:
                                 break
-                thread.exit()
+                _thread.exit()
 
         def wait(self):
                 while 1:

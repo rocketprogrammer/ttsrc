@@ -219,7 +219,7 @@ class DistributedDoorAI(DistributedObjectAI.DistributedObjectAI):
         assert(self.debugPrint("enqueueAvatarIdEnter(avatarsWhoAreEntering=%s)"%(self.avatarsWhoAreEntering,)))
         # By storing the avatarID in the key, we're creating a set of
         # unique avatarIDs.
-        if not self.avatarsWhoAreEntering.has_key(avatarID):
+        if avatarID not in self.avatarsWhoAreEntering:
             self.avatarsWhoAreEntering[avatarID]=1
             self.sendUpdate("avatarEnter", [avatarID])
         self.openDoor(self.fsm)
@@ -248,9 +248,9 @@ class DistributedDoorAI(DistributedObjectAI.DistributedObjectAI):
     def enqueueAvatarIdExit(self, avatarID):
         assert(self.debugPrint("enqueueAvatarIdExit(avatarID=%s)"%(avatarID,)))
         assert(self.debugPrint("enqueueAvatarIdExit(avatarsWhoAreExiting=%s)"%(self.avatarsWhoAreExiting,)))
-        if self.avatarsWhoAreEntering.has_key(avatarID):
+        if avatarID in self.avatarsWhoAreEntering:
             del self.avatarsWhoAreEntering[avatarID]
-        elif not self.avatarsWhoAreExiting.has_key(avatarID):
+        elif avatarID not in self.avatarsWhoAreExiting:
             self.avatarsWhoAreExiting[avatarID]=1
             self.openDoor(self.exitDoorFSM)
         else:

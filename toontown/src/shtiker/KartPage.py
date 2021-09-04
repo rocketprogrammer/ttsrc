@@ -27,7 +27,7 @@ from toontown.racing.Kart import Kart
 from toontown.racing import RaceGlobals
 from toontown.shtiker.ShtikerPage import ShtikerPage
 from toontown.toonbase import ToontownGlobals, TTLocalizer
-from FishPage import FishingTrophy
+from .FishPage import FishingTrophy
 
 ##########################################################################
 # Python Import Modules
@@ -287,7 +287,7 @@ class KartPage( ShtikerPage ):
             self.trophyTab[ 'state' ] = DGG.DISABLED
             
         else:
-            raise StandardError, "KartPage::setMode - Invalid Mode %s" % ( mode )
+            raise Exception("KartPage::setMode - Invalid Mode %s" % ( mode ))
 
         self.updatePage()
 
@@ -313,7 +313,7 @@ class KartPage( ShtikerPage ):
             self.racingTrophies.show()
             self.racingRecords.hide()
         else:
-            raise StandardError, "KartPage::updatePage - Invalid Mode %s" % ( self.mode )
+            raise Exception("KartPage::updatePage - Invalid Mode %s" % ( self.mode ))
 
 
 class KartCustomizeUI( DirectFrame ):
@@ -825,7 +825,7 @@ class ItemSelector( DirectFrame ):
             """
             """
             currKartDNA = self.avatar.getKartDNA()
-            for i in xrange( len( self.updatedDNA ) ):
+            for i in range( len( self.updatedDNA ) ):
                 if( self.updatedDNA[ i ] != currKartDNA[ i ] ):
                     self.avatar.requestKartDNAFieldUpdate( i, self.updatedDNA[ i ] )
 
@@ -1389,11 +1389,11 @@ class ItemSelector( DirectFrame ):
         """
 
         # Destroy UI Componenets
-        for key in self.buttonDict.keys():
+        for key in list(self.buttonDict.keys()):
             self.buttonDict[ key ].destroy()
             del self.buttonDict[ key ]
 
-        for key in self.itemViewers.keys():
+        for key in list(self.itemViewers.keys()):
             self.itemViewers[ key ].destroy()
             del self.itemViewers[ key ]
 
@@ -1560,7 +1560,7 @@ class ItemSelector( DirectFrame ):
         Params: None
         Return: None
         """
-        for key in self.buttonDict.keys():
+        for key in list(self.buttonDict.keys()):
             self.buttonDict[ key ].setProp( 'state', DGG.NORMAL )
 
         self.itemViewers[ 'main' ].show()
@@ -1630,7 +1630,7 @@ class ItemSelector( DirectFrame ):
             self.itemViewers[ 'main' ].setViewerText( TTLocalizer.KartShtikerSelect )
             self.itemViewers[ 'main' ].setupViewer( buttonType )
         else:
-            raise StandardError, "KartPage.py::__changeItemCategory - INVALID Category Type!"                
+            raise Exception("KartPage.py::__changeItemCategory - INVALID Category Type!")                
 
         # Update the state
         if( self.state != buttonType and self.state != InvalidEntry ):
@@ -1788,8 +1788,8 @@ class KartViewer( DirectFrame ):
             self.kart = None
         if( not hasattr( self, "kartDisplayRegion" ) ):
             self.kartDisplayRegion = DirectRegion( parent = self )
-            apply( self.kartDisplayRegion.setBounds, self.bounds )
-            apply( self.kartDisplayRegion.setColor, self.colors )
+            self.kartDisplayRegion.setBounds(*self.bounds)
+            self.kartDisplayRegion.setColor(*self.colors)
             
         frame = self.kartDisplayRegion.load()
         if self.dna:

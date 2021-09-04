@@ -24,7 +24,7 @@ wedge2.enterPlayer(1,0)
 
 time.sleep(5)
 
-print '-------- BENCHMARK REMOTE OBJECT ---------'
+print('-------- BENCHMARK REMOTE OBJECT ---------')
 begin = time.time()
 #for f in funcs:
 voor = time.time()
@@ -41,11 +41,11 @@ for i in range(iters):
 
 try:
     duration = time.time()-begin
-    print 'total time %.4f seconds' % duration
-    print 'total method calls',iters
+    print('total time %.4f seconds' % duration)
+    print('total method calls',iters)
     avg_pyro_msec = 1000.0*duration/(iters)
-    print 'avg. time per method call: %.4f' % avg_pyro_msec ,"msec"
-    print 'msg/sec: %.4f' % (iters/duration)
+    print('avg. time per method call: %.4f' % avg_pyro_msec ,"msec")
+    print('msg/sec: %.4f' % (iters/duration))
 except:
     pass
 sys.stdout.flush()

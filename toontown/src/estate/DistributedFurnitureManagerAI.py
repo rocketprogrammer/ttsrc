@@ -1,8 +1,8 @@
 from direct.distributed import DistributedObjectAI
-import DistributedFurnitureItemAI
-import DistributedBankAI
-import DistributedClosetAI
-import DistributedPhoneAI
+from . import DistributedFurnitureItemAI
+from . import DistributedBankAI
+from . import DistributedClosetAI
+from . import DistributedPhoneAI
 from toontown.catalog import CatalogFurnitureItem
 from toontown.catalog import CatalogSurfaceItem
 from toontown.catalog import CatalogWindowItem

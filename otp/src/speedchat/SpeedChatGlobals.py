@@ -9,12 +9,12 @@
 # speedChat.getEventName(eventBaseName)
 # where 'speedChat' is your SpeedChat object, and 'eventBaseName' is
 # one of the following:
-from SCTerminal           import SCTerminalSelectedEvent
-from SCTerminal           import SCTerminalLinkedEmoteEvent
-from SCStaticTextTerminal import SCStaticTextMsgEvent
-from SCGMTextTerminal import SCGMTextMsgEvent
-from SCCustomTerminal     import SCCustomMsgEvent
-from SCEmoteTerminal      import SCEmoteMsgEvent, SCEmoteNoAccessEvent
+from .SCTerminal           import SCTerminalSelectedEvent
+from .SCTerminal           import SCTerminalLinkedEmoteEvent
+from .SCStaticTextTerminal import SCStaticTextMsgEvent
+from .SCGMTextTerminal import SCGMTextMsgEvent
+from .SCCustomTerminal     import SCCustomMsgEvent
+from .SCEmoteTerminal      import SCEmoteMsgEvent, SCEmoteNoAccessEvent
 
 # SCColorSchemeChangeMsgEvent
 

@@ -207,7 +207,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
         # set the timer task to off, because raceExit calls removeAvBlock and
         # shouldn't call. SHOULD BREAK UP THOSE CALLS.
         self.timerTask = None
-        players = self.avId2BlockDict.keys()
+        players = list(self.avId2BlockDict.keys())
         circuitLoop = []
         if self.trackType == RaceGlobals.Circuit:
             circuitLoop = RaceGlobals.getCircuitLoop(self.trackId)
@@ -219,7 +219,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
                                             circuitLoop[1:],
                                             {},{}, [], {},
                                             circuitTotalBonusTickets = {})
-        for avId in self.avId2BlockDict.keys():
+        for avId in list(self.avId2BlockDict.keys()):
             if( avId ):
                 self.notify.debug( "Handling Race Launch Countdown for avatar %s" % ( avId ) )
                 # Tell each player that they should enter
@@ -235,7 +235,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
         """
         Commnet:
         """
-        return ( self.avId2BlockDict.keys() != [] )
+        return ( list(self.avId2BlockDict.keys()) != [] )
 
     def enableStartingBlocks( self ):
         """
@@ -387,7 +387,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
 
         # Make certain that there are toons onboard, they might have
         # left the district.
-        players = self.avId2BlockDict.keys()
+        players = list(self.avId2BlockDict.keys())
 
         # check to see if we need to kick a solo racer
         kickSoloRacer = False

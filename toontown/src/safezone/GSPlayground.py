@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 
 from toontown.toonbase import ToontownGlobals
-import Playground
+from . import Playground
 from toontown.launcher import DownloadForceAcknowledge
 from toontown.building import Elevator
 from toontown.toontowngui import TTDialog
@@ -135,7 +135,7 @@ class GSPlayground(Playground.Playground):
         elif (where == 'exit'):
             self.fsm.request("walk")
         elif (where == 'racetrack'):
-            print "Entering Racetrack"
+            print("Entering Racetrack")
             self.doneStatus = doneStatus
             messenger.send(self.doneEvent)
         else:

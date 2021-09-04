@@ -5,11 +5,11 @@ import sys
 import getopt
 import cherrypy
 
-import sbConfig
-from sbLog import sbLog
+from . import sbConfig
+from .sbLog import sbLog
 
-from LastSeenDB import LastSeenDB
-from sbMaildb import sbMaildb
+from .LastSeenDB import LastSeenDB
+from .sbMaildb import sbMaildb
 
 class sbMonitor(object):
     def __init__(self):
@@ -314,7 +314,7 @@ class sbMonitor(object):
 '''
 
         linkNum = 0
-        for link in self.menu.keys():
+        for link in list(self.menu.keys()):
             if linkNum == 0:
                 if link == current:
                     pageText += "<li id=\"active\" class=\"first\"><a href=\"%s\" id=\"current\">%s</a></li>\n" % \

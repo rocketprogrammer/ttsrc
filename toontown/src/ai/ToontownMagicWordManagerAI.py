@@ -22,7 +22,7 @@ from toontown.toonbase import ToontownBattleGlobals
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.battle import DistributedBattleBaseAI
 from toontown.toon import DistributedToonAI
-import WelcomeValleyManagerAI
+from . import WelcomeValleyManagerAI
 from toontown.hood import ZoneUtil
 from toontown.battle import SuitBattleGlobals
 from toontown.quest import Quests
@@ -717,7 +717,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
 
         elif word == "~allFishingTrophies":
             from toontown.fishing import FishGlobals
-            allTrophyList = FishGlobals.TrophyDict.keys()
+            allTrophyList = list(FishGlobals.TrophyDict.keys())
             av.b_setFishingTrophies(allTrophyList)
             self.down_setMagicWordResponse(senderId, "All fishing trophies")
 
@@ -1272,7 +1272,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             numPets = 56 # 50 friends, six Toons/acct #100 * 3 # 500 toons, 100 at estate, 3 pets per
             if len(args) > 1:
                 numPets = int(args[1])
-            for i in xrange(numPets):
+            for i in range(numPets):
                 pet = DistributedPetAI.DistributedPetAI(self.air)
                 # make up a fake owner doId
                 pet._initFakePet(100+i, 'StressPet%s' % i)
@@ -1314,7 +1314,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         elif wordIs('~spamTrick'):
             # spam the nearby pets with N commands to do the 'jump' trick
             from toontown.pets import PetObserve
-            for i in xrange(20):
+            for i in range(20):
                 PetObserve.send(av.zoneId,
                                 PetObserve.getSCObserve(21200, av.doId))
 
@@ -1708,7 +1708,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             else:
                 streetId=int(args[4])
 
-                if not self.air.suitPlanners.has_key(streetId):
+                if streetId not in self.air.suitPlanners:
                     response = "Street %d is not known." % (streetId)
                     self.down_setMagicWordResponse(senderId, response)
                     return
@@ -1716,7 +1716,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         if streetId == 'all':
             # All buildings, everywhere.
             blockMap = {}
-            for sp in self.air.suitPlanners.values():
+            for sp in list(self.air.suitPlanners.values()):
                 if sp.buildingMgr:
                     blockMap[sp.buildingMgr] = sp.buildingMgr.getToonBlocks()
 
@@ -1755,7 +1755,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             maxPathLen = None
 
         total = 0
-        for bm, blocks in blockMap.items():
+        for bm, blocks in list(blockMap.items()):
             total += len(blocks)
             for i in blocks:
                 if now:
@@ -1817,7 +1817,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             else:
                 streetId=int(args[4])
 
-                if not self.air.suitPlanners.has_key(streetId):
+                if streetId not in self.air.suitPlanners:
                     response = "Street %d is not known." % (streetId)
                     self.down_setMagicWordResponse(senderId, response)
                     return
@@ -1825,7 +1825,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         if streetId == 'all':
             # All buildings, everywhere.
             blockMap = {}
-            for sp in self.air.suitPlanners.values():
+            for sp in list(self.air.suitPlanners.values()):
                 if sp.buildingMgr:
                     blockMap[sp.buildingMgr] = sp.buildingMgr.getToonBlocks()
 
@@ -1864,7 +1864,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             maxPathLen = None
 
         total = 0
-        for bm, blocks in blockMap.items():
+        for bm, blocks in list(blockMap.items()):
             total += len(blocks)
             for i in blocks:
                 if now:
@@ -1914,7 +1914,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             else:
                 streetId=int(args[2])
 
-                if not self.air.suitPlanners.has_key(streetId):
+                if streetId not in self.air.suitPlanners:
                     response = "Street %d is not known." % (streetId)
                     self.down_setMagicWordResponse(senderId, response)
                     return
@@ -1922,7 +1922,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         if streetId == 'all':
             # All buildings, everywhere.
             blockMap = {}
-            for sp in self.air.suitPlanners.values():
+            for sp in list(self.air.suitPlanners.values()):
                 if sp.buildingMgr:
                     blockMap[sp.buildingMgr] = sp.buildingMgr.getSuitBlocks()
 
@@ -1951,7 +1951,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             blockMap = { bm: blocks }
 
         total = 0
-        for bm, blocks in blockMap.items():
+        for bm, blocks in list(blockMap.items()):
             total += len(blocks)
             for i in blocks:
                 building = bm.getBuilding(i)
@@ -2001,7 +2001,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             # Welcome Valleys.
 
             response = ""
-            hoodIds = mgr.welcomeValleys.keys()
+            hoodIds = list(mgr.welcomeValleys.keys())
             hoodIds.sort()
             for hoodId in hoodIds:
                 hood = mgr.welcomeValleys[hoodId]
@@ -2019,7 +2019,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             # Welcome Valleys.
 
             response = ""
-            hoodIds = mgr.welcomeValleys.keys()
+            hoodIds = list(mgr.welcomeValleys.keys())
             hoodIds.sort()
             for hoodId in hoodIds:
                 hood = mgr.welcomeValleys[hoodId]
@@ -2134,16 +2134,16 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         if word == "~buildings where":
             # "~buildings where": report the distribution of buildings.
             dist = {}
-            for sp in self.air.suitPlanners.values():
+            for sp in list(self.air.suitPlanners.values()):
                 if sp.buildingMgr:
                     numActual = len(sp.buildingMgr.getSuitBlocks())
-                    if not dist.has_key(numActual):
+                    if numActual not in dist:
                         dist[numActual] = []
                     dist[numActual].append(sp.zoneId)
 
             # Sort the distribution by number of buildings.
             sorted = []
-            for tuple in dist.items():
+            for tuple in list(dist.items()):
                 sorted.append(tuple)
             sorted.sort(self.__sortBuildingDist)
 
@@ -2175,7 +2175,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
                 numAttempting = 0
                 numPerTrack = {}
                 numPerHeight = {}
-                for sp in self.air.suitPlanners.values():
+                for sp in list(self.air.suitPlanners.values()):
                     numTarget += sp.targetNumSuitBuildings
                     if sp.buildingMgr:
                         numActual += len(sp.buildingMgr.getSuitBlocks())
@@ -2189,7 +2189,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
                     sp.formatNumSuitsPerTrack(numPerHeight),
                     numTotalBuildings, numTarget, numAttempting)
 
-            elif not self.air.suitPlanners.has_key(streetId):
+            elif streetId not in self.air.suitPlanners:
                 response = "Street %d is not known." % (streetId)
 
             else:
@@ -2227,7 +2227,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             response = "Suit building target percentage is %d" % (DistributedSuitPlannerAI.DistributedSuitPlannerAI.TOTAL_SUIT_BUILDING_PCT)
         else:
             DistributedSuitPlannerAI.DistributedSuitPlannerAI.TOTAL_SUIT_BUILDING_PCT = percent
-            sp = self.air.suitPlanners.values()[0]
+            sp = list(self.air.suitPlanners.values())[0]
             sp.assignInitialSuitBuildings()
             response = "Reset target percentage to %d" % (percent)
 
@@ -2258,14 +2258,14 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         if len(args) > 4:
             revives = int(args[4])
 
-        if not self.air.suitPlanners.has_key(streetId):
+        if streetId not in self.air.suitPlanners:
             response = "Street %d is not known." % (streetId)
 
         else:
             sp = self.air.suitPlanners[streetId]
             map = sp.getZoneIdToPointMap()
             canonicalZoneId = ZoneUtil.getCanonicalZoneId(zoneId)
-            if not map.has_key(canonicalZoneId):
+            if canonicalZoneId not in map:
                 response = "Zone %d isn't near a suit point." % (canonicalZoneId)
             else:
                 points = map[canonicalZoneId][:]
@@ -2313,7 +2313,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         is a participant, or None if the avatar is not involved in any
         battles."""
 
-        for dobj in self.air.doId2do.values():
+        for dobj in list(self.air.doId2do.values()):
             if (isinstance(dobj, DistributedBattleBaseAI.DistributedBattleBaseAI)):
                 if avId in dobj.toons:
                     return dobj
@@ -2322,7 +2322,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         """Returns the battle, if any, in the indicated zoneId, or
         None if no battle is occurring in the indicated zone."""
 
-        for dobj in self.air.doId2do.values():
+        for dobj in list(self.air.doId2do.values()):
             if (isinstance(dobj, DistributedBattleBaseAI.DistributedBattleBaseAI)):
                 if dobj.zoneId == zoneId:
                     return dobj
@@ -2472,7 +2472,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             numActual = 0
             numPerTrack = {}
             sp = None
-            for sp in self.air.suitPlanners.values():
+            for sp in list(self.air.suitPlanners.values()):
                 numTarget += sp.calcDesiredNumFlyInSuits() + sp.calcDesiredNumBuildingSuits()
                 numActual += sp.numFlyInSuits + sp.numBuildingSuits
                 sp.countNumSuitsPerTrack(numPerTrack)
@@ -2489,7 +2489,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
                 response = "Overall, %d cogs (%s); target is %d." % (
                     numActual, sp.formatNumSuitsPerTrack(numPerTrack), numTarget)
 
-        elif not self.air.suitPlanners.has_key(streetId):
+        elif streetId not in self.air.suitPlanners:
             response = "Street %d is not known." % (streetId)
 
         else:
@@ -2779,7 +2779,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
         # Find the particular Boss Cog that's in the same zone with
         # the avatar.
         bossCog = None
-        for distObj in self.air.doId2do.values():
+        for distObj in list(self.air.doId2do.values()):
             if isinstance(distObj, DistributedBossCogAI.DistributedBossCogAI):
                 if distObj.zoneId == zoneId:
                     bossCog = distObj
@@ -3038,7 +3038,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             bossCog.b_setState('Frolic')
 
         else:
-            raise StandardError, 'Not implemented: boss cog %s' % (dept)
+            raise Exception('Not implemented: boss cog %s' % (dept))
 
         return bossCog
 
@@ -3197,7 +3197,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             av.makeRandomFlowerBasket()
             self.down_setMagicWordResponse(senderId, "Created random flower basket")
         elif action == "allTrophies":
-            allTrophyList = GardenGlobals.TrophyDict.keys()
+            allTrophyList = list(GardenGlobals.TrophyDict.keys())
             av.b_setGardenTrophies(allTrophyList)
             self.down_setMagicWordResponse(senderId, "All garden trophies")
         else:
@@ -3398,7 +3398,7 @@ class ToontownMagicWordManagerAI(MagicWordManagerAI.MagicWordManagerAI):
             else:
                 recipient = int(args[2])
                 text = args[3]
-                for i in xrange(4, len(args)):
+                for i in range(4, len(args)):
                     text += ' ' + args[i]
                 self.air.mailManager.sendSimpleMail(
                     senderId, recipient, text)

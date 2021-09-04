@@ -2,11 +2,11 @@
 
 import direct.directbase.DirectStart
 from pandac.PandaModules import *
-import LevelSpec
-import LevelConstants
-import LevelUtil
+from . import LevelSpec
+from . import LevelConstants
+from . import LevelUtil
 from direct.showbase.PythonUtil import list2dict
-import EntityTypes
+from . import EntityTypes
 import types
 
 """
@@ -24,7 +24,7 @@ def makeNewSpec(filename, modelPath, entTypeModule=EntityTypes):
     # expand any env vars, then convert to an OS-correct path
     fname = Filename.expandFrom(filename).toOsSpecific()
     spec.saveToDisk(fname, makeBackup=0)
-    print 'Done.'
+    print('Done.')
 
 """
 FOR SAME LEVEL MODEL PATH:
@@ -47,7 +47,7 @@ def updateSpec(specModule, entTypeModule=EntityTypes, modelPath=None):
     spec = LevelSpec.LevelSpec(specModule)
     privUpdateSpec(spec, modelPath, entTypeModule)
     spec.saveToDisk()
-    print 'Done.'
+    print('Done.')
 
 def privUpdateSpec(spec, modelPath, entTypeModule, newZonesGloballyVisible=0):
     """internal: take a spec and update it to match its level model
@@ -56,7 +56,7 @@ def privUpdateSpec(spec, modelPath, entTypeModule, newZonesGloballyVisible=0):
     """
     assert __dev__
     assert type(entTypeModule) is types.ModuleType
-    import EntityTypeRegistry
+    from . import EntityTypeRegistry
     etr = EntityTypeRegistry.EntityTypeRegistry(entTypeModule)
     spec.setEntityTypeReg(etr)
 
@@ -76,7 +76,7 @@ def privUpdateSpec(spec, modelPath, entTypeModule, newZonesGloballyVisible=0):
     TexturePool.clearFakeTextureImage()
     # get the model's zone info
     zoneNum2node = LevelUtil.getZoneNum2Node(model)
-    zoneNums = zoneNum2node.keys()
+    zoneNums = list(zoneNum2node.keys())
 
     # what zone entities do we have specs for?
     type2ids = spec.getEntType2ids(spec.getAllEntIds())
@@ -96,7 +96,7 @@ def privUpdateSpec(spec, modelPath, entTypeModule, newZonesGloballyVisible=0):
     removedZoneNums = []
     for entId in list(zoneEntIds):
         if entId not in zoneNums:
-            print 'zone %s no longer exists; removing' % entId
+            print('zone %s no longer exists; removing' % entId)
             removeZoneEntity(entId)
             removedZoneNums.append(entId)
             
@@ -106,7 +106,7 @@ def privUpdateSpec(spec, modelPath, entTypeModule, newZonesGloballyVisible=0):
         if zoneNum not in zoneEntIds:
             newZoneNums.append(zoneNum)
 
-            print 'adding new zone entity %s' % zoneNum
+            print('adding new zone entity %s' % zoneNum)
             insertZoneEntity(zoneNum)
             # by default, new zone can't see any other zones
             spec.doSetAttrib(zoneNum, 'visibility', [])
@@ -117,7 +117,7 @@ def privUpdateSpec(spec, modelPath, entTypeModule, newZonesGloballyVisible=0):
             visDict = list2dict(visList)
             for zoneNum in newZoneNums:
                 visDict[zoneNum] = None
-            visList = visDict.keys()
+            visList = list(visDict.keys())
             visList.sort()
             spec.doSetAttrib(entId, 'visibility', visList)
 

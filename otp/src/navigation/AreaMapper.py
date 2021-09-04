@@ -190,11 +190,11 @@ class AreaMapper(object):
 
     def _exploreFrontier(self):
         if len(self.frontierSquaresQueue) == 0:
-            assert len(self.frontierSquares.keys()) == 0
+            assert len(list(self.frontierSquares.keys())) == 0
             return 0
         else:
             qlen = len(self.frontierSquaresQueue)
-            for i in xrange(qlen):
+            for i in range(qlen):
                 p = self.frontierSquaresQueue.pop(0)
                 del self.frontierSquares[p]
                 self._explore(p)
@@ -203,7 +203,7 @@ class AreaMapper(object):
 
 
     def runDiscovery(self,maxSquares):
-        print "Discovering walkable space (this will take 30-60 seconds)..."
+        print("Discovering walkable space (this will take 30-60 seconds)...")
         #self._unstashEnvironment()
         squaresExplored = 1
 
@@ -437,7 +437,7 @@ class AreaMapper(object):
         
 
     def _subdivide(self):
-        print "Growing squares..."
+        print("Growing squares...")
         self.vertexCounter = 0
         self.polyCounter = 0
 

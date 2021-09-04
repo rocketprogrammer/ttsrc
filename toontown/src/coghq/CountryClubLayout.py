@@ -7,21 +7,21 @@ import random
 
 def printAllBossbotInfo():
     # print out roomId->room name
-    print 'roomId: roomName'
-    for roomId, roomName in CountryClubRoomSpecs.BossbotCountryClubRoomId2RoomName.items():
-        print '%s: %s' % (roomId, roomName)
+    print('roomId: roomName')
+    for roomId, roomName in list(CountryClubRoomSpecs.BossbotCountryClubRoomId2RoomName.items()):
+        print('%s: %s' % (roomId, roomName))
     # print out # of battles in each room
-    print '\nroomId: numBattles'
-    for roomId, numBattles in CountryClubRoomSpecs.roomId2numBattles.items():
-        print '%s: %s' % (roomId, numBattles)
+    print('\nroomId: numBattles')
+    for roomId, numBattles in list(CountryClubRoomSpecs.roomId2numBattles.items()):
+        print('%s: %s' % (roomId, numBattles))
     # print out all of the rooms in all countryClub floors
-    print '\ncountryClubId floor roomIds'
+    print('\ncountryClubId floor roomIds')
     printCountryClubRoomIds()
     # print out # of rooms in each countryClub floor
-    print '\ncountryClubId floor numRooms'
+    print('\ncountryClubId floor numRooms')
     printNumRooms()
     # print out # of non-skippable battles in each countryClub floor
-    print '\ncountryClubId floor numForcedBattles'
+    print('\ncountryClubId floor numForcedBattles')
     printNumBattles()
     
 # print out info on all countryClub levels for Bossbot
@@ -31,23 +31,23 @@ def iterateBossbotCountryClubs(func):
     for countryClubId in [ToontownGlobals.BossbotCountryClubIntA,
                    ToontownGlobals.BossbotCountryClubIntB,
                    ToontownGlobals.BossbotCountryClubIntC,]:
-        for floorNum in xrange(ToontownGlobals.CountryClubNumFloors[countryClubId]):
+        for floorNum in range(ToontownGlobals.CountryClubNumFloors[countryClubId]):
             func(CountryClubLayout(countryClubId, floorNum))
 
 def printCountryClubInfo():
-    def func(ml): print ml
+    def func(ml): print(ml)
     iterateBossbotCountryClubs(func)
 def printCountryClubRoomIds():
-    def func(ml): print ml.getCountryClubId(), ml.getFloorNum(), ml.getRoomIds()
+    def func(ml): print(ml.getCountryClubId(), ml.getFloorNum(), ml.getRoomIds())
     iterateBossbotCountryClubs(func)
 def printCountryClubRoomNames():
-    def func(ml): print ml.getCountryClubId(), ml.getFloorNum(), ml.getRoomNames()
+    def func(ml): print(ml.getCountryClubId(), ml.getFloorNum(), ml.getRoomNames())
     iterateBossbotCountryClubs(func)
 def printNumRooms():
-    def func(ml): print ml.getCountryClubId(), ml.getFloorNum(), ml.getNumRooms()
+    def func(ml): print(ml.getCountryClubId(), ml.getFloorNum(), ml.getNumRooms())
     iterateBossbotCountryClubs(func)
 def printNumBattles():
-    def func(ml): print ml.getCountryClubId(), ml.getFloorNum(), ml.getNumBattles()
+    def func(ml): print(ml.getCountryClubId(), ml.getFloorNum(), ml.getNumBattles())
     iterateBossbotCountryClubs(func)
 
 
@@ -174,7 +174,7 @@ class CountryClubLayout:
         # pick the hallways
         hallwayRng = self.getRng()
         connectorRoomNames = CountryClubRoomSpecs.BossbotCountryClubConnectorRooms
-        for i in xrange(self.numHallways):
+        for i in range(self.numHallways):
             self.hallways.append(hallwayRng.choice(connectorRoomNames))
 
     def _genFloorLayout(self):
@@ -206,7 +206,7 @@ class CountryClubLayout:
 
         # get list of all battle rooms
         allBattleRooms = []
-        for num, roomIds in numBattles2middleRoomIds.items():
+        for num, roomIds in list(numBattles2middleRoomIds.items()):
             if num > 0:
                 allBattleRooms.extend(roomIds)
 
@@ -228,7 +228,7 @@ class CountryClubLayout:
         if middleRoomsLeft > 0:
             # choose action rooms for the rest of the middle rooms
             actionRoomIds = numBattles2middleRoomIds[0]
-            for i in xrange(middleRoomsLeft):
+            for i in range(middleRoomsLeft):
                 roomId = rng.choice(actionRoomIds)
                 actionRoomIds.remove(roomId)
                 middleRoomIds.append(roomId)
@@ -240,7 +240,7 @@ class CountryClubLayout:
         #rng.shuffle(middleRoomIds)
         # temp only for debugging
         middleRoomIds.sort()
-        print('middleRoomIds=%s' % middleRoomIds)
+        print(('middleRoomIds=%s' % middleRoomIds))
         roomIds.extend(middleRoomIds)
         # add the chosen final room
         roomIds.append(finalRoomId)

@@ -1,13 +1,13 @@
 """DistributedDivingGameAI module: contains the DistributedDivingGameAI class"""
 
-from DistributedMinigameAI import *
+from .DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.actor import Actor
-import DivingGameGlobals
+from . import DivingGameGlobals
 #import DistributedSharkAI
 import random
 import random
@@ -171,7 +171,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         
 
         # reset scores
-        for avId in self.scoreDict.keys():
+        for avId in list(self.scoreDict.keys()):
             self.scoreDict[avId] = 0
             
 
@@ -195,7 +195,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         
         self.scoreTracking = {}
 
-        for avId in self.scoreDict.keys():
+        for avId in list(self.scoreDict.keys()):
             self.scoreTracking[avId] = [0,0,0,0,0] #0fishhits, 1crabhits, 2treasure catches, 3treasure drops, 4treasure Recoveries
 
     # called from the client
@@ -226,11 +226,11 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         self.scoreTracking[avId][4] += 1
         
         # increment scores in AI
-        for someAvId in self.scoreDict.keys():
+        for someAvId in list(self.scoreDict.keys()):
             if someAvId == avId:#reward to carrier
                 self.scoreDict[avId] += 10 * (self.REWARDMOD * 0.25)
                     
-            self.scoreDict[someAvId] += 10 * ((self.REWARDMOD * 0.75)/ float(len(self.scoreDict.keys())))
+            self.scoreDict[someAvId] += 10 * ((self.REWARDMOD * 0.75)/ float(len(list(self.scoreDict.keys()))))
             
         self.sendUpdate("incrementScore", [avId, newSpot, timestamp])
         
@@ -253,7 +253,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         DistributedMinigameAI.gameOver(self)
         trackingString = "MiniGame Stats : Diving Game"
         trackingString += ("\nDistrict:%s" % (self.getSafezoneId()))
-        for avId in self.scoreTracking.keys():
+        for avId in list(self.scoreTracking.keys()):
             trackingString = trackingString + ("\navId:%s fishHits:%s crabHits:%s treasureCatches:%s treasureDrops:%s treasureRecoveries:%s Score: %s" % (avId, self.scoreTracking[avId][0],self.scoreTracking[avId][1],self.scoreTracking[avId][2],self.scoreTracking[avId][3],self.scoreTracking[avId][4], self.scoreDict[avId]))
         #print trackingString
         self.air.writeServerEvent("MiniGame Stats", None, trackingString)        
@@ -294,7 +294,7 @@ class DistributedDivingGameAI(DistributedMinigameAI):
         #print "time to kick everyone out"
         
         # make sure players get at least 5
-        for avId in self.scoreDict.keys():
+        for avId in list(self.scoreDict.keys()):
             if self.scoreDict[avId] < 5:
                 self.scoreDict[avId] = 5
             

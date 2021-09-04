@@ -14,9 +14,9 @@ from direct.task import Task
 from toontown.effects.FireworkShow import FireworkShow
 
 # parties imports
-import PartyGlobals
-from DistributedPartyActivityAI import DistributedPartyActivityAI
-from activityFSMs import FireworksActivityFSM
+from . import PartyGlobals
+from .DistributedPartyActivityAI import DistributedPartyActivityAI
+from .activityFSMs import FireworksActivityFSM
 
 class DistributedPartyFireworksActivityAI(DistributedPartyActivityAI):
 

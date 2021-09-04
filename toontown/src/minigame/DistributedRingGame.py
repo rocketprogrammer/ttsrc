@@ -3,19 +3,20 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task import Task
-import ArrowKeys
-import Ring
-import RingTrack
-import RingGameGlobals
-import RingGroup
-import RingTrackGroups
+from . import ArrowKeys
+from . import Ring
+from . import RingTrack
+from . import RingGameGlobals
+from . import RingGroup
+from . import RingTrackGroups
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
+from functools import reduce
 
 class DistributedRingGame(DistributedMinigame):
 
@@ -546,7 +547,7 @@ class DistributedRingGame(DistributedMinigame):
             }
 
         # make sure that the difficulty numbers add up correctly
-        for distr in difficultyDistributions.values():
+        for distr in list(difficultyDistributions.values()):
             sum = reduce(lambda x,y: x+y, distr)
             assert sum == self.NumRingGroups
 
@@ -600,7 +601,7 @@ class DistributedRingGame(DistributedMinigame):
                              difficultyDistributions=
                              difficultyDistributions):
             # for each safezone
-            for sz in difficultyPatterns.keys():
+            for sz in list(difficultyPatterns.keys()):
                 # for each pattern
                 for pattern in difficultyPatterns[sz]:
                     assert len(pattern) == self.NumRingGroups
@@ -611,13 +612,13 @@ class DistributedRingGame(DistributedMinigame):
                         numGroupsPerDifficulty = difficultyDistributions[sz]
                         if numGroupsPerDifficulty[difficulty] != \
                            pattern.count(difficulty):
-                            print 'safezone:', sz
-                            print 'pattern:', pattern
-                            print 'difficulty:', difficulty
-                            print 'expected %s %ss, found %s' % (
+                            print('safezone:', sz)
+                            print('pattern:', pattern)
+                            print('difficulty:', difficulty)
+                            print('expected %s %ss, found %s' % (
                                 numGroupsPerDifficulty[difficulty],
                                 difficulty,
-                                pattern.count(difficulty))
+                                pattern.count(difficulty)))
                             return 0
             return 1
         assert patternsAreValid()
@@ -750,7 +751,7 @@ class DistributedRingGame(DistributedMinigame):
         # toon/toon collisions were set up in setGameReady
         if not self.isSinglePlayer():
             # get rid of remote toon collisions
-            for np in self.remoteToonCollNPs.values():
+            for np in list(self.remoteToonCollNPs.values()):
                 np.removeNode()
             del self.remoteToonCollNPs
 

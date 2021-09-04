@@ -4,8 +4,8 @@ import Pyro.errors
 import sys
 import time
 
-from sbLog import sbLog
-import sbConfig
+from .sbLog import sbLog
+from . import sbConfig
 
 from Pyro.errors import ConnectionClosedError
 from Pyro.errors import ProtocolError
@@ -53,7 +53,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         self.log.info("Starting.")
 
         # DISL SOAP init (temporary)
-        from PlayerFriendsDB import PlayerFriendsDB
+        from .PlayerFriendsDB import PlayerFriendsDB
         self.friendsDB = PlayerFriendsDB(self.log,dislURL)
 
         # DISL MD init
@@ -62,7 +62,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         
         # db init
 
-        from LastSeenDB import LastSeenDB
+        from .LastSeenDB import LastSeenDB
         self.lastSeenDB = LastSeenDB(log=self.log,
                                      host=sbConfig.lastSeenDBhost,
                                      port=sbConfig.lastSeenDBport,
@@ -70,7 +70,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
                                      passwd=sbConfig.lastSeenDBpasswd,
                                      dbname=sbConfig.lastSeenDBdb)
 
-        from sbMaildb import sbMaildb
+        from .sbMaildb import sbMaildb
         self.mailDB = sbMaildb(log=self.log,
                                host=sbConfig.mailDBhost,
                                port=sbConfig.mailDBport,
@@ -204,17 +204,17 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
 
             friends = []
 
-            for i in xrange(1,len(tempVals)-1,2):
+            for i in range(1,len(tempVals)-1,2):
                 friends.append([int(tempVals[i]),int(tempVals[i+1])])
             #self.log.debug(str(friends))
-        except Exception,e:
+        except Exception as e:
             self.parsingError(message)
             self.log.error(str(e))   
             return
 
         #self.log.debug("localPlayers: %s"%self.localPlayers)
 
-        if self.localPlayers.has_key(friendOne):
+        if friendOne in self.localPlayers:
             # add the new friendships
             for friend in friends:
                 friendTwo = friend[0]
@@ -247,10 +247,10 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
 
             friends = []
 
-            for i in xrange(1,len(tempVals)-1,2):
+            for i in range(1,len(tempVals)-1,2):
                 friends.append([int(tempVals[i]),int(tempVals[i+1])])
             #self.log.debug(str(friends))
-        except Exception,e:
+        except Exception as e:
             self.parsingError(message)
             self.log.error(str(e))
             return
@@ -265,11 +265,11 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         else:
             secret = False
 
-        if self.id2Friends.has_key(friendOne):
+        if friendOne in self.id2Friends:
             self.id2Friends[friendOne][friendTwo] = secret
             self.sendLocalFriendsUpdate(friendOne,[[friendTwo,secret],])
 
-        if self.id2Friends.has_key(friendTwo):
+        if friendTwo in self.id2Friends:
             self.id2Friends[friendTwo][friendOne] = secret
             self.sendLocalFriendsUpdate(friendTwo,[[friendOne,secret],])
 
@@ -294,16 +294,16 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         #self.log.debug("Friends before removal: %s" % str(self.id2Friends))
 
         # update my in-memory lists
-        if self.id2Friends.has_key(friendOne):
+        if friendOne in self.id2Friends:
             self.id2Friends[friendOne].pop(friendTwo,None)
 
-        if self.id2Friends.has_key(friendTwo):
+        if friendTwo in self.id2Friends:
             self.id2Friends[friendTwo].pop(friendOne,None)
 
         #self.log.debug("Friends after removal: %s" % str(self.id2Friends))
 
         # notify both friends
-        if self.localPlayers.has_key(friendOne) or self.localPlayers.has_key(friendTwo):
+        if friendOne in self.localPlayers or friendTwo in self.localPlayers:
             self.sendLocalFriendshipRemoved(friendOne,friendTwo)
 
 
@@ -340,7 +340,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
             self.log.debug("poking wedge")
             try:
                 self.wedge.recvEnterNode(self.nodeName)
-            except Exception,e:
+            except Exception as e:
                 self.log.info("Couldn't contact sb.wedge.%s, wedge is None." % self.nodeName)
                 self.wedge = None
 
@@ -349,7 +349,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
             try:
                 proxy = self.nodeProxy[node]
                 proxy.recvEnterNode(self.nodeName)
-            except Exception,e:
+            except Exception as e:
                 self.log.info("Couldn't contact sb.node.%s, removing from nodelist." % node)
                 self.nodeList.remove(node)
                 del self.nodeProxy[node]
@@ -439,7 +439,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
 
     #wedge->node
     def recvEnterLocalPlayer(self,playerId,playerInfo):
-        if self.localPlayers.has_key(playerId):
+        if playerId in self.localPlayers:
             self.log.warning("Warning: enterPlayer(%d) called, but I already have this player."%(playerId))
 
         self.log.debug("Player %d entered." % (playerId))
@@ -461,7 +461,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
                                                  sbConfig.DISL2SBChannel+self.nodeName,
                                                  sbConfig.FC_DISLGetFriends,
                                                  "%d"%playerId))
-        except Exception,e:
+        except Exception as e:
             self.log.error("Error sending friends request to DISL:")
             self.log.error(''.join(Pyro.util.getPyroTraceback(e)))
 
@@ -471,7 +471,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
 
     #wedge->node
     def recvExitLocalPlayer(self,playerId,playerInfo=None):
-        if not self.localPlayers.has_key(playerId):
+        if playerId not in self.localPlayers:
             self.log.warning("Warning: exitPlayer(%d) called, but I don't have this one."%playerId)
         
         self.log.debug("Player %d exited." % playerId)
@@ -491,13 +491,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         try:
             for node in self.nodeList:
                 self.nodeProxy[node].recvEnterRemotePlayer(playerId,self.nodeName,playerInfo,friendsList)
-        except ConnectionClosedError,e:
+        except ConnectionClosedError as e:
             self.log.error("ConnectionClosedError in sendEnterRemotePlayer.  Refreshing all nodes.")
             self.updateNodes()
-        except ProtocolError,e:
+        except ProtocolError as e:
             self.log.error("ProtocolError (%s) in sendEnterRemotePlayer.  Refreshing all nodes."%str(e))
             self.updateNodes()
-        except Exception,e:
+        except Exception as e:
             self.log.error("Error sending enterRemotePlayer to sb.node.%s: %s" % (node,''.join(Pyro.util.getPyroTraceback(e))))
         
 
@@ -506,19 +506,19 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         try:
             for node in self.nodeList:
                 self.nodeProxy[node].recvExitRemotePlayer(playerId,self.nodeName,friendsList)
-        except ConnectionClosedError,e:
+        except ConnectionClosedError as e:
             self.log.error("ConnectionClosedError in sendExitRemotePlayer.  Refreshing all nodes.")
             self.updateNodes()
-        except ProtocolError,e:
+        except ProtocolError as e:
             self.log.error("ProtocolError (%s) in sendExitRemotePlayer.  Refreshing all nodes."%str(e))
             self.updateNodes()
-        except Exception,e:
+        except Exception as e:
             self.log.error("Error sending exitRemotePlayer to sb.node.%s: %s" % (node,''.join(Pyro.util.getPyroTraceback(e))))
 
 
     #node->node
     def recvEnterRemotePlayer(self,playerId,nodeName,playerInfo,friendsList):
-        if self.remotePlayerLoc.has_key(playerId):
+        if playerId in self.remotePlayerLoc:
             self.log.warning("Warning: enterRemotePlayer(%d) called, but I already see this player."%(playerId))
             
         self.log.debug("Saw player %d enter at :sb.node.%s."%(playerId,nodeName))
@@ -531,13 +531,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         if self.wedge is not None:
             try:
                 self.wedge.recvEnterRemotePlayer(playerId,playerInfo,friendsList)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvEnterRemotePlayer.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvEnterRemotePlayer.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send player enter notice to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %s, %s, %s"%(str(playerId),str(playerInfo),str(friendsList)))
         else:
@@ -545,7 +545,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
 
     #node->node
     def recvExitRemotePlayer(self,playerId,nodeName,friendsList):
-        if not self.remotePlayerLoc.has_key(playerId):
+        if playerId not in self.remotePlayerLoc:
             self.log.warning("Warning: exitRemotePlayer(%d) called, but I don't see this player.  Ignoring."%(playerId))
             return
 
@@ -559,13 +559,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         if self.wedge is not None:
             try:
                 self.wedge.recvExitRemotePlayer(playerId,friendsList)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvExitRemotePlayer.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvExitRemotePlayer.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send player exit notice to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
         else:
             self.log.warning("ExitRemotePlayer: No wedge connected!")
@@ -579,23 +579,23 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         err = None
         try:
             self.friendsDB.addFriendship(playerId1,playerId2)
-        except Exception,e:
+        except Exception as e:
             try:                                           
                 for d in e.fault.detail:
                     if d.nodeName.find("errcode") != -1:
                         err = d.childNodes[0].get_data()
-            except Exception,ex:
+            except Exception as ex:
                 self.log.error("Unknown exception in removeFriendship: %s" % str(e))
         if err is not None:
             try:           
                 self.wedge.recvAddFriendshipError(playerId,err)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvSecretRequestError.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvSecretRequestError.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send recvAddFriendshipError to my wedge")
         
 
@@ -603,12 +603,12 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         self.log.debug("Got removeFriendship request")
         try:
             self.friendsDB.removeFriendship(playerId1,playerId2)
-        except Exception,e:           
+        except Exception as e:           
             try:
                 for d in e.fault.detail:
                     if d.nodeName.find("errcode") != -1:
                         err = d.childNodes[0].get_data()
-            except Exception,ex:
+            except Exception as ex:
                 self.log.error("Unknown exception in removeFriendship: %s" % str(e))
             
 
@@ -618,35 +618,35 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         err = None
         try:
             secret = self.friendsDB.getToken(playerId)
-        except Exception,e:
+        except Exception as e:
             try:
                 for d in e.fault.detail:
                     if d.nodeName.find("errcode") != -1:
                         err = d.childNodes[0].get_data()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Unknown exception in generateToken: %s" % str(e))
 
         if err is None:
             try:
                 self.wedge.recvSecretGenerated(playerId,secret)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvSecretGenerated.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvSecretGenerated.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send recvSecretGenerated to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
         else:
             try:
                 self.wedge.recvSecretRequestError(playerId,err)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvSecretRequestError.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvSecretRequestError.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send recvSecretRequestError to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
         
     def recvSecretRedeem(self,playerId,secret,parentUsername,parentPassword):
@@ -654,37 +654,37 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         err = None
         try:
             res = self.friendsDB.redeemToken(playerId,secret)
-        except Exception,e:
+        except Exception as e:
             try:
                 for d in e.fault.detail:
                     if d.nodeName.find("errcode") != -1:
                         err = d.childNodes[0]._get_data()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Unknown exception in redeemToken: %s" % str(e))
 
         if err is not None:
             try:
                 self.wedge.recvSecretRedeemError(playerId,err)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvSecretRedeemError.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvSecretRedeemError.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send recvSecretRedeemError to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
 
     def _getFriendInfo(self,playerId):
-        if self.localPlayers.has_key(playerId):
+        if playerId in self.localPlayers:
             return self.localPlayers[playerId]
-        elif self.remotePlayerInfo.has_key(playerId):
+        elif playerId in self.remotePlayerInfo:
             return self.remotePlayerInfo[playerId]
         else:
             return self.lastSeenDB.getInfo(playerId)
 
     def _getFriendView(self,viewerId,friendId):
         info = self._getFriendInfo(friendId)
-        assert self.id2Friends.has_key(viewerId)
+        assert viewerId in self.id2Friends
         if self.id2Friends[viewerId][friendId] is True:
             info.openChatFriendshipYesNo = 1
         else:
@@ -702,13 +702,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
                 friend[1] = self._getFriendView(friendOne,friend[0])
             try:
                 self.wedge.recvFriendsUpdate(friendOne,friends)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in sendLocalFriendsUpdate.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError (%s) in sendLocalFriendsUpdate.  Reconnecting to wedge."%str(e))
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't sendLocalFriendsUpdate to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %d, %s"%(friendOne,friends))
         else:
@@ -719,13 +719,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         if self.wedge is not None:
             try:
                 self.wedge.recvFriendshipRemoved(friendOne,friendTwo)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in sendFriendshipRemoved.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in sendLocalFriendshipRemoved.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't sendFriendshipRemoved to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %d, %d"%(friendOne,friendTwo))
         else:
@@ -744,7 +744,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         #if self.localPlayers.has_key(recipientId):
         #    self.log("Warning: I own %d.  Ignoring whisper." % (recipientId))
         #    self.wedge.recvWhisperFailed(recipientId,senderId,msgText)
-        if not self.remotePlayerLoc.has_key(recipientId):
+        if recipientId not in self.remotePlayerLoc:
             self.log.warning("I don't see %d anywhere!  Whisper not delivered."%recipientId)
             return
         #CHECK FRIENDSHIP, permissions, ignore list, etc?
@@ -755,13 +755,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         try:
             self.servedChat = self.servedChat + 1
             self.nodeProxy[loc].recvWhisper(recipientId,senderId,msgText)
-        except ConnectionClosedError,e:
+        except ConnectionClosedError as e:
             self.log.error("ConnectionClosedError in sendWhisper.  Reconnecting to nodes.")
             self.updateNodes()
-        except ProtocolError,e:
+        except ProtocolError as e:
             self.log.error("ProtocolError in sendWhisper.  Reconnecting to nodes.")
             self.updateNodes()
-        except Exception,e:
+        except Exception as e:
             self.log.error("Couldn't send whisper to sb.node.%s, had an error: %s"%(loc,''.join(Pyro.util.getPyroTraceback(e))))
 
     def recvWhisper(self,recipientId,senderId,msgText):
@@ -771,13 +771,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         if self.wedge is not None:
             try:
                 self.wedge.recvWhisper(recipientId,senderId,msgText)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvWhisper.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvWhisper.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send whisper to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %d, %d, %s"%(recipientId,senderId,msgText))
         else:
@@ -789,7 +789,7 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         #if self.localPlayers.has_key(recipientId):
         #    self.log("Warning: I own %d.  Ignoring whisper." % (recipientId))
         #    self.wedge.recvWhisperFailed(recipientId,senderId,msgText)
-        if not self.remotePlayerLoc.has_key(recipientId):
+        if recipientId not in self.remotePlayerLoc:
             self.log.warning("I don't see %d anywhere!  Whisper not delivered."%recipientId)
             #self.wedge.recvSCWhisperFailed(recipientId,senderId,msgText)
             return
@@ -801,13 +801,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         try:
             self.servedSC = self.servedSC + 1
             self.nodeProxy[loc].recvSCWhisper(recipientId,senderId,msgText)
-        except ConnectionClosedError,e:
+        except ConnectionClosedError as e:
             self.log.error("ConnectionClosedError in sendSCWhisper.  Reconnecting to nodes.")
             self.updateNodes()
-        except ProtocolError,e:
+        except ProtocolError as e:
             self.log.error("ProtocolError in sendSCWhisper.  Reconnecting to nodes.")
             self.updateNodes()
-        except Exception,e:
+        except Exception as e:
             self.log.error("Couldn't send SCwhisper to sb.node.%s, had an error: %s"%(loc,''.join(Pyro.util.getPyroTraceback(e))))
 
     def recvSCWhisper(self,recipientId,senderId,msgText):
@@ -815,13 +815,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         if self.wedge is not None:
             try:
                 self.wedge.recvWhisper(recipientId,senderId,msgText)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvSCWhisper.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvSCWhisper.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send whisper to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %d, %d, %s"%(recipientId,senderId,msgText))
         else:
@@ -850,13 +850,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
         if self.wedge is not None:
             try:
                 self.wedge.recvMailUpdate(recipientId,senderId,msgText)
-            except ConnectionClosedError,e:
+            except ConnectionClosedError as e:
                 self.log.error("ConnectionClosedError in recvMailUpdate.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:
+            except ProtocolError as e:
                 self.log.error("ProtocolError in recvMailUpdate.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send mail update to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %d, %d, %s"%(recipientId,senderId,msgText))
         else:
@@ -873,13 +873,13 @@ class sbNode(Pyro.core.SynchronizedObjBase,ChannelListener):
             try:
                 self.wedge.recvMail(recipientId,mail)
                 self.log.debug("Sent mail to %d: %s" % (recipientId,mail))
-            except ConnectionClosedError,e:       
+            except ConnectionClosedError as e:       
                 self.log.error("ConnectionClosedError in recvMail.  Reconnecting to wedge.")
                 self.updateWedge()
-            except ProtocolError,e:       
+            except ProtocolError as e:       
                 self.log.error("ProtocolError in recvMail.  Reconnecting to wedge.")
                 self.updateWedge()
-            except Exception,e:
+            except Exception as e:
                 self.log.error("Couldn't send mail to my wedge, had an error: %s"%''.join(Pyro.util.getPyroTraceback(e)))
                 self.log.error("I sent: %d, %s"%(recipientId,mail))
         else:

@@ -17,8 +17,8 @@ from otp.chat import ChatManager
 
 import random
 
-from Avatar import Avatar
-import AvatarDNA
+from .Avatar import Avatar
+from . import AvatarDNA
 
 
 class DistributedAvatar(DistributedActor, Avatar):

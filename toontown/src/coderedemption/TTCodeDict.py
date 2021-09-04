@@ -93,21 +93,21 @@ class TTCodeDict:
         # get the largest prime in this code value space to use as the code value modulus
         if codeLength in cls._PrimeModuli:
             return cls._PrimeModuli[codeLength]
-        print ('calculating prime modulus for code length %s...' % codeLength),
+        print(('calculating prime modulus for code length %s...' % codeLength), end=' ')
         i = cls.getNumValuesInCodeSpace(codeLength)
         while not cls._isPrime(i):
             i -= 1
             if i < 0:
                 raise 'could not find prime modulus for code length %s' % codeLength
         cls._PrimeModuli[codeLength] = i
-        print 'done.'
+        print('done.')
         return i
 
     @classmethod
     def _getPrime(cls, codeLength):
         if (codeLength in cls._Primes):
             return cls._Primes[codeLength]
-        print ('calculating prime multiplier for code length %s...' % codeLength),
+        print(('calculating prime multiplier for code length %s...' % codeLength), end=' ')
         numValues = cls.getNumValuesInCodeSpace(codeLength)
         if '_scatterPrime' not in cls.__dict__:
             # longer codes will require a larger (longer/more digits/more 7's!) prime here
@@ -130,7 +130,7 @@ class TTCodeDict:
             raise 'could not find prime smaller than %s' % numValues
         cls._Primes[codeLength] = prime
         #print 'codeLength %s, prime=%s' % (codeLength, prime)
-        print 'done.'
+        print('done.')
         return prime
 
     @classmethod
@@ -217,7 +217,7 @@ class TTCodeDict:
         if not codeLength:
             codeLength = 4
         while 1:
-            print 'testing code uniqueness for code length: %s' % codeLength
+            print('testing code uniqueness for code length: %s' % codeLength)
             codes = set()
             maxVal = cls._getPrimeModulus(codeLength)
             #print maxVal
@@ -226,7 +226,7 @@ class TTCodeDict:
                 x = cls.getObfuscatedCodeValue(i, codeLength)
                 code = cls.getCodeFromValue(x, codeLength)
                 if verbose:
-                    print '%s %s/%s -> %s' % (cls.getReadableCode(code), i, maxVal-1, x)
+                    print('%s %s/%s -> %s' % (cls.getReadableCode(code), i, maxVal-1, x))
                 if code in codes:
                     raise 'code %s already encountered!' % code
                 codes.add(code)

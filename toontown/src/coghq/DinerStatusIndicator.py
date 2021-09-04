@@ -125,7 +125,7 @@ class DinerStatusIndicator(NodePath.NodePath, FSM.FSM):
         flashDuration = 10
         if time > flashDuration:
             flashingTrack.append(Wait(time-flashDuration))
-            for i in xrange(10):
+            for i in range(10):
                 flashingTrack.append(Parallel(
                     LerpColorScaleInterval(icon, 0.5, VBase4(1, 0, 0, 1)),
                     icon.scaleInterval(0.5, 1.25)

@@ -2,13 +2,13 @@ from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.task.Task import Task
 from direct.interval.IntervalGlobal import *
-from TrolleyConstants import *
+from .TrolleyConstants import *
 from direct.gui.DirectGui import *
 from toontown.toonbase import TTLocalizer
 
 from direct.distributed import DistributedNode
 from direct.distributed.ClockDelta import globalClockDelta
-from ChineseCheckersBoard import ChineseCheckersBoard
+from .ChineseCheckersBoard import ChineseCheckersBoard
 from direct.fsm import ClassicFSM, State
 from direct.fsm import StateData
 #from direct.distributed import DelayDelete
@@ -720,7 +720,7 @@ class DistributedFindFour(DistributedNode.DistributedNode):
             blinkList = self.findDiagonal(x,y,playerNum)
 
         if blinkList != []:
-            print blinkList
+            print(blinkList)
             val0 = (x*7) + y
             
             x = blinkList[0][0]

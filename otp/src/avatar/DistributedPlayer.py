@@ -172,7 +172,7 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar,
         name from within setWhisper and expect the derived function to
         override it.
         """
-        print "Whisper type %s from %s: %s" % (whisperType, fromId, chatString)
+        print("Whisper type %s from %s: %s" % (whisperType, fromId, chatString))
         
         
     def displayWhisperPlayer(self, playerId, chatString, whisperType):
@@ -182,7 +182,7 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar,
         name from within setWhisper and expect the derived function to
         override it.
         """
-        print "WhisperPlayer type %s from %s: %s" % (whisperType, playerId, chatString)
+        print("WhisperPlayer type %s from %s: %s" % (whisperType, playerId, chatString))
 
     ### setWhisperSC ###
 
@@ -273,7 +273,7 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar,
         Sends a speedchat whisper message to the indicated
         toon, prefixed with our own name.
         """
-        print("whisperSCEmoteTo %s %s %s" % (emoteId, sendToId, toPlayer))
+        print(("whisperSCEmoteTo %s %s %s" % (emoteId, sendToId, toPlayer)))
         if toPlayer:
             base.cr.playerFriendsManager.sendSCEmoteWhisper(sendToId, emoteId)
             return
@@ -366,7 +366,7 @@ class DistributedPlayer(DistributedAvatar.DistributedAvatar,
         name from within setWhisper and expect the derived function to
         override it.
         """
-        print "TalkWhisper from %s: %s" % (fromId, chatString)
+        print("TalkWhisper from %s: %s" % (fromId, chatString))
         
     def scrubTalk(self, chat, mods):
         """

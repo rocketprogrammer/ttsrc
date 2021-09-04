@@ -1,6 +1,6 @@
 """SCStaticTextTerminal.py: contains the SCStaticTextTerminal class"""
 
-from SCTerminal import SCTerminal
+from .SCTerminal import SCTerminal
 from otp.otpbase.OTPLocalizer import SpeedChatStaticText
 
 # args: textId

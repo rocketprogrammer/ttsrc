@@ -1,5 +1,5 @@
-import RepairAvatars
-import DatabaseObject
+from . import RepairAvatars
+from . import DatabaseObject
 import time
 
 # this removes all traces of a list of tasks from all avatars; if they are
@@ -51,7 +51,7 @@ class DeadTaskRemover(RepairAvatars.AvatarIterator):
 
         # and store the changes in the DB
         if questsChanged:
-            print "Fixing %s: %s" % (av.doId, av.name)
+            print("Fixing %s: %s" % (av.doId, av.name))
             fields = ['setQuests']
             if questHistoryChanged:
                 fields.append('setQuestHistory')
@@ -63,15 +63,15 @@ class DeadTaskRemover(RepairAvatars.AvatarIterator):
     def printSometimes(self, av):
         now = time.time()
         if now - self.lastPrintTime > self.printInterval:
-            print "Avatar %d: %s" % (av.doId, av.name)
+            print("Avatar %d: %s" % (av.doId, av.name))
             self.lastPrintTime = now
 
-import UtilityStart
-f = DeadTaskRemover(simbase.air, (range(6979, 6999+1) +
-                                  range(7979, 7999+1) +
-                                  range(8979, 8999+1) +
-                                  range(9979, 9999+1) +
-                                  range(10979, 10999+1)))
+from . import UtilityStart
+f = DeadTaskRemover(simbase.air, (list(range(6979, 6999+1)) +
+                                  list(range(7979, 7999+1)) +
+                                  list(range(8979, 8999+1)) +
+                                  list(range(9979, 9999+1)) +
+                                  list(range(10979, 10999+1))))
 f.start()
 run()
 

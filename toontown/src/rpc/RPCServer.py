@@ -1,4 +1,4 @@
-import threading,Queue
+import threading,queue
 import SOAPpy
 from tlslite.errors import TLSError
 
@@ -29,8 +29,8 @@ class RPCServerThread(threading.Thread):
 
         threading.Thread.__init__(self)
         self.setDaemon(True)
-        self.requestQueue = Queue.Queue()
-        self.resultQueue = Queue.Queue()
+        self.requestQueue = queue.Queue()
+        self.resultQueue = queue.Queue()
 
         SOAPpy.Config.debug = 0
         SOAPpy.Config.dumpFaultInfo = 0
@@ -50,7 +50,7 @@ class RPCServerThread(threading.Thread):
             assert self.requestQueue.empty()
             assert self.resultQueue.empty()
             if not isinstance(accountName,str):
-                raise RPCException, "Argument accountName was not a string."
+                raise RPCException("Argument accountName was not a string.")
 
             c = SOAPpy.GetSOAPContext()
 
@@ -60,7 +60,7 @@ class RPCServerThread(threading.Thread):
             idList = self.resultQueue.get()
 
             if isinstance(idList,TimeoutException):
-                raise RPCException, "Request timed out."
+                raise RPCException("Request timed out.")
 
             resultList = []
             for doid in idList:
@@ -84,7 +84,7 @@ class RPCServerThread(threading.Thread):
             assert self.requestQueue.empty()
             assert self.resultQueue.empty()
             if not isinstance(accountName,str):
-                raise RPCException, "Argument accountName was not a string."
+                raise RPCException("Argument accountName was not a string.")
 
             c = SOAPpy.GetSOAPContext()
 
@@ -94,7 +94,7 @@ class RPCServerThread(threading.Thread):
             idList = self.resultQueue.get()
 
             if isinstance(idList,TimeoutException):
-                raise RPCException, "Request timed out."
+                raise RPCException("Request timed out.")
 
             resultList = []
             id = 0
@@ -124,15 +124,15 @@ class RPCServerThread(threading.Thread):
             assert self.requestQueue.empty()
             assert self.resultQueue.empty()
             if not isinstance(toonID,int):
-                raise RPCException, "Argument toonID was not an int."
+                raise RPCException("Argument toonID was not an int.")
             if not isinstance(beanAmount,int):
-                raise RPCException, "Argument beanAmount was not an int."
+                raise RPCException("Argument beanAmount was not an int.")
             if toonID < 1:
-                raise RPCException, "Argument toonID was non-positive."
+                raise RPCException("Argument toonID was non-positive.")
             if beanAmount > 100:
-                raise RPCException, "Attempted to give a toon more than 100 jellybeans at once"
+                raise RPCException("Attempted to give a toon more than 100 jellybeans at once")
             if beanAmount < 1:
-                raise RPCException, "Attempted to give a toon a non-positive jellybean amount"
+                raise RPCException("Attempted to give a toon a non-positive jellybean amount")
 
 
             c = SOAPpy.GetSOAPContext()
@@ -160,15 +160,15 @@ class RPCServerThread(threading.Thread):
             assert self.requestQueue.empty()
             assert self.resultQueue.empty()
             if not isinstance(toonID,int):
-                raise RPCException, "Argument toonID was not an int."
+                raise RPCException("Argument toonID was not an int.")
             if not isinstance(beanAmount,int):
-                raise RPCException, "Argument beanAmount was not an int."
+                raise RPCException("Argument beanAmount was not an int.")
             if toonID < 1:
-                raise RPCException, "Argument toonID was non-positive."
+                raise RPCException("Argument toonID was non-positive.")
             if beanAmount > 100:
-                raise RPCException, "Attempted to give a toon more than 100 jellybeans at once"
+                raise RPCException("Attempted to give a toon more than 100 jellybeans at once")
             if beanAmount < 1:
-                raise RPCException, "Attempted to give a toon a non-positive jellybean amount"
+                raise RPCException("Attempted to give a toon a non-positive jellybean amount")
 
             c = SOAPpy.GetSOAPContext()
 
@@ -189,9 +189,9 @@ class RPCServerThread(threading.Thread):
             assert self.requestQueue.empty()
             assert self.resultQueue.empty()
             if not isinstance(toonID,int):
-                raise RPCException, "Argument toonID was not an int."
+                raise RPCException("Argument toonID was not an int.")
             if toonID < 1:
-                raise RPCException, "Argument toonID was non-positive."
+                raise RPCException("Argument toonID was non-positive.")
 
             c = SOAPpy.GetSOAPContext()
 
@@ -201,7 +201,7 @@ class RPCServerThread(threading.Thread):
             picid = self.resultQueue.get()
 
             if isinstance(picid,TimeoutException):
-                raise RPCException, "Request timed out."
+                raise RPCException("Request timed out.")
 
             return picid
 
@@ -215,9 +215,9 @@ class RPCServerThread(threading.Thread):
             assert self.requestQueue.empty()
             assert self.resultQueue.empty()
             if not isinstance(toonID,int):
-                raise RPCException, "Argument toonID was not an int."
+                raise RPCException("Argument toonID was not an int.")
             if toonID < 1:
-                raise RPCException, "Argument toonID was non-positive."
+                raise RPCException("Argument toonID was non-positive.")
 
             c = SOAPpy.GetSOAPContext()
 
@@ -227,7 +227,7 @@ class RPCServerThread(threading.Thread):
             dna = self.resultQueue.get()
 
             if isinstance(dna,TimeoutException):
-                raise RPCException, "Request timed out."
+                raise RPCException("Request timed out.")
 
             return dna
             
@@ -263,19 +263,19 @@ class RPCServerThread(threading.Thread):
         result = self.resultQueue.get()
 
         if toonID < 1:
-            raise RPCException, "Argument toonID was non-positive."
+            raise RPCException("Argument toonID was non-positive.")
         if isinstance(result,TimeoutException):
-            raise RPCException, "Request timed out."
-        return unicode(result.decode("utf-8"))
+            raise RPCException("Request timed out.")
+        return str(result.decode("utf-8"))
 
 
     def run(self):
         while 1:
             try:
                 self.SOAPServer.serve_forever()
-            except TLSError,e:
+            except TLSError as e:
                 self.SOAPServer.logRequestQueue.put(("unknown","TLSError",e))
-            except Exception,e:
+            except Exception as e:
                 self.SOAPServer.logRequestQueue.put(("unknown","Exception",e))
     
 
@@ -316,7 +316,7 @@ class RPCServer(object):
         if allowed_ipdict == {}:
             self.notify.warning("No allowed IP list provided.  ALLOWING ANYONE TO CONNECT.")
         else:
-            self.notify.info("Allowing requests from: %s" % allowed_ipdict.keys())
+            self.notify.info("Allowing requests from: %s" % list(allowed_ipdict.keys()))
       
         self.rpcip = rpcip
         self.rpcport = rpcport
@@ -344,13 +344,13 @@ class RPCServer(object):
         try:
             request = self.serverthread.requestQueue.get_nowait()
             request.submit()
-        except Queue.Empty:
+        except queue.Empty:
             pass
 
         try:
             clientIP,description,info = self.serverthread.SOAPServer.logRequestQueue.get_nowait()
             self.processLogRequest(clientIP,description,info)
-        except Queue.Empty:
+        except queue.Empty:
             pass
 
 

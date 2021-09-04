@@ -9,8 +9,8 @@ from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.directnotify import DirectNotifyGlobal
 from otp.otpbase import OTPLocalizer
-import TTAccount
-import GuiScreen
+from . import TTAccount
+from . import GuiScreen
 from otp.otpbase import OTPGlobals
 from direct.distributed.MsgTypes import *
 
@@ -336,7 +336,7 @@ class CreateAccountScreen(StateData.StateData, GuiScreen.GuiScreen):
             error=self.loginInterface.createAccount(self.userName,
                                                     self.password,
                                                     data)
-        except TTAccount.TTAccountException, e:
+        except TTAccount.TTAccountException as e:
             # show the error message, and back out of account creation
             error = str(e)
             self.notify.info(error)

@@ -29,7 +29,7 @@ class CogdoCraneGameBase:
         def getEntityTypeReg(self):
             # return an EntityTypeRegistry with information about the
             # entity types that the crane game uses
-            import CogdoEntityTypes
+            from . import CogdoEntityTypes
             from otp.level import EntityTypeRegistry
             typeReg = EntityTypeRegistry.EntityTypeRegistry(CogdoEntityTypes)
             return typeReg

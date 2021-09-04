@@ -1,8 +1,8 @@
 from pandac.PandaModules import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
-from ElevatorConstants import *
-from ElevatorUtils import *
+from .ElevatorConstants import *
+from .ElevatorUtils import *
 from direct.showbase import PythonUtil
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
@@ -157,7 +157,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         if self.bldgRequest:
             self.cr.relatedObjectMgr.abortRequest(self.bldgRequest)
             self.bldgRequest = None
-        for request in self.toonRequests.values():
+        for request in list(self.toonRequests.values()):
             self.cr.relatedObjectMgr.abortRequest(request)
         self.toonRequests = {}
 
@@ -267,12 +267,12 @@ class DistributedElevator(DistributedObject.DistributedObject):
             # be taken.
             pass
 
-        elif not self.cr.doId2do.has_key(avId):
+        elif avId not in self.cr.doId2do:
             # It's someone who hasn't been generated yet.
             func = PythonUtil.Functor(
                 self.gotToon, index, avId)
                                       
-            assert not self.toonRequests.has_key(index)
+            assert index not in self.toonRequests
             self.toonRequests[index] = self.cr.relatedObjectMgr.requestObjects(
                 [avId], allCallback = func)
 
@@ -330,7 +330,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
             else:
                 animInFunc = Sequence(Func(toon.setAnimState, "run", 1.0))
                 animFunc = Func(toon.setAnimState, "neutral", 1.0)
-            toon.headsUp(self.getElevatorModel(), apply(Point3, self.elevatorPoints[index]))
+            toon.headsUp(self.getElevatorModel(), Point3(*self.elevatorPoints[index]))
 
             track = Sequence(
                 # Pos 1: -1.5, 5, 0
@@ -339,7 +339,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
                 # Pos 4: 2.5, 3, 0
                 animInFunc,
                 LerpPosInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.75,
-                                apply(Point3, self.elevatorPoints[index]),
+                                Point3(*self.elevatorPoints[index]),
                                 other=self.getElevatorModel()),
                 LerpHprInterval(toon, TOON_BOARD_ELEVATOR_TIME * 0.25,
                                 Point3(180, 0, 0),
@@ -443,7 +443,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
             timeToSet = self.countdownTime
             if timeSent > 0:
                 timeToSet = timeSent
-            if self.cr.doId2do.has_key(avId):
+            if avId in self.cr.doId2do:
                 # See if we need to reset the clock
                 # (countdown assumes we've created a clockNode already)
                 if (bailFlag == 1 and hasattr(self, 'clockNode')):
@@ -555,7 +555,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         # This should only be sent to us if our localToon requested
         # permission to board the elevator.
         # reason 0: unknown, 1: shuffle, 2: too low laff, 3: no seat, 4: need promotion
-        print("rejectBoard %s" % (reason))
+        print(("rejectBoard %s" % (reason)))
         if hasattr(base.localAvatar, "elevatorNotifier"):
             if reason == REJECT_SHUFFLE:
                 base.localAvatar.elevatorNotifier.showMe(TTLocalizer.ElevatorHoppedOff)
@@ -633,7 +633,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         """
         # for any avatars that are still parented to us, remove them from the scene graph
         # so that they're not there when the doors open again
-        for avId in self.boardedAvIds.keys():
+        for avId in list(self.boardedAvIds.keys()):
             av = self.cr.doId2do.get(avId)
             if av is not None:
                 if av.getParent().compareTo(self.getElevatorModel()) == 0:
@@ -766,7 +766,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
             keyList.append(key)
             
         for key in keyList:
-            if self.__toonTracks.has_key(key):
+            if key in self.__toonTracks:
                 self.clearToonTrack(key)
                 
     def getDestName(self):
@@ -786,7 +786,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         teleport to or run to.
         Note: This is the pos reletive to the toon parent.
         """
-        self.offsetNP.setPos(apply(Point3, self.getOffsetPos(seatIndex)))
+        self.offsetNP.setPos(Point3(*self.getOffsetPos(seatIndex)))
         return self.offsetNP.getPos(toon.getParent())
     
     def getOffsetPosWrtRender(self, seatIndex = 0):
@@ -795,7 +795,7 @@ class DistributedElevator(DistributedObject.DistributedObject):
         teleport to or run to.
         Note: This is the pos reletive to the render.
         """
-        self.offsetNP.setPos(apply(Point3, self.getOffsetPos(seatIndex)))
+        self.offsetNP.setPos(Point3(*self.getOffsetPos(seatIndex)))
         return self.offsetNP.getPos(render)
     
     def canHideBoardingQuitBtn(self, avId):

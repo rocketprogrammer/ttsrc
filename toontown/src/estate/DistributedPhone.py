@@ -1,12 +1,12 @@
 from toontown.toonbase import ToontownGlobals
-import PhoneGlobals
+from . import PhoneGlobals
 from toontown.catalog import CatalogScreen
 from toontown.catalog import CatalogItem
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
-import DistributedHouseInterior
+from . import DistributedHouseInterior
 from direct.actor import Actor
-import DistributedFurnitureItem
+from . import DistributedFurnitureItem
 from direct.distributed import ClockDelta
 from direct.showbase import PythonUtil
 from direct.showutil import Rope
@@ -369,7 +369,7 @@ class DistributedPhone(DistributedFurnitureItem.DistributedFurnitureItem):
         # parameters: the appropriate code from PhoneGlobals.py,
         # followed by the item itself.
 
-        print "in the client phone"
+        print("in the client phone")
 
         blob = item.getBlob(store = CatalogItem.Customization)
         context = self.getCallbackContext(callback, [item])

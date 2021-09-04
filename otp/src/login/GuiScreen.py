@@ -102,7 +102,7 @@ class GuiScreen:
         # Note that we still need to listen for DirectEntry focus events,
         # in case the user clicks on a DirectEntry.
         self.focusHandlerAbsorbCounts = {}
-        for i in xrange(len(self.focusList)):
+        for i in range(len(self.focusList)):
             item = self.focusList[i]
             if isinstance(item, DirectEntry):
                 self.focusHandlerAbsorbCounts[item] = 0
@@ -111,7 +111,7 @@ class GuiScreen:
         self.userFocusHandlers = {}
         self.userCommandHandlers = {}
 
-        for i in xrange(len(self.focusList)):
+        for i in range(len(self.focusList)):
             item = self.focusList[i]
             if isinstance(item, DirectEntry):
                 # store the old focus handler so that we can chain to it
@@ -146,12 +146,12 @@ class GuiScreen:
 
         # set up the Enter-press handlers
         self.enterPressHandlers = {}
-        for i in xrange(len(self.focusList)):
+        for i in range(len(self.focusList)):
             item = self.focusList[i]
 
             # pick an enter-press behavior
             behavior = enterPressBehavior
-            if overrides.has_key(item):
+            if item in overrides:
                 behavior = overrides[item]
 
             if callable(behavior):
@@ -320,16 +320,16 @@ class GuiScreen:
         if userHandler:
             if isinstance(item, DirectEntry):
                 enteredText = item.get()
-                apply(userHandler, [enteredText] + userHandlerArgs)
+                userHandler(*[enteredText] + userHandlerArgs)
             elif isinstance(item, DirectScrolledList):
-                apply(userHandler, userHandlerArgs)
+                userHandler(*userHandlerArgs)
 
     def __chainToUserFocusHandler(self, item):
         # call the user focus handler, if any
         if isinstance(item, DirectEntry):
             userHandler, userHandlerArgs = self.userFocusHandlers[item]
             if userHandler:
-                apply(userHandler, userHandlerArgs)
+                userHandler(*userHandlerArgs)
 
     ### TAB key handlers ##########
 

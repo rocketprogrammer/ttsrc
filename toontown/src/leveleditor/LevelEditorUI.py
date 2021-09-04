@@ -2,17 +2,17 @@ import os
 from pandac.PandaModules import *
 from direct.leveleditor.LevelEditorUIBase import *
 from direct.gui import DirectGui
-from SceneGraphUI import *
-from FlatBuildingObj import *
-from LandmarkObj import *
-from PropObj import *
-from AnimPropObj import *
-from AnimBuildingObj import *
-from GroupObj import *
-from SignEditFrame import *
-from VisGroupsUI import *
+from .SceneGraphUI import *
+from .FlatBuildingObj import *
+from .LandmarkObj import *
+from .PropObj import *
+from .AnimPropObj import *
+from .AnimBuildingObj import *
+from .GroupObj import *
+from .SignEditFrame import *
+from .VisGroupsUI import *
 
-from LevelEditorGlobals import HOOD_IDS
+from .LevelEditorGlobals import HOOD_IDS
 
 ID_SAVE_DNA    = 1101
 ID_SAVE_DNA_AS = 1102
@@ -184,7 +184,7 @@ class LevelEditorUI(LevelEditorUIBase):
 
         elif isinstance(objNP, PropObj):
             if objDef.hood == 'Generic':
-                for hoodId in HOOD_IDS.keys():
+                for hoodId in list(HOOD_IDS.keys()):
                     addSubMenuItem('Prop Color for %s'%hoodId, None, 'prop_color', objNP.dna, None, hoodId) 
             else:
                 addSubMenuItem('Prop Color', None, 'prop_color', objNP.dna)         
@@ -246,9 +246,9 @@ class LevelEditorUI(LevelEditorUIBase):
         objNP.removeBattleCell(cell)
         # Remove cell from DNASTORE
         if DNASTORE.removeBattleCell(cell):
-            print "Removed from DNASTORE"
+            print("Removed from DNASTORE")
         else:
-            print "Not found in DNASTORE"        
+            print("Not found in DNASTORE")        
 
         del self.cellDict[cell]
         for i in range(visGroupDNA.getNumBattleCells()):
@@ -299,7 +299,7 @@ class LevelEditorUI(LevelEditorUIBase):
         return marker
 
     def resetBattleCellMarkers(self):
-        for cell, marker in self.cellDict.items():
+        for cell, marker in list(self.cellDict.items()):
             if not marker.isEmpty():
                 marker.remove()
         self.cellDict = {}
@@ -485,19 +485,19 @@ class LevelEditorUI(LevelEditorUIBase):
         self.PopupMenu(self.contextMenu, mpos)
 
     def onShowBattleCells(self, evt=None):
-        for cell, marker in self.cellDict.items():
+        for cell, marker in list(self.cellDict.items()):
             if self.showBattleCellsMenuItem.IsChecked():
                marker.show()
             else:
                marker.hide()
 
     def onShowSuitPath(self, evt=None):
-        for edge, edgeLine in self.edgeDict.items():
+        for edge, edgeLine in list(self.edgeDict.items()):
             if self.showSuitPathMenuItem.IsChecked():
                 edgeLine.show()
             else:
                 edgeLine.hide()
-        for point, marker in self.pointDict.items():
+        for point, marker in list(self.pointDict.items()):
             if self.showSuitPathMenuItem.IsChecked():
                 marker.show()
             else:
@@ -573,13 +573,13 @@ class LevelEditorUI(LevelEditorUIBase):
         return marker
 
     def resetPathMarkers(self):
-        for edge, edgeLine in self.edgeDict.items():
+        for edge, edgeLine in list(self.edgeDict.items()):
             if not edgeLine.isEmpty():
                 edgeLine.reset()
                 edgeLine.removeNode()
         self.edgeDict = {}
         self.np2EdgeDict = {}
-        for point, marker in self.pointDict.items():
+        for point, marker in list(self.pointDict.items()):
             if not marker.isEmpty():
                 marker.removeNode()
         self.pointDict = {}
@@ -609,7 +609,7 @@ class LevelEditorUI(LevelEditorUIBase):
                 # Store the edge on each point in case we move the point
                 # we can update the edge
                 for point in [edge.getStartPoint(), edge.getEndPoint()]:
-                    if self.point2edgeDict.has_key(point):
+                    if point in self.point2edgeDict:
                         self.point2edgeDict[point].append(edge)
                     else:
                         self.point2edgeDict[point] = [edge]
@@ -623,10 +623,10 @@ class LevelEditorUI(LevelEditorUIBase):
         elif (side == 'inner'):
             barricadeDict = self.innerBarricadeDict
         else:
-            print("unhandled side %s" % side)
+            print(("unhandled side %s" % side))
             return
 
-        if not barricadeDict.has_key(barricadeOrigNum):
+        if barricadeOrigNum not in barricadeDict:
             barricadeDict[barricadeOrigNum] = [curBldgGroupIndex, curBldgGroupIndex]
 
         if curBldgGroupIndex < barricadeDict[barricadeOrigNum][0]:
@@ -635,7 +635,7 @@ class LevelEditorUI(LevelEditorUIBase):
         if barricadeDict[barricadeOrigNum][1] < curBldgGroupIndex:
             barricadeDict[barricadeOrigNum][1] = curBldgGroupIndex
 
-        print "---------- %s barricadeDict origNum=%d  data=(%d, %d)" %(side, barricadeOrigNum, barricadeDict[barricadeOrigNum][0], barricadeDict[barricadeOrigNum][1])
+        print("---------- %s barricadeDict origNum=%d  data=(%d, %d)" %(side, barricadeOrigNum, barricadeDict[barricadeOrigNum][0], barricadeDict[barricadeOrigNum][1]))
 
     def reparentStreetBuildings(self, nodePath):
         dnaNode = self.editor.findDNANode(nodePath)
@@ -668,7 +668,7 @@ class LevelEditorUI(LevelEditorUIBase):
         return newGroup
 
     def makeNewBuildingGroup(self, sequenceNum, side, curveName):
-        print "-------------------------- new building group %s  curveName=%s------------------------" % (sequenceNum, curveName)
+        print("-------------------------- new building group %s  curveName=%s------------------------" % (sequenceNum, curveName))
         # Now create a new group with just the buildings
         self.editor.addGroup(self.editor.NPToplevel)
         newGroup = self.editor.NPParent
@@ -678,10 +678,10 @@ class LevelEditorUI(LevelEditorUIBase):
 
         if 'curveside' in curveName:
             #we want to preserve which group the side street is closest to
-            print "special casing %s" % curveName
+            print("special casing %s" % curveName)
             parts = curveName.split('_')
             groupName = 'Buildings_' + side + "-" + parts[3] + "_" + parts[4]
-            print "groupname = %s" % groupName
+            print("groupname = %s" % groupName)
         else:
             groupName = 'Buildings_' + side + "-" + str(sequenceNum)
         newGroup.setName(groupName)
@@ -808,13 +808,13 @@ class LevelEditorUI(LevelEditorUIBase):
         return marker
 
     def resetPathMarkers(self):
-        for edge, edgeLine in self.edgeDict.items():
+        for edge, edgeLine in list(self.edgeDict.items()):
             if not edgeLine.isEmpty():
                 edgeLine.reset()
                 edgeLine.removeNode()
         self.edgeDict = {}
         self.np2EdgeDict = {}
-        for point, marker in self.pointDict.items():
+        for point, marker in list(self.pointDict.items()):
             if not marker.isEmpty():
                 marker.removeNode()
         self.pointDict = {}
@@ -844,7 +844,7 @@ class LevelEditorUI(LevelEditorUIBase):
                 # Store the edge on each point in case we move the point
                 # we can update the edge
                 for point in [edge.getStartPoint(), edge.getEndPoint()]:
-                    if self.point2edgeDict.has_key(point):
+                    if point in self.point2edgeDict:
                         self.point2edgeDict[point].append(edge)
                     else:
                         self.point2edgeDict[point] = [edge]

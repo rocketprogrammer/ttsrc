@@ -111,7 +111,7 @@ class ToontownGroupManager:
         print("removeFromGroup")
         group = self.getGroup(leaverId)
         if group and (leaverId in group[GROUPMEMBER]):
-            print("Group found for %s" % (leaverId))
+            print(("Group found for %s" % (leaverId)))
             #send everyone in the group a message memberId has left
             for avId in group[GROUPMEMBER]:
                 if avId != leaverId:
@@ -133,14 +133,14 @@ class ToontownGroupManager:
         if group and len(group[GROUPMEMBER]) <= 1:
             self.groupLists.remove(group)
             for member in group[GROUPMEMBER]:
-                if self.avIdDict.has_key(member):
+                if member in self.avIdDict:
                     self.avIdDict.pop(member)
         # clear the member's group affiliation
-        if self.avIdDict.has_key(leaverId):
+        if leaverId in self.avIdDict:
             self.avIdDict.pop(leaverId)
         
     def getGroup(self, memberId):
-        if self.avIdDict.has_key(memberId):
+        if memberId in self.avIdDict:
             return self.avIdDict[memberId]
         else:
             return None

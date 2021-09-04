@@ -2,7 +2,7 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownBattleGlobals import *
 from toontown.toonbase.ToontownGlobals import *
-from SuitBattleGlobals import *
+from .SuitBattleGlobals import *
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.gui import OnscreenText

@@ -1,13 +1,13 @@
 # dummy SB
 
-from sbNode import sbNode
-from sbWedge import sbWedge
-import Queue
+from .sbNode import sbNode
+from .sbWedge import sbWedge
+import queue
 import sys
 import socket  
 import select
 
-q = Queue.Queue()
+q = queue.Queue()
 
 class dumWedge(sbWedge):
     def __init__(self,wedgeName,qq):
@@ -27,7 +27,7 @@ myWedge.node._setOneway(["enterPlayer","exitPlayer","sendWhisper"])
 #myWedge.node.enterPlayer(1234)
 
 def log(message):
-    print message
+    print(message)
     sys.stdout.flush()
 
 
@@ -63,7 +63,7 @@ while True:
                 sendstr = "%d %d SEND %s\n" % (recipient,sender,msg)
                 log(sendstr)
                 clisock.sendall(sendstr)
-            except Queue.Empty: pass      
+            except queue.Empty: pass      
 
         if listensock in ins:
             if clisock is not None:
@@ -89,7 +89,7 @@ while True:
                     else:
                         log("Invalid message: %s" % s)
                         clisock.sendall("Blargh invalid message\n")
-                except Exception,e:
+                except Exception as e:
                     log(e)
                     log("Problematic message: %s" % s)
                     clisock.sendall("Blargh invalid message\n")
@@ -98,7 +98,7 @@ while True:
                 s = s + data
 
 
-    except Queue.Empty,e:
+    except queue.Empty as e:
         log("Caught error:")
         log(e)
         try:

@@ -1,8 +1,8 @@
 
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-import FishPokerBase
-import FishGlobals
+from . import FishPokerBase
+from . import FishGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
 
@@ -158,7 +158,7 @@ class FishPokerGui(FishPokerBase.FishPokerBase,
     def clear(self):
         FishPokerBase.FishPokerBase.clear(self)
         # Update the gui
-        for cardGui in self.__cardGuis.values():
+        for cardGui in list(self.__cardGuis.values()):
             cardGui.clear()
         # Update value
         self.updateCashIn()

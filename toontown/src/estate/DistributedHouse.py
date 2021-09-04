@@ -16,7 +16,7 @@ from toontown.toonbase import TTLocalizer
 import random
 from direct.showbase import PythonUtil
 from toontown.hood import Place
-import HouseGlobals
+from . import HouseGlobals
 from toontown.building import ToonInteriorColors
 from direct.showbase.MessengerGlobal import messenger
 
@@ -29,7 +29,7 @@ class DistributedHouse(DistributedObject.DistributedObject):
 
     def __init__(self, cr):
         DistributedObject.DistributedObject.__init__(self, cr)
-        print('yeah', cr)
+        print(('yeah', cr))
 
         self.houseType = None
         self.avId = -1

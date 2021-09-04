@@ -92,7 +92,7 @@ class TwoDStomper(DirectObject):
         # Setup the collision solids
         self.collSolids = []
         self.collSolids.append(originalColl)
-        for i in xrange(self.numCollSolids - 1):
+        for i in range(self.numCollSolids - 1):
             newColl = originalColl.copyTo(self.model)
             self.collSolids.append(newColl)
         self.collSolids[-1].reparentTo(self.head)

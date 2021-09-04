@@ -1,6 +1,6 @@
 from direct.actor import Actor
 from otp.avatar import Avatar
-import SuitDNA
+from . import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *
 from toontown.battle import SuitBattleGlobals
@@ -140,7 +140,7 @@ def unloadSuits(level):
 
 
 def loadSuitModelsAndAnims(level, flag=0):
-    for key in ModelDict.keys():
+    for key in list(ModelDict.keys()):
         (model, phase) = ModelDict[key]
         (headModel, headPhase) = HeadModelDict[key]
         if flag:
@@ -159,7 +159,7 @@ def loadSuitAnims(suit, flag=1):
             animList = ()
 
     else:
-        print 'Invalid suit name: ', suit
+        print('Invalid suit name: ', suit)
         return -1
     for anim in animList:
         phase = 'phase_' + str(anim[2])

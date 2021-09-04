@@ -16,7 +16,7 @@ username = config.GetString("mysql-user")
 password = config.GetString("mysql-passwd")
 
 if username == "" or password == "":
-    print "Username or password not found, check your config.prc!"
+    print("Username or password not found, check your config.prc!")
     sys.exit(2)
 
 
@@ -25,17 +25,17 @@ db = MySQLdb.connect(host="localhost",
                      user=username,
                      passwd=password)
 
-print "Connected to MySQL at localhost."
+print("Connected to MySQL at localhost.")
 
 cursor = db.cursor()
 
 def dropdb(dbname):
     try:
-        print "Dropping database %s:" % dbname
+        print("Dropping database %s:" % dbname)
         cursor.execute("DROP DATABASE %s"%dbname)
-        print "  Success!"
-    except Exception,e:
-        print "  Failed: %s" % e
+        print("  Success!")
+    except Exception as e:
+        print("  Failed: %s" % e)
 
 if language == 'castillian':
     ttDbName = "es_toontownTopDb"

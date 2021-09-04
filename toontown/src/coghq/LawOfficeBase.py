@@ -1,6 +1,6 @@
 """FactoryBase module: contains the FactoryBase class"""
 
-import FactorySpecs
+from . import FactorySpecs
 from otp.level import LevelSpec
 from toontown.toonbase import ToontownGlobals
 
@@ -25,7 +25,7 @@ class LawOfficeBase:
         def getEntityTypeReg(self):
             # return an EntityTypeRegistry with information about the
             # entity types that factories use
-            import FactoryEntityTypes
+            from . import FactoryEntityTypes
             from otp.level import EntityTypeRegistry
             typeReg = EntityTypeRegistry.EntityTypeRegistry(FactoryEntityTypes)
             return typeReg

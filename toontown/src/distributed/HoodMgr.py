@@ -277,7 +277,7 @@ class HoodMgr(DirectObject.DirectObject):
         assert(self.notify.debug("getZonesInPhase()"))
         # return the zone id's available in given phase
         p = []
-        for i in ToontownGlobals.phaseMap.items():
+        for i in list(ToontownGlobals.phaseMap.items()):
             if (i[1] == phase):
                 p.append(i[0])
         return p
@@ -286,7 +286,7 @@ class HoodMgr(DirectObject.DirectObject):
         hoodId = ZoneUtil.getCanonicalHoodId(hoodId)
         assert(self.notify.debug("getPhaseFromHood()"))
         # return the phase that the specified zone is in
-        assert(ToontownGlobals.phaseMap.has_key(hoodId))
+        assert(hoodId in ToontownGlobals.phaseMap)
         return ToontownGlobals.phaseMap[hoodId]
 
     # TODO: put these points in the dna

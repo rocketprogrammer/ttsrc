@@ -9,7 +9,7 @@ def checkNames(names, goodFlags=None):
         # the game does the strip() in NameShop.py
         problem = NameCheck.checkName(name.strip())
         if problem:
-            print '   user msg: ' + problem
+            print('   user msg: ' + problem)
         if goodFlags:
             # make sure our results are consistent
             if problem:
@@ -76,10 +76,10 @@ testNames = [
     ]
 
 def runTest():
-    print 'CHECKING GOOD NAMES'
+    print('CHECKING GOOD NAMES')
     checkNames(goodNames, [1] * len(goodNames))
-    print 'CHECKING BAD NAMES'
+    print('CHECKING BAD NAMES')
     checkNames(badNames, [0] * len(badNames))
-    print '*** all tests passed'
+    print('*** all tests passed')
 
     checkNames(testNames)

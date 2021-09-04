@@ -1,4 +1,4 @@
-import Entity
+from . import Entity
 
 class LevelMgrBase(Entity.Entity):
     __module__ = __name__

@@ -157,8 +157,8 @@ class DistributedStage(DistributedObject.DistributedObject):
                         % name)
                 else:
                     self.camEnterRoom(roomNum)
-                    print collEntry
-                    print 
+                    print(collEntry)
+                    print() 
         self.accept('on-floor', handleCameraRayFloorCollision)
 
         if bboard.has('stageRoom'):
@@ -272,7 +272,7 @@ class DistributedStage(DistributedObject.DistributedObject):
     def warpToRoom(self, roomId):
         # returns False if invalid roomId
         # find a room with the right id
-        for i in xrange(len(self.rooms)):
+        for i in range(len(self.rooms)):
             room = self.rooms[i]
             if room.roomId == roomId:
                 break

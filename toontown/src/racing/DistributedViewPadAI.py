@@ -51,7 +51,7 @@ class DistributedViewPadAI( DistributedKartPadAI ):
 
     def delete( self ):
         # Remove any outstanding tasks
-        for avId in self.kickAvDict.keys():
+        for avId in list(self.kickAvDict.keys()):
             self.stopTimeout( self.kickAvDict.get( avId ) )
             del self.kickAvDict[ avId ]
         del self.kickAvDict
@@ -102,7 +102,7 @@ class DistributedViewPadAI( DistributedKartPadAI ):
 
         # Remove the avatar from the kick dictionary and update the
         # local client dictionary as well.
-        if( self.kickAvDict.has_key( avId ) ):
+        if( avId in self.kickAvDict ):
             self.stopCountdown(self.kickAvDict[avId])
             del self.kickAvDict[ avId ]
             #self.d_setAvExitPad( avId )

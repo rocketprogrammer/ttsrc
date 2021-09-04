@@ -13,9 +13,9 @@ from direct.distributed import DistributedObject
 from toontown.hood import ZoneUtil
 from toontown.suit import Suit
 from toontown.distributed import DelayDelete
-import FADoorCodes
+from . import FADoorCodes
 from direct.task.Task import Task
-import DoorTypes
+from . import DoorTypes
 from toontown.toontowngui import TTDialog
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
@@ -144,7 +144,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         self.ignore("clearOutToonInterior")
         self.fsm.request("off")
         self.exitDoorFSM.request("off")
-        if self.__dict__.has_key('building'):
+        if 'building' in self.__dict__:
             del self.building
 
         # Clean up a little more gracefully; we might get a disable
@@ -205,7 +205,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         # HQ doors (toon, cog, and kartshop) need to have an index appended, since they are
         # the only type of door that supports multiple doors on a building.
         if (self.doorType == DoorTypes.INT_HQ or
-            self.specialDoorTypes.has_key(self.doorType) ):
+            self.doorType in self.specialDoorTypes ):
             return ("door_trigger_" + str(self.block) + "_" +
                     str(self.doorIndex))
         else:
@@ -228,7 +228,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         return "exit" + self.getTriggerName()
 
     def hideDoorParts(self):
-        if (self.specialDoorTypes.has_key(self.doorType)):
+        if (self.doorType in self.specialDoorTypes):
             # This work gets done by the DNA in non HQ buildings.
             self.hideIfHasFlat(self.findDoorNode("rightDoor"))
             self.hideIfHasFlat(self.findDoorNode("leftDoor"))
@@ -246,7 +246,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         # have the wrong name applied to the trigger poly
         # (door_trigger_<doorIndex>), so we have to find it, and change it
         # to (door_trigger_<blockNumber>_<doorIndex>).
-        if (self.specialDoorTypes.has_key(self.doorType)):
+        if (self.doorType in self.specialDoorTypes):
             building = self.getBuilding()            
             doorTrigger = building.find("**/door_" + str(self.doorIndex) +
                                         "/**/door_trigger*")
@@ -335,7 +335,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
 
     def getBuilding(self):
         # Once we find it, we store it, so we don't have to find it again.        
-        if (not self.__dict__.has_key('building')):
+        if ('building' not in self.__dict__):
             if self.doorType == DoorTypes.INT_STANDARD:
                 #if ZoneUtil.isInterior(self.zoneId):
                 # building interior.
@@ -375,13 +375,13 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
         
     def getBuilding_wip(self):
         # Once we find it, we store it, so we don't have to find it again.
-        if (not self.__dict__.has_key('building')):
-            if self.__dict__.has_key('block'):
+        if ('building' not in self.__dict__):
+            if 'block' in self.__dict__:
                 self.building=self.cr.playGame.hood.loader.geom.find(
                     "**/??"+str(self.block)+":*_landmark_*_DNARoot;+s")
             else:
                 self.building=self.cr.playGame.hood.loader.geom
-                print "---------------- door is interior -------"
+                print("---------------- door is interior -------")
 
             #if ZoneUtil.isInterior(self.zoneId):
             #    self.building=self.cr.playGame.hood.loader.geom
@@ -705,7 +705,7 @@ class DistributedDoor(DistributedObject.DistributedObject, DelayDeletable):
                 otherNP.setHpr(posHpr.getHpr())
                 # Store this for clean up later
                 self.tempDoorNodePath=otherNP
-        elif (self.specialDoorTypes.has_key(self.doorType)):
+        elif (self.doorType in self.specialDoorTypes):
             building = self.getBuilding()
             otherNP = building.find("**/door_origin_" + str(self.doorIndex))
             assert(not otherNP.isEmpty())

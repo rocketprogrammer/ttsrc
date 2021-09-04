@@ -1,6 +1,6 @@
 """SCCustomTerminal.py: contains the SCCustomTerminal class"""
 
-from SCTerminal import SCTerminal
+from .SCTerminal import SCTerminal
 from otp.otpbase.OTPLocalizer import CustomSCStrings
 
 # args: textId

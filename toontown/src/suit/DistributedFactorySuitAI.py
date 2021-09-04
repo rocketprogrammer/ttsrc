@@ -2,8 +2,8 @@ from otp.ai.AIBaseGlobal import *
 
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import SuitBattleGlobals
-import DistributedSuitBaseAI
-import SuitDialog
+from . import DistributedSuitBaseAI
+from . import SuitDialog
 
 class DistributedFactorySuitAI(DistributedSuitBaseAI.DistributedSuitBaseAI):
 

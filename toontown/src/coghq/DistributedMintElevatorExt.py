@@ -13,7 +13,7 @@ from toontown.hood import ZoneUtil
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TTDialog
 from direct.distributed import DelayDelete
-import CogDisguiseGlobals
+from . import CogDisguiseGlobals
 
 class DistributedMintElevatorExt(DistributedElevatorExt.DistributedElevatorExt):
     __module__ = __name__

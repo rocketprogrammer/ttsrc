@@ -1,7 +1,7 @@
 from otp.ai.AIBaseGlobal import *
 from direct.directnotify import DirectNotifyGlobal
 from toontown.suit import SuitDNA
-from CogPageGlobals import *
+from .CogPageGlobals import *
 
 class CogPageManagerAI:
 
@@ -60,7 +60,7 @@ class CogPageManagerAI:
                 msgName = '%s%s' % (cog, level)
                 if encounter['isSkelecog']:
                     msgName += "+"
-                if eventMsg.has_key(msgName):
+                if msgName in eventMsg:
                     eventMsg[msgName] += 1
                 else:
                     eventMsg[msgName] = 1
@@ -85,7 +85,7 @@ class CogPageManagerAI:
 
         # Now format the message for the AI.
         msgText = ''
-        for msgName, count in eventMsg.items():
+        for msgName, count in list(eventMsg.items()):
             if msgText != '':
                 msgText += ','
             msgText += '%s%s' % (count, msgName)

@@ -58,14 +58,14 @@ class TTSCKartRacingMenu(SCMenu):
                         #This is not a submenu but a terminal!
                         for phrase in section[1]:
                                 if phrase not in OTPLocalizer.SpeedChatStaticText:
-                                        print ('warning: tried to link kart phrase %s which does not seem to exist' % phrase)
+                                        print(('warning: tried to link kart phrase %s which does not seem to exist' % phrase))
                                         break
                                 self.append(SCStaticTextTerminal(phrase))
                 else: #this should be a submenu
                         menu = SCMenu()
                         for phrase in section[1]:
                                 if phrase not in OTPLocalizer.SpeedChatStaticText:
-                                        print ('warning: tried to link kart phrase %s which does not seem to exist' % phrase)                                
+                                        print(('warning: tried to link kart phrase %s which does not seem to exist' % phrase))                                
                                         break
                                 menu.append(SCStaticTextTerminal(phrase))
                     

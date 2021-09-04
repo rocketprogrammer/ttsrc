@@ -1,9 +1,9 @@
 """LocalChar module: contains the LocalChar class"""
 
-import DistributedChar
+from . import DistributedChar
 from otp.avatar import LocalAvatar
 from otp.chat import ChatManager
-import Char
+from . import Char
 
 class LocalChar(DistributedChar.DistributedChar, LocalAvatar.LocalAvatar):
     """LocalChar class:"""

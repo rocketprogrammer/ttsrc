@@ -4,7 +4,7 @@ from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.building import TutorialBuildingAI
 from toontown.building import TutorialHQBuildingAI
-import SuitPlannerTutorialAI
+from . import SuitPlannerTutorialAI
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.toon import NPCToons
 from toontown.toonbase import TTLocalizer

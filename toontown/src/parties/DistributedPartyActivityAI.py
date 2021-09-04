@@ -215,13 +215,13 @@ class DistributedPartyActivityAI(DistributedObjectAI.DistributedObjectAI):
         """
         now = globalClock.getFrameTime()
         while len(self.toonIdsToJellybeanRewards):
-            self.issueJellybeanRewardToToonId(self.toonIdsToJellybeanRewards.keys()[0], now=now)
+            self.issueJellybeanRewardToToonId(list(self.toonIdsToJellybeanRewards.keys())[0], now=now)
                 
     def issueJellybeanRewardToToonId(self, toonId, now=None):
         """
         Give a specific toon a their jellybean reward.
         """
-        if self.toonIdsToJellybeanRewards.has_key(toonId):
+        if toonId in self.toonIdsToJellybeanRewards:
             if now is None:
                 now = globalClock.getFrameTime()
             reward = self.toonIdsToJellybeanRewards[toonId]

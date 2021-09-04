@@ -9,10 +9,10 @@ class DistributedDeliveryManager(DistributedObject):
         self.sendUpdate("hello", [message])
     
     def rejectHello(self, message):
-        print "rejected", message
+        print("rejected", message)
         
     def helloResponse(self, message):
-        print "accepted", message
+        print("accepted", message)
         
     def sendAck(self):
         self.sendUpdate("requestAck", [])
@@ -21,7 +21,7 @@ class DistributedDeliveryManager(DistributedObject):
         messenger.send("DeliveryManagerAck")
         
     def test(self):
-        print "Distributed Delviery Manager Stub Test"
+        print("Distributed Delviery Manager Stub Test")
     """
     def sendRequestPurchaseGift(self, item, receiverId, callback):
         print "sent request for gift"

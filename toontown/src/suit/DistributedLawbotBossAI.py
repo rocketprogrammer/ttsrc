@@ -1,9 +1,9 @@
 from otp.ai.AIBaseGlobal import *
 from direct.distributed.ClockDelta import *
-import DistributedBossCogAI
+from . import DistributedBossCogAI
 from direct.directnotify import DirectNotifyGlobal
 from otp.avatar import DistributedAvatarAI
-import DistributedSuitAI
+from . import DistributedSuitAI
 from toontown.battle import BattleExperienceAI
 from direct.fsm import FSM
 from toontown.toonbase import ToontownGlobals
@@ -12,7 +12,7 @@ from toontown.toonbase import TTLocalizer
 from toontown.battle import BattleBase
 from toontown.toon import NPCToons
 from toontown.building import SuitBuildingGlobals
-import SuitDNA
+from . import SuitDNA
 import random
 from toontown.coghq import DistributedLawbotBossGavelAI
 from toontown.suit import DistributedLawbotBossSuitAI
@@ -49,7 +49,7 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
 
 
         # Choose an NPC toon to be in the cage.
-        self.cagedToonNpcId = random.choice(NPCToons.npcFriends.keys())
+        self.cagedToonNpcId = random.choice(list(NPCToons.npcFriends.keys()))
 
         self.bossMaxDamage = ToontownGlobals.LawbotBossMaxDamage
         self.recoverRate = 0
@@ -639,14 +639,14 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
 
 
     def getCannonBallsLeft(self, avId):
-        if self.cannonBallsLeft.has_key(avId):
+        if avId in self.cannonBallsLeft:
             return self.cannonBallsLeft[avId]
         else:
             self.notify.warning('getCannonBalsLeft invalid avId: %d' % avId)
             return 0
 
     def decrementCannonBallsLeft( self ,avId):
-        if self.cannonBallsLeft.has_key(avId):
+        if avId in self.cannonBallsLeft:
             self.cannonBallsLeft[avId] -= 1
             if self.cannonBallsLeft[avId] < 0:
                 self.notify.warning('decrementCannonBallsLeft <0 cannonballs for %d' % avId)
@@ -1135,8 +1135,8 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
                         foundOne = True
                         break
 
-                possibleCogLevel = range(SuitDNA.suitsPerDept)
-                possibleDeptIndex = range (len(SuitDNA.suitDepts))
+                possibleCogLevel = list(range(SuitDNA.suitsPerDept))
+                possibleDeptIndex = list(range(len(SuitDNA.suitDepts)))
                 possibleSummonType = ['single','building','invasion']
 
                 typeWeights = ['single']   * 70 + \

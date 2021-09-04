@@ -10,8 +10,8 @@ from toontown.minigame import Purchase
 from direct.gui import OnscreenText
 from otp.avatar import DistributedAvatar
 from toontown.building import SuitInterior
-import QuietZoneState
-import ZoneUtil
+from . import QuietZoneState
+from . import ZoneUtil
 from toontown.toonbase import TTLocalizer
 
 class Hood(StateData.StateData):
@@ -291,7 +291,7 @@ class Hood(StateData.StateData):
         elif loaderName=="minigame":
             pass
         elif loaderName=="cogHQLoader":
-            print "should be loading HQ"
+            print("should be loading HQ")
         else:
             assert(self.notify.debug("  unknown loaderName="+loaderName))
 

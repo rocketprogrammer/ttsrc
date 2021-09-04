@@ -8,7 +8,7 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.minigame import Purchase
 from otp.avatar import DistributedAvatar
-import Hood
+from . import Hood
 from toontown.building import SuitInterior
 from toontown.cogdominium import CogdoInterior
 

@@ -1,5 +1,5 @@
 
-import toc
+from . import toc
 from direct.task import Task
 
 class TTToc(toc.TocTalk):
@@ -24,13 +24,13 @@ class TTToc(toc.TocTalk):
     def taskProc(self, task):
         event = self.recv_event()
         if event:
-            print event
+            print(event)
             self.handle_event(event)
         return Task.cont
 
     def on_IM_IN(self,data):
         screenname = data.split(":")[0]
         message = self.strip_html(data.split(":",2)[2])
-        print screenname, message
+        print(screenname, message)
         localAvatar.setSystemMessage(0, "%s: %s" % (screenname, message))
         

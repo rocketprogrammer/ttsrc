@@ -1062,7 +1062,7 @@ class PartyPlanner(DirectFrame,FSM):
         """
         Handle cases for game events
         """
-        self.inviteThemes = range(len(PartyGlobals.InviteTheme))
+        self.inviteThemes = list(range(len(PartyGlobals.InviteTheme)))
         
         if hasattr(base.cr, "newsManager") and base.cr.newsManager:
             holidayIds = base.cr.newsManager.getHolidayIdList()

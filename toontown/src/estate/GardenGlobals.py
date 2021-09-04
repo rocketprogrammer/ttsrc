@@ -137,7 +137,7 @@ def getWateringCanPower(wateringCan , wateringCanSkill):
 
 def getMaxWateringCanPower():
     retval = 0
-    for wateringCanAttrib in WateringCanAttributes.values():
+    for wateringCanAttrib in list(WateringCanAttributes.values()):
         retval += wateringCanAttrib['numBoxes']
     return retval
 
@@ -161,8 +161,8 @@ FLOWER_YELLOW = 5
 FLOWER_WHITE = 6
 FLOWER_GREEN = 7
 
-ToonStatuaryTypeIndices = xrange(205,209) #  205,206,206,207,208
-ChangingStatuaryTypeIndices = xrange(230,231) # just 230
+ToonStatuaryTypeIndices = range(205,209) #  205,206,206,207,208
+ChangingStatuaryTypeIndices = range(230,231) # just 230
 
 PlantAttributes = {
     #### Gag trees ####
@@ -713,7 +713,7 @@ def getRecipeKey( beans, special):
     returns -1 if not found
     """
     testDict = { 'beans':beans, 'special' :special }
-    for key in Recipes.keys():
+    for key in list(Recipes.keys()):
         recipe = Recipes[key]
         if testDict == recipe:
             return key
@@ -724,7 +724,7 @@ def getRecipeKeyUsingSpecial( special):
     returns -1 if not found
     WARNING assumes 1 special is not used in 2 recipes
     """
-    for key in Recipes.keys():
+    for key in list(Recipes.keys()):
         recipe = Recipes[key]
         if recipe['special'] == special:
             return key
@@ -797,13 +797,13 @@ def getMaxShovelSkill():
 
 def getNumberOfShovelBoxes():
     retVal = 0
-    for attrib in ShovelAttributes.values():
+    for attrib in list(ShovelAttributes.values()):
         retVal += attrib['numBoxes']
     return retVal
 
 def getNumberOfWateringCanBoxes():
     retVal = 0
-    for attrib in WateringCanAttributes.values():
+    for attrib in list(WateringCanAttributes.values()):
         retVal += attrib['numBoxes']
     return retVal
 
@@ -813,7 +813,7 @@ def getNumberOfFlowerVarieties():
     How many Flower Varieties do we have
     """
     retVal = 0
-    for attrib in PlantAttributes.values():
+    for attrib in list(PlantAttributes.values()):
         if attrib['plantType'] == FLOWER_TYPE:
             retVal += len( attrib['varieties'])
     return retVal
@@ -823,7 +823,7 @@ def getNumberOfFlowerSpecies():
     How many Flower species do we have
     """
     retVal = 0
-    for attrib in PlantAttributes.values():
+    for attrib in list(PlantAttributes.values()):
         if attrib['plantType'] == FLOWER_TYPE:
             retVal += 1
     return retVal
@@ -833,7 +833,7 @@ def getFlowerVarieties(species):
     return the varieties for this species
     """
     retval = ()
-    if species in PlantAttributes.keys():
+    if species in list(PlantAttributes.keys()):
         attrib = PlantAttributes[species]
         if attrib['plantType'] == FLOWER_TYPE:
             retval = attrib['varieties']
@@ -844,7 +844,7 @@ def getFlowerSpecies():
     return a list of flower species keys
     """
     retVal = []
-    for key in PlantAttributes.keys():
+    for key in list(PlantAttributes.keys()):
         attrib = PlantAttributes[key]
         if attrib['plantType'] == FLOWER_TYPE:
             retVal.append(key)
@@ -861,7 +861,7 @@ def getRandomFlower():
 
 def getFlowerVarietyName(species, variety):
     retVal = TTLocalizer.FlowerUnknown
-    if species in PlantAttributes.keys():
+    if species in list(PlantAttributes.keys()):
         attrib = PlantAttributes[species]
         if variety < len(attrib['varieties']) :
             #this block would produce something like 'red rose'
@@ -889,11 +889,11 @@ def getSpeciesVarietyGivenRecipe(recipeKey):
     """
     returns (-1,-1) if not found
     """
-    for species in PlantAttributes.keys():
+    for species in list(PlantAttributes.keys()):
         attrib = PlantAttributes[species]
         if attrib['plantType'] == GAG_TREE_TYPE:
             continue
-        if attrib.has_key('varieties'):
+        if 'varieties' in attrib:
             for variety in range(len(attrib['varieties'])):
                 if attrib['varieties'][variety][0] == recipeKey:
                     return (species, variety)
@@ -906,7 +906,7 @@ def getNumBeansRequired(species,variety):
     retval = -1
     if not PlantAttributes.get(species):
         return retval
-    if not PlantAttributes[species].has_key('varieties'):
+    if 'varieties' not in PlantAttributes[species]:
         return retval
     if variety >= len(PlantAttributes[species]['varieties'] ):
         return -1
@@ -914,7 +914,7 @@ def getNumBeansRequired(species,variety):
 
     recipe = Recipes.get(recipeKey)
     if recipe:
-        if recipe.has_key('beans'):
+        if 'beans' in recipe:
             retval = len(recipe['beans'])
 
     return retval
@@ -932,7 +932,7 @@ def validateRecipes(notify):
     #we now enfore the rule that a special can only appear in the recipes once
     uniqueSpecials = []
 
-    for key in Recipes.keys():
+    for key in list(Recipes.keys()):
         recipe = Recipes[key]
         beans = recipe['beans']
 
@@ -960,7 +960,7 @@ def validateRecipes(notify):
         #double check uniqueness and validity of special
         special = recipe['special']
         if special != -1:
-            assert special in Specials.keys(), 'No special %d in Specials dict' % (special)
+            assert special in list(Specials.keys()), 'No special %d in Specials dict' % (special)
             assert special not in uniqueSpecials, 'Duplicate special %s key=%d' % (testTuple, key)
             uniqueSpecials.append(special)
 
@@ -983,7 +983,7 @@ def validatePlantAttributes(notify):
 
 
 
-    for key in PlantAttributes.keys():
+    for key in list(PlantAttributes.keys()):
         plant = PlantAttributes[key]
         notify.debug('now validating %s' % plant['name'])
         #check growth thresholds
@@ -1000,7 +1000,7 @@ def validatePlantAttributes(notify):
             for variety in varieties:
                 recipeNum = variety[0]
                 #check if recipeNum is valid
-                assert recipeNum in Recipes.keys(), 'Invalid recipeNum %d, key=%d, variety=%s' % (recipeNum, key, str(variety))
+                assert recipeNum in list(Recipes.keys()), 'Invalid recipeNum %d, key=%d, variety=%s' % (recipeNum, key, str(variety))
                 assert recipeNum not in uniqueRecipes, 'duplicate recipe %d, key=%d, variety=%s' % (recipeNum, key, str(variety))
                 uniqueRecipes.append(recipeNum)
 
@@ -1413,7 +1413,7 @@ def getPlantItWithString(special):
     return retval
 
 #this automatically sets up the description for the Special dictionary
-for specialKey in Specials.keys():
+for specialKey in list(Specials.keys()):
     recipeKey = getRecipeKeyUsingSpecial(specialKey)
     if not recipeKey == -1:
         Specials[specialKey]['description'] = getPlantItWithString(specialKey)

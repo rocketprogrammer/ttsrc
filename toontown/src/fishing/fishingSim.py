@@ -478,7 +478,7 @@ class Fisherman(Toon.Toon):
             fBite = (random.random() < 0.4) or (not self.fTargetMode)
             delay = self.fTargetMode * 0.25
             if fBite:
-                print 'BITE'
+                print('BITE')
                 Sequence(Wait(random.random() * delay),
                          Func(flashFunc),
                          Func(self.catchFish),
@@ -486,7 +486,7 @@ class Fisherman(Toon.Toon):
                          Func(moveFunc),
                          ).play()
             else:
-                print 'MISS'
+                print('MISS')
                 def moveIt():
                     moveFunc(targetPos = target.getPos())
                 Sequence(Wait(random.random() * delay),

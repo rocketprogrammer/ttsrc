@@ -41,15 +41,15 @@ def getJackpot(typeId):
     return CardTypeDict[typeId][1]
 
 def getColor(typeId):
-    float_color = map(lambda x: x/255.0, CardTypeDict[typeId][0][0])
+    float_color = [x/255.0 for x in CardTypeDict[typeId][0][0]]
     return float_color
 
 def getButtonColor(typeId):
-    float_color = map(lambda x: x/255.0, CardTypeDict[typeId][0][1])
+    float_color = [x/255.0 for x in CardTypeDict[typeId][0][1]]
     return float_color
 
 def getButtonRolloverColor(typeId):
-    float_color = map(lambda x: x/255.0, CardTypeDict[typeId][0][2])
+    float_color = [x/255.0 for x in CardTypeDict[typeId][0][2]]
     return float_color
 
 def getHelpString(typeId):

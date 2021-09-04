@@ -4,7 +4,7 @@ The Toontown Avatar Manager UD handles all the avatar accross all
 districts.
 """
 
-from cPickle import loads, dumps
+from pickle import loads, dumps
 
 from otp.uberdog.UberDogUtil import ManagedAsyncRequest
 from otp.distributed import OtpDoGlobals
@@ -32,7 +32,7 @@ class AsyncRequestAvatarList(ManagedAsyncRequest):
     def getAvatarData(self, avatars):
         assert self.notify.debugCall()
         avatarData=[]
-        for i, slot in zip(avatars, range(6)):
+        for i, slot in zip(avatars, list(range(6))):
             if i is None:
                 avatarData.append(None)
             else:

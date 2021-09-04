@@ -8,9 +8,9 @@ from direct.showbase.PythonUtil import bound as clamp
 
 from toontown.toonbase import TTLocalizer
 
-from DistributedPartyTeamActivityAI import DistributedPartyTeamActivityAI
-import PartyGlobals
-import PartyCogUtils
+from .DistributedPartyTeamActivityAI import DistributedPartyTeamActivityAI
+from . import PartyGlobals
+from . import PartyCogUtils
 
 class DistributedPartyCogActivityAI(DistributedPartyTeamActivityAI):
     notify = directNotify.newCategory("DistributedPartyCogActivityAI")
@@ -103,7 +103,7 @@ class DistributedPartyCogActivityAI(DistributedPartyTeamActivityAI):
         self.score = [0, 0]
 
     def _addToToonScore(self, toonId, points):
-        if self.toonScore.has_key(toonId):
+        if toonId in self.toonScore:
             self.toonScore[toonId] += points
             
     def _addToonToTeam(self, toonId, team):
@@ -112,15 +112,15 @@ class DistributedPartyCogActivityAI(DistributedPartyTeamActivityAI):
         
     def _removeToonFromTeam(self, toonId, team):
         if DistributedPartyTeamActivityAI._removeToonFromTeam(self, toonId, team) and \
-            self.toonScore.has_key(toonId):
+            toonId in self.toonScore:
             del self.toonScore[toonId]
     
     def _findNewHighScore(self):
         """Check to see if a new high score has been made, and broadcast"""
         highScoreFound = False
         
-        for toonId, score in self.toonScore.items():
-            if score > self.highScore[1] and self.air.doId2do.has_key(toonId):
+        for toonId, score in list(self.toonScore.items()):
+            if score > self.highScore[1] and toonId in self.air.doId2do:
                 self.highScore = (self.air.doId2do[toonId].getName(), score)
                 highScoreFound = True
             

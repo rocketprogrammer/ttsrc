@@ -37,7 +37,7 @@ class TwoDEnemyMgr(DirectObject):
         
         # Creating enemies
         self.enemies = []
-        for index in xrange(len(self.enemyList)):
+        for index in range(len(self.enemyList)):
             enemyId = self.section.getSectionizedId(index)
             suitAttribs = self.enemyList[index]
             newEnemy = TwoDEnemy.TwoDEnemy(self, enemyId, suitAttribs)

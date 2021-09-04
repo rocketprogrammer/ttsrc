@@ -117,7 +117,7 @@ TrickSounds = {
 def getSoundIval(trickId):
     sounds = TrickSounds.get(trickId, None)
     if sounds:
-        if type(sounds) == types.StringType:
+        if type(sounds) == bytes:
             sound = loader.loadSfx(sounds)
             return SoundInterval(sound)
         else:
@@ -137,7 +137,7 @@ def getTrickIval(pet, trickId):
     animRate = random.uniform(.9, 1.1)
     waitTime = random.uniform(0.0, 1.0)
     
-    if type(anims) == types.StringType:
+    if type(anims) == bytes:
         # If-Else statement to construct animation intervals based-on
         # specific tricks that cannot be generated generically, ie the jump
         # because the z-offset was left out of the animation.

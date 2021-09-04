@@ -892,7 +892,7 @@ class ToontownAIRepository(AIDistrict):
                 key = di.getString()
                 #key = key[2:]
                 #right why to do this???? ask Roger and/or Dave
-                value = di.getString()
+                value = di.getString().encode("ISO-8859-1")
                 found = di.getUint8()
 
                 #print key;
@@ -928,7 +928,7 @@ class ToontownAIRepository(AIDistrict):
                 assert(numHouses2 == numHouses)
                 tempHouseVal[i] = [None] * numHouses
                 for j in range(numHouses):
-                    tempHouseVal[i][j] = di.getString()
+                    tempHouseVal[i][j] = di.getString().encode("ISO-8859-1")
                     # do we need a check for "value found" here?
 
             #print houseKey

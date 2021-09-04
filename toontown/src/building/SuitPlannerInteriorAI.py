@@ -245,7 +245,7 @@ class SuitPlannerInteriorAI:
             lvlList.append( newLvl )
 
 
-        lvlList.sort( cmp )
+        lvlList.sort(key=functools.cmp_to_key(cmp))
         self.notify.debug( "LevelList: " + repr( lvlList ) )
         return lvlList
 

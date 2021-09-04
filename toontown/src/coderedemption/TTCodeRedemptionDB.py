@@ -1187,7 +1187,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name']
+            lotName = row['name'].decode()
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue

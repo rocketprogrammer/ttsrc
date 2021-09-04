@@ -99,7 +99,7 @@ for opt in opts:
 
 if not dcFileNames:
     dcFileNames = ['otp.dc', 'toon.dc']
-    
+
 # Setup the log files
 # We want C++ and Python to both go to the same log so they
 # will be interlaced properly.
@@ -141,7 +141,7 @@ nout.addSystemDebug()
 # so we can more easily grep for a restart on a particular date in the
 # log files.
 print("\n\nStarting %s (number: %s) on %s port %s. %s %s" % (
-    districtName, districtNumber, mdip, mdport, 
+    districtName, districtNumber, mdip, mdport,
     time.asctime(time.localtime(time.time())), time.tzname[0]))
 
 print("Initializing...")

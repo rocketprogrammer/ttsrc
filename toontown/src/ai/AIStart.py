@@ -30,7 +30,6 @@ simbase.mdport = simbase.config.GetInt("msg-director-port", 6666)
 simbase.esip = simbase.config.GetString("event-server-ip", "localhost")
 simbase.esport = simbase.config.GetInt("event-server-port", 4343)
 
-
 districtType = 0
 serverId = simbase.config.GetInt("district-ssid", 20100000)
 
@@ -65,6 +64,8 @@ for i in range(1, 20+1):
         if i != 1:
             break
 
+districtName = os.getenv('DISTRICT_NAME', 'Estrela')
+
 print("-"*30, "creating toontown district %s" % districtNumber, "-"*30)
 
 simbase.air = ToontownAIRepository.ToontownAIRepository(
@@ -84,10 +85,10 @@ simbase.air = ToontownAIRepository.ToontownAIRepository(
 simbase.aiService = 0
 
 try:
-    simbase.air.fsm.request("districtReset")        
+    simbase.air.fsm.request("districtReset")
     run()
 except:
     info = PythonUtil.describeException()
     simbase.air.writeServerEvent('ai-exception', districtNumber, info)
     raise
-    
+

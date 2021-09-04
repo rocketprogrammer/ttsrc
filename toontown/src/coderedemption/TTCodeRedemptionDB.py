@@ -24,7 +24,7 @@ from otp.uberdog.DBInterface import DBInterface
 from toontown.coderedemption.TTCodeDict import TTCodeDict
 from toontown.coderedemption import TTCodeRedemptionConsts
 from direct.directutil import DirectMySQLdb
-import _mysql_exceptions
+import MySQLdb
 import random
 import datetime
 import MySQLdb
@@ -59,7 +59,7 @@ class TTDBCursorBase:
             self.notify.debug('execute:\n%s' % u2ascii(args[0]))
         try:
             cursorBase.execute(self, *args, **kArgs)
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if self._connection.getErrorCode(e) in TTDBCursorBase.ConnectionProblems:
                 # force a reconnect
                 TTCRDBConnection.db = None
@@ -175,7 +175,7 @@ class TTCRDBConnection(DBInterface):
                                                           port=self._port,
                                                           user=self._user,
                                                           passwd=self._passwd)
-            except _mysql_exceptions.OperationalError as e:
+            except MySQLdb.OperationalError as e:
                 """
                 self.notify.warning("Failed to connect to MySQL at %s:%d. Retrying in %s seconds."%(
                     self._host,self._port,self.RetryPeriod))
@@ -200,7 +200,7 @@ class TTCRDBConnection(DBInterface):
         cursor = self.getCursor()
         try:
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if self.getErrorCode(e) == MySQLErrors.TableAlreadyExists:
                 # table already exists
                 pass
@@ -213,9 +213,9 @@ class TTCRDBConnection(DBInterface):
         initDb = config.GetBool('want-code-redemption-init-db', __dev__)
         if initDb:
             try:
-                cursor.execute("CREATE DATABASE IF NOT EXISTS %s" % self._dbName)
+                cursor.execute("CREATE DATABASE %s" % self._dbName)
                 self.notify.info("database %s did not exist, created new one" % self._dbName)
-            except _mysql_exceptions.ProgrammingError as e:
+            except MySQLdb.ProgrammingError as e:
                 if self.getErrorCode(e) == MySQLErrors.DbAlreadyExists:
                     # db already exists
                     pass
@@ -228,7 +228,7 @@ class TTCRDBConnection(DBInterface):
             # create tables
             self._createTable(
                 """
-                CREATE TABLE IF NOT EXISTS code_space (
+                CREATE TABLE code_space (
                 code_length int(32) unsigned NOT NULL,
                 next_code_value bigint(64) unsigned NOT NULL
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -236,7 +236,7 @@ class TTCRDBConnection(DBInterface):
                 )
             self._createTable(
                 """
-                CREATE TABLE IF NOT EXISTS lot (
+                CREATE TABLE lot (
                 lot_id int(32) unsigned NOT NULL auto_increment,
                 name text NOT NULL,
                 manual enum('F','T') NOT NULL,
@@ -292,7 +292,7 @@ class TTCRDBConnection(DBInterface):
             if self.WantTableLocking:
                 if len(self._tableLocks):
                     cmd = 'LOCK TABLES '
-                    for table, lock in self._tableLocks.items():
+                    for table, lock in self._tableLocks.iteritems():
                         cmd += '%s %s, ' % (table, lock)
                     cmd = cmd[:-2] + ';'
                     self.getCursor().execute(cmd)
@@ -413,7 +413,7 @@ class TTCodeRedemptionDBTester(Job):
         return code
 
     def _getUnusedUtf8ManualCode(self):
-        chars = '\u65e5\u672c\u8a9e'
+        chars = u'\u65e5\u672c\u8a9e'
         code = str('', 'utf-8')
         while 1:
             code += random.choice(chars)
@@ -1211,7 +1211,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name']
+            lotName = row['name'].decode()
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue
@@ -1348,9 +1348,9 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             # client hack prevention:
             # safe; code is between quotes and can only contain letters, numbers and dashes
             cursor.execute(
-                str("""
+                """
                 SELECT code FROM code_set_%s WHERE code='%s';
-                """, 'utf-8') % (lotName, code)
+                """ % (lotName, code)
                 )
             rows = cursor.fetchall()
 
@@ -1396,10 +1396,10 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         # client hack prevention:
         # safe; code is between quotes and can only contain letters, numbers and dashes
         cursor.execute(
-            str("""
+            """
             SELECT %s, %s FROM code_set_%s INNER JOIN lot
             WHERE lot.lot_id=code_set_%s.lot_id AND CODE='%s';
-            """, 'utf-8') % (self.RewardTypeFieldName, self.RewardItemIdFieldName, lotName, lotName, code)
+            """ % (self.RewardTypeFieldName, self.RewardItemIdFieldName, lotName, lotName, code)
             )
         rows = cursor.fetchall()
 
@@ -1432,9 +1432,9 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         cursor = conn.getDictCursor()
 
         cursor.execute(
-            str("""
+            """
             SELECT redemptions FROM code_set_%s WHERE code='%s';
-            """, 'utf-8') % (lotName, code)
+            """ % (lotName, code)
             )
         rows = cursor.fetchall()
 
@@ -1484,10 +1484,10 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             # client hack prevention:
             # safe; code is between quotes and can only contain letters, numbers and dashes
             cursor.execute(
-                str("""
+                """
                 SELECT redemptions FROM code_set_%s INNER JOIN lot WHERE
                 code_set_%s.lot_id=lot.lot_id AND code='%s' AND ((expiration IS NULL) OR (CURDATE()<=expiration));
-                """, 'utf-8') % (lotName, lotName, code)
+                """ % (lotName, lotName, code)
                 )
 
             rows = cursor.fetchall()
@@ -1517,9 +1517,9 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         # client hack prevention:
         # safe; code is between quotes and can only contain letters, numbers and dashes
         cursor.execute(
-            str("""
+            """
             UPDATE code_set_%s SET redemptions=redemptions+%s%s WHERE code='%s';
-            """, 'utf-8') % (lotName, count, choice(manualCode, '', ', av_id=%s' % avId), code)
+            """ % (lotName, count, choice(manualCode, '', ', av_id=%s' % avId), code)
             )
 
     def _handleRewardResult(self, code, manualCode, avId, lotName, rewardTypeId, rewardItemId,
@@ -1586,7 +1586,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
                     )
 
             for row in rows:
-                code = str(row['code'], 'utf-8')
+                code = str(row['code'])
                 codes.append(code)
 
         conn.destroy()
@@ -1666,7 +1666,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             if len(rows):
                 conn.destroy()
                 row = rows[0]
-                row['code'] = str(row['code'], 'utf-8')
+                row['code'] = str(row['code'])
                 return row
 
         self.notify.error('code \'%s\' not found' % u2ascii(code))

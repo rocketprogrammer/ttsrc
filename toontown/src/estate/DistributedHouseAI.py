@@ -52,13 +52,13 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         # self.garden = None
         self.cannon = None
         self.housePosInd = posIndex
-        
+
         # these members are stored in the db and initialized in the
         # initFromServerResponse function (called by the estateAI).
         # These are the default values until they are initialized by
         # the database.  (It is more convenient here not to depend on
         # initial value settings in the dc file.)
-        
+
         self.houseType = HouseGlobals.HOUSE_DEFAULT
         self.gardenPosInd = 0
         self.ownerId = 0
@@ -72,7 +72,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         self.interiorWindows = CatalogItemList.CatalogItemList()
         self.deletedItems = CatalogItemList.CatalogItemList()
         self.cannonEnabled = 0
-        
+
         # initialize the stuff that doesn't need a response from the database
         self.interior = None
         self.interiorManager = None
@@ -139,11 +139,11 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         # Outside door:
         self.door = DistributedHouseDoorAI.DistributedHouseDoorAI(
             self.air, self.doId, DoorTypes.EXT_STANDARD)
-        
+
         # Inside door of the same door (different zone, and different distributed object):
         self.insideDoor = DistributedHouseDoorAI.DistributedHouseDoorAI(
             self.air, self.doId, DoorTypes.INT_STANDARD)
-        
+
         # Tell them about each other:
         self.door.setOtherDoor(self.insideDoor)
         self.insideDoor.setOtherDoor(self.door)
@@ -163,10 +163,10 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         # create a cannon
         #if self.cannonEnabled and simbase.config.GetBool('estate-cannons', 0):
         #    posHpr = CannonGlobals.cannonDrops[self.housePosInd]
-        #    self.cannon = DistributedCannonAI.DistributedCannonAI(self.air, self.estateId, 
+        #    self.cannon = DistributedCannonAI.DistributedCannonAI(self.air, self.estateId,
         #                                                         *posHpr)
         #    self.cannon.generateWithRequired(self.zoneId)
-        
+
         if self.interior != None:
             self.interior.requestDelete()
             self.interior = None
@@ -218,13 +218,13 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         for item in self.interiorItems:
             if (item.getFlags() & CatalogFurnitureItem.FLPhone) != 0:
                 return 1
-                
+
         for item in self.atticItems:
             if (item.getFlags() & CatalogFurnitureItem.FLPhone) != 0:
                 return 1
 
         return 0
-        
+
     def resetFurniture(self):
         # Deletes all of the furniture, wallpaper, and window items, and
         # recreates it all.
@@ -236,7 +236,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         # Create a furniture manager for the interior furniture.
         self.interiorManager = DistributedFurnitureManagerAI.DistributedFurnitureManagerAI(self.air, self, 1)
         self.interiorManager.generateWithRequired(self.interiorZoneId)
-        
+
         # Create all of the furniture items inside the house.
         for item in self.interiorItems:
             self.interiorManager.manifestInteriorItem(item)
@@ -245,7 +245,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         # interior.
         self.interior.b_setWallpaper(self.interiorWallpaper)
         self.interior.b_setWindows(self.interiorWindows)
-        
+
 
     def setInitialFurniture(self):
         # Resets the furniture to the initial default furniture for an
@@ -272,7 +272,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             CatalogFurnitureItem.CatalogFurnitureItem(700, posHpr = (4.44649, -0.463924, 0.025, 0, 0, 0)),
             CatalogFurnitureItem.CatalogFurnitureItem(1399, posHpr = (-10.1, 2.0, 0.1, 0, 0, 0)),
             ])
-        
+
         InitialFurnitureB = CatalogItemList.CatalogItemList([
             CatalogFurnitureItem.CatalogFurnitureItem(200, posHpr = (-3.2, 17.0, 0.025, -0.2, 0.0, 0.0)),
             CatalogFurnitureItem.CatalogFurnitureItem(400, posHpr = (-18.6, -7.1, 0.025, 90.0, 0.0, 0.0)),
@@ -299,7 +299,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             CatalogFurnitureItem.CatalogFurnitureItem(1399, posHpr = (-10.1, 2.0, 0.1, 0, 0, 0)),
         ])
 
-        
+
         self.b_setDeletedItems(CatalogItemList.CatalogItemList())
         self.b_setAtticItems(CatalogItemList.CatalogItemList())
         self.b_setInteriorItems(random.choice((InitialFurnitureA,
@@ -329,12 +329,12 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             CatalogWindowItem.CatalogWindowItem(20, placement = 2),
             CatalogWindowItem.CatalogWindowItem(20, placement = 4),
             ]))
-             
+
 
     def b_setHouseType(self, houseType):
         self.setHouseType(houseType)
         self.d_setHouseType(houseType)
-        
+
     def d_setHouseType(self, houseType):
         self.sendUpdate("setHouseType", [houseType])
 
@@ -364,7 +364,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
     def getHousePos(self):
         self.notify.debug('getHousePos')
         return self.housePosInd
-    
+
     def b_setAvatarId(self, avId):
         self.notify.debug("b_setAvatarId(%s) = %s" % (self.doId, avId))
         self.setAvatarId(avId)
@@ -372,17 +372,17 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
 
     def d_setAvatarId(self, avId):
         self.sendUpdate("setAvatarId", [avId])
-        
+
     def setAvatarId(self, avId):
         self.notify.debug("setAvatarId(%s) = %s" % (self.doId, avId))
         self.ownerId = avId
         # set the avatars houseId also
         try:
             av = self.air.doId2do[avId]
-            av.b_setHouseId(self.doId) 
+            av.b_setHouseId(self.doId)
         except:
             self.notify.debug("unable to set av(%s)'s houseId" % avId)
-            
+
     def getAvatarId(self):
         self.notify.debug("getAvatarId(%s)" % (self.doId))
         return self.ownerId
@@ -438,7 +438,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             self.removeOldItem(CatalogFurnitureItem.FLCloset)
 
         self.makeRoomFor(1)
-            
+
         self.atticItems.append(item)
         self.d_setAtticItems(self.atticItems)
         if self.interiorManager:
@@ -576,7 +576,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         deleted, remaining = self.deletedItems.extractDeliveryItems(now)
         if deleted:
             self.notify.info("Aging out deleted items for %s, eliminated %s" % (self.doId, deleted))
-            
+
         self.deletedItems = remaining
 
         return deleted
@@ -656,19 +656,18 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
 
     def getInteriorWindows(self):
         return self.interiorWindows.getBlob(store = CatalogItem.Customization | CatalogItem.WindowPlacement)
-        
 
     def checkOwner(self):
         # Checks whether the owner still exists, and checks whether
         # he's got stuff waiting in his mailbox.
-        
+
         self.notify.debug("__checkOwner: %s" % (self.doId))
 
         if self.ownerId == 0:
             # No owner.  Duh.
             self.d_setHouseReady()
             return
-        
+
         owner = self.air.doId2do.get(self.ownerId)
         if owner and hasattr(owner, "onOrder"):
             # The avatar is in the live database.
@@ -685,7 +684,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             db.doneEvent = gotAvEvent
 
             db.getFields(['setDeliverySchedule', 'setMailboxContents', 'setMaxHp', 'setAwardMailboxContents'])
-                                 
+
     def __gotOwnerAv(self, db, retcode):
         assert(self.notify.debug("__gotOwnerAv(%s, %s): %s" % (list(db.values.keys()), retcode, self.doId)))
         if retcode != 0:
@@ -702,7 +701,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             di = PyDatagramIterator(dg)
             blob = di.getString()
             onOrder = CatalogItemList.CatalogItemList(blob, store = CatalogItem.Customization | CatalogItem.DeliveryDate)
-            
+
         dg = db.values.get('setMailboxContents')
         if dg:
             di = PyDatagramIterator(dg)
@@ -719,7 +718,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             di = PyDatagramIterator(dg)
             blob = di.getString()
             awardMailboxContents = CatalogItemList.CatalogItemList(blob, store = CatalogItem.Customization)
-            
+
         #self.b_setCannonEnabled(1)
         self.__checkMailbox(onOrder, mailboxContents, 0, awardMailboxContents)
 
@@ -727,7 +726,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
         # We have gotten the above data for the owner of this house.
         # Check whether we should raise the flag because he has
         # something in his mailbox.
-        
+
         assert(self.notify.debug("__checkMailbox(%s, %s, %s): %s" %
                                  (onOrder, mailboxContents, liveDatabase,
                                   self.doId)))
@@ -754,7 +753,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
                 else:
                     self.notify.debug("delivery has been completed, raising flag: %s" % (self.doId))
                     self.mailbox.b_setFullIndicator(1)
-            
+
         # Now tell the client that the house is ready.
         self.d_setHouseReady()
 
@@ -772,7 +771,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             posHpr = CannonGlobals.cannonDrops[self.housePosInd]
             estate = simbase.air.doId2do[self.estateId]
             targetId = estate.target.doId
-            self.cannon = DistributedCannonAI.DistributedCannonAI(self.air, self.estateId, 
+            self.cannon = DistributedCannonAI.DistributedCannonAI(self.air, self.estateId,
                                                                   targetId, *posHpr)
             self.cannon.generateWithRequired(self.zoneId)
         elif self.cannon and not self.cannonEnabled:
@@ -783,7 +782,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
 
     def getCannonEnabled(self):
         return self.cannonEnabled
-    
+
     def d_setHouseReady(self):
         self.notify.debug("setHouseReady: %s" % (self.doId))
         self.sendUpdate("setHouseReady", [])

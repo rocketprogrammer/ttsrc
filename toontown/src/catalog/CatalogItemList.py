@@ -24,7 +24,7 @@ class CatalogItemList:
         # properties we will store in (or decode from) the blob along
         # with each CatalogItem.  See CatalogItem.py.
         self.store = store
-        
+
         # The data is stored in either or both of self.__blob and
         # self.__list.  If either one is None, the current data is
         # stored in the other.  If both are None, the data represents
@@ -75,7 +75,7 @@ class CatalogItemList:
         # or None if the list is empty.
         if len(self) == 0:
             return None
-        
+
         nextDeliveryDate = None
         for item in self:
             #print ("item %s" %(item))
@@ -85,13 +85,13 @@ class CatalogItemList:
                     nextDeliveryDate = item.deliveryDate
 
         return nextDeliveryDate
-        
+
     def getNextDeliveryItem(self):
         # Returns the minimum of all the listed items' delivery times,
         # or None if the list is empty.
         if len(self) == 0:
             return None
-        
+
         nextDeliveryDate = None
         nextDeliveryItem = None
         for item in self:
@@ -107,7 +107,7 @@ class CatalogItemList:
         # Extracts from the list the set of items whose delivery time
         # is on or before the cutoff time.  Returns a list of items to
         # be delivered and a list of items still on the way.
-        
+
         beforeTime = []
         afterTime = []
         for item in self:
@@ -127,7 +127,7 @@ class CatalogItemList:
         # appended to the end of the list.  So just extract the first
         # n items.
         return (self[0:count], self[count:])
-    
+
     def __encodeList(self):
         # We shouldn't try to call this function twice.
         assert(self.__blob == None)
@@ -142,7 +142,7 @@ class CatalogItemList:
             for item in self.__list:
                 CatalogItem.encodeCatalogItem(dg, item, store)
         return dg.getMessage()
-        
+
     def __decodeList(self):
         # We shouldn't try to call this function twice.
         assert(self.__list == None)
@@ -163,7 +163,7 @@ class CatalogItemList:
 
 
     # Functions to make this act just like a Python list.
-    
+
     def append(self, item):
         if self.__list == None:
             self.__decodeList()

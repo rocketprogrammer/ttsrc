@@ -29,14 +29,14 @@ import gc
 class AIRepository(ConnectionRepository):
     """
     The new AIRepository base class
-    
+
     It does not have:
       - district or shard code (see AIDistrict.py)
       - friends or secret friends code
       - a collision traverser
-      
+
     of course, a derived class may add those.
-    
+
     It does have:
       + object creation code
       + channel listening code
@@ -52,17 +52,17 @@ class AIRepository(ConnectionRepository):
             minChannel, maxChannel, dcSuffix = 'AI'):
         assert self.notify.debugStateCall(self)
         self._channels={}
-        self.AIRunningNetYield = simbase.config.GetBool('ai-running-net-yield', 0)        
-        
+        self.AIRunningNetYield = simbase.config.GetBool('ai-running-net-yield', 0)
+
         self._msgBundleNames = []
 
         # doId->requestDeleted object
         self._requestDeletedDOs = {}
-        
+
         ConnectionRepository.__init__(
                 self, ConnectionRepository.CM_NATIVE, simbase.config)
         self.dcSuffix = dcSuffix
-        
+
         simbase.setupCpuAffinities(minChannel)
 
         self.distributedObjectRequests=set()
@@ -90,7 +90,7 @@ class AIRepository(ConnectionRepository):
 
         # UDP socket for sending events to the event server.
         self.udpSock = None
-        
+
         if not self.esurl.empty():
             udpEventServer = SocketAddress()
             if not udpEventServer.setHost(self.esurl.getServer(), self.esurl.getPort()):
@@ -154,16 +154,16 @@ class AIRepository(ConnectionRepository):
         # in.  However, in the normal AI repository, we should do
         # these things.
         self.doLiveUpdates = 1
-        
+
         #for generating unqiue names for non-dos, manly used for tasks
         self.keyCounter = 0
-        
-        self.MaxEpockSpeed = self.config.GetFloat('ai-net-yield-epoch', 1.0/30.0)        
-        
+
+        self.MaxEpockSpeed = self.config.GetFloat('ai-net-yield-epoch', 1.0/30.0)
+
         if self.AIRunningNetYield :
             taskMgr.doYield =self.taskManagerDoYieldNetwork
 
-        # use this for time yields without sleeps        
+        # use this for time yields without sleeps
         #taskMgr.doYield = self.taskManagerDoYield
 
         self.garbageLeakLogger = GarbageLeakServerEventAggregatorAI(self)
@@ -252,7 +252,7 @@ class AIRepository(ConnectionRepository):
 
     def uniqueName(self, desc):
         return desc+"-"+str(self.serverId)
-        
+
     def trueUniqueName(self, desc):
         self.keyCounter += 1
         return desc+"-"+str(self.serverId)+"-"+str(self.keyCounter)
@@ -324,7 +324,7 @@ class AIRepository(ConnectionRepository):
                 break
             breakCount += 1
 
-            
+
     def writeServerStatus(self, who, avatar_count, object_count):
         """
         Sends the Status Packet to the event server via UDP for
@@ -458,19 +458,19 @@ class AIRepository(ConnectionRepository):
 
     def handleAvatarUsage(self, di):
         """
-        Should only be handled by the UD process containing the AvatarManagerUD 
+        Should only be handled by the UD process containing the AvatarManagerUD
         """
         pass
-    
+
     def handleAccountUsage(self, di):
         """
-        Should only be handled by the UD process containing the AvatarManagerUD 
+        Should only be handled by the UD process containing the AvatarManagerUD
         """
         pass
-    
+
     def handleObjectDeleteDisk(self, di):
         pass
-    
+
     def handleObjectQueryField(self, di):
         assert self.notify.debugStateCall(self)
 
@@ -491,7 +491,7 @@ class AIRepository(ConnectionRepository):
                 value = packer.unpackObject()
                 messenger.send(
                     "doFieldResponse-%s"%(context,), [context, value])
-                
+
     def handleObjectQueryFields(self, di):
         assert self.notify.debugStateCall(self)
 
@@ -536,15 +536,15 @@ class AIRepository(ConnectionRepository):
         datagram = PyDatagram()
         sender=self.getMsgSender()
         datagram.addServerHeader(
-            sender, self.ourChannel, SERVER_PING)           
+            sender, self.ourChannel, SERVER_PING)
         # A context that can be used to index the response if needed
         datagram.addUint32(sec)
         datagram.addUint32(usec)
         datagram.addString(url)
         datagram.addUint32(channel)
         self.send(datagram)
-        
-        
+
+
 
     def handleMessageType(self, msgType, di):
         if msgType == CLIENT_GET_STATE_RESP:
@@ -600,11 +600,11 @@ class AIRepository(ConnectionRepository):
             if __dev__:
                 import pdb
                 pdb.set_trace()
-    
+
     def exitPlayGame(self):
         self.handler = None
         self.stopReaderPollTask()
-        
+
         self.deleteDistributedObjects()
         cleanupAsyncRequests()
 
@@ -692,8 +692,8 @@ class AIRepository(ConnectionRepository):
         self.distributedObjectRequests.discard(doId)
         distObj.setLocation(parentId, zoneId)
         self.writeServerEvent('distObjEnter', doId, '')
-    
-    def handleDistObjEnter(self, di):       
+
+    def handleDistObjEnter(self, di):
         assert self.notify.debugStateCall(self)
         context = di.getUint32()
         parentId = di.getUint32()
@@ -722,7 +722,7 @@ class AIRepository(ConnectionRepository):
 ##             self.notify.error("Avatar %s re-entered without exiting" % doId)
 
 
-    def handleDistObjEnterZone(self, di):       
+    def handleDistObjEnterZone(self, di):
         assert self.notify.debugStateCall(self)
         parentId = di.getUint32()
         zoneId = di.getUint32()
@@ -901,7 +901,7 @@ class AIRepository(ConnectionRepository):
         #print args
         dg = do.dclass.aiFormatUpdate(
                 fieldName, do.doId, do.doId, self.ourChannel, args)
-        self.sendDatagram(dg)        
+        self.sendDatagram(dg)
 
     def sendUpdateToDoId(self, dclassName, fieldName, doId, args,
                          channelId=None):
@@ -910,7 +910,7 @@ class AIRepository(ConnectionRepository):
         airecv, ownrecv, broadcast, etc.  If you don't include a channelId
         or if channelId == doId, then the normal broadcast options will
         be used.
-        
+
         See Also: def queryObjectField
         """
         dclass=self.dclassesByName.get(dclassName+self.dcSuffix)
@@ -929,7 +929,7 @@ class AIRepository(ConnectionRepository):
         airecv, ownrecv, broadcast, etc.  If you don't include a channelId
         or if channelId == doId, then the normal broadcast options will
         be used.
-        
+
         This is just like sendUpdateToDoId, but just returns
         the datagram instead of immediately sending it.
         """
@@ -954,7 +954,7 @@ class AIRepository(ConnectionRepository):
         dg = dclass.aiFormatUpdate(
             fieldName, doId, doId, self.ourChannel, args)
         self.send(dg)
-        
+
     def sendUpdateToChannel(self, do, channelId, fieldName, args):
         dg = do.dclass.aiFormatUpdate(
                 fieldName, do.doId, channelId, self.ourChannel, args)
@@ -987,7 +987,7 @@ class AIRepository(ConnectionRepository):
             self.abandonMessageBundles()
             self.notify.error('message bundling leak, see warnings above (most recent first)')
         return task.cont
-        
+
     def registerForChannel(self, channelNumber):
         if self._channels.get(channelNumber):
             # We are already registered for this channel.
@@ -999,19 +999,19 @@ class AIRepository(ConnectionRepository):
         datagram.addInt8(1)
         datagram.addChannel(CONTROL_MESSAGE)
         datagram.addUint16(CONTROL_SET_CHANNEL)
-        
+
         datagram.addChannel(channelNumber)
         self.send(datagram)
 
     def addPostSocketClose(self, themessage):
         # Time to send a register for channel message to the msgDirector
         datagram = PyDatagram()
-#        datagram.addServerControlHeader(CONTROL_ADD_POST_REMOVE)        
+#        datagram.addServerControlHeader(CONTROL_ADD_POST_REMOVE)
         datagram.addInt8(1)
         datagram.addChannel(CONTROL_MESSAGE)
         datagram.addUint16(CONTROL_ADD_POST_REMOVE)
 
-        datagram.addString(themessage.getMessage())
+        datagram.addBlob(themessage.getMessage())
         self.send(datagram)
 
     def addPostSocketCloseUD(self, dclassName, fieldName, doId, args):
@@ -1028,7 +1028,7 @@ class AIRepository(ConnectionRepository):
         del self._channels[channelNumber]
         # Time to send a unregister for channel message to the msgDirector
         datagram = PyDatagram()
-#        datagram.addServerControlHeader(CONTROL_REMOVE_CHANNEL)                
+#        datagram.addServerControlHeader(CONTROL_REMOVE_CHANNEL)
         datagram.addInt8(1)
         datagram.addChannel(CONTROL_MESSAGE)
         datagram.addUint16(CONTROL_REMOVE_CHANNEL)
@@ -1037,7 +1037,7 @@ class AIRepository(ConnectionRepository):
         self.send(datagram)
 
     #----------------------------------
-    
+
     def addAvatarToChannels(self, avatarId, listOfChannels):
         """
         avatarId is a 32 bit doId
@@ -1059,7 +1059,7 @@ class AIRepository(ConnectionRepository):
         assert self.notify.debugCall()
         dg = PyDatagram()
         dg.addServerHeader(
-            targetConnection, self.serverId, CLIENT_AGENT_OPEN_CHANNEL)             
+            targetConnection, self.serverId, CLIENT_AGENT_OPEN_CHANNEL)
         for i in listOfChannels:
             dg.addUint64(i)
         self.send(dg)
@@ -1071,7 +1071,7 @@ class AIRepository(ConnectionRepository):
         assert self.notify.debugCall()
         dg = PyDatagram()
         dg.addServerHeader(
-            targetConnection, self.serverId, CLIENT_AGENT_CLOSE_CHANNEL)                
+            targetConnection, self.serverId, CLIENT_AGENT_CLOSE_CHANNEL)
         for i in listOfChannels:
             dg.addUint64(i)
         self.send(dg)
@@ -1118,7 +1118,7 @@ class AIRepository(ConnectionRepository):
         # the AI and not the client
         dg.addUint16((1<<15)+interestId)
         dg.addUint32(contextId)
-        self.send(dg)        
+        self.send(dg)
 
     def setAllowClientSend(self, avatarId,
                            dObject, fieldNameList = []):
@@ -1148,23 +1148,23 @@ class AIRepository(ConnectionRepository):
 
         # insert the fieldIds into the datagram
         for fieldId in sorted(fieldIdSet):
-            dg.addUint16(fieldId)          
+            dg.addUint16(fieldId)
         self.send(dg)
 
     def clearAllowClientSend(self, avatarId, dObject):
         self.setAllowClientSend(avatarId, dObject)
-        
+
     # ----------------------------------
-    
+
     def setConnectionName(self, name):
         self.connectionName = name
         # Time to send a register for channel message to the msgDirector
         datagram = PyDatagram()
-        # datagram.addServerControlHeader(CONTROL_SET_CON_NAME)                        
+        # datagram.addServerControlHeader(CONTROL_SET_CON_NAME)
         datagram.addInt8(1)
         datagram.addChannel(CONTROL_MESSAGE)
         datagram.addUint16(CONTROL_SET_CON_NAME)
-        
+
         datagram.addString(name)
         self.send(datagram)
 
@@ -1172,11 +1172,11 @@ class AIRepository(ConnectionRepository):
         self.connectionURL = url
         # Time to send a register for channel message to the msgDirector
         datagram = PyDatagram()
-        # datagram.addServerControlHeader(CONTROL_SET_CON_NAME)                        
+        # datagram.addServerControlHeader(CONTROL_SET_CON_NAME)
         datagram.addInt8(1)
         datagram.addChannel(CONTROL_MESSAGE)
         datagram.addUint16(CONTROL_SET_CON_URL)
-        
+
         datagram.addString(url)
         self.send(datagram)
 
@@ -1296,7 +1296,7 @@ class AIRepository(ConnectionRepository):
             doId, self.ourChannel, STATESERVER_OBJECT_SET_OWNER_RECV)
         datagram.addChannel(0)
         self.send(datagram)
-            
+
     def sendSetZone(self, distobj, zoneId):
         self.notify.error("non-district types should not call sendSetZone")
 
@@ -1332,7 +1332,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
-            distobj.doId, self.ourChannel, STATESERVER_OBJECT_DELETE_RAM)        
+            distobj.doId, self.ourChannel, STATESERVER_OBJECT_DELETE_RAM)
         # The Id of the object in question
         datagram.addUint32(distobj.doId)
         self.send(datagram)
@@ -1342,7 +1342,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
-            doId, self.ourChannel, STATESERVER_OBJECT_DELETE_RAM)        
+            doId, self.ourChannel, STATESERVER_OBJECT_DELETE_RAM)
         # The Id of the object in question
         datagram.addUint32(doId)
         self.send(datagram)
@@ -1369,7 +1369,7 @@ class AIRepository(ConnectionRepository):
             (context, doId))
         messenger.send(
             self.getDatabaseGenerateResponseEvent(context), [doId])
-            
+
     def getDatabaseIdForClassName(self, className):
         assert 0
         # You probably want to override this to return something better.
@@ -1430,7 +1430,7 @@ class AIRepository(ConnectionRepository):
             self.send(dg)
         else:
             packer = DCPacker()
-            packer.rawPackUint8(1)                
+            packer.rawPackUint8(1)
             packer.rawPackUint64(databaseId)
             packer.rawPackUint64(self.ourChannel)
             packer.rawPackUint16(
@@ -1486,7 +1486,7 @@ class AIRepository(ConnectionRepository):
 
             dg = Datagram(packer.getString())
             self.send(dg)
-            
+
     def lostConnection(self):
         ConnectionRepository.lostConnection(self)
         sys.exit()
@@ -1521,7 +1521,7 @@ class AIRepository(ConnectionRepository):
                 distObj, distObj.doId, distObj.parentId, distObj.zoneId,
                 toChannel, self.ourChannel, [])
         self.send(dg)
-        
+
     def generateWithRequired(self, distObj, parentId, zoneId, optionalFields=[]):
         assert self.notify.debugStateCall(self)
         # Assign it an id
@@ -1547,7 +1547,7 @@ class AIRepository(ConnectionRepository):
         self.addDOToTables(distObj, location = (parentId,zoneId))
         # Send a generate message
         distObj.sendGenerateWithRequired(self, parentId, zoneId, optionalFields)
-        
+
     def queryObjectAll(self, doId, context=0):
         """
         Get a one-time snapshot look at the object.
@@ -1556,7 +1556,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
-            doId, self.ourChannel, STATESERVER_QUERY_OBJECT_ALL)           
+            doId, self.ourChannel, STATESERVER_QUERY_OBJECT_ALL)
         # A context that can be used to index the response if needed
         datagram.addUint32(context)
         self.send(datagram)
@@ -1568,7 +1568,7 @@ class AIRepository(ConnectionRepository):
         #    { objId : [zoneId, zoneId, ...],
         #      objId : [zoneId, zoneId, ...],
         #    }
-        assert self.notify.debugStateCall(self)        
+        assert self.notify.debugStateCall(self)
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
@@ -1588,7 +1588,7 @@ class AIRepository(ConnectionRepository):
         self.flush()
 
     def queryObjectChildrenLocal(self, parentId, context=0):
-        assert self.notify.debugStateCall(self)        
+        assert self.notify.debugStateCall(self)
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
@@ -1622,7 +1622,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
-            doId, self.ourChannel, STATESERVER_OBJECT_QUERY_FIELD)           
+            doId, self.ourChannel, STATESERVER_OBJECT_QUERY_FIELD)
         datagram.addUint32(doId)
         datagram.addUint16(fieldId)
         # A context that can be used to index the response if needed
@@ -1641,7 +1641,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
-            doId, self.ourChannel, STATESERVER_OBJECT_QUERY_FIELDS)           
+            doId, self.ourChannel, STATESERVER_OBJECT_QUERY_FIELDS)
         datagram.addUint32(doId)
         datagram.addUint32(context)
         for x in fieldIds:
@@ -1660,7 +1660,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         dg = PyDatagram()
         dg.addServerHeader(
-            dbId, self.ourChannel, STATESERVER_OBJECT_QUERY_FIELDS_STRING)           
+            dbId, self.ourChannel, STATESERVER_OBJECT_QUERY_FIELDS_STRING)
         dg.addString(objString)
         dg.addUint32(context)
         for x in fieldIds:
@@ -1749,8 +1749,8 @@ class AIRepository(ConnectionRepository):
             else:
                 assert self.notify.error(
                         "queryObjectFields invalid field in %s, %s"%(doId, repr(fieldNames)))
-                
-        
+
+
     def requestDistributedObject(self, doId):
         """
         Ask for the object to be added to the private
@@ -1759,7 +1759,7 @@ class AIRepository(ConnectionRepository):
         Normally a query object all does not actually enter the object
         returned into the doId2do table.  This function will change a query
         request to a distributed object that is part of the normal set of
-        objects on this server. 
+        objects on this server.
         """
         assert self.notify.debugCall()
         distObj = self.doId2do.get(doId)
@@ -1773,7 +1773,7 @@ class AIRepository(ConnectionRepository):
         self.distributedObjectRequests.add(doId)
         context=self.allocateContext()
         self.acceptOnce(
-            "doRequestResponse-%s"%(context,), 
+            "doRequestResponse-%s"%(context,),
             self.postGenerate, [])
         self.registerForChannel(doId)
         self.queryObjectAll(doId, context)
@@ -1783,7 +1783,7 @@ class AIRepository(ConnectionRepository):
         # Create a message
         datagram = PyDatagram()
         datagram.addServerHeader(
-            self.ourChannel, self.ourChannel, STATESERVER_ADD_AI_RECV)                       
+            self.ourChannel, self.ourChannel, STATESERVER_ADD_AI_RECV)
         # The Id of the object in question
         datagram.addUint32(objectId)
         if aiChannel is None:
@@ -1866,43 +1866,43 @@ class AIRepository(ConnectionRepository):
         minFinTime = frameStartTime + self.MaxEpockSpeed
         if nextScheuledTaksTime > 0 and nextScheuledTaksTime < minFinTime:
             minFinTime = nextScheuledTaksTime
-                                    
-        self.networkBasedReaderAndYielder(self.handleDatagram,globalClock,minFinTime)                           
+
+        self.networkBasedReaderAndYielder(self.handleDatagram,globalClock,minFinTime)
 
         if not self.isConnected():
             self.stopReaderPollTask()
             self.lostConnection()
-     
-    ############################################################### 
+
+    ###############################################################
     # Optimized version of old behavior..
     def readerPollUntilEmpty(self, task):
-        self.checkDatagramAi(self.handleDatagram)                   
+        self.checkDatagramAi(self.handleDatagram)
         if not self.isConnected():
             self.stopReaderPollTask()
             self.lostConnection()
 
         return Task.cont
 
-    
-    ############################################################### 
+
+    ###############################################################
     # This can be used to do time based yielding instead of the sleep task.
     def  taskManagerDoYield(self , frameStartTime, nextScheuledTaksTime):
         minFinTime = frameStartTime + self.MaxEpockSpeed
         if nextScheuledTaksTime > 0 and nextScheuledTaksTime < minFinTime:
             minFinTime = nextScheuledTaksTime
-            
+
         delta = minFinTime - globalClock.getRealTime()
         while(delta > 0.002):
-            time.sleep(delta)           
+            time.sleep(delta)
             delta = minFinTime - globalClock.getRealTime()
-            
-            
-    ############################################################### 
+
+
+    ###############################################################
     # This can be used to do time based yielding instead of the sleep task.
     def startReaderPollTask(self):
         if not self.AIRunningNetYield:
             ConnectionRepository.startReaderPollTask(self)
-        else:                    
+        else:
             print('########## startReaderPollTask New ')
             self.stopReaderPollTask()
             self.accept(CConnectionRepository.getOverflowEventName(),self.handleReaderOverflow)

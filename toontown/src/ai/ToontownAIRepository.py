@@ -599,7 +599,7 @@ class ToontownAIRepository(AIDistrict):
 
         if ((isinstance(dnaGroup, DNAGroup)) and
             # If it is a DNAGroup, and the name has party_gate, count it
-            (string.find(dnaGroup.getName(), 'party_gate') >= 0)):
+            (dnaGroup.getName().find('party_gate') >= 0)):
             # Here's a party hat!
             ph = DistributedPartyGateAI.DistributedPartyGateAI(self)
             ph.generateWithRequired(zoneId)
@@ -633,7 +633,7 @@ class ToontownAIRepository(AIDistrict):
 
         if ((isinstance(dnaGroup, DNAGroup)) and
             # If it is a DNAGroup, and the name starts with fishing_pond, count it
-            (string.find(dnaGroup.getName(), 'fishing_pond') >= 0)):
+            (dnaGroup.getName().find('fishing_pond') >= 0)):
             # Here's a fishing pond!
             fishingPondGroups.append(dnaGroup)
             fp = DistributedFishingPondAI.DistributedFishingPondAI(self, area)
@@ -668,7 +668,7 @@ class ToontownAIRepository(AIDistrict):
         for i in range(dnaPondGroup.getNumChildren()):
             dnaGroup = dnaPondGroup.at(i)
             if ((isinstance(dnaGroup, DNAProp)) and
-                (string.find(dnaGroup.getCode(), 'fishing_spot') >= 0)):
+                (dnaGroup.getCode().find('fishing_spot') >= 0)):
                 # Here's a fishing spot!
                 pos = dnaGroup.getPos()
                 hpr = dnaGroup.getHpr()
@@ -683,7 +683,7 @@ class ToontownAIRepository(AIDistrict):
     def findRacingPads(self, dnaGroup, zoneId, area, overrideDNAZone = 0, type = 'racing_pad'):
         racingPads = []
         racingPadGroups = []
-        if ((isinstance(dnaGroup, DNAGroup)) and (string.find(dnaGroup.getName(), type) >= 0)):
+        if ((isinstance(dnaGroup, DNAGroup)) and (dnaGroup.getName().find(type) >= 0)):
             racingPadGroups.append(dnaGroup)
             if (type == 'racing_pad'):
                 nameInfo = dnaGroup.getName().split('_')
@@ -752,7 +752,7 @@ class ToontownAIRepository(AIDistrict):
             dnaGroup = dnaRacingPadGroup.at(i)
 
             # TODO - check if DNAProp instance
-            if ((string.find(dnaGroup.getName(), 'starting_block') >= 0)):
+            if ((dnaGroup.getName().find('starting_block') >= 0)):
                 padLocation = dnaGroup.getName().split('_')[2]
                 pos = dnaGroup.getPos()
                 hpr = dnaGroup.getHpr()
@@ -772,7 +772,7 @@ class ToontownAIRepository(AIDistrict):
         Find and return leader boards
         '''
         leaderBoards = []
-        if (string.find(dnaPool.getName(), 'leaderBoard') >= 0):
+        if (dnaPool.getName().find('leaderBoard') >= 0):
             #found a leader board
             pos = dnaPool.getPos()
             hpr = dnaPool.getHpr()

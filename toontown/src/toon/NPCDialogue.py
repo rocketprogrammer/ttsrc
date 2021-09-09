@@ -13,16 +13,16 @@ class NPCDialogue:
     notify = DirectNotifyGlobal.directNotify.newCategory("NPCDialogue")
 
     def __init__(self, participant, dialogueTopic):
-        self.participants = {}        
-        
+        self.participants = {}
+
         if dialogueTopic in TTLocalizer.toontownDialogues:
             self.topic = dialogueTopic
         else:
             self.notify.warning("Dialogue does not exist: %s" %dialogueTopic)
             self.topic = TTLocalizer.BoringTopic
-        
+
         self.conversation = TTLocalizer.toontownDialogues[self.topic]
-        
+
         if participant and isinstance(participant, DistributedNPCToonBaseAI.DistributedNPCToonBaseAI):
             self.addParticipant(participant)
             self.participantProgress = 0
@@ -31,7 +31,7 @@ class NPCDialogue:
             self.notify.warning("Participant does not exist: %s" %participant)
             self.participantProgress = 0
             self.currrentParticipant = None
-    
+
     def calcMaxNumMsgs(self):
         """
         Find the participant that has the most number of things to say
@@ -40,13 +40,13 @@ class NPCDialogue:
         for participant, spiel in list(self.conversation.items()):
             if len(spiel)>self.maxNumMsgs and participant[1] in self.participants:
                 self.maxNumMsgs = len(spiel)
-    
+
     def getTopic(self):
         """
         Accessor function for topic
         """
         return self.topic
-            
+
     def addParticipant(self, participant):
         """
         Add a new participant
@@ -67,33 +67,33 @@ class NPCDialogue:
                     return True
             self.notify.warning("Participant: %s should not be in conversation" %participant)
         return False
-                
+
     def removeParticipant(self, participant):
         """
         Remove a participant
         """
         if participant.npcId in self.participants:
             if participant.npcId == self.currentParticipant:
-                self.getNextParticipant()                
+                self.getNextParticipant()
             self.participants[participant.npcId].remove(participant)
             if self.participants[participant.npcId] == []:
                 del self.participants[participant.npcId]
             self.calcMaxNumMsgs()
             return True
-        return False            
-        
+        return False
+
     def getNextParticipant(self):
         while 1:
             self.currentParticipant = self.calcNextParticipant()
             if self.currentParticipant in self.participants:
                 break
-    
+
     def calcNextParticipant(self):
         """
         Returns the next in line to talk
         """
         nextParticipant = None
-        
+
         for partPos in list(self.conversation.keys()):
             if partPos[1] == self.currentParticipant:
                 nextPos = partPos[0]+1
@@ -105,22 +105,22 @@ class NPCDialogue:
             if partPos[0] == nextPos:
                 nextParticipant = partPos[1]
                 return nextParticipant
-            
+
         return self.currentParticipant
-        
-        
+
+
     def getMaxParticipants(self):
         """
         Number of conversation pieces provided in TTLocalizer
         """
         return len(self.conversation)
-        
+
     def getNumParticipants(self):
         """
         Returns the number of NPC's currently participating
         """
         return len(self.participants)
-        
+
     def isRunning(self):
         if taskMgr.hasTaskNamed("Dialogue"+self.topic):
             return True
@@ -130,11 +130,11 @@ class NPCDialogue:
         Start up a dialogue amongst the participants
         """
         self.nextChatTime = 0
-        
+
         taskMgr.add(self.__blather, "Dialogue"+self.topic)
-        
+
         return True
-        
+
     def stop(self):
         """
         This conversation is over!
@@ -151,7 +151,7 @@ class NPCDialogue:
 
         if not self.currentParticipant:
             return Task.done
-            
+
         # Increment the participantProgress
         for partPos in list(self.conversation.keys()):
             if partPos[1] == self.currentParticipant:
@@ -160,15 +160,15 @@ class NPCDialogue:
         if self.participantProgress >= len(self.conversation[convKey]):
             self.getNextParticipant()
             return Task.cont
-                    
-        # Select the current spiel      
+
+        # Select the current spiel
         #msg = self.conversation[self.participants[self.currentParticipant]][self.participantProgress]
-        
+
         for participant in self.participants[self.currentParticipant]:
             chatFlags = CFSpeech | CFTimeout
-            
+
             participant.sendUpdate("setChat", [self.topic, convKey[0], convKey[1], self.participantProgress, chatFlags])
-            
+
         self.getNextParticipant()
 
         # Delay before next message

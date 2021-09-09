@@ -4,7 +4,7 @@ npcDNA = {}
 
 def parseAndCopyDNA():
     loadDNA()
-    
+
     if not os.path.isfile("/cygwin/home/abhinath/player/toontown/src/toon/NPCToons.py"):
         print("NPCToons.py not found")
     else:
@@ -17,18 +17,18 @@ def parseAndCopyDNA():
             lineStart = npcToons.find(npcId+" :")
             lineEnd = npcToons.find("\n", lineStart)
             randPos = npcToons.find(" \"r\"", lineStart, lineEnd)
-            
+
             oldLine = npcToons[lineStart:lineEnd]
             newLine = oldLine.replace(" \"r\"", npcDNA[npcId])
-            
+
             npcToons = npcToons.replace(oldLine, newLine)
-        
+
             npcCount += 1
-            
+
         # print npcToons
         npcToonsFile.seek(0,0)
-        npcToonsFile.write(npcToons)           
-    
+        npcToonsFile.write(npcToons)
+
 def loadDNA():
     if not os.path.isfile("/cygwin/home/abhinath/player/toontown/src/toon/RTDNAFile.txt"):
         print("RTDNAFile.txt not found")
@@ -41,7 +41,7 @@ def loadDNA():
                 break
             if NPCLine.find("NPC Id: ")>-1:
                 break
-                
+
         while NPCLine != "":
             DNALine = npcDNAFile.readline()
             if (NPCLine.find("NPC Id: ")>-1):
@@ -51,17 +51,16 @@ def loadDNA():
                 DNALine = DNALine.replace("DNA: ", "")
                 DNALine = DNALine.replace("\n", "")
                 npcDNA[NPCLine] = DNALine
-                
+
             while 1:
                 NPCLine = npcDNAFile.readline()
                 if NPCLine == "":
                     break
                 if NPCLine.find("NPC Id: ")>-1:
                     break
-                
+
         # print npcDNA
         return 0
-        
-        
+
+
 parseAndCopyDNA()
-        

@@ -339,6 +339,11 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         DistributedAvatarAI.DistributedAvatarAI.handleLogicalZoneChange(
             self, newZoneId, oldZoneId)
 
+        if oldZoneId is None:
+            # Make sure the oldZoneId is by default 0.
+            # This is required for Python 3.
+            oldZoneId = 0
+
         # make sure ghost mode is disabled on zone change (fixes furniture arranger exploit)
         self.b_setGhostMode(0)
 

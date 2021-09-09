@@ -5,6 +5,7 @@ from direct.distributed.ClockDelta import *
 from otp.avatar import DistributedAvatarAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
+import functools
 
 class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
     """

@@ -49,13 +49,13 @@ class whrandom:
         """Set the seed from (x, y, z).
         These must be integers in the range [0, 256)."""
         if not type(x) == type(y) == type(z) == type(0):
-            raise TypeError, 'seeds must be integers'
+            raise TypeError('seeds must be integers')
         if not (0 <= x < 256 and 0 <= y < 256 and 0 <= z < 256):
-            raise ValueError, 'seeds must be in range(0, 256)'
+            raise ValueError('seeds must be in range(0, 256)')
         if 0 == x == y == z:
             # Initialize from current time
             import time
-            t = long(time.time() * 256)
+            t = int(time.time() * 256)
             t = int((t & 0xffffff) ^ (t >> 24))
             t, x = divmod(t, 256)
             t, y = divmod(t, 256)
@@ -103,31 +103,31 @@ class whrandom:
         # common case while still doing adequate error checking
         istart = int(start)
         if istart != start:
-            raise ValueError, "non-integer arg 1 for randrange()"
+            raise ValueError("non-integer arg 1 for randrange()")
         if stop is default:
             if istart > 0:
                 return int(self.random() * istart)
-            raise ValueError, "empty range for randrange()"
+            raise ValueError("empty range for randrange()")
         istop = int(stop)
         if istop != stop:
-            raise ValueError, "non-integer stop for randrange()"
+            raise ValueError("non-integer stop for randrange()")
         if step == 1:
             if istart < istop:
                 return istart + int(self.random() *
                                     (istop - istart))
-            raise ValueError, "empty range for randrange()"
+            raise ValueError("empty range for randrange()")
         istep = int(step)
         if istep != step:
-            raise ValueError, "non-integer step for randrange()"
+            raise ValueError("non-integer step for randrange()")
         if istep > 0:
             n = (istop - istart + istep - 1) / istep
         elif istep < 0:
             n = (istop - istart + istep + 1) / istep
         else:
-            raise ValueError, "zero step for randrange()"
+            raise ValueError("zero step for randrange()")
 
         if n <= 0:
-            raise ValueError, "empty range for randrange()"
+            raise ValueError("empty range for randrange()")
         return istart + istep * int(self.random() * n)
 
 

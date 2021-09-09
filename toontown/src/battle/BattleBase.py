@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToontownBattleGlobals import *
 from direct.task.Timer import *
-import math
+import math, functools
 
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toon import NPCToons
@@ -172,7 +172,7 @@ def findToonAttack(toons, attacks, track):
         elif (a[TOON_LVL_COL] < b[TOON_LVL_COL]):
             return -1
         return 0
-    foundAttacks.sort(compFunc)
+    foundAttacks.sort(key=functools.cmp_to_key(compFunc))
     return foundAttacks
 
 # A little pad time added to server time calculations, to allow for

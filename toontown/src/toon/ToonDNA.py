@@ -1,4 +1,4 @@
-from otp.util import random
+from otp.util import whrandom
 from pandac.PandaModules import *
 from direct.directnotify.DirectNotifyGlobal import *
 import random

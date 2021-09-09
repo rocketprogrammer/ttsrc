@@ -2298,8 +2298,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
 
             nextItem = None
             nextGiftItem = None
-            nextTime = None
-            nextGiftTime = None
+            nextTime = 0
+            nextGiftTime = 0
             if self.onOrder:
                 nextTime = self.onOrder.getNextDeliveryDate()
                 nextItem = 0

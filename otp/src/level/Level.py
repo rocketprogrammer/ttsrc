@@ -1,10 +1,10 @@
 from direct.directnotify import DirectNotifyGlobal
-import string, LevelConstants
+import string
+from . import LevelConstants
 from direct.showbase.PythonUtil import lineInfo, uniqueElements
 import types
 
 class Level:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('Level')
 
     def __init__(self):
@@ -99,9 +99,9 @@ class Level:
         spec = self.levelSpec.getEntitySpec(entId)
         Level.notify.debug('creating %s %s' % (spec['type'], entId))
         entity = self.entityCreator.createEntity(entId)
-        if entity is 'nonlocal':
+        if entity == 'nonlocal':
             self.nonlocalEntIds[entId] = None
-        elif entity is 'nothing':
+        elif entity == 'nothing':
             self.nothingEntIds[entId] = None
         else:
             self.createdEntIds.append(entId)

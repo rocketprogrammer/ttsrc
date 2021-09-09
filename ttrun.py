@@ -1,7 +1,4 @@
-import sys
-sys.path.append("./modules")
-
-import os, marshal, imp
+import os, marshal, imp, sys
 os.environ["PATH"] += ";./resources"
 
 codes = {}
@@ -20,7 +17,6 @@ def generate(path, module):
                 codes[".".join(module)] = [1, os.path.join(path, file)]
             else:
                 codes[".".join(module + [file[:-3]])] = [0, os.path.join(path, file)]
-
 
 class Importer:
     @classmethod
@@ -51,12 +47,10 @@ class Importer:
             module.__package__ = ".".join(fullname.split(".")[:-1])
 
         if code[1]:
-            with open(code[1], "r") as file:
-                exec compile(file.read() + "\n", codes[fullname][1], "exec") in module.__dict__
+            with open(code[1], "rb") as file:
+                exec(compile(file.read() + b"\n", codes[fullname][1], "exec"), module.__dict__)
 
         return module
-
-
 
 if __name__ == "__main__":
     sys.meta_path.append(Importer)
@@ -71,26 +65,27 @@ if __name__ == "__main__":
     for phase in [3,3.5,4,5,5.5,6,7,8,9,10,11,12,13]:
         vfs.mount(Filename("resources", "phase_" + str(phase) + ".mf"), '.', VirtualFileSystem.MFReadOnly)
 
+    # we need some sql config
+    loadPrcFileData("", "mysql-user root")
+    loadPrcFileData("", "mysql-passwd klnbZS9Jca4PLaWIMEED77zwQzL0EfaX")
+    loadPrcFileData("", "want-code-redemption-init-db 1")
+
+    loadPrcFileData('', 'dc-multiple-inheritance #f')
+    loadPrcFileData('', 'dc-sort-virtual-inheritance #t')
+    loadPrcFileData('', 'dc-sort-inheritance-by-file #f')
+
+    loadPrcFileData("", "dc-file resources/phase_3/etc/otp.dc")
+    loadPrcFileData("", "dc-file resources/phase_3/etc/toon.dc")
+
+    loadPrcFileData("", "msg-director-ip 127.0.0.1")
+    loadPrcFileData("", "event-server-ip 127.0.0.1")
+
     import traceback
     try:
         if "-ai" in sys.argv:
-            loadPrcFileData('', 'dc-multiple-inheritance #f')
-            loadPrcFileData('', 'dc-sort-virtual-inheritance #t')
-            loadPrcFileData('', 'dc-sort-inheritance-by-file #f')
             from toontown.ai import AIStart
+
         elif "-ud" in sys.argv:
-            # ihooks messes with our import system
-            import ihooks
-            ihooks.install = lambda *args: None
-
-            # ud tries to load from libdirect but it's libp3direct on public 1.7.2
-            import libp3direct
-            sys.modules["libdirect"] = sys.modules["libp3direct"]
-
-            # we need some sql config
-            loadPrcFileData("", "mysql-user root")
-            loadPrcFileData("", "mysql-passwd klnbZS9Jca4PLaWIMEED77zwQzL0EfaX")
-            loadPrcFileData("", "want-code-redemption-init-db 1")
             from toontown.uberdog import Start
 
         else:

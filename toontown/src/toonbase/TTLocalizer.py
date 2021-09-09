@@ -7,7 +7,7 @@ to use in the game.
 
 # Do not import panda modules because it is not downloaded until Phase 3
 # This file is in phase 2
-from pandac.libpandaexpressModules import *
+from pandac.PandaModules import *
 import string
 import types
 
@@ -28,9 +28,9 @@ def getLanguage():
 
 print(("TTLocalizer: Running in language: %s" % (language)))
 if language == 'english':
-    _languageModule = "toontown.toonbase.TTLocalizer" + string.capitalize(language)
+    _languageModule = "toontown.toonbase.TTLocalizer" + language.capitalize()
 else:
-    checkLanguage = 1 
+    checkLanguage = 1
     _languageModule = "toontown.toonbase.TTLocalizer_" + language
 
 print(("from " + _languageModule + " import *"))

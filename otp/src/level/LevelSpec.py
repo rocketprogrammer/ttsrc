@@ -1,12 +1,12 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase.PythonUtil import list2dict, uniqueElements
-import string, LevelConstants, types
+import string, types
+from . import LevelConstants
 import importlib
 if __dev__:
     import os
 
 class LevelSpec:
-    __module__ = __name__
     notify = DirectNotifyGlobal.directNotify.newCategory('LevelSpec')
     SystemEntIds = (
      LevelConstants.UberZoneEntId, LevelConstants.LevelMgrEntId, LevelConstants.EditMgrEntId)

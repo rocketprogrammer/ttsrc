@@ -106,7 +106,7 @@ class SCMenu(SCObject, NodePath):
         del self.bgBottomRight
         self.bg.removeNode()
         del self.bg
-        
+
         self.holder = None
         for member in self.__members:
             member.destroy()
@@ -131,7 +131,7 @@ class SCMenu(SCObject, NodePath):
         """ This will destroy the current content of this menu and replace
         it with the tree described by 'structure'."""
         self.clearMenu()
-        
+
         if title:
             holder = self.getHolder()
             if holder:
@@ -162,7 +162,7 @@ class SCMenu(SCObject, NodePath):
         """
         from .SpeedChatTypes import SCMenuHolder, SCStaticTextTerminal, SCGMTextTerminal
         from otp.otpbase import OTPLocalizer
-        
+
         def addChildren(menu, childList):
             """ this recursive function adds children to an SCMenu
             according to the specification in 'childList'. See above
@@ -214,8 +214,8 @@ class SCMenu(SCObject, NodePath):
                     terminal = SCGMTextTerminal(child)
                     menu.append(terminal)
                 else:
-                    raise 'error parsing speedchat structure. '
-                           'invalid child: %s'
+                    raise ('error parsing speedchat structure. '
+                           'invalid child: %s')
 
         addChildren(self, structure)
         # clean up memory leak
@@ -347,7 +347,7 @@ class SCMenu(SCObject, NodePath):
             # otherwise, don't switch the active member right away.
             # if this element maintains the input focus for N seconds,
             # make it active
-            
+
             def doActiveMemberSwitch(task, self=self, member=member):
                 self.activeCandidate = None
                 self.__setActiveMember(member)
@@ -528,7 +528,7 @@ class SCMenu(SCObject, NodePath):
             # keep the menu from going off the top of the screen
             if self.getZ(aspect2d) > 1.:
                 self.setZ(aspect2d, 1.)
-        
+
         # set up the background frame
         sX = memberWidth
         sZ = memberHeight * len(visibleMembers)
@@ -648,7 +648,7 @@ class SCMenu(SCObject, NodePath):
 
     def privMemberListChanged(self, added=None, removed=None):
         assert added or removed
-        
+
         if removed is not None:
             for element in removed:
                 # if this element is our active member, we no longer have an

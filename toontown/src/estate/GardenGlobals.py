@@ -394,15 +394,15 @@ PlantAttributes = {
            'worldScale' : 0.05,
            'varieties' : ( (1008,1,0),),
            'pinballScore' : (500,1)
-           },    
+           },
     230 :{ 'name': TTLocalizer.StatuaryMeltingSnowman,
            'plantType' : STATUARY_TYPE,
            'model' : "phase_5.5/models/estate/tt_m_prp_ext_snowman",
            'worldScale' : 1.0,
            'varieties' : ( (1030,1,0),),
            'pinballScore' : (500,1),
-           'growthThresholds': (1,2) # different models at growth level 0, 1, then 2 and up           
-           },    
+           'growthThresholds': (1,2) # different models at growth level 0, 1, then 2 and up
+           },
     254 :{ 'name' : 'reserved tag', #HARDCODED!!!!!!!!!!!! HAHAHA!!!
            'plantType' : STATUARY_TYPE,
            'model' : "phase_5.5/models/estate/garden_minnie",
@@ -428,7 +428,7 @@ if ACCELERATOR_USED_FROM_SHTIKER_BOOK:
 
 ##Tree Utils
 def getTreeTrackAndLevel(typeIndex):
-    track = typeIndex / 7
+    track = typeIndex // 7
     level = typeIndex % 7
     return (track, level)
 
@@ -440,7 +440,7 @@ NUM_GAGS = (7 * 7)
 for i in range(NUM_GAGS):
     track, level = getTreeTrackAndLevel(i)
     if level <= 6:
-        name = TTLocalizer.BattleGlobalAvPropStrings[track][level] + TTLocalizer.GardenGagTree 
+        name = TTLocalizer.BattleGlobalAvPropStrings[track][level] + TTLocalizer.GardenGagTree
     else:
         name = TTLocalizer.GardenUberGag
     attr = {'name': name,
@@ -697,7 +697,7 @@ Recipes = {
     # melting snowman
     1030 : { 'beans': 'S',
              'special' : 130
-             },    
+             },
     # reserved tag recipe, deliberately invalid color
     2001 : { 'beans': 'ZVOVOVO',
              'special' : -1
@@ -1379,7 +1379,7 @@ Specials = {
     'subtype' : GARDEN_ITEM_SUBTYPE,
     'photoModel' : "phase_5.5/models/estate/tt_m_prp_ext_snowman_icon",
     'photoScale' : 90.0,
-    'photoPos' : (0,0,0),    
+    'photoPos' : (0,0,0),
     'photoName' : TTLocalizer.StatuaryMeltingSnowman,
     'description': TTLocalizer.GardenSpecialDiscription,
     'isCatalog' : True,

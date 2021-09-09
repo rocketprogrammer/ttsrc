@@ -21,7 +21,6 @@ class NodePathEntityBase:
 
 
 class NodePathAttribs(NodePathEntityBase):
-    __module__ = __name__
 
     def initNodePathAttribs(self, doReparent=1):
         NodePathEntityBase.initNodePathAttribs(self, doReparent)
@@ -33,12 +32,11 @@ class NodePathAttribs(NodePathEntityBase):
         return self
 
 
-class NodePathAndAttribs(NodePathEntityBase, NodePath.NodePath):
-    __module__ = __name__
+class NodePathAndAttribs(NodePathEntityBase, NodePath):
 
     def __init__(self):
         node = hidden.attachNewNode('EntityNodePath')
-        NodePath.NodePath.__init__(self, node)
+        NodePath.__init__(self, node)
 
     def initNodePathAttribs(self, doReparent=1):
         NodePathEntityBase.initNodePathAttribs(self, doReparent)
@@ -52,7 +50,6 @@ class NodePathAndAttribs(NodePathEntityBase, NodePath.NodePath):
 
 
 class NodePathAttribsProxy(NodePathEntityBase):
-    __module__ = __name__
 
     def initNodePathAttribs(self, doReparent=1):
         NodePathEntityBase.initNodePathAttribs(self, doReparent)
@@ -100,12 +97,11 @@ class NodePathAttribsProxy(NodePathEntityBase):
         self.getNodePath().reparentTo(*args)
 
 
-class NodePathEntity(Entity.Entity, NodePath.NodePath, NodePathAttribs):
-    __module__ = __name__
+class NodePathEntity(Entity.Entity, NodePath, NodePathAttribs):
 
     def __init__(self, level, entId):
         node = hidden.attachNewNode('NodePathEntity')
-        NodePath.NodePath.__init__(self, node)
+        NodePath.__init__(self, node)
         Entity.Entity.__init__(self, level, entId)
         self.initNodePathAttribs(self)
 
@@ -115,7 +111,7 @@ class NodePathEntity(Entity.Entity, NodePath.NodePath, NodePathAttribs):
         self.removeNode()
 
 
-class DistributedNodePathEntity(DistributedEntity.DistributedEntity, NodePath.NodePath, NodePathAttribs):
+class DistributedNodePathEntity(DistributedEntity.DistributedEntity, NodePath, NodePathAttribs):
     __module__ = __name__
 
     def __init__(self, cr):
@@ -124,7 +120,7 @@ class DistributedNodePathEntity(DistributedEntity.DistributedEntity, NodePath.No
     def generateInit(self):
         DistributedEntity.DistributedEntity.generateInit(self)
         node = hidden.attachNewNode('DistributedNodePathEntity')
-        NodePath.NodePath.__init__(self, node)
+        NodePath.__init__(self, node)
 
     def announceGenerate(self):
         DistributedEntity.DistributedEntity.announceGenerate(self)

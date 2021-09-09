@@ -1,4 +1,5 @@
-import CatalogAtticItem, CatalogItem, random
+from . import CatalogAtticItem, CatalogItem
+import random
 from toontown.toonbase import TTLocalizer
 FTModelName = 0
 FTColor = 1

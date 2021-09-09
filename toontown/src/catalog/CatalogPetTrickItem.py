@@ -6,7 +6,6 @@ from otp.otpbase import OTPLocalizer
 from direct.interval.IntervalGlobal import *
 
 class CatalogPetTrickItem(CatalogItem.CatalogItem):
-    __module__ = __name__
     sequenceNumber = 0
 
     def makeNewItem(self, trickId):
@@ -84,7 +83,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
 
 def getAllPetTricks():
     list = []
-    for trickId in list(PetTricks.TrickId2scIds.keys()):
+    for trickId in PetTricks.TrickId2scIds.keys():
         list.append(CatalogPetTrickItem(trickId))
 
     return list

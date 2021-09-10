@@ -2194,7 +2194,6 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI,
         self.air.catalogManager.deliverCatalogFor(self)
         return Task.done
 
-
     def b_setCatalog(self, monthlyCatalog, weeklyCatalog, backCatalog):
         self.setCatalog(monthlyCatalog, weeklyCatalog, backCatalog)
         self.d_setCatalog(monthlyCatalog, weeklyCatalog, backCatalog)

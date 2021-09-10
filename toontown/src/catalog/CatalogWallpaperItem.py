@@ -12,7 +12,6 @@ WallpaperGroups = {1100: (1100, 1110, 1120, 1130, 1140, 1150), 1200: (1200, 1210
 BorderTypes = {1000: ('phase_5.5/maps/bd_grey_border1.jpg', CTFlatColorDark), 1010: ('phase_5.5/maps/diamonds_border2.jpg', CTWhite), 1020: ('phase_5.5/maps/diamonds_border2ch.jpg', CTWhite), 1030: ('phase_5.5/maps/diamonds_border3ch.jpg', CTWhite), 1040: ('phase_5.5/maps/diamonds_border4ch.jpg', CTWhite), 1050: ('phase_5.5/maps/flower_border2.jpg', CTWhite), 1060: ('phase_5.5/maps/flower_border5.jpg', CTWhite), 1070: ('phase_5.5/maps/flower_border6.jpg', CTWhite), 1080: ('phase_5.5/maps/football_border_neutral.jpg', CTFlatColorDark), 1090: ('phase_5.5/maps/vine_border1.jpg', CTFlatColorDark), 1100: ('phase_5.5/maps/doll_board.jpg', CTWhite), 1110: ('phase_5.5/maps/doll_board_neutral.jpg', CTFlatColorDark), 1120: ('phase_5.5/maps/UWwallPaperPlantBorder.jpg', CTWhite), 1130: ('phase_5.5/maps/UWwallPaperSea_horseBorder.jpg', CTWhite), 1140: ('phase_5.5/maps/UWwallPaperShellBorder1.jpg', CTWhite), 1150: ('phase_5.5/maps/UWwallPaperShellBorder2.jpg', CTWhite), 1160: ('phase_5.5/maps/UWwallPaperWaveBorder.jpg', CTWhite), 1170: ('phase_5.5/maps/WesternSkullBorder.jpg', CTWhite), 1180: ('phase_5.5/maps/WesternStarBorder.jpg', CTWhite), 10010: ('phase_5.5/maps/border_ScarryMoon1.jpg', CTWhite), 10020: ('phase_5.5/maps/border_candy1.jpg', CTWhite), 11000: ('phase_5.5/maps/flakes_border.jpg', CTWhite), 11010: ('phase_5.5/maps/hollyleaf_border.jpg', CTWhite), 12000: ('phase_5.5/maps/Vborder1a.jpg', CTWhite), 12010: ('phase_5.5/maps/Vborder1b.jpg', CTWhite), 12020: ('phase_5.5/maps/Vborder2b.jpg', CTWhite), 13000: ('phase_5.5/maps/StPatBorder1.jpg', CTWhite)}
 
 class CatalogWallpaperItem(CatalogSurfaceItem):
-    __module__ = __name__
 
     def makeNewItem(self, patternIndex, colorIndex=None, borderIndex=0, borderColorIndex=0):
         self.patternIndex = patternIndex
@@ -193,7 +192,7 @@ def getWallpaperRange(fromIndex, toIndex, *otherRanges):
         tos.append(otherRanges[(i + 1)])
         i += 2
 
-    for patternIndex in list(WallpaperTypes.keys()):
+    for patternIndex in WallpaperTypes.keys():
         for (fromIndex, toIndex) in zip(froms, tos):
             if patternIndex >= fromIndex and patternIndex <= toIndex:
                 borderKeys = WallpaperTypes[patternIndex][WTBorderList]

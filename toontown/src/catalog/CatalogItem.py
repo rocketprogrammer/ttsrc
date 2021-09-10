@@ -171,11 +171,26 @@ class CatalogItem:
         return None
         return
 
-    def __cmp__(self, other):
-        c = cmp(self.__class__, other.__class__)
-        if c != 0:
-            return c
-        return self.compareTo(other)
+    def __lt__(self, other):
+        c = self.__class__ == other.__class__
+        if not c:
+            return 0
+
+        return self.compareTo(other) < 0
+
+    def __gt__(self, other):
+        c = self.__class__ == other.__class__
+        if not c:
+            return 0
+
+        return self.compareTo(other) > 0
+
+    def __eq__(self, other):
+        c = self.__class__ == other.__class__
+        if not c:
+            return 0
+
+        return self.compareTo(other) == 0
 
     def __hash__(self):
         return hash((self.__class__, self.getHashContents()))
@@ -199,9 +214,9 @@ class CatalogItem:
                 p = 0.0
                 r = 0.0
             elif versionNumber < 5:
-                h = di.getArg(STInt8, 256.0 / 360.0)
-                p = di.getArg(STInt8, 256.0 / 360.0)
-                r = di.getArg(STInt8, 256.0 / 360.0)
+                h = di.getArg(STInt16, 256.0 / 360.0)
+                p = di.getArg(STInt16, 256.0 / 360.0)
+                r = di.getArg(STInt16, 256.0 / 360.0)
                 hpr = oldToNewHpr(VBase3(h, p, r))
                 h = hpr[0]
                 p = hpr[1]
@@ -219,9 +234,9 @@ class CatalogItem:
             dg.putArg(self.posHpr[0], STInt16, 10)
             dg.putArg(self.posHpr[1], STInt16, 10)
             dg.putArg(self.posHpr[2], STInt16, 100)
-            dg.putArg(self.posHpr[3], STInt8, 256.0 / 360.0)
-            dg.putArg(self.posHpr[4], STInt8, 256.0 / 360.0)
-            dg.putArg(self.posHpr[5], STInt8, 256.0 / 360.0)
+            dg.putArg(self.posHpr[3], STInt16, 256.0 / 360.0)
+            dg.putArg(self.posHpr[4], STInt16, 256.0 / 360.0)
+            dg.putArg(self.posHpr[5], STInt16, 256.0 / 360.0)
 
     def getTypeCode(self):
         from . import CatalogItemTypes

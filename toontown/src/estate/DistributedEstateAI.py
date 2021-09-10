@@ -428,6 +428,9 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
         tupleNewTime = time.localtime(currentTime - self.epochHourInSeconds)
         tupleOldTime = time.localtime(self.lastEpochTimeStamp)
 
+        if (tupleOldTime < time.gmtime(0)):
+            tupleOldTime = time.gmtime(0)
+
         #tupleOldTime = (2006, 6, 18, 0, 36, 45, 0, 170, 1)
         #tupleNewTime = (2006, 6, 19, 3, 36, 45, 0, 170, 1)
 
@@ -440,7 +443,6 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
         randomDelay = random.random() * 5 * 60 # random five minute range
 
         secondsNextEpoch = (time.mktime(tupleLastDay) + self.epochHourInSeconds + self.dayInSeconds + randomDelay) - currentTime
-
 
         #should we do the epoch for the current day?
         #beforeEpoch = 1
@@ -492,15 +494,11 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
 
         tupleNextEpoch = time.localtime(whenNextEpoch)
 
-        self.notify.info("Next epoch to happen at %s" % (tupleNextEpoch))
-
-
-
+        self.notify.info("Next epoch to happen at %s" % (str(tupleNextEpoch)))
 
     def gardenInit(self, avIdList):
         self.sendUpdate('setIdList', [avIdList])
         #self.bootStrapEpochs()
-
 
         self.avIdList = avIdList
         #check to see if the av field tags match the house owners

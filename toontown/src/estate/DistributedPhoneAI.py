@@ -281,8 +281,6 @@ class DistributedPhoneAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI):
         else:
             self.air.writeServerEvent('suspicious', sAvId, 'Attempted to buy a gift for %s which is not a toon' % (targetDoID))
 
-
-
     def d_setMovie(self, mode, avId):
         timestamp = ClockDelta.globalClockDelta.getRealNetworkTime(bits = 32)
         self.sendUpdate("setMovie", [mode, avId, timestamp])

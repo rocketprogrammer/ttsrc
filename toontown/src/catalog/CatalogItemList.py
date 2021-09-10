@@ -1,6 +1,6 @@
 from . import CatalogItem
 from pandac.PandaModules import *
-import types
+import types, functools
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
 
@@ -10,7 +10,7 @@ class CatalogItemList:
         self.store = store
         self.__blob = None
         self.__list = None
-        if isinstance(source, bytes):
+        if isinstance(source, str):
             self.__blob = source
         elif isinstance(source, list):
             self.__list = source[:]
@@ -147,7 +147,7 @@ class CatalogItemList:
         if cmpfunc == None:
             self.__list.sort()
         else:
-            self.__list.sort(cmpfunc)
+            self.__list.sort(key=functools.cmp_to_key(cmpfunc))
         self.__blob = None
         return
 

@@ -663,7 +663,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
 
         self.notify.debug("__checkOwner: %s" % (self.doId))
 
-        if self.ownerId == 0:
+        if self.ownerId >= 0:
             # No owner.  Duh.
             self.d_setHouseReady()
             return

@@ -53,6 +53,8 @@ class PetNameGenerator:
 
         currentLine = input.readline()
         while currentLine:
+            currentlLine = currentLine.decode()
+
             if currentLine.lstrip()[0:1] != '#':
                 a1 = currentLine.find('*')
                 a2 = currentLine.find('*', a1+1)
@@ -67,7 +69,7 @@ class PetNameGenerator:
 
     def getName(self, uniqueID):
         return self.nameDictionary[uniqueID][1]
-    
+
     def returnUniqueID(self, name):
         """
         If successful it returns the uniqueID, if not then -1

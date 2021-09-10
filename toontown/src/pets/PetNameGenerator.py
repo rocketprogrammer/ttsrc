@@ -53,7 +53,7 @@ class PetNameGenerator:
 
         currentLine = input.readline()
         while currentLine:
-            currentlLine = currentLine.decode()
+            currentLine = currentLine.decode()
 
             if currentLine.lstrip()[0:1] != '#':
                 a1 = currentLine.find('*')

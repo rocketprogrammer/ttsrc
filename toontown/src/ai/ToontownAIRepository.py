@@ -87,6 +87,7 @@ from toontown.uberdog import DistributedCpuInfoMgrAI
 from toontown.parties import ToontownTimeManager
 from toontown.coderedemption.TTCodeRedemptionMgrAI import TTCodeRedemptionMgrAI
 from toontown.distributed.NonRepeatableRandomSourceAI import NonRepeatableRandomSourceAI
+from toontown.ai.AIZoneData import AIZoneDataStore
 
 from . import ToontownGroupManager
 
@@ -264,6 +265,7 @@ class ToontownAIRepository(AIDistrict):
         #    "NonRepeatableRandomSource")
 
         self.groupManager = ToontownGroupManager.ToontownGroupManager()
+        self.zoneDataStore = AIZoneDataStore()
 
     def getGameDoId(self):
         return OTP_DO_ID_TOONTOWN

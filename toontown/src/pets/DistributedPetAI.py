@@ -4,7 +4,7 @@ from pandac.PandaModules import *
 from direct.showbase.PythonUtil import weightedChoice, randFloat, lerp
 from direct.showbase.PythonUtil import contains, list2dict, clampScalar
 from direct.directnotify import DirectNotifyGlobal
-from direct.distributed import DistributedSmoothNodeAI
+from toontown.distributed.DistributedSmoothNodeAI import DistributedSmoothNodeAI
 from direct.distributed import DistributedSmoothNodeBase
 from direct.distributed import ClockDelta
 from direct.fsm import ClassicFSM, State
@@ -25,9 +25,9 @@ import time
 import string
 import copy
 from direct.showbase.PythonUtil import StackTrace
+from toontown.distributed.DistributedSmoothNodeAI import BroadcastTypes
 
-class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
-                       PetLookerAI.PetLookerAI, PetBase.PetBase):
+class DistributedPetAI(DistributedSmoothNodeAI, PetLookerAI.PetLookerAI, PetBase.PetBase):
     """AI-side implementation of Toon pet"""
 
     notify = DirectNotifyGlobal.directNotify.newCategory("DistributedPetAI")
@@ -42,7 +42,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                         PetConstants.PET_MOVIE_SCRATCH: PetConstants.SCRATCH_DIST.get }
 
     def __init__(self, air, dna = None):
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.__init__(self, air)
+        DistributedSmoothNodeAI.__init__(self, air)
         PetLookerAI.PetLookerAI.__init__(self)
         self.ownerId = 0
         self.petName = 'unnamed'
@@ -192,8 +192,8 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         # valid/safe values.
         self.b_setOwnerId(ownerId)
         if name is None:
-            name = b'pet%s' % self.doId
-        self.b_setPetName(name.decode())
+            name = 'pet%s' % self.doId
+        self.b_setPetName(name)
         self.b_setTraitSeed(traitSeed)
         self.b_setSafeZone(safeZone)
 
@@ -237,8 +237,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         self.b_setGender(gender)
 
     def handleZoneChange(self, newZoneId, oldZoneId):
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.handleZoneChange(
-            self, newZoneId, oldZoneId)
+        DistributedSmoothNodeAI.handleZoneChange(self, newZoneId, oldZoneId)
         # we want to stop listening to observes as soon as we change to the
         # quiet zone
         self.ignore(PetObserve.getEventName(oldZoneId))
@@ -247,8 +246,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
 
     def handleLogicalZoneChange(self, newZoneId, oldZoneId):
         # we've changed to a non-quiet zone
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.handleLogicalZoneChange(
-            self, newZoneId, oldZoneId)
+        DistributedSmoothNodeAI.handleLogicalZoneChange(self, newZoneId, oldZoneId)
         self.announceZoneChange(newZoneId, oldZoneId)
         # re-create our PetSphere, since it holds a handle to a collision
         # traverser, which is zone-specific
@@ -298,8 +296,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
     def setPetName(self, petName):
         self.petName = petName
         # set the nodepath name, for kicks
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.setName(self,
-                                                                self.petName)
+        DistributedSmoothNodeAI.setName(self, self.petName)
 
     def getTraitSeed(self):
         return self.traitSeed
@@ -331,8 +328,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
     def setPetName(self, petName):
         self.petName = petName
         # set the nodepath name, for kicks
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.setName(self,
-                                                                self.petName)
+        DistributedSmoothNodeAI.setName(self, self.petName)
 
     """ looks like this is not used
     def getTraits(self):
@@ -607,7 +603,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
                 self.setTrickAptitudes(aptitudes, local=1)
 
     def generate(self):
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.generate(self)
+        DistributedSmoothNodeAI.generate(self)
         self._hasCleanedUp = False
         self.setHasRequestedDelete(False)
         self.b_setParent(ToontownGlobals.SPHidden)
@@ -755,7 +751,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         # record the 'last-seen' timestamp
         self.b_setLastSeenTimestamp(self.getCurEpochTimestamp())
 
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.requestDelete(self)
+        DistributedSmoothNodeAI.requestDelete(self)
 
     def _doDeleteCleanup(self):
         self.trickLogger.destroy()
@@ -864,7 +860,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
 
         self.setHasRequestedDelete(False)
 
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.delete(self)
+        DistributedSmoothNodeAI.delete(self)
 
     def patchDelete(self):
         # called by the patcher to remove cyclical references and prevent
@@ -882,7 +878,7 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
         # prevent a crash; we do not own our doId and do not have a zoneId
         self.doNotDeallocateChannel = True
         self.zoneId = None
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.delete(self)
+        DistributedSmoothNodeAI.delete(self)
         self.ignoreAll()
 
     def createImpulses(self):
@@ -994,11 +990,9 @@ class DistributedPetAI(DistributedSmoothNodeAI.DistributedSmoothNodeAI,
     def startPosHprBroadcast(self):
         if self._outOfBounds:
             return
-        # force XYH only
-        DistributedSmoothNodeAI.DistributedSmoothNodeAI.startPosHprBroadcast(
-            self,
-            period=simbase.petPosBroadcastPeriod,
-            type=DistributedSmoothNodeBase.DistributedSmoothNodeBase.BroadcastTypes.XYH)
+        self.broadcastType = BroadcastTypes.XYH
+        self.broadcastTime = PetConstants.PosBroadcastPeriod
+        DistributedSmoothNodeAI.startPosHprBroadcast(self)
 
     # you can call these funcs to influence the pet's mood
     def setMoodComponent(self, component, value):

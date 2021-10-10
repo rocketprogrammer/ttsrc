@@ -9,6 +9,7 @@ from toontown.ai.HolidayInfo import *
 # Python Specific Modules
 import random
 import time
+import functools
 
 class HolidayInfo_Yearly(HolidayInfo_Base):
     """
@@ -33,14 +34,14 @@ class HolidayInfo_Yearly(HolidayInfo_Base):
         """
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in range(len(dateList)//2):
             start = dateElemIter.current()
             end = next(dateElemIter)
 
             self.tupleList.append((start, end))
             next(dateElemIter)
 
-        self.tupleList.sort(cmpDates)
+        self.tupleList.sort(key=functools.cmp_to_key(cmpDates))
 
     def getTime(self, date, t):
         """

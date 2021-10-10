@@ -255,7 +255,7 @@ from toontown.parties import DistributedPartyJukeboxActivity/AI
 from toontown.parties import DistributedPartyJukebox40Activity/AI
 from toontown.parties import DistributedPartyValentineJukeboxActivity/AI
 from toontown.parties import DistributedPartyValentineJukebox40Activity/AI
-from toontown.friends import TTPlayerFriendsManager/UD
+from toontown.friends import TTPlayerFriendsManager
 from toontown.uberdog import TTSpeedchatRelay/UD
 from toontown.safezone import DistributedGolfKart/AI
 from toontown.safezone import DistributedPicnicBasket/AI

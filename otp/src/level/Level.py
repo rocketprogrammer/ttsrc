@@ -205,9 +205,9 @@ class Level:
         # it has all of its initial spec data; see 'initializeEntity'
         # below.
         announce = False
-        if entity is 'nonlocal':
+        if entity == 'nonlocal':
             self.nonlocalEntIds[entId] = None
-        elif entity is 'nothing':
+        elif entity == 'nothing':
             self.nothingEntIds[entId] = None
             announce = True
         else:
@@ -397,7 +397,7 @@ class Level:
     def handleVisChange(self):
         """the zone visibility lists have changed"""
         pass
-    
+
     if __dev__:
         # the level generates these events when the spec changes
         def getAttribChangeEventName(self):
@@ -406,7 +406,7 @@ class Level:
             return 'insertEntity-%s' % self.levelId
         def getRemoveEntityEventName(self):
             return 'removeEntity-%s' % self.levelId
-        
+
         # these handlers are called directly by our levelSpec
         def handleAttribChange(self, entId, attrib, value, username=None):
             entity = self.getEntity(entId)

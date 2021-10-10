@@ -1,5 +1,5 @@
 import MySQLdb
-import _mysql_exceptions
+import MySQLdb
 
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.directnotify.DirectNotifyGlobal import directNotify
@@ -11,7 +11,7 @@ class StatusDatabaseUD(DistributedObjectGlobalUD,DBInterface):
     StatusDatabase is a lightweight DB wrapper for status information about avatars.
     This initial version only stores last online times by recording timestamps each
     time an avatar comes online or goes offline.
-    
+
     Currently, he client must pull all desired information using requestOfflineAvatarStatus.
     This can easily change to a push interface later on, if desired.
     """
@@ -42,7 +42,7 @@ class StatusDatabaseUD(DistributedObjectGlobalUD,DBInterface):
         try:
             cursor.execute("CREATE DATABASE `%s`"%self.DBname)
             self.notify.info("Database '%s' did not exist, created a new one!"%self.DBname)
-        except _mysql_exceptions.ProgrammingError as e:
+        except MySQLdb.ProgrammingError as e:
             pass
 
         cursor.execute("USE `%s`"%self.DBname)
@@ -57,7 +57,7 @@ class StatusDatabaseUD(DistributedObjectGlobalUD,DBInterface):
             ) ENGINE=InnoDB
             """)
             self.notify.info("Table offlineAvatarStatus did not exist, created a new one!")
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             pass
 
         if __dev__:
@@ -65,7 +65,7 @@ class StatusDatabaseUD(DistributedObjectGlobalUD,DBInterface):
 
         taskMgr.doMethodLater(1.0,self._lazyCommit,'lazyCommit')
 
-    
+
     def announceGenerate(self):
         self.accept("avatarOnline", self.avatarOnline, [])
         self.accept("avatarOffline", self.avatarOffline, [])
@@ -91,13 +91,13 @@ class StatusDatabaseUD(DistributedObjectGlobalUD,DBInterface):
         """
         if not avatarIds: #return if empty
             return
-        
+
         senderId = self.air.getAvatarIdFromSender()
 
         if len(avatarIds) > 1000:
             self.notify.warning("Ignoring huge avatarIds list sent to requestOfflineAvatarStatus from sender %s: %s" % (senderId,avatarIds))
             return
-        
+
         onlineTimes = self._getLastOnlineTimes(avatarIds)
 
         for (avId,onlineTime) in onlineTimes:
@@ -105,14 +105,14 @@ class StatusDatabaseUD(DistributedObjectGlobalUD,DBInterface):
                                       "recvOfflineAvatarStatus",
                                       [avId, onlineTime])
 
-        
+
     # ----- Handy internal functions -----
 
 
     def _lazyCommit(self,task):
         self.db.commit()
         return task.again
-    
+
 
     def _valueList(self, numVals):
         assert numVals > -1

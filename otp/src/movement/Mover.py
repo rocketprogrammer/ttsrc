@@ -1,5 +1,5 @@
 from pandac.PandaModules import *
-from libotp import CMover
+from panda3d.otp import CMover
 from direct.directnotify import DirectNotifyGlobal
 from otp.movement.PyVec3 import PyVec3
 
@@ -18,7 +18,7 @@ class Mover(CMover):
     PSCCpp = 'App:Show code:moveObjects:MoverC++'
     PSCPy  = 'App:Show code:moveObjects:MoverPy'
     PSCInt = 'App:Show code:moveObjects:MoverIntegrate'
-    
+
     def __init__(self, objNodePath, fwdSpeed=1, rotSpeed=1):
         """objNodePath: nodepath to be moved"""
         CMover.__init__(self, objNodePath, fwdSpeed, rotSpeed)

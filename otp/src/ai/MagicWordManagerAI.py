@@ -6,7 +6,6 @@ from otp.otpbase import OTPGlobals
 from direct.showbase import PythonUtil, GarbageReport, ContainerReport, MessengerLeakDetector
 from direct.showbase import ContainerLeakDetector
 from direct.showbase.PythonUtil import Functor, DelayedCall, formatTimeCompact
-import fpformat
 import string
 import time
 import re
@@ -73,7 +72,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
                     response = "No name."
                 else:
                     av.d_setName(name)
-            
+
         elif wordIs("~badname"):
             self.notify.warning("Renaming inappropriately named toon %s (doId %d)." % (av.name, av.doId))
             name = "toon%d" % (av.doId % 1000000)
@@ -131,7 +130,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.notify.debug("Only 1 hp for " + av.name)
         elif wordIs("~sad"):
             av.b_setHp(0)
-            self.notify.debug("Only 0 hp for " + av.name)            
+            self.notify.debug("Only 0 hp for " + av.name)
         elif wordIs("~dead"):
             av.takeDamage(av.hp)
             self.notify.debug(av.name + " is dead")
@@ -511,7 +510,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
         response = "%s" % (dna.asTuple(),)
 
         self.down_setMagicWordResponse(senderId, response)
-    """    
+    """
 
     def _handleGPTCfinished(self, senderId, ct, gptcJob):
         self.down_setMagicWordResponse(senderId, 'aigptc(%s) finished' % ct)
@@ -571,7 +570,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
                 str += '%s %s\n' % (obj.accountName, obj.name)
         if not str:
             str = "No avatars."
-                
+
         senderId = self.air.getAvatarIdFromSender()
         self.down_setMagicWordResponse(senderId, str)
 

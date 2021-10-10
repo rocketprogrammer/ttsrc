@@ -24,7 +24,7 @@ from otp.uberdog.DBInterface import DBInterface
 from toontown.coderedemption.TTCodeDict import TTCodeDict
 from toontown.coderedemption import TTCodeRedemptionConsts
 from direct.directutil import DirectMySQLdb
-import _mysql_exceptions
+import MySQLdb
 import random
 import datetime
 import MySQLdb
@@ -37,7 +37,7 @@ class MySQLErrors:
     TableAlreadyExists = 1050
     ServerShuttingDown = 1053
     ServerGoneAway = 2006
-    
+
 class TryAgainLater(Exception):
     def __init__(self, mysqlException, address):
         self._exception = mysqlException
@@ -53,13 +53,13 @@ class TTDBCursorBase:
                               ])
     def _setConnection(self, connection):
         self._connection = connection
-        
+
     def _doExecute(self, cursorBase, *args, **kArgs):
         if self.notify.getDebug():
             self.notify.debug('execute:\n%s' % u2ascii(args[0]))
         try:
             cursorBase.execute(self, *args, **kArgs)
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if self._connection.getErrorCode(e) in TTDBCursorBase.ConnectionProblems:
                 # force a reconnect
                 TTCRDBConnection.db = None
@@ -168,14 +168,14 @@ class TTCRDBConnection(DBInterface):
         if self.__class__.LastFailedConnectTime is not None:
             if (globalClock.getRealTime() - self.__class__.LastFailedConnectTime) < self.ConnectRetryTimeout:
                 raise TryAgainLater(None, '%s:%s' % (self._host, self._port))
-                
+
         if not self.__class__.db:
             try:
                 self.__class__.db = DirectMySQLdb.connect(host=self._host,
                                                           port=self._port,
                                                           user=self._user,
                                                           passwd=self._passwd)
-            except _mysql_exceptions.OperationalError as e:
+            except MySQLdb.OperationalError as e:
                 """
                 self.notify.warning("Failed to connect to MySQL at %s:%d. Retrying in %s seconds."%(
                     self._host,self._port,self.RetryPeriod))
@@ -200,7 +200,7 @@ class TTCRDBConnection(DBInterface):
         cursor = self.getCursor()
         try:
             cursor.execute(command)
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if self.getErrorCode(e) == MySQLErrors.TableAlreadyExists:
                 # table already exists
                 pass
@@ -215,7 +215,7 @@ class TTCRDBConnection(DBInterface):
             try:
                 cursor.execute("CREATE DATABASE %s" % self._dbName)
                 self.notify.info("database %s did not exist, created new one" % self._dbName)
-            except _mysql_exceptions.ProgrammingError as e:
+            except MySQLdb.ProgrammingError as e:
                 if self.getErrorCode(e) == MySQLErrors.DbAlreadyExists:
                     # db already exists
                     pass
@@ -777,7 +777,7 @@ class NotFound:
 
 class InfoCache:
     NotFound = NotFound
-    
+
     def __init__(self):
         self._cache = {}
 
@@ -1062,7 +1062,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             if len(randSamples) == 0:
                 yield None
                 continue
-                
+
             # r in [0,1) but truly random (non-repeatable)
             r = randSamples.pop(0) / float(1<<32)
             assert 0. <= r < 1.
@@ -1114,7 +1114,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         self._doCleanup()
 
         self._clearCaches()
-        
+
         conn = TTCRDBConnection(self)
         cursor = conn.getDictCursor()
 
@@ -1374,7 +1374,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
 
     def getRewardFromCode(self, code):
         assert self.notify.debugCall()
-        
+
         code = TTCodeDict.getFromReadableCode(code)
         assert TTCodeDict.isLegalCode(code)
 
@@ -1386,7 +1386,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             return cachedReward
 
         assert self.notify.debug('reward from code CACHE MISS (%s)' % u2ascii(code))
-        
+
         self._doCleanup()
 
         conn = TTCRDBConnection(self, {'code_set_%s' % lotName: self.READ,
@@ -1441,7 +1441,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         conn.destroy()
 
         return int(rows[0]['redemptions'])
-        
+
     def redeemCode(self, code, avId, rewarder, callback):
         assert self.notify.debugCall()
         self._doCleanup()
@@ -1450,7 +1450,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         origCode = code
         code = TTCodeDict.getFromReadableCode(code)
         assert TTCodeDict.isLegalCode(code)
-        
+
         lotName = self.getLotNameFromCode(code)
         if lotName is None:
             self.air.writeServerEvent('invalidCodeRedemption', avId, '%s' % (u2ascii(origCode), ))
@@ -1466,7 +1466,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             manualCode = cachedManual
         else:
             assert self.notify.debug('manualFromCode CACHE MISS (%s)' % u2ascii(code))
-            
+
             cursor.execute(
                 """
                 SELECT manual FROM lot WHERE name='%s';
@@ -1531,7 +1531,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         if awardMgrResult:
             callback(TTCodeRedemptionConsts.RedeemErrors.AwardCouldntBeGiven, awardMgrResult)
             return
-        
+
         conn = TTCRDBConnection(self, {'code_set_%s' % lotName: self.WRITE, })
         cursor = conn.getDictCursor()
 

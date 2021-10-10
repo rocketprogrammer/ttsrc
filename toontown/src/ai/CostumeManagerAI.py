@@ -131,7 +131,6 @@ class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
     # Trigger the switching of the character
     ########################################################
     def triggerSwitch(self, curWalkNode, curChar):
-        from toontown.classicchars import *
         if(self.holidayId == ToontownGlobals.HALLOWEEN_COSTUMES):
             for hood in self.hoods:
                 if hood.classicChar == curChar:

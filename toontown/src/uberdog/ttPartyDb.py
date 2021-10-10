@@ -5,7 +5,6 @@ import sys
 import datetime
 import MySQLdb
 import MySQLdb.constants.CR
-import _mysql_exceptions
 from direct.directnotify import DirectNotifyGlobal
 from toontown.uberdog import ttSQL
 from toontown.parties import PartyGlobals
@@ -33,7 +32,7 @@ class ttPartyDb:
                                       user=user,
                                       passwd=passwd,
                                       )
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             self.notify.warning("Failed to connect to MySQL db=%s at %s:%d.  ttMaildb DB is disabled."%(db,host,port))
             self.notify.warning("Error detail: %s"%str(e))
             self.sqlAvailable = False
@@ -47,10 +46,10 @@ class ttPartyDb:
             cursor.execute("CREATE DATABASE `%s`"%self.dbname)
             if __debug__:
                 ttPartyDb.notify.info("Database '%s' did not exist, created a new one!"%self.dbname)
-        except _mysql_exceptions.ProgrammingError as e:
+        except MySQLdb.ProgrammingError as e:
             # ttPartyDb.notify.info('%s' % str(e))
             pass
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             ttPartyDb.notify.info('%s' % str(e))            
             pass
 
@@ -127,7 +126,7 @@ class ttPartyDb:
             # TOTAL = 539 bytes
             if __debug__:
                 ttPartyDb.notify.info("Table ttParty did not exist, created a new one!")
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             pass            
 
         try:
@@ -173,7 +172,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getParty retry. Giving up:\n%s" % str(e))
                 return ()
@@ -225,7 +224,7 @@ class ttPartyDb:
             cursor.execute(ttSQL.putPartyINSERT,
                            (hostId, startTime, endTime, isPrivate, inviteTheme, activityStr, decorStr, status))
             self.db.commit() 
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("putParty failed with error '%s' on retry. Giving up." % str(e))
                 return False
@@ -260,7 +259,7 @@ class ttPartyDb:
 
             self.db.commit()
                 
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error in deleteParty retry, giving up:\n%s" % str(e))
                 return
@@ -301,7 +300,7 @@ class ttPartyDb:
             self._setPartyStatusToCanStart(res)
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPartiesAvailableToStart retry, giving up:\n%s" % str(e))
                 return ()
@@ -343,7 +342,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPartiesOfHost retry, giving up:\n%s" % str(e))
                 return ()
@@ -374,7 +373,7 @@ class ttPartyDb:
             res = cursor.fetchall()
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPartiesOfHostThatCanStart retry, giving up:\n%s" % str(e))
                 return ()
@@ -406,7 +405,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on changePrivate retry, giving up:\n%s" % str(e))
                 return ()
@@ -439,7 +438,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on changePartyStatus retry, giving up:\n%s" % str(e))
                 return ()
@@ -492,7 +491,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in getMultipleParties, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getMultipleParties retry. Giving up:\n%s" % str(e))
                 return ()
@@ -543,7 +542,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in getPrioritizedParties, returning %s" % str(res))
             return res        
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getPrioritizedParties retry. Giving up:\n%s" % str(e))
                 return ()
@@ -591,7 +590,7 @@ class ttPartyDb:
             self.notify.debug("Select was successful in getHostPrioritizedParties, returning %s" % str(res))
             return res        
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on getHostPrioritizedParties retry. Giving up:\n%s" % str(e))
                 return ()
@@ -626,7 +625,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on forceFinishForStarted retry, giving up:\n%s" % str(e))
                 return ()
@@ -660,7 +659,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on forceNeverStartedForCanStart retry, giving up:\n%s" % str(e))
                 return ()
@@ -701,7 +700,7 @@ class ttPartyDb:
             #self.notify.debug("Select was successful in ttMaildb, returning %s" % str(res))
             return res
         
-        except _mysql_exceptions.OperationalError as e:
+        except MySQLdb.OperationalError as e:
             if isRetry:
                 self.notify.warning("Error on changeMultiplePartiesStatus retry, giving up:\n%s" % str(e))
                 return ()

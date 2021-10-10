@@ -7,7 +7,8 @@ to use in the game.
 
 # Do not import panda modules because it is not downloaded until Phase 3
 # This file is in phase 2
-from pandac.libpandaexpressModules import *
+from panda3d.core import *
+from direct.showbase import DConfig
 import string
 import types
 
@@ -19,16 +20,16 @@ try:
     checkLanguage = getConfigExpress().GetBool("check-language", 0)
 except:
     # AI
-    language = simbase.config.GetString("language", "english")
-    checkLanguage = simbase.config.GetBool("check-language", 0)
+    language = DConfig.GetString("language", "english")
+    checkLanguage = DConfig.GetBool("check-language", 0)
 
 # Ask what language we are running in. Returns a string.
 def getLanguage():
     return language
-    
+
 print(("OTPLocalizer: Running in language: %s" % (language)))
 if language == "english":
-    _languageModule = "otp.otpbase.OTPLocalizer" + string.capitalize(language)
+    _languageModule = "otp.otpbase.OTPLocalizer" + language.capitalize()
 else:
     checkLanguage = 1
     _languageModule = "otp.otpbase.OTPLocalizer_" + language
@@ -59,8 +60,8 @@ if checkLanguage:
                 for dkey in list(fval.keys()):
                     if dkey not in val:
                         print(("WARNING: Foreign module: %s extra key: %s.%s" % (_languageModule, key, dkey)))
-                    
-            
+
+
     for key in list(foreignModule.__dict__.keys()):
         if key not in englishModule.__dict__:
             print(("WARNING: Foreign module: %s extra key: %s" % (_languageModule, key)))

@@ -13,16 +13,16 @@ class SettingsMgrUD(DistributedObjectGlobalUD, SettingsMgrBase):
     """global object for tweaking settings across all shards and clients in realtime"""
     notify = directNotify.newCategory('SettingsMgrUD')
 
-    SessionIdAlphabet = string.letters + string.digits
+    SessionIdAlphabet = string.ascii_letters + string.digits
 
     ModifiedColor = "CCFFCC"
-    
+
     def __init__(self, air):
         assert self.notify.debugCall()
         DistributedObjectGlobalUD.__init__(self, air)
 
         self.HTTPListenPort = uber.settingsMgrHTTPListenPort
-        
+
         self.webDispatcher = WebRequestDispatcher()
         self.webDispatcher.landingPage.setTitle("SettingsMgr")
         self.webDispatcher.landingPage.setDescription("SettingsMgr enables developers to tweak game settings without restarting the site.")

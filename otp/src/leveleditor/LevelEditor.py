@@ -12,7 +12,7 @@ from .LevelEditorUI import *
 from .ProtoPalette import *
 
 class LevelEditor(LevelEditorBase):
-    """ Class for Panda3D LevelEditor """ 
+    """ Class for Panda3D LevelEditor """
     def __init__(self):
         LevelEditorBase.__init__(self)
 
@@ -27,7 +27,7 @@ class LevelEditor(LevelEditorBase):
 
         # LevelEditorUI class must declared after ObjectPalette
         self.ui = LevelEditorUI(self)
-        
+
         # When you define your own LevelEditor class inheriting LevelEditorBase
         # you should call self.initialize() at the end of __init__() function
         self.initialize()

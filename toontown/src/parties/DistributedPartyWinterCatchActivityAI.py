@@ -1,0 +1,5 @@
+from direct.directnotify.DirectNotifyGlobal import directNotify
+from toontown.parties.DistributedPartyCatchActivityAI import DistributedPartyCatchActivityAI
+
+class DistributedPartyWinterCatchActivityAI(DistributedPartyCatchActivityAI):
+    notify = directNotify.newCategory('DistributedPartyWinterCatchActivityAI')

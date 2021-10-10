@@ -1,5 +1,5 @@
 from pandac.PandaModules import *
-import Impulse
+from . import Impulse
 
 class ImpFriction(Impulse.Impulse):
     """friction impulse"""

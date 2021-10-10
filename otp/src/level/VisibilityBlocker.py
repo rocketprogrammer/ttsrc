@@ -1,6 +1,6 @@
 """VisibilityBlocker module: contains the VisibilityBlocker class"""
 
-import Entity
+from . import Entity
 
 class VisibilityBlocker:
     """This is a mixin class for level entities (see Entity.py) that in some

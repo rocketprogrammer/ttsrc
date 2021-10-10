@@ -99,7 +99,7 @@ class DistributedLawbotChair(DistributedObject.DistributedObject, FSM.FSM):
         self.nodePath.wrtReparentTo(chairParent)
 
         
-        assert(not self.boss.chairs.has_key(self.index))
+        assert(self.index not in self.boss.chairs)
         self.boss.chairs[self.index] = self
 
         

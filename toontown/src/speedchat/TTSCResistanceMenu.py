@@ -12,7 +12,7 @@ from otp.speedchat.SCMenu import SCMenu
 from otp.speedchat.SCMenuHolder import SCMenuHolder
 from toontown.chat import ResistanceChat
 #from toontown.toonbase.TTLocalizer import ResistanceSCStrings
-from TTSCResistanceTerminal import TTSCResistanceTerminal
+from .TTSCResistanceTerminal import TTSCResistanceTerminal
 
 class TTSCResistanceMenu(SCMenu):
     """

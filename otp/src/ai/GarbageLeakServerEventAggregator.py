@@ -31,7 +31,7 @@ class GarbageLeakServerEventAggregator(DirectObject):
         self._doLaterName = None
 
     def _sendLeaks(self, task=None):
-        for desc, curNum in self._curLeakDesc2num.iteritems():
+        for desc, curNum in self._curLeakDesc2num.items():
             # only send the number of occurrences of each leak that
             # we haven't already sent
             self._sentLeakDesc2num.setdefault(desc, 0)

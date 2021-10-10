@@ -6,7 +6,7 @@ from otp.ai import AIMsgTypes
 from direct.directnotify.DirectNotifyGlobal import directNotify
 
 from direct.task import Task
-import Queue
+import queue
 from direct.distributed.AsyncRequest import AsyncRequest
 from pandac.PandaModules import Thread
 
@@ -84,7 +84,7 @@ class SnapshotRendererUD(DistributedObjectGlobalUD):
     # -- Internal methods --
 
     def renderSnapshot(self,jobId,avatarId,avatarDNA,writeToFile):
-        print "OTP-level renderSnapshot method called!  You should override this!"
+        print("OTP-level renderSnapshot method called!  You should override this!")
 
     def errorFetchingAvatar(self,jobId,avatarId):
         """

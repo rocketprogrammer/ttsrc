@@ -2,7 +2,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.distributed.ClockDelta import *
 from direct.interval.IntervalGlobal import *
 from direct.fsm import ClassicFSM, State
@@ -10,12 +10,12 @@ from direct.fsm import State
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownTimer
 from direct.task.Task import Task
-import Trajectory
+from . import Trajectory
 import math
 from toontown.toon import ToonHead
 from toontown.effects import Splash
 from toontown.effects import DustCloud
-import CannonGameGlobals
+from . import CannonGameGlobals
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -437,7 +437,7 @@ class DistributedCannonGame(DistributedMinigame):
         del self.rightButton
 
         # make sure the blink and lookaround tasks are cleaned up
-        for avId in self.toonHeadDict.keys():
+        for avId in list(self.toonHeadDict.keys()):
             head = self.toonHeadDict[avId]
             head.stopBlink()
             head.stopLookAroundNow()
@@ -449,11 +449,11 @@ class DistributedCannonGame(DistributedMinigame):
                 av.nametag.removeNametag(head.tag)
             head.delete()
         del self.toonHeadDict
-        for model in self.toonModelDict.values():
+        for model in list(self.toonModelDict.values()):
             model.removeNode()
         del self.toonModelDict
         del self.toonScaleDict
-        for interval in self.toonIntervalDict.values():
+        for interval in list(self.toonIntervalDict.values()):
             interval.finish()
         del self.toonIntervalDict
 
@@ -522,7 +522,7 @@ class DistributedCannonGame(DistributedMinigame):
         for avId in self.avIdList:
             self.cannonDict[avId][0].reparentTo(hidden)
             # this dict may not have been filled in
-            if self.dropShadowDict.has_key(avId):
+            if avId in self.dropShadowDict:
                 self.dropShadowDict[avId].reparentTo(hidden)
 
             av = self.getAvatar(avId)
@@ -1206,7 +1206,7 @@ class DistributedCannonGame(DistributedMinigame):
         flightResults = self.__calcFlightResults(avId, launchTime)
         # pull all the results into the local namespace
         for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+            exec("%s = flightResults['%s']" % (key, key))
 
         self.notify.debug("start position: " + str(startPos))
         self.notify.debug("start velocity: " + str(startVel))

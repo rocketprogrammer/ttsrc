@@ -3,7 +3,7 @@ Toontown Sign Edit Frame
 """
 
 import wx
-from LevelStyleManager import *
+from .LevelStyleManager import *
 from wx.lib.agw.knobctrl import *
 
 class ToonKnobCtrl(KnobCtrl):

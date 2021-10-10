@@ -50,5 +50,5 @@ for file in cvslist:
     if file in filelist:
         continue
     else:
-        print file
+        print(file)
         

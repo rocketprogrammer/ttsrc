@@ -1,7 +1,7 @@
 from otp.ai.AIBase import *
 from toontown.toonbase.ToontownGlobals import *
 from direct.distributed.ClockDelta import *
-from TrolleyConstants import *
+from .TrolleyConstants import *
 
 from toontown.toonbase import ToontownGlobals
 

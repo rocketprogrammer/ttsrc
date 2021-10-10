@@ -1,7 +1,7 @@
 from otp.ai.AIBase import *
-import DistributedLawnDecorAI
+from . import DistributedLawnDecorAI
 from direct.directnotify import DirectNotifyGlobal
-import GardenGlobals
+from . import GardenGlobals
 
 class DistributedStatuaryAI(DistributedLawnDecorAI.DistributedLawnDecorAI):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedStatuaryAI')

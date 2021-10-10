@@ -1,13 +1,13 @@
 from otp.level import DistributedLevelAI
 from direct.directnotify import DirectNotifyGlobal
-import cPickle
-import LevelSuitPlannerAI
-import LawOfficeBase
+import pickle
+from . import LevelSuitPlannerAI
+from . import LawOfficeBase
 from direct.task import Task
-import FactoryEntityCreatorAI
-import FactorySpecs
+from . import FactoryEntityCreatorAI
+from . import FactorySpecs
 from otp.level import LevelSpec
-import CogDisguiseGlobals
+from . import CogDisguiseGlobals
 from toontown.suit import DistributedFactorySuitAI
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals
 from toontown.coghq import DistributedBattleFactoryAI
@@ -160,7 +160,7 @@ class DistributedLawOfficeAI(DistributedObjectAI, LawOfficeBase.LawOfficeBase):
         #print self.layout.floorIds
         
         if self.avIds:
-            print self.avIds
+            print(self.avIds)
             self.currentFloor +=1
             specModule = self.layout.getFloorSpec(self.currentFloor)
             

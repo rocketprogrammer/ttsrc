@@ -4,11 +4,11 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 
 from toontown.toonbase import ToontownGlobals
-import ToonInterior
+from . import ToonInterior
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObject
 import random
-import ToonInteriorColors
+from . import ToonInteriorColors
 from toontown.hood import ZoneUtil
 from toontown.char import Char
 from toontown.suit import SuitDNA
@@ -206,7 +206,7 @@ class DistributedTutorialInterior(DistributedObject.DistributedObject):
         # of where to stand, but in this case the npc must be created first so the tutorial
         # can get a handle on him. Instead, I'll let the npc be created first which means
         # he will not find his origin. We'll just do that work here again.
-        npcOrigin = self.interior.find("**/npc_origin_" + `self.npc.posIndex`)
+        npcOrigin = self.interior.find("**/npc_origin_" + repr(self.npc.posIndex))
         # Now he's no longer parented to render, but no one minds.
         if not npcOrigin.isEmpty():
             self.npc.reparentTo(npcOrigin)

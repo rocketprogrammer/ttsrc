@@ -4,7 +4,7 @@ from direct.showbase.ShowBaseGlobal import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
 from toontown.toonbase import ToontownTimer
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM
 from direct.fsm import State
@@ -12,20 +12,20 @@ from direct.task import Task
 from direct.actor import Actor
 from toontown.toon import LaffMeter
 from direct.distributed import DistributedSmoothNode
-import ArrowKeys
-import Ring
-import RingTrack
-import DivingGameGlobals
+from . import ArrowKeys
+from . import Ring
+from . import RingTrack
+from . import DivingGameGlobals
 #import DistributedShark 
 
-import RingGroup
-import RingTrackGroups
+from . import RingGroup
+from . import RingTrackGroups
 import random
-import DivingGameToonSD
-import DivingFishSpawn
-import DivingTreasure
+from . import DivingGameToonSD
+from . import DivingFishSpawn
+from . import DivingTreasure
 import math
-import TreasureScorePanel
+from . import TreasureScorePanel
 
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -221,7 +221,7 @@ class DistributedDivingGame(DistributedMinigame):
               
         # remove our game ClassicFSM from the framework ClassicFSM
         self.removeChildGameFSM(self.gameFSM)
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             toonSD = self.toonSDs[avId]
             toonSD.unload()
         del self.toonSDs
@@ -244,7 +244,7 @@ class DistributedDivingGame(DistributedMinigame):
             # send information on the spawning location and the id of the fish
             spawnerId = int(name[2])
             spawnId = int(name[3:len(name)])
-            if self.spawners[spawnerId].fishArray.has_key(spawnId):
+            if spawnId in self.spawners[spawnerId].fishArray:
                 #print "fish collision() - fish"
                 self.sendUpdate("handleFishCollision", [avId, spawnId, spawnerId, toonSD.status])
                 
@@ -485,7 +485,7 @@ class DistributedDivingGame(DistributedMinigame):
         # Restore normal non-predictive smoothing.
         DistributedSmoothNode.activateSmoothing(1, 0)
         
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             self.toonSDs[avId].exit()
             
         # Restore camera
@@ -543,7 +543,7 @@ class DistributedDivingGame(DistributedMinigame):
             del self.cSphereNodePath2
         
         if hasattr(self, "remoteToonCollNPs"):
-            for np in self.remoteToonCollNPs.values():
+            for np in list(self.remoteToonCollNPs.values()):
                 np.removeNode()
             del self.remoteToonCollNPs
 
@@ -1068,7 +1068,7 @@ class DistributedDivingGame(DistributedMinigame):
             self.localLerp = Sequence(Func(toonSD.fsm.request,'freeze'), Wait(3.0), Func(toonSD.fsm.request,'normal'))
             self.localLerp.start(ts)
                 
-        if self.spawners[spawnerId].fishArray.has_key(spawnId):
+        if spawnId in self.spawners[spawnerId].fishArray:
             fish = self.spawners[spawnerId].fishArray[spawnId]
             endX = self.spawners[spawnerId].position.getX()
             
@@ -1148,7 +1148,7 @@ class DistributedDivingGame(DistributedMinigame):
         spawnerId = int(code[0])
         
         #print "FISH REMOVE TOO"
-        if self.spawners[spawnerId].fishArray.has_key(spawnId):
+        if spawnId in self.spawners[spawnerId].fishArray:
             fish = self.spawners[spawnerId].fishArray[spawnId]
             fish.specialLerp.finish()
             fish.moveLerp.finish()

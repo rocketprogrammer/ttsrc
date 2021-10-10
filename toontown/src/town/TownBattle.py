@@ -4,13 +4,13 @@ import types
 from direct.fsm import StateData
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-import TownBattleAttackPanel
-import TownBattleWaitPanel
-import TownBattleChooseAvatarPanel
-import TownBattleSOSPanel
-import TownBattleSOSPetSearchPanel
-import TownBattleSOSPetInfoPanel
-import TownBattleToonPanel
+from . import TownBattleAttackPanel
+from . import TownBattleWaitPanel
+from . import TownBattleChooseAvatarPanel
+from . import TownBattleSOSPanel
+from . import TownBattleSOSPetSearchPanel
+from . import TownBattleSOSPetInfoPanel
+from . import TownBattleToonPanel
 from toontown.toontowngui import TTDialog
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import BattleBase
@@ -206,7 +206,7 @@ class TownBattle(StateData.StateData):
 
         if (not self.isLoaded):
             self.load()
-        print("Battle Event %s" % (event))
+        print(("Battle Event %s" % (event)))
         self.battleEvent = event
         self.fsm.enterInitialState()
         base.localAvatar.laffMeter.start()
@@ -431,7 +431,7 @@ class TownBattle(StateData.StateData):
         return None
 
     def __handleAttackPanelDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         self.notify.debug('doneStatus: %s' % doneStatus)
         mode = doneStatus['mode']
         if (mode == 'Inventory'):
@@ -563,7 +563,7 @@ class TownBattle(StateData.StateData):
                           (luredIndices, self.luredIndices))
         self.notify.debug('adjustCogsAndToons() trappedIndices: %s self.trappedIndices: %s' %
                           (trappedIndices, self.trappedIndices))
-        toonIds = map(lambda toon: toon.doId, toons)
+        toonIds = [toon.doId for toon in toons]
         self.notify.debug('adjustCogsAndToons() toonIds: %s self.toons: %s' %
                           (toonIds, self.toons))
 
@@ -638,7 +638,7 @@ class TownBattle(StateData.StateData):
         return None
 
     def __handleChooseCogPanelDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'Back'):
             self.fsm.request('Attack')
@@ -666,7 +666,7 @@ class TownBattle(StateData.StateData):
         self.ignore(self.waitPanelDoneEvent)
 
     def __handleAttackWaitBack(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'Back'):
             if (self.track == HEAL_TRACK):
@@ -713,7 +713,7 @@ class TownBattle(StateData.StateData):
         return None
 
     def __handleChooseToonPanelDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'Back'):
             self.fsm.request('Attack')
@@ -766,7 +766,7 @@ class TownBattle(StateData.StateData):
         
         
     def __handleCogFireDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'Back'):
             self.fsm.request('Attack')
@@ -798,7 +798,7 @@ class TownBattle(StateData.StateData):
         return None
 
     def __handleSOSPanelDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'Friend'):
             doId  = doneStatus['friend']
@@ -844,7 +844,7 @@ class TownBattle(StateData.StateData):
         return None
 
     def __handleSOSPetSearchPanelDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'Back'):
             self.fsm.request('SOS')
@@ -867,7 +867,7 @@ class TownBattle(StateData.StateData):
         return None
 
     def __handleSOSPetInfoPanelDone(self, doneStatus):
-        assert doneStatus.has_key('mode')
+        assert 'mode' in doneStatus
         mode = doneStatus['mode']
         if (mode == 'OK'):
             response = {}
@@ -898,8 +898,8 @@ class TownBattle(StateData.StateData):
         Lets you know if the given attack is a group attack.
         """
         # Sanity checks
-        assert isinstance(trackNum, types.IntType)
-        assert isinstance(levelNum, types.IntType)
+        assert isinstance(trackNum, int)
+        assert isinstance(levelNum, int)
         assert((trackNum >= MIN_TRACK_INDEX) and (trackNum <= MAX_TRACK_INDEX) or
                (trackNum == BattleBase.NO_ATTACK) or
                (trackNum == BattleBase.SOS) or

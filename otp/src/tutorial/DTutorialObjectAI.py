@@ -69,8 +69,8 @@ class DTutorialObjectAI(DistributedObjectAI, DTutorialObjectBase):
 class DTutorialAI(FSM):
     def __init__(self):
         FSM.__init__(self, 'DTutorialAI')
-        import __builtin__
-        __builtin__.tut = self
+        import builtins
+        builtins.tut = self
 
         self.tutObj = None
         

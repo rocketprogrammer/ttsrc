@@ -65,7 +65,7 @@ for file in dnaStorageFiles:
 
 print ("zone2TitleDict = {")
 for file in dnaFiles:
-    print ("    # titles for: %s" % (file))
+    print(("    # titles for: %s" % (file)))
     loadDNAFile(dnaStore, file, CSDefault, 0)
     for blockIndex in range(dnaStore.getNumBlockTitles()):
         blockNumber = dnaStore.getTitleBlockAt(blockIndex)
@@ -74,7 +74,7 @@ for file in dnaFiles:
         article = dnaStore.getArticleFromBlockNumber(blockNumber)        
         branchZone = zone-(zone%100)
         finalZone = branchZone + 500 + blockNumber
-        print ('    %s : ("%s", "%s"),' % (finalZone, title, article))
+        print(('    %s : ("%s", "%s"),' % (finalZone, title, article)))
     dnaStore.resetBlockTitle()
     dnaStore.resetBlockNumbers()
     dnaStore.resetBlockArticle()

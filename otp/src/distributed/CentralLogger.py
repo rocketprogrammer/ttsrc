@@ -17,7 +17,7 @@ class CentralLogger(DistributedObjectGlobal):
 
     def hasReportedPlayer(self, targetDISLId, targetAvId):
         # Has this playerId, avatarId already been reported this session?
-        return self.PlayersReportedThisSession.has_key((targetDISLId, targetAvId))
+        return (targetDISLId, targetAvId) in self.PlayersReportedThisSession
 
     def reportPlayer(self, category, targetDISLId, targetAvId, description = "None"):
         # You can only report another player once per session.

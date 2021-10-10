@@ -53,7 +53,7 @@ class DistributedPetProxy(DistributedObject.DistributedObject):
     # setXXX func is generated for each trait
     def __generateDistTraitFuncs(self):
         # generate a set func for each trait
-        for i in xrange(PetTraits.PetTraits.NumTraits):
+        for i in range(PetTraits.PetTraits.NumTraits):
             traitName = PetTraits.getTraitNames()[i]
             setterName = self.getSetterName(traitName)
             def traitSetter(value, self=self, i=i):
@@ -155,7 +155,7 @@ class DistributedPetProxy(DistributedObject.DistributedObject):
         # the corrupted doodle problem
         DistributedObject.DistributedObject.announceGenerate(self)
         self.traits = PetTraits.PetTraits(self.traitSeed, self.safeZone)
-        print self.traits.traits
+        print(self.traits.traits)
         """
         self.traits = PetTraits.PetTraits(self.traitSeed, self.safeZone,
                                           traitValueList=self.traitList)
@@ -166,7 +166,7 @@ class DistributedPetProxy(DistributedObject.DistributedObject):
         self.lastKnownMood = self.mood.makeCopy()
 
         # pass in the cached required mood component values
-        for mood, value in self.requiredMoodComponents.items():
+        for mood, value in list(self.requiredMoodComponents.items()):
             self.mood.setComponent(mood, value, announce=0)
         self.requiredMoodComponents = {}
 

@@ -21,7 +21,7 @@ class TTWhiteList(WhiteList):
             searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('toontown/chat')))
         found = vfs.resolveFilename(filename,searchPath)
         if not found:
-            print "Couldn't find whitelist data file!"
+            print("Couldn't find whitelist data file!")
 
         data = vfs.readFile(filename, 1)
 

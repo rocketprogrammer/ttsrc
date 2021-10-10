@@ -1,7 +1,7 @@
 from otp.ai.AIBase import *
-import DistributedLawnDecorAI
+from . import DistributedLawnDecorAI
 from direct.directnotify import DirectNotifyGlobal
-import GardenGlobals
+from . import GardenGlobals
 
 from direct.showbase.ShowBase import *
 

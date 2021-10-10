@@ -1,16 +1,16 @@
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
-from BattleSounds import *
+from .BattleBase import *
+from .BattleProps import *
+from .BattleSounds import *
 from toontown.toon.ToonDNA import *
 from toontown.suit.SuitDNA import *
 
 from direct.directnotify import DirectNotifyGlobal
 import random
-import MovieCamera
-import MovieUtil
-from MovieUtil import calcAvgSuitPos
+from . import MovieCamera
+from . import MovieUtil
+from .MovieUtil import calcAvgSuitPos
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieThrow')
 
@@ -51,7 +51,7 @@ pieFlyTaskName = "MovieThrow-pieFly"
 
 
 def addHit (dict, suitId, hitCount):
-    if (dict.has_key(suitId)):
+    if (suitId in dict):
         dict[suitId] += hitCount
     else:
         dict[suitId] = hitCount
@@ -87,12 +87,12 @@ def doThrows(throws):
             pass
         else:
             suitId = throw['target']['suit'].doId
-            if (suitThrowsDict.has_key(suitId)):
+            if (suitId in suitThrowsDict):
                 suitThrowsDict[suitId].append(throw)
             else:
                 suitThrowsDict[suitId] = [throw]
     # A list of lists of throws grouped by suit
-    suitThrows = suitThrowsDict.values()
+    suitThrows = list(suitThrowsDict.values())
     # Sort the suits based on the number of throws per suit
     def compFunc(a, b):
         if (len(a) > len(b)):
@@ -805,7 +805,7 @@ def __throwGroupPie(throw, delay, groupHitDict):
 
         else:
             #if none of the group throws hit at all, we can do a dodge
-            groupHitValues = groupHitDict.values()
+            groupHitValues = list(groupHitDict.values())
             if groupHitValues.count(0) == len(groupHitValues):
                 singleSuitResponseTrack = MovieUtil.createSuitDodgeMultitrack(delay + tSuitDodges,
                                                                 suit, leftSuits, rightSuits)

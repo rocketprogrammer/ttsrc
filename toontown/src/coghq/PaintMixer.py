@@ -1,6 +1,6 @@
 """PaintMixer module: contains the PaintMixer class"""
 
-import PlatformEntity
+from . import PlatformEntity
 
 class PaintMixer(PlatformEntity.PlatformEntity):
     def start(self):

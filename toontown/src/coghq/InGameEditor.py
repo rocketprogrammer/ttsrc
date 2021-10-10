@@ -4,12 +4,12 @@ from direct.tkwidgets.AppShell import *
 from direct.showbase.TkGlobal import *
 from direct.tkwidgets.Tree import *
 from direct.tkwidgets import Slider, Floater
-from tkSimpleDialog import askstring
-from tkMessageBox import showwarning, askyesno
-from Tkinter import *
+from tkinter.simpledialog import askstring
+from tkinter.messagebox import showwarning, askyesno
+from tkinter import *
 from direct.showbase.PythonUtil import Functor, list2dict
 from direct.gui.DirectGui import DGG
-import tkFileDialog
+import tkinter.filedialog
 from direct.showbase import DirectObject
 import math
 import operator
@@ -150,7 +150,7 @@ class InGameEditor(AppShell):
         # a choice dialog with a list of entity types, or something
         permanentTypes = self.level.entTypeReg.getPermanentTypeNames()
         entTypes = list(self.level.entTypes)
-        map(entTypes.remove, permanentTypes)
+        list(map(entTypes.remove, permanentTypes))
         entTypes.sort()
         numEntities = len(entTypes)
         cascadeMenu = ''
@@ -404,7 +404,7 @@ class InGameEditor(AppShell):
         widgetSetter = None
 
         entSpec = levelSpec.getEntitySpec(entId)
-        assert entSpec.has_key('type')
+        assert 'type' in entSpec
         typeDesc = entTypeReg.getTypeDesc(entSpec['type'])
         attribNames = typeDesc.getAttribNames()
         attribDescs = typeDesc.getAttribDescDict()
@@ -544,7 +544,7 @@ class InGameEditor(AppShell):
             attribDesc = typeDesc.getAttribDescDict()[attribName]
             attributeValue = attribDesc.getDefaultValue()
         valueDict = params.get('valueDict', {})
-        for key,value in valueDict.items():
+        for key,value in list(valueDict.items()):
             if value == attributeValue:
                 attributeValue = key
                 break
@@ -565,10 +565,10 @@ class InGameEditor(AppShell):
         label.pack(side = LEFT, expand = 0)
         # Add radio buttons
         for choice in params.get('choiceSet', []):
-            if type(choice) is types.StringType:
+            if type(choice) is bytes:
                 choiceStr = choice
             else:
-                choiceStr = `choice`
+                choiceStr = repr(choice)
             # Store desired value by string repr (since that's what
             # we'll get back from the radio button command
             if choiceStr not in valueDict:
@@ -585,7 +585,7 @@ class InGameEditor(AppShell):
         self.attribWidgets.append(frame)
         # Update Tkinter variable on edits and undo/redo
         def setRadioVar(attributeValue):
-            for key,value in valueDict.items():
+            for key,value in list(valueDict.items()):
                 if value == attributeValue:
                     attributeValue = key
                     break
@@ -617,24 +617,24 @@ class InGameEditor(AppShell):
             # Command to update level based upon current radio button value
             def cbCommand(var, trueValue=trueValue):
                 vd = self.cbDict[attribName]
-                print vd
+                print(vd)
                 # Use value dict to translate current value
                 # If entry not found, just use current value
                 if var.get():
-                    print 'got it', trueValue, vd
+                    print('got it', trueValue, vd)
                     vd[trueValue] = 1
                 else:
-                    print 'not it', trueValue, vd
+                    print('not it', trueValue, vd)
                     if trueValue in vd:
                         del vd[trueValue]
-                value = vd.keys()
-                print 'SENDING', value
+                value = list(vd.keys())
+                print('SENDING', value)
                 self.level.setAttribEdit(entId, attribName, value)
             # Create check button
-            if type(choice) is types.StringType:
+            if type(choice) is bytes:
                 labelStr = choice
             else:
-                labelStr = `choice`
+                labelStr = repr(choice)
             func = Functor(cbCommand, cbVar)
             choiceButton = Checkbutton(
                 frame,
@@ -647,8 +647,8 @@ class InGameEditor(AppShell):
         self.attribWidgets.append(frame)
         # Update Tkinter variable on edits and undo/redo
         def setCheckbuttonVar(attributeValueList):
-            print 'COMING BACK', attributeValueList
-            for attributeValue, cb in checkbuttonDict.items():
+            print('COMING BACK', attributeValueList)
+            for attributeValue, cb in list(checkbuttonDict.items()):
                 if attributeValue in attributeValueList:
                     cb.set(1)
                 else:
@@ -759,7 +759,7 @@ class InGameEditor(AppShell):
                 initialDir = Filename.expandFrom('$TTMODELS/built/').toOsSpecific()
             else:
                 initialDir = Filename.expandFrom('$TTMODELS/built/%s' % text.get()[1:-1]).toOsSpecific()
-            print text, text.get()[1:-1], initialDir
+            print(text, text.get()[1:-1], initialDir)
             #import pdb;pdb.set_trace()
             rawFilename = askopenfilename(
                 defaultextension = '*',
@@ -771,7 +771,7 @@ class InGameEditor(AppShell):
             if rawFilename != '':
                 filename = Filename.fromOsSpecific(rawFilename)
                 filename.findOnSearchpath(getModelPath().getValue())
-                text.set("'%s'" % `filename`)
+                text.set("'%s'" % repr(filename))
                 handleReturn(None)
         # Create widgets, label which does double duty as a button
         frame = Frame(self.pageOneFrame.interior())
@@ -884,10 +884,10 @@ class InGameEditor(AppShell):
             for eType in entTypeReg.getTypeNamesFromOutputType('bool'):
                 idDict[eType] = self.level.entType2ids.get(eType, [])
         else:
-            for eType in self.level.entType2ids.keys():
+            for eType in list(self.level.entType2ids.keys()):
                 idDict[eType] = self.level.entType2ids.get(eType, [])
         # Now build popup menu
-        typeKeys = idDict.keys()
+        typeKeys = list(idDict.keys())
         # Arrange according to entity type
         typeKeys.sort()
         def getChildEntIds(entity):
@@ -1046,7 +1046,7 @@ class InGameEditor(AppShell):
         self.ignore('DIRECT_manipulateObjectCleanup')
         self.ignore('DIRECT_undo')
         self.ignore('DIRECT_redo')
-        print 'InGameEditor.onDestroy()'
+        print('InGameEditor.onDestroy()')
         if self.visZonesEditor:
             self.visZonesEditor.destroy()
         self.explorer._node.destroy()
@@ -1058,7 +1058,7 @@ class InGameEditor(AppShell):
 
     def handleSaveAs(self):
         # error if we set parent=self
-        filename = tkFileDialog.asksaveasfilename(
+        filename = tkinter.filedialog.asksaveasfilename(
             parent=self.parent,
             defaultextension='.py',
             filetypes=[('Python Source Files', '.py'),

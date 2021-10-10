@@ -15,18 +15,18 @@ from direct.showbase import RandomNumGen
 from direct.task.Task import Task
 from toontown.toonbase import TTLocalizer
 import random
-import cPickle
+import pickle
 import time
 from direct.showbase import PythonUtil
 from toontown.hood import Place
-import Estate
-import HouseGlobals
+from . import Estate
+from . import HouseGlobals
 from toontown.estate import GardenGlobals
 from toontown.estate import DistributedFlower
 from toontown.estate import DistributedGagTree
 from toontown.estate import DistributedStatuary
-import GardenDropGame
-import GardenProgressMeter
+from . import GardenDropGame
+from . import GardenProgressMeter
 from toontown.estate import FlowerSellGUI
 from toontown.toontowngui import TTDialog
 
@@ -260,7 +260,7 @@ class DistributedEstate(DistributedObject.DistributedObject):
         
     def setHouseInfo(self, houseInfo):
         self.notify.debug("setHouseInfo")
-        houseType, housePos = cPickle.loads(houseInfo)
+        houseType, housePos = pickle.loads(houseInfo)
         self.loadEstate(houseType, housePos)
 
     def loadEstate(self, indexList, posList):
@@ -349,7 +349,7 @@ class DistributedEstate(DistributedObject.DistributedObject):
         curTime = time.time() % HouseGlobals.DAY_NIGHT_PERIOD
         dawnTime = self.dawnTime
         dT = ((curTime - dawnTime) - self.deltaTime) % HouseGlobals.DAY_NIGHT_PERIOD
-        print ("getDeltaTime = %s. curTime=%s. dawnTime=%s. serverTime=%s.  deltaTime=%s" % (dT,curTime,dawnTime,self.serverTime,self.deltaTime))
+        print(("getDeltaTime = %s. curTime=%s. dawnTime=%s. serverTime=%s.  deltaTime=%s" % (dT,curTime,dawnTime,self.serverTime,self.deltaTime)))
         return dT
         
     def __initDaytimeTask(self):
@@ -400,7 +400,7 @@ class DistributedEstate(DistributedObject.DistributedObject):
         ts = 0
         if hasattr(task, 'ts'):
             ts = task.ts
-        print "ts=%s" % ts
+        print("ts=%s" % ts)
         self.dayTrack.start(ts)
         taskMgr.doMethodLater(HouseGlobals.DAY_NIGHT_PERIOD-ts,
                               self.__dayTimeTask,
@@ -472,7 +472,7 @@ class DistributedEstate(DistributedObject.DistributedObject):
             else:
                 self.__stopCrickets()
                 self.__startBirds()
-        print "ts(sun)=%s" % ts
+        print("ts(sun)=%s" % ts)
         self.sunTrack.start(ts)
         taskMgr.doMethodLater(HouseGlobals.DAY_NIGHT_PERIOD-ts,
                               self.__sunTask,

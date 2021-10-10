@@ -200,7 +200,7 @@ class DistributedCashbotBossCrane(DistributedObject.DistributedObject, FSM.FSM):
 
         arm = self.boss.craneArm.copyTo(self.crane)
 
-        assert(not self.boss.cranes.has_key(self.index))
+        assert(self.index not in self.boss.cranes)
         self.boss.cranes[self.index] = self
 
     def disable(self):

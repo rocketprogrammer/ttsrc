@@ -38,7 +38,7 @@ class TwoDTreasureMgr(DirectObject):
         # Creating treasuresNP
         self.treasures = []
         # Create the initial treasures from the treasure list 
-        for index in xrange(len(self.treasureList)):
+        for index in range(len(self.treasureList)):
             treasureAttribs = self.treasureList[index][0]
             treasureValue = self.treasureList[index][1]
             self.createNewTreasure(treasureAttribs, treasureValue)
@@ -48,7 +48,7 @@ class TwoDTreasureMgr(DirectObject):
         # The value of the enemy generated treasure increases when there are more players.
         numPlayers = self.section.sectionMgr.game.numPlayers
         pos = Point3(-1, -1, -1)
-        for index in xrange(len(self.enemyList)):
+        for index in range(len(self.enemyList)):
             self.createNewTreasure([pos], numPlayers, isEnemyGenerated = True)
             
     def createNewTreasure(self, attrib, value, isEnemyGenerated = False, model = None):

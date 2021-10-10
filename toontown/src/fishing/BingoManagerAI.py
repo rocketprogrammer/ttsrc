@@ -36,7 +36,7 @@ from toontown.hood import ZoneUtil
 #################################################################
 # Python Specific Modules
 #################################################################
-import cPickle
+import pickle
 import os
 import time
 
@@ -110,7 +110,7 @@ class BingoManagerAI(object):
 
         # CHEATS
         #initState = 'Intermission'
-        for do in self.doId2do.values():
+        for do in list(self.doId2do.values()):
             do.startup(initState)
         self.waitForIntermission()
 
@@ -147,7 +147,7 @@ class BingoManagerAI(object):
 
         if self.doId2do:
             #self.notify.warning('__shutdown: Not all PondBingoManagers have shutdown! Manual Shutdown for Memory sake.')
-            for bingoMgr in self.doId2do.values():
+            for bingoMgr in list(self.doId2do.values()):
                 self.notify.info("__shutdown: shutting down PondBinfoManagerAI in zone %s" % bingoMgr.zoneId)
                 bingoMgr.shutdown()
             self.doId2do.clear()
@@ -167,7 +167,7 @@ class BingoManagerAI(object):
     ############################################################
     def __resumeBingoNight(self, task):
         self.__hoodJackpots = self.load()
-        for bingoMgr in self.doId2do.values():
+        for bingoMgr in list(self.doId2do.values()):
             if bingoMgr.isGenerated():
                 if self.finalGame:
                     bingoMgr.setFinalGame(self.finalGame)
@@ -193,7 +193,7 @@ class BingoManagerAI(object):
         # Save Jackpot Data to File
         self.notify.info("handleSuperBingoClose: Saving Hood Jackpots to DB")
         self.notify.info("handleSuperBingoClose: hoodJackpots %s" %(self.__hoodJackpots))
-        for hood in self.__hoodJackpots.keys():
+        for hood in list(self.__hoodJackpots.keys()):
             if self.__hoodJackpots[hood][1]:
                 self.__hoodJackpots[hood][0] += BG.ROLLOVER_AMOUNT
                 # clamp it if it exceeds jackpot total
@@ -239,7 +239,7 @@ class BingoManagerAI(object):
     # Output: None
     ############################################################
     def __startIntermission(self):
-        for bingoMgr in self.doId2do.values():
+        for bingoMgr in list(self.doId2do.values()):
             bingoMgr.setFinalGame(BG.INTERMISSION)
 
         if not self.finalGame:
@@ -304,7 +304,7 @@ class BingoManagerAI(object):
             self.createPondBingoMgrAI(hood)
 
         # Create DPBMAI for every pond in every active estate.
-        for estateAI in self.air.estateMgr.estate.values():
+        for estateAI in list(self.air.estateMgr.estate.values()):
             self.createPondBingoMgrAI(estateAI)
 
     ############################################################
@@ -394,7 +394,7 @@ class BingoManagerAI(object):
     # Output: None
     ############################################################  
     def removePondBingoMgrAI(self, doId):
-        if self.doId2do.has_key(doId):
+        if doId in self.doId2do:
             zoneId = self.doId2do[doId].zoneId
             self.notify.info('removePondBingoMgrAI: Removing PondBingoMgrAI %s' %(zoneId))
             hood = self.__hoodToUse(zoneId)
@@ -414,7 +414,7 @@ class BingoManagerAI(object):
     ############################################################
     def setAvCatchForPondMgr(self, avId, zoneId, catch):
         self.notify.info('setAvCatchForPondMgr: zoneId %s' %(zoneId))
-        if self.zoneId2do.has_key(zoneId):
+        if zoneId in self.zoneId2do:
             self.zoneId2do[zoneId].setAvCatch(avId, catch)
         else:
             self.notify.info('setAvCatchForPondMgr Failed: zoneId %s' %(zoneId))
@@ -439,7 +439,7 @@ class BingoManagerAI(object):
     # Output: None
     ############################################################
     def saveTo(self, file):
-        cPickle.dump(self.__hoodJackpots, file)
+        pickle.dump(self.__hoodJackpots, file)
 
     ############################################################
     # Method:  save
@@ -475,7 +475,7 @@ class BingoManagerAI(object):
         # Default Jackpot Amount
         jackpots = self.DefaultReward
         try:
-            jackpots = cPickle.load(file)
+            jackpots = pickle.load(file)
         except EOFError:
             pass
         return jackpots

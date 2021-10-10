@@ -281,14 +281,14 @@ class Char(Avatar.Avatar):
             # Clear the net transforms first, in case we have
             # merge-lod-bundles on (which would mean this is really
             # just one bundle).
-            for bundle in self.getPartBundleDict().values():
+            for bundle in list(self.getPartBundleDict().values()):
                 bundle = bundle['modelRoot'].getBundle()
                 earNull = bundle.findChild("sphere3")
                 if not earNull:
                     earNull = bundle.findChild("*sphere3")
                 earNull.clearNetTransforms()
 
-            for bundle in self.getPartBundleDict().values():
+            for bundle in list(self.getPartBundleDict().values()):
                 charNodepath = bundle['modelRoot'].partBundleNP
                 bundle = bundle['modelRoot'].getBundle()
                 earNull = bundle.findChild("sphere3")

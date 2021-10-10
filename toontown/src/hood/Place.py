@@ -7,8 +7,8 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import StateData
 from toontown.safezone import PublicWalk
 from toontown.launcher import DownloadForceAcknowledge
-import TrialerForceAcknowledge
-import ZoneUtil
+from . import TrialerForceAcknowledge
+from . import ZoneUtil
 from toontown.friends import FriendsListManager
 from toontown.toonbase import ToontownGlobals
 from toontown.estate import HouseGlobals
@@ -16,7 +16,7 @@ from toontown.toonbase import TTLocalizer
 from otp.otpbase import OTPLocalizer
 from otp.avatar import Emote
 from direct.task import Task
-import QuietZoneState
+from . import QuietZoneState
 from toontown.distributed import ToontownDistrictStats
 
 class Place(StateData.StateData,
@@ -675,7 +675,7 @@ class Place(StateData.StateData,
         else:
             # Some return code that is not handled
             Place.notify.error("Unknown done status for DownloadForceAcknowledge: "
-                              + `doneStatus`)
+                              + repr(doneStatus))
 
     def enterDFAReject(self):
         # TODO: reject movie, turn toon around
@@ -994,7 +994,7 @@ class Place(StateData.StateData,
 
         avId = requestStatus.get("avId", -1)
         if avId != -1:
-            if base.cr.doId2do.has_key(avId):
+            if avId in base.cr.doId2do:
                 # Teleport to avatar
                 avatar = base.cr.doId2do[avId]
                 avatar.forceToTruePosition()

@@ -1,5 +1,5 @@
 from pandac.PandaModules import *
-from DistributedNPCToonBase import *
+from .DistributedNPCToonBase import *
 from toontown.quest import QuestParser
 from toontown.quest import QuestChoiceGui
 from toontown.quest import TrackChoiceGui
@@ -21,7 +21,7 @@ class DistributedNPCSpecialQuestGiver(DistributedNPCToonBase):
     def announceGenerate(self):
         self.setAnimState("neutral", 0.9, None, None)
         
-        npcOrigin = self.cr.playGame.hood.loader.geom.find("**/npc_origin_" + `self.posIndex`)
+        npcOrigin = self.cr.playGame.hood.loader.geom.find("**/npc_origin_" + repr(self.posIndex))
         
          # Now he's no longer parented to render, but no one minds.
         if not npcOrigin.isEmpty():

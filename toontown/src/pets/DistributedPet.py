@@ -132,7 +132,7 @@ class DistributedPet(DistributedSmoothNode.DistributedSmoothNode,
     # setXXX func is generated for each trait
     def __generateDistTraitFuncs(self):
         # generate a set func for each trait
-        for i in xrange(PetTraits.PetTraits.NumTraits):
+        for i in range(PetTraits.PetTraits.NumTraits):
             traitName = PetTraits.getTraitNames()[i]
             setterName = self.getSetterName(traitName)
             def traitSetter(value, self=self, i=i):
@@ -265,7 +265,7 @@ class DistributedPet(DistributedSmoothNode.DistributedSmoothNode,
         self.mood = PetMood.PetMood(self)
 
         # pass in the cached required mood component values
-        for mood, value in self.requiredMoodComponents.items():
+        for mood, value in list(self.requiredMoodComponents.items()):
             self.mood.setComponent(mood, value, announce=0)
         self.requiredMoodComponents = {}
 
@@ -641,8 +641,8 @@ class DistributedPet(DistributedSmoothNode.DistributedSmoothNode,
                     self._getPetMovieCompleteIval(av),
                     )
                 self.movieTrack.start()
-            except StandardError, error:
-                print str(error)
+            except Exception as error:
+                print(str(error))
 
         if (mode == PetConstants.PET_MOVIE_SCRATCH):
             assert(self.notify.debug('PET_MOVIE_SCRATCH'))
@@ -658,8 +658,8 @@ class DistributedPet(DistributedSmoothNode.DistributedSmoothNode,
                     self._getPetMovieCompleteIval(av),
                     )
                 self.movieTrack.start()
-            except StandardError, error:
-                print str(error)
+            except Exception as error:
+                print(str(error))
 
         if (mode == PetConstants.PET_MOVIE_FEED):
             assert(self.notify.debug('PET_MOVIE_FEED'))

@@ -6,8 +6,8 @@
 
 from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
-import CatalogGenerator
-import CatalogItem
+from . import CatalogGenerator
+from . import CatalogItem
 from toontown.toonbase import ToontownGlobals
 import time
 import math
@@ -169,7 +169,7 @@ class CatalogManagerAI(DistributedObjectAI.DistributedObjectAI):
                         itemType, numSticky = item.getBackSticky()
                         #print ("type %s numSticky %s" % (itemType, numSticky))
                         if numSticky > 0:
-                            if stickDict.has_key(itemType):
+                            if itemType in stickDict:
                                 #print("has Key")
                                 if (len(stickDict[itemType]) < numSticky):
                                     stickDict[itemType].append(item)
@@ -320,6 +320,6 @@ class CatalogManagerAI(DistributedObjectAI.DistributedObjectAI):
         avatar = self.air.doId2do.get(avId)
 
         if avatar and avatar.catalogScheduleNextTime == 0:
-            print("starting catalog for %s" % (avatar.getName()))
+            print(("starting catalog for %s" % (avatar.getName())))
             self.deliverCatalogFor(avatar)
 

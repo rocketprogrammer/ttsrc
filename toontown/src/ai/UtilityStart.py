@@ -8,10 +8,10 @@ import sys
 import ihooks
 ihooks.install()
 
-print "Initializing..."
+print("Initializing...")
     
 from otp.ai.AIBaseGlobal import *
-import UtilityAIRepository
+from . import UtilityAIRepository
 
 simbase.mdip = simbase.config.GetString("msg-director-ip", "localhost")
 simbase.mdport = simbase.config.GetInt("msg-director-port", 6665)

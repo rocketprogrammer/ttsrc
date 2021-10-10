@@ -1,4 +1,4 @@
-from ElevatorConstants import *
+from .ElevatorConstants import *
 
 # floor and suit information for all suit buildings, organized by each
 # level of suit that originally took over the building (minus 1), used

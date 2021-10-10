@@ -115,7 +115,7 @@ class SuitInvasionManagerAI:
 
         # Get rid of all the current cogs on the streets
         # (except those already in battle, they can stay)
-        for suitPlanner in self.air.suitPlanners.values():
+        for suitPlanner in list(self.air.suitPlanners.values()):
             suitPlanner.flySuits()
         # Success!
         return 1
@@ -143,7 +143,7 @@ class SuitInvasionManagerAI:
         self.numCogsRemaining = 0
         # Get rid of all the current invasion cogs on the streets
         # (except those already in battle, they can stay)
-        for suitPlanner in self.air.suitPlanners.values():
+        for suitPlanner in list(self.air.suitPlanners.values()):
             suitPlanner.flySuits()
 
     # Need this here since this is not a distributed object

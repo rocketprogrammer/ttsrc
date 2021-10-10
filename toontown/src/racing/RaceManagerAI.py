@@ -1,13 +1,13 @@
 from direct.directnotify import DirectNotifyGlobal
-import DistributedRaceAI
+from . import DistributedRaceAI
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.coghq import MintLayout
 from toontown.ai import HolidayBaseAI
 from direct.showbase import DirectObject
-import RaceGlobals
+from . import RaceGlobals
 import random
 import os
-import cPickle
+import pickle
 
 def getDefaultRecord(trackId):
     """
@@ -158,7 +158,7 @@ class RaceManagerAI(DirectObject.DirectObject):
                 # see if they broke a server record
                 if not suspicious:
                     bonus = self.checkTimeRecord(race.trackId, totalTime, race.raceType, race.toonCount, playerInfo.avId)
-                    if (race.circuitTotalBonusTickets.has_key(playerInfo.avId)):
+                    if (playerInfo.avId in race.circuitTotalBonusTickets):
                         race.circuitTotalBonusTickets[playerInfo.avId] += bonus
                     else:
                         race.circuitTotalBonusTickets[playerInfo.avId] = bonus                
@@ -272,7 +272,7 @@ class RaceManagerAI(DirectObject.DirectObject):
                 if av and (avId in race.playersFinished):
                     # keep track of placement for contests
                     self.air.writeServerEvent("kartingCircuitFinished", avId, "%s|%s|%s|%s" % (place, places, race.circuitTimes[avId], race.trackId))
-                    print "kartingCircuitFinished", avId, "%s|%s|%s|%s" % (place, places, race.circuitTimes[avId], race.trackId)
+                    print("kartingCircuitFinished", avId, "%s|%s|%s|%s" % (place, places, race.circuitTimes[avId], race.trackId))
 
                     # calculate their winnings
                     entryFee = RaceGlobals.getEntryFee(race.trackId, race.raceType)
@@ -309,7 +309,7 @@ class RaceManagerAI(DirectObject.DirectObject):
                     av.b_setTickets(newTickets)
 
                     finalBonus = 0
-                    if (race.circuitTotalBonusTickets.has_key(avId)):
+                    if (avId in race.circuitTotalBonusTickets):
                         finalBonus = race.circuitTotalBonusTickets[avId]
                         
                     #race.d_setCircuitPlace(avId, place, entryFee, winnings, bonus, trophies)
@@ -927,7 +927,7 @@ class RaceManagerAI(DirectObject.DirectObject):
                 os.rename(self.filename, backup)
             file = open(self.filename, 'w')
             file.seek(0)
-            cPickle.dump(self.trackRecords, file)
+            pickle.dump(self.trackRecords, file)
             file.close()
             if os.path.exists(backup):
                 os.remove(backup)
@@ -960,7 +960,7 @@ class RaceManagerAI(DirectObject.DirectObject):
 
         #check for new tracks
         for trackId in RaceGlobals.TrackIds:
-            if not records.has_key(trackId):
+            if trackId not in records:
                 records[trackId] = {}
                 # for each recording period (daily, etc.)
                 for i in RaceGlobals.PeriodIds:
@@ -978,7 +978,7 @@ class RaceManagerAI(DirectObject.DirectObject):
         records = {}
         try:
             while 1:
-                records = cPickle.load(file)
+                records = pickle.load(file)
         except EOFError:
             pass
         return records

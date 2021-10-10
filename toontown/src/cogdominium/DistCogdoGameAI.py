@@ -114,7 +114,7 @@ class DistCogdoGameAI(DistributedObjectAI):
 
     def handleToonWentSad(self, toonId):
         self.notify.debug('handleToonWentSad: %s' % toonId)
-        callbacks = self._sadToken2callback.values()
+        callbacks = list(self._sadToken2callback.values())
         for callback in callbacks:
             callback(toonId)
 

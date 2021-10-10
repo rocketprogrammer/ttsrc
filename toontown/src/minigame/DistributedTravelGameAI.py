@@ -3,7 +3,7 @@
 from toontown.minigame.DistributedMinigameAI import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
-import TravelGameGlobals
+from . import TravelGameGlobals
 from toontown.toonbase import ToontownGlobals
 
 class DistributedTravelGameAI(DistributedMinigameAI):
@@ -59,7 +59,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
             self.gotBonus = {}
             self.desiredNextGame = -1
 
-            self.boardIndex = random.choice(range(len(TravelGameGlobals.BoardLayouts)))
+            self.boardIndex = random.choice(list(range(len(TravelGameGlobals.BoardLayouts))))
             
     
     def generate(self):
@@ -233,7 +233,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
     def waitClientsChoicesTimeout(self, task):
         self.notify.debug("waitClientsChoicesTimeout: did not hear from all clients")
         # Anybody who did not choose gets a 0 for their input
-        for avId in self.avatarChoices.keys():
+        for avId in list(self.avatarChoices.keys()):
             if self.avatarChoices[avId] == (-1,0):
                 self.avatarChoices[avId] = (0,0)
 
@@ -297,7 +297,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         """
         Returns true if all avatars playing have chosen their votes
         """
-        for avId in self.avatarChoices.keys():
+        for avId in list(self.avatarChoices.keys()):
             choice = self.avatarChoices[avId]
             if (choice[0] == -1) and not (self.stateDict[avId] == EXITED):
                 return False
@@ -320,7 +320,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         give the bonus beans if a toon reaches his goal
         """
         noOneGotBonus = True
-        for avId in self.avIdBonuses.keys():
+        for avId in list(self.avIdBonuses.keys()):
             self.scoreDict[avId] = 0
             if self.avIdBonuses[avId][0] == endingSwitch and \
                not self.stateDict[avId] == EXITED:
@@ -330,7 +330,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
         # if no one reached the secret goal, give everyone 1 bean
         if noOneGotBonus:
-            for avId in self.avIdBonuses.keys():
+            for avId in list(self.avIdBonuses.keys()):
                 self.scoreDict[avId] = 1         
         
 
@@ -388,7 +388,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         allowedGames = MinigameCreatorAI.removeUnreleasedMinigames(allowedGames)
         #allowedGames = [1,2,13,14,15,16] # uncomment to see the newest icons
         self.switchToMinigameDict = {}
-        for switch in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
+        for switch in list(TravelGameGlobals.BoardLayouts[self.boardIndex].keys()):
             if self.isLeaf(switch):
                 if len(allowedGames) == 0:
                     #if we somehow don't have enough allowed games, just
@@ -401,7 +401,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         
         switches = []
         minigames = []
-        for key in self.switchToMinigameDict.keys():
+        for key in list(self.switchToMinigameDict.keys()):
             switches.append( key)
             minigames.append( self.switchToMinigameDict[key])
         
@@ -412,7 +412,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
         figure out where the bonus beans go
         """
         possibleLeaves = []
-        for switch in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
+        for switch in list(TravelGameGlobals.BoardLayouts[self.boardIndex].keys()):
             if self.isLeaf(switch):
                 possibleLeaves.append(switch)
 
@@ -457,7 +457,7 @@ class DistributedTravelGameAI(DistributedMinigameAI):
 
         allExited = True
         for avId in self.avIdList:
-            if avId in self.stateDict.keys() and self.stateDict[avId]!=EXITED:
+            if avId in list(self.stateDict.keys()) and self.stateDict[avId]!=EXITED:
                 allExited =False
                 break
             

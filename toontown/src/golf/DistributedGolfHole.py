@@ -347,7 +347,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
         self.crowdBuildupSfx = []
         self.crowdApplauseSfx = []
         self.crowdMissSfx = []
-        for i in xrange(4):
+        for i in range(4):
             self.crowdBuildupSfx.append(
                 loader.loadSfx("phase_6/audio/sfx/Golf_Crowd_Buildup.mp3"))
             self.crowdApplauseSfx.append(
@@ -395,7 +395,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
 
         if self.holeBottomNodePath.isEmpty():
             holePositions = self.holePositions
-            for index in xrange(len(holePositions)):
+            for index in range(len(holePositions)):
                 holePos =  holePositions[index]
                 targetNodePathGeom, t1, t2 = BuildGeometry.addCircleGeom(self.targets, 16, 1)
                 targetNodePathGeom.setPos(holePos)
@@ -1695,7 +1695,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
     def __updateGolfPower(self, task):
         """Change the value of the power meter."""
         if not self.powerBar:
-            print "### no power bar!!!"
+            print("### no power bar!!!")
             return Task.done
 
         newPower =  self.__getGolfPower(globalClock.getFrameTime())
@@ -1873,7 +1873,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
 
         try:
             self.flyOverActor = Actor.Actor(camModelFullPath, {'camera':cameraAnimFullPath})
-        except StandardError:
+        except Exception:
             # this hole doesn't have the flyover animation, just return
             self.notify.debug("Couldn't find flyover %s" % camModelFullPath)
             return False
@@ -1887,7 +1887,7 @@ class DistributedGolfHole(DistributedPhysicsWorld.DistributedPhysicsWorld, FSM, 
         flyOverJoint = self.flyOverActor.find('**/camera1')
         children = flyOverJoint.getChildren()
         numChild = children.getNumPaths()
-        for i in xrange(numChild):
+        for i in range(numChild):
             childNodePath = children.getPath(i)
             childNodePath.removeNode()
         self.flyOverJoint = flyOverJoint

@@ -2,7 +2,7 @@
 
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.toonbase import TTLocalizer, ToontownTimer
@@ -11,8 +11,8 @@ from toontown.minigame import PlayingCardGlobals
 from toontown.minigame import PairingGameCard
 from toontown.minigame import PlayingCardDeck
 from toontown.minigame import PairingGameGlobals
-from OrthoWalk import OrthoWalk
-from OrthoDrive import OrthoDrive
+from .OrthoWalk import OrthoWalk
+from .OrthoDrive import OrthoDrive
 from direct.interval.IntervalGlobal import Sequence,Parallel,Func, LerpColorScaleInterval, LerpScaleInterval, LerpFunctionInterval, Wait, SoundInterval
 from toontown.toonbase.ToontownGlobals import GlobalDialogColor
 
@@ -142,7 +142,7 @@ class DistributedPairingGame(DistributedMinigame):
 
         self.cards = []
 
-        for index in xrange(len(self.deck.cards)):
+        for index in range(len(self.deck.cards)):
             cardValue = self.deck.cards[index]
             oneCard = PairingGameCard.PairingGameCard(cardValue)
             oneCard.load()
@@ -156,7 +156,7 @@ class DistributedPairingGame(DistributedMinigame):
             oneCard.turnDown(doInterval = False)
             self.cards.append(oneCard)
 
-        self.bonusTraversal = range(len(self.cards))
+        self.bonusTraversal = list(range(len(self.cards)))
 
         self.bonusGlow = render.attachNewNode('bonusGlow')
 
@@ -325,7 +325,7 @@ class DistributedPairingGame(DistributedMinigame):
             return
         # all of the remote toons have joined the game;
         # it's safe to show them now.
-        for index in xrange(self.numPlayers):
+        for index in range(self.numPlayers):
             avId = self.avIdList[index]
             # Find the actual avatar in the cr
             toon = self.getAvatar(avId)
@@ -473,7 +473,7 @@ class DistributedPairingGame(DistributedMinigame):
         return newPos
 
     def getDeckOrderFromValue(self, value):
-        for index in xrange(len(self.cards)):
+        for index in range(len(self.cards)):
             if self.cards[index].value == value:
                 return index
         return -1
@@ -765,10 +765,10 @@ class DistributedPairingGame(DistributedMinigame):
         halfRow = self.cardsPerRow / 2
         if self.cardsPerRow % 2:
             halfRow += 1
-        for i in xrange( halfRow):
-            for j in xrange(2):
+        for i in range( halfRow):
+            for j in range(2):
                 col = i + j*halfRow
-                for row in xrange(self.cardsPerCol):
+                for row in range(self.cardsPerCol):
                     card = self.getDeckOrderIndex(row,col)
                     if card > -1:
                         self.bonusTraversal.append(card)

@@ -9,10 +9,10 @@ from toontown.toonbase import ToontownGlobals
 from direct.showbase import DirectObject
 from toontown.toon import ToonDNA
 from direct.fsm import ClassicFSM, State, StateData
-import ClosetGUI
+from . import ClosetGUI
 from direct.task.Task import Task
-import ClosetGlobals
-import DistributedFurnitureItem
+from . import ClosetGlobals
+from . import DistributedFurnitureItem
 from toontown.toonbase import TTLocalizer
 
 class DistributedCloset(DistributedFurnitureItem.DistributedFurnitureItem):
@@ -305,12 +305,12 @@ class DistributedCloset(DistributedFurnitureItem.DistributedFurnitureItem):
 
                     # print out our clothes and closet information before we start
                     print ("-----------Starting closet interaction-----------")
-                    print "customerId: %s, gender: %s, ownerId: %s" % (self.av.doId, self.av.style.gender, ownerId)
-                    print "current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
+                    print("customerId: %s, gender: %s, ownerId: %s" % (self.av.doId, self.av.style.gender, ownerId))
+                    print("current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
                                                                            self.av.style.sleeveTex, self.av.style.sleeveTexColor,
-                                                                           self.av.style.botTex, self.av.style.botTexColor)
-                    print "topsList = %s" % self.av.getClothesTopsList()
-                    print "bottomsList = %s" % self.av.getClothesBottomsList()
+                                                                           self.av.style.botTex, self.av.style.botTexColor))
+                    print("topsList = %s" % self.av.getClothesTopsList())
+                    print("bottomsList = %s" % self.av.getClothesBottomsList())
                     print ("-------------------------------------------------")
                     
                     if not self.isOwner:
@@ -547,12 +547,12 @@ class DistributedCloset(DistributedFurnitureItem.DistributedFurnitureItem):
                 
                 # print out our clothes and closet information before we start
                 print ("-----------ending closet interaction-----------")
-                print "avid: %s, gender: %s" % (self.av.doId, self.av.style.gender)
-                print "current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
+                print("avid: %s, gender: %s" % (self.av.doId, self.av.style.gender))
+                print("current top = %s,%s,%s,%s and  bot = %s,%s," % (self.av.style.topTex, self.av.style.topTexColor,
                                                                        self.av.style.sleeveTex, self.av.style.sleeveTexColor,
-                                                                       self.av.style.botTex, self.av.style.botTexColor)
-                print "topsList = %s" % self.av.getClothesTopsList()
-                print "bottomsList = %s" % self.av.getClothesBottomsList()
+                                                                       self.av.style.botTex, self.av.style.botTexColor))
+                print("topsList = %s" % self.av.getClothesTopsList())
+                print("bottomsList = %s" % self.av.getClothesBottomsList())
                 print ("-------------------------------------------------")
                 
                 self.resetCloset()

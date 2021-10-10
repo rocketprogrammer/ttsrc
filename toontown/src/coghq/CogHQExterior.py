@@ -174,7 +174,7 @@ class CogHQExterior(BattlePlace.BattlePlace):
         # If the request comes from a battle, let the battle handle
         # the teleport animation sequence, otherwise use the distributed
         # toon version
-        if (requestStatus.has_key('battle')):
+        if ('battle' in requestStatus):
             self.__teleportOutDone(requestStatus)
         else:
             BattlePlace.BattlePlace.enterTeleportOut(self, requestStatus,

@@ -7,8 +7,8 @@ from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
 
 from otp.level import BasicEntities
-import DistributedSwitchBase
-import MovingPlatform
+from . import DistributedSwitchBase
+from . import MovingPlatform
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM, State
@@ -156,7 +156,7 @@ class DistributedSwitch(
         required dc field.
         """
         assert(self.debugPrint("setAvatarInteract(%s)"%(avatarId,)))
-        assert(not self.__dict__.has_key(avatarId))
+        assert(avatarId not in self.__dict__)
         self.avatarId=avatarId
 
     def setState(self, state, timestamp):

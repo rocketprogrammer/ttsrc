@@ -6,5 +6,5 @@
 # speedChat.getEventName(eventBaseName)
 # where 'speedChat' is your SpeedChat object, and 'eventBaseName' is
 # one of the following:
-from TTSCToontaskTerminal   import TTSCToontaskMsgEvent
-from TTSCResistanceTerminal   import TTSCResistanceMsgEvent
+from .TTSCToontaskTerminal   import TTSCToontaskMsgEvent
+from .TTSCResistanceTerminal   import TTSCResistanceMsgEvent

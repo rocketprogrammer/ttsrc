@@ -1,6 +1,6 @@
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-import CatalogItemPanel
+from . import CatalogItemPanel
 
 # how many items of master list are visible at once in the scrolling list
 NUM_ITEMS_SHOWN = 3

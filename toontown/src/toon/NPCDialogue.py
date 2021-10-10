@@ -1,7 +1,7 @@
 from toontown.toonbase import TTLocalizer
 from direct.distributed.ClockDelta import *
 from direct.directnotify import DirectNotifyGlobal
-import DistributedNPCToonBaseAI
+from . import DistributedNPCToonBaseAI
 from direct.task import Task
 import random
 
@@ -37,7 +37,7 @@ class NPCDialogue:
         Find the participant that has the most number of things to say
         """
         self.maxNumMsgs = 0
-        for participant, spiel in self.conversation.items():
+        for participant, spiel in list(self.conversation.items()):
             if len(spiel)>self.maxNumMsgs and participant[1] in self.participants:
                 self.maxNumMsgs = len(spiel)
     
@@ -54,7 +54,7 @@ class NPCDialogue:
         if self.getNumParticipants() > self.getMaxParticipants():
             return False
         if participant:
-            for partPos in self.conversation.keys():
+            for partPos in list(self.conversation.keys()):
                 if partPos[1] == participant.npcId:
                     if not (participant.npcId in self.participants):
                         self.participants[participant.npcId] = [participant]
@@ -94,14 +94,14 @@ class NPCDialogue:
         """
         nextParticipant = None
         
-        for partPos in self.conversation.keys():
+        for partPos in list(self.conversation.keys()):
             if partPos[1] == self.currentParticipant:
                 nextPos = partPos[0]+1
                 break
         if nextPos>len(self.conversation):
             nextPos = 1
             self.participantProgress = (self.participantProgress+1)%self.maxNumMsgs
-        for partPos in self.conversation.keys():
+        for partPos in list(self.conversation.keys()):
             if partPos[0] == nextPos:
                 nextParticipant = partPos[1]
                 return nextParticipant
@@ -153,7 +153,7 @@ class NPCDialogue:
             return Task.done
             
         # Increment the participantProgress
-        for partPos in self.conversation.keys():
+        for partPos in list(self.conversation.keys()):
             if partPos[1] == self.currentParticipant:
                 convKey = partPos
                 break

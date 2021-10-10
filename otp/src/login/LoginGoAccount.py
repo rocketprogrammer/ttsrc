@@ -4,7 +4,7 @@ registry, e.g. a DMC 'blue' token."""
 from pandac.PandaModules import *
 from direct.distributed.MsgTypes import *
 from direct.directnotify import DirectNotifyGlobal
-import LoginBase
+from . import LoginBase
 from direct.distributed.PyDatagram import PyDatagram
 
 

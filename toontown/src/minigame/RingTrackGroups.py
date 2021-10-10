@@ -1,11 +1,11 @@
 """RingTrackGroups.py: contains various Ring Game ring track groups"""
 
 import math
-import RingGameGlobals
-import RingAction
-import RingTracks
-import RingTrack
-import RingTrackGroup
+from . import RingGameGlobals
+from . import RingAction
+from . import RingTracks
+from . import RingTrack
+from . import RingTrackGroup
 from direct.showbase import PythonUtil
 
 # ringTrackGroup types/difficulty levels
@@ -176,7 +176,7 @@ def __get_Slots(numRings, rng, vertical=1):
     # staying within bounds
     offset = 1 - fpTab[-1]
     offset = (rng.random() * (offset*2)) - offset
-    fpTab = map(lambda x: x+offset, fpTab)
+    fpTab = [x+offset for x in fpTab]
     
     for i in range(0,numRings):
         if vertical:

@@ -276,7 +276,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         # are not.  Returns a list of the removed avId's.  This is
         # normally used for magic word purposes only.
         removed = []
-        for avId in self.avatarZones.keys():
+        for avId in list(self.avatarZones.keys()):
             if avId not in self.air.doId2do:
                 # Here's one for removing.
                 removed.append(avId)
@@ -459,7 +459,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         if simbase.fakeDistrictPopulations:
             return 0
         answer = 0
-        hoodIds = self.welcomeValleys.keys()
+        hoodIds = list(self.welcomeValleys.keys())
         for hoodId in hoodIds:
             hood = self.welcomeValleys[hoodId]
             answer += hood[0].getHoodPopulation()
@@ -471,7 +471,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         # of the Welcome Valley hoods.
 
         self.notify.info("Current Welcome Valleys:")
-        hoodIds = self.welcomeValleys.keys()
+        hoodIds = list(self.welcomeValleys.keys())
         hoodIds.sort()
         for hoodId in hoodIds:
             hood = self.welcomeValleys[hoodId]

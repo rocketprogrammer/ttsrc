@@ -26,12 +26,12 @@ HOOD_IDS = {'TT': 'toontown_central',
 NEIGHBORHOODS = []
 NEIGHBORHOOD_CODES = {}
 for hoodId in hoods:
-    if HOOD_IDS.has_key(hoodId):
+    if hoodId in HOOD_IDS:
         hoodName = HOOD_IDS[hoodId]
         NEIGHBORHOOD_CODES[hoodName] = hoodId
         NEIGHBORHOODS.append(hoodName)
     else:
-        print 'Error: no hood defined for: ', hoodId
+        print('Error: no hood defined for: ', hoodId)
 
 dnaDirectory = Filename.expandFrom(base.config.GetString("dna-directory", "$TTMODELS/src/dna"))
 
@@ -362,13 +362,13 @@ def importModule(dcImports, moduleName, importSymbols):
             if hasattr(module, "__all__"):
                 importSymbols = module.__all__
             else:
-                importSymbols = module.__dict__.keys()
+                importSymbols = list(module.__dict__.keys())
 
         for symbolName in importSymbols:
             if hasattr(module, symbolName):
                 dcImports[symbolName] = getattr(module, symbolName)
             else:
-                raise StandardError, 'Symbol %s not defined in module %s.' % (symbolName, moduleName)
+                raise Exception('Symbol %s not defined in module %s.' % (symbolName, moduleName))
     else:
         # "import moduleName"
 

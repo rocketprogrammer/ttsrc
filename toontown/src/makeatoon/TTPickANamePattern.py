@@ -15,7 +15,7 @@ class TTPickANamePattern(PickANamePatternTwoPartLastName):
             TTPickANamePattern.NameParts['f'] = ng.getFemaleNameParts()
 
         # make sure the dicts haven't been inverted
-        assert type(TTPickANamePattern.NameParts[gender][0].keys()[0]) is types.StringType
+        assert type(list(TTPickANamePattern.NameParts[gender][0].keys())[0]) is bytes
 
         return TTPickANamePattern.NameParts[gender]
 

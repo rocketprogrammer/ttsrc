@@ -5,8 +5,8 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
-import FlowerSpeciesPanel
-import GardenGlobals
+from . import FlowerSpeciesPanel
+from . import GardenGlobals
 
 class FlowerBrowser(DirectScrolledList):
     """
@@ -54,7 +54,7 @@ class FlowerBrowser(DirectScrolledList):
             # Make the disabled button fade out
             ('decButton_image3_color',   Vec4(0.8,0.8,0.8,0.5), None),
             ('numItemsVisible',                              1, None),
-            ('items',        map(str, GardenGlobals.getFlowerSpecies()), None),
+            ('items',        list(map(str, GardenGlobals.getFlowerSpecies())), None),
             ('scrollSpeed',                                  4, None),
             ('itemMakeFunction',         FlowerSpeciesPanel.FlowerSpeciesPanel, None),
             ('itemMakeExtraArgs',                         base.localAvatar.flowerCollection, None),

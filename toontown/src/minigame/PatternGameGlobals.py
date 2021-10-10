@@ -1,7 +1,7 @@
 # PatternGameGlobals.py: contains pattern game stuff
 # used by AI and client
 
-import MinigameGlobals
+from . import MinigameGlobals
 
 # pattern constants
 INITIAL_ROUND_LENGTH = 2

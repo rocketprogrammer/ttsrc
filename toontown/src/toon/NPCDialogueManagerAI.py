@@ -1,6 +1,6 @@
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
-import NPCDialogue
+from . import NPCDialogue
 
 class NPCDialogueManagerAI:
     """

@@ -2,7 +2,7 @@
 ToonTown Prop object
 """
 
-from ToonTownObj import *
+from .ToonTownObj import *
 
 class PropObj(ToonTownObj):
     def __init__(self, editor, propType, dna=None, nodePath=None, nameStr=None):

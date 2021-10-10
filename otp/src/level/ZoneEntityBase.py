@@ -1,7 +1,7 @@
 """ZoneEntityBase module: contains the ZoneEntityBase class"""
 
-import Entity
-import LevelConstants
+from . import Entity
+from . import LevelConstants
 
 class ZoneEntityBase(Entity.Entity):
     def __init__(self, level, entId):

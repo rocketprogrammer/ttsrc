@@ -1,6 +1,6 @@
 """SCGMTextTerminal.py: contains the SCGMTextTerminal class"""
 
-from SCTerminal import SCTerminal
+from .SCTerminal import SCTerminal
 from otp.speedchat import SpeedChatGMHandler
 
 # args: textId

@@ -2,7 +2,7 @@
 The Avatar Manager handles all the avatar (avatar groups) accross all districts.
 """
 
-from cPickle import loads, dumps
+from pickle import loads, dumps
 from direct.distributed import DistributedObject
 from direct.directnotify import DirectNotifyGlobal
 

@@ -8,7 +8,7 @@ from direct.showbase import BulletinBoardWatcher
 from direct.interval.IntervalGlobal import *
 from otp.otpbase import OTPGlobals
 from direct.interval.IntervalGlobal import *
-from RaceGag import RaceGag
+from .RaceGag import RaceGag
 from toontown.toonbase import ToontownGlobals, TTLocalizer
 from toontown.toon import ToonHeadFrame
 from toontown.racing.KartDNA import InvalidEntry, getAccessory, getDefaultColor
@@ -16,8 +16,8 @@ from pandac.PandaModules import CardMaker, OrthographicLens, LineSegs
 from direct.distributed import DistributedSmoothNode
 from math import fmod
 from math import sqrt
-from RaceGUI import RaceGUI
-import RaceGlobals
+from .RaceGUI import RaceGUI
+from . import RaceGlobals
 from direct.task.Task import Task
 from toontown.hood import SkyUtil
 from direct.fsm import ClassicFSM, State
@@ -352,13 +352,13 @@ class DistributedRace(DistributedObject.DistributedObject):
 
         avatar=base.cr.doId2do.get(avId,None)
         if(avatar):
-            print ("circuit trophies %s" % (trophies))
-            print ("winnings %s" % (winnings))
+            print(("circuit trophies %s" % (trophies)))
+            print(("winnings %s" % (winnings)))
             #self.gui.racerFinishedCircuit(avId, place, winnings, trophies)
             self.gui.racerFinishedCircuit(avId, oldPlace, entryFee, winnings, bonus,trophies)
 
     def endCircuitRace(self):
-        print self.placeFixup
+        print(self.placeFixup)
         self.gui.circuitFinished(self.placeFixup)
 
     def prepForRace(self):
@@ -1289,7 +1289,7 @@ class DistributedRace(DistributedObject.DistributedObject):
                     elif side == 'outersidest':
                         dict = self.outerBarricadeDict
 
-                    if dict.has_key(segmentInd):
+                    if segmentInd in dict:
                         self.currBldgGroups[side] = dict[segmentInd]
                 
                     #we should have the correct value in currBldgGroups at this point
@@ -1406,7 +1406,7 @@ class DistributedRace(DistributedObject.DistributedObject):
                             else:
                                 self.notify.error("unhandled side")
                             
-                            if dict.has_key(i):
+                            if i in dict:
                                 if not bldgGroupIndex in dict[i]:
                                     dict[i].append(bldgGroupIndex)
                                     #self.notify.debug("%s BarrierDict[%d] = %s" % (side, i, dict[i]))                                
@@ -1432,7 +1432,7 @@ class DistributedRace(DistributedObject.DistributedObject):
                             else:
                                 self.notify.error("unhandled side")
                              
-                            if dict.has_key(i):
+                            if i in dict:
                                 if not bldgGroupIndex in dict[i]:
                                    dict[i].append(bldgGroupIndex)
                                    #self.notify.debug("%s BarrierDict[%d] = %s" % (side, i, dict[i])) 
@@ -1699,7 +1699,7 @@ class DistributedRace(DistributedObject.DistributedObject):
         idStr = into.getTag('boostId')
         arrowVec = self.boostDir.get(idStr)
         if arrowVec == None:
-            print "Unknown boost arrow %s" % (idStr)
+            print("Unknown boost arrow %s" % (idStr))
             return
 
         # Get the forward direction of the kart

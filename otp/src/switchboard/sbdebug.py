@@ -10,17 +10,17 @@ import getopt
 try:
     opts,args = getopt.getopt(sys.argv[1:], "h:n:p:u:exw:m:sci")
 except getopt.GetoptError:
-    print "Switchboard Debugger Options:"
-    print "-h hostname - Specify NS hostname"
-    print "-p port - specify NS port"
-    print "-n wedgename - Connect to wedge, required to issue any command"
-    print "-u usernumber - Specify user to perform action"
-    print "-e - Enter Player"
-    print "-x - Exit Player"
-    print "-w recipient -m message - Whisper to recipient with message"
-    print "-c checkSocket"
-    print "-i interactive"
-    print "-s - Shutdown this node"
+    print("Switchboard Debugger Options:")
+    print("-h hostname - Specify NS hostname")
+    print("-p port - specify NS port")
+    print("-n wedgename - Connect to wedge, required to issue any command")
+    print("-u usernumber - Specify user to perform action")
+    print("-e - Enter Player")
+    print("-x - Exit Player")
+    print("-w recipient -m message - Whisper to recipient with message")
+    print("-c checkSocket")
+    print("-i interactive")
+    print("-s - Shutdown this node")
     sys.exit(2)
 
 NShost = "localhost"
@@ -62,10 +62,10 @@ for o,a in opts:
 
 
 if wedgename == "":
-    print "Please pass a node name with -n."
+    print("Please pass a node name with -n.")
     sys.exit(2)
 if action == "":
-    print "No action specified!  Doing nothing."
+    print("No action specified!  Doing nothing.")
     sys.exit(0)
 
 
@@ -88,7 +88,7 @@ try:
 
     elif action == "interactive":
         wedge = Pyro.core.getProxyForURI(ns.resolve(":sb.wedge.%s"%wedgename))
-        print wedge
+        print(wedge)
         import pdb
         pdb.set_trace()
 
@@ -105,6 +105,6 @@ try:
     elif action == "checkSocket":
         wedge = Pyro.core.getProxyForURI(ns.resolve(":sb.wedge.%s"%wedgename))
         wedge.checkSocket()
-except Exception, x:
-    print ''.join(Pyro.util.getPyroTraceback(x))
+except Exception as x:
+    print(''.join(Pyro.util.getPyroTraceback(x)))
     sys.stdout.flush()

@@ -1,7 +1,7 @@
 """LevelMgrAI module: contains the LevelMgrAI class"""
 
 from direct.showbase.PythonUtil import Functor
-import LevelMgrBase
+from . import LevelMgrBase
 
 class LevelMgrAI(LevelMgrBase.LevelMgrBase):
     """This class manages editable AI level attributes"""
@@ -45,7 +45,7 @@ class LevelMgrAI(LevelMgrBase.LevelMgrBase):
 
     def privCreateSortedZoneIdList(self):
         # sort the zoneNums
-        zoneNums = self.level.zoneNum2zoneId.keys()
+        zoneNums = list(self.level.zoneNum2zoneId.keys())
         zoneNums.sort()
 
         # create a list of network zoneIds, ordered by their corresponding

@@ -4,7 +4,7 @@ from direct.showbase.DirectObject import DirectObject
 from toontown.toonbase.ToontownGlobals import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.interval.IntervalGlobal import *
-import DivingGameGlobals
+from . import DivingGameGlobals
 
 # a treasure that has some information on who grabbed it
 # and a moveLerp

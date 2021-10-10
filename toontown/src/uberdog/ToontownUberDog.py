@@ -130,7 +130,7 @@ class ToontownUberDog(UberDog):
     if __debug__:
         def status(self):
             if self.isGiftingManager:
-                print "deliveryManager is", self.deliveryManager
+                print("deliveryManager is", self.deliveryManager)
             if self.isFriendsManager:
-                print "playerFriendsManager is ",self.playerFriendsManager
+                print("playerFriendsManager is ",self.playerFriendsManager)
             

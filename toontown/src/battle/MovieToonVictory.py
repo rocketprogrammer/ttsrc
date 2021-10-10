@@ -1,8 +1,8 @@
 from direct.interval.IntervalGlobal import *
-from RewardPanel import *
-from BattleSounds import *
+from .RewardPanel import *
+from .BattleSounds import *
 
-import MovieCamera
+from . import MovieCamera
 from direct.directnotify import DirectNotifyGlobal
 import types
 
@@ -31,7 +31,7 @@ def doToonVictory(localToonActive, toons, rewardToonIds, rewardDicts,
     countToons = 0
     uberListNew = []
     for t in toons:
-        if isinstance(t, types.IntType):
+        if isinstance(t, int):
             t = base.cr.doId2do.get(t)
         if t:
             toonList.append(t)

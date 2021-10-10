@@ -1,8 +1,8 @@
 """SCTerminal.py: contains the SCTerminal class"""
 
-from SCElement import SCElement
-from SCObject import SCObject
-from SCMenu import SCMenu
+from .SCElement import SCElement
+from .SCObject import SCObject
+from .SCMenu import SCMenu
 from direct.fsm.StatePush import StateVar, FunctionCall
 from direct.showbase.DirectObject import DirectObject
 from otp.avatar import Emote

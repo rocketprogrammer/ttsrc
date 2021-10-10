@@ -1,12 +1,12 @@
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
-from BattleProps import *
+from .BattleBase import *
+from .BattleProps import *
 
 from direct.directnotify import DirectNotifyGlobal
 import random
 from direct.particles import ParticleEffect
-import BattleParticles
-import BattleProps
+from . import BattleParticles
+from . import BattleProps
 from toontown.toonbase import TTLocalizer
 
 notify = DirectNotifyGlobal.directNotify.newCategory('MovieUtil')

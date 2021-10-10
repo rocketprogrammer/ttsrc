@@ -304,7 +304,7 @@ class DistributedPartyCannon(DistributedObject, Cannon):
         
             
         # Place toon inside cannon
-        if self.cr.doId2do.has_key(avId):
+        if avId in self.cr.doId2do:
             # If the toon exists, look it up
             self.toonInsideAvId = avId
             self.notify.debug("enterCannon self.toonInsideAvId=%d" % self.toonInsideAvId)
@@ -406,7 +406,7 @@ class DistributedPartyCannon(DistributedObject, Cannon):
             if not hasattr(place, 'fsm'):
                 return
             placeState = place.fsm.getCurrentState().getName()
-            print placeState
+            print(placeState)
             if (placeState != "fishing"):
                 if (av != None):
                     av.startSmooth()

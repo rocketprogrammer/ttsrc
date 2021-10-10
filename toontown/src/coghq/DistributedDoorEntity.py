@@ -10,7 +10,7 @@ from direct.distributed.ClockDelta import *
 
 from toontown.toonbase import ToontownGlobals
 from direct.directnotify import DirectNotifyGlobal
-import DistributedDoorEntityBase
+from . import DistributedDoorEntityBase
 from direct.fsm import FourState
 from direct.fsm import ClassicFSM
 from otp.level import DistributedEntity
@@ -72,7 +72,7 @@ class DistributedDoorEntityLock(DistributedDoorEntityBase.LockBase, FourState.Fo
         if self.track is not None:
             self.track.pause()
             self.track = None
-        for i in self.states.keys():
+        for i in list(self.states.keys()):
             del self.states[i]
         self.states = []
         self.fsm = None           
@@ -303,7 +303,7 @@ class DistributedDoorEntity(
             i.takedown()
         self.locks = []
         self.fsm = None
-        for i in self.states.keys():
+        for i in list(self.states.keys()):
             del self.states[i]
         self.states = []
     
@@ -463,7 +463,7 @@ class DistributedDoorEntity(
             # Top Door:
             door = doorway.find("doortop")
             if door.isEmpty(): #Hack#*#
-                print "doortop hack"
+                print("doortop hack")
                 door = doorway.attachNewNode("doortop")
                 doorway.find("doortop1").reparentTo(door)
                 doorway.find("doortop2").reparentTo(door)
@@ -503,7 +503,7 @@ class DistributedDoorEntity(
             # Bottom Door:
             door = doorway.find("doorbottom")
             if door.isEmpty(): #Hack#*#
-                print "doorbottom hack"
+                print("doorbottom hack")
                 door = doorway.attachNewNode("doorbottom")
                 doorway.find("doorbottom1").reparentTo(door)
                 doorway.find("doorbottom2").reparentTo(door)

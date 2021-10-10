@@ -1,6 +1,6 @@
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
-import Quests
+from . import Quests
 from toontown.toon import NPCToons
 from toontown.toon import ToonHead
 from toontown.toon import ToonDNA
@@ -434,7 +434,7 @@ class QuestPoster(DirectFrame):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
         quest = Quests.getQuest(questId)
         if quest == None:
-            print "Tried to display poster for unknown quest %s" % (questId)
+            print("Tried to display poster for unknown quest %s" % (questId))
             return
         # Update reward info
         if rewardId == Quests.NA:
@@ -514,8 +514,8 @@ class QuestPoster(DirectFrame):
         auxTextPos = Vec3(0,0,0.12)
         headlineString = quest.getHeadlineString()
         objectiveStrings = quest.getObjectiveStrings()
-        assert type(objectiveStrings) in (types.ListType, types.TupleType)
-        captions = map(string.capwords,quest.getObjectiveStrings())
+        assert type(objectiveStrings) in (list, tuple)
+        captions = list(map(string.capwords,quest.getObjectiveStrings()))
         imageColor = Vec4(*self.colors['white'])        
         # Adjust poster for the particular quest type
         if ((quest.getType() == Quests.DeliverGagQuest) or
@@ -702,7 +702,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -739,7 +739,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -776,7 +776,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -813,7 +813,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogPartQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -852,7 +852,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -889,7 +889,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -926,7 +926,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsCogNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -959,7 +959,7 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                 captions = [quest.getCaption()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsRescueQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -1022,7 +1022,7 @@ class QuestPoster(DirectFrame):
             infoText = TTLocalizer.QuestPosterPlayground
             if not fComplete:
                 captions = [TTLocalizer.QuestsMinigameNewbieQuestCaption % quest.getNewbieLevel()]
-                captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                 auxText = TTLocalizer.QuestsMinigameNewbieQuestAux
                 lPos.setX(-0.18)
                 self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -1086,7 +1086,7 @@ class QuestPoster(DirectFrame):
                 if not fComplete:
                     headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                     captions = [quest.getCaption()]
-                    captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                    captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                     auxText = TTLocalizer.QuestsCogNewbieQuestAux
                     lPos.setX(-0.18)
                     self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())
@@ -1135,7 +1135,7 @@ class QuestPoster(DirectFrame):
                 if not fComplete:
                     headlineString = TTLocalizer.QuestsNewbieQuestHeadline
                     captions = [quest.getCaption()]
-                    captions.append(map(string.capwords, quest.getObjectiveStrings()))
+                    captions.append(list(map(string.capwords, quest.getObjectiveStrings())))
                     auxText = TTLocalizer.QuestsCogNewbieQuestAux
                     lPos.setX(-0.18)
                     self.laffMeter = self.createLaffMeter(quest.getNewbieLevel())

@@ -1,6 +1,6 @@
 """LevelMgrBase module: contains the LevelMgrBase class"""
 
-import Entity
+from . import Entity
 
 class LevelMgrBase(Entity.Entity):
     """This class contains LevelMgr code shared by the AI and client"""

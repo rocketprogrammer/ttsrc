@@ -12,7 +12,7 @@ class NonRepeatableRandomSourceAI(DistributedObjectAI):
 
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
-        self._contextGen = SerialMaskedGen((1L<<32)-1)
+        self._contextGen = SerialMaskedGen((1<<32)-1)
         self._requests = {}
         # in case the UD goes down before ack-ing, send a sample every few minutes
         self._sampleTask = self.doMethodLater(3 * 60, self._sampleRandomTask, self.uniqueName('sampleRandom'))
@@ -33,7 +33,7 @@ class NonRepeatableRandomSourceAI(DistributedObjectAI):
         self.air.sendUpdateToDoId('NonRepeatableRandomSource',
                                   'randomSample',
                                   OtpDoGlobals.OTP_DO_ID_TOONTOWN_NON_REPEATABLE_RANDOM_SOURCE,
-                                  [self.doId, int(random.randrange(1L << 32))]
+                                  [self.doId, int(random.randrange(1 << 32))]
                                   )
 
     def randomSampleAck(self):
@@ -47,7 +47,7 @@ class NonRepeatableRandomSourceAI(DistributedObjectAI):
         """
         if num is None:
             num = 1
-        context = self._contextGen.next()
+        context = next(self._contextGen)
         self._requests[context] = (callback, )
         self.air.sendUpdateToDoId('NonRepeatableRandomSource',
                                   'getRandomSamples',
@@ -61,7 +61,7 @@ class NonRepeatableRandomSourceAI(DistributedObjectAI):
         
     if __debug__:
         def printSamples(self, samples):
-            print samples
+            print(samples)
             
         def testRandom(self):
             self.getRandomSamples(self.printSamples, 100)

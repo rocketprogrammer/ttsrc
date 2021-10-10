@@ -32,9 +32,9 @@ from toontown.effects import Splash
 from toontown.minigame.MinigamePowerMeter import MinigamePowerMeter
 from toontown.minigame.ArrowKeys import ArrowKeys
 
-import PartyGlobals
-import PartyUtils
-from DistributedPartyTeamActivity import DistributedPartyTeamActivity
+from . import PartyGlobals
+from . import PartyUtils
+from .DistributedPartyTeamActivity import DistributedPartyTeamActivity
 
 class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
 
@@ -219,7 +219,7 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
         """
         assert(self.notify.debug("handleToonDisabled( toonId:%d )" %toonId ))
         
-        if self.toonIdsToAnimIntervals.has_key(toonId):
+        if toonId in self.toonIdsToAnimIntervals:
             if self.toonIdsToAnimIntervals[toonId]:
                 if self.toonIdsToAnimIntervals[toonId].isPlaying():
                     self.toonIdsToAnimIntervals[toonId].finish()
@@ -669,7 +669,7 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
                 if self.getAvatar(toonId):
                     self.getAvatar(toonId).loop("victory")
         
-        for ival in self.toonIdsToAnimIntervals.values():
+        for ival in list(self.toonIdsToAnimIntervals.values()):
             if ival is not None:
                 ival.finish()
     
@@ -873,7 +873,7 @@ class DistributedPartyTugOfWarActivity(DistributedPartyTeamActivity):
         if self.activityFSM.state != "Active":
             return
         toon = self.getAvatar(toonId)
-        if not self.toonIdsToIsPullingFlags.has_key(toonId):
+        if toonId not in self.toonIdsToIsPullingFlags:
             if self.getTeam(toonId) == None:
                 self.notify.warning("setAnimState called with toonId (%d) that wasn't in self.toonIds" %toonId)
                 return

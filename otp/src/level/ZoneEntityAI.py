@@ -1,6 +1,6 @@
 """ZoneEntityAI module: contains the ZoneEntityAI class"""
 
-import ZoneEntityBase
+from . import ZoneEntityBase
 
 class ZoneEntityAI(ZoneEntityBase.ZoneEntityBase):
     def __init__(self, level, entId):

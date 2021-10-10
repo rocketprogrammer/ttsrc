@@ -25,7 +25,7 @@ def getHTTPResponse(url, http, body=''):
     response = sr.readlines()
 
     # strip trailing newlines
-    for i in xrange(len(response)):
+    for i in range(len(response)):
         if response[i][-1] == '\n':
             response[i] = response[i][:-1]
 

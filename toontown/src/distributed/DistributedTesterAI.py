@@ -122,21 +122,21 @@ class DistributedTesterAI(DistributedObjectAI.DistributedObjectAI):
 
     def getMovie(self):
         msg = self.getMsg()
-        print "get movie", msg
+        print("get movie", msg)
         return msg
 
     def badMovie(self):
         return [-126, [955899898, 509065983, 960926492, 81065606], [680133635, 605541213, 292096447, 796580728], -26, -108, 62, 923747760, [-25682, -29341, -7593, 30016], -12694, 5591, [22660, -16418, -5502, 2241], -26, -101, 13, 52, 645424651, [-7770, -5732, 9321, -15618], 14005, 11185, [17463, -13305, -17446, 3621], 32, 13, 100, 35, 988348921, [-32722, -9363, -18511, 29851], 29093, 6620, [17046, -29729, -26187, -31586], 42, -10, -49, -2, 487248998, [29940, 6573, -30864, 2953], -8914, -9981, [-952, -20232, 16826, -834], 123, -45, -90, 12, [-28659, 27866, -24647, 23687], -29, 96, 0, 50, -127, -104, [31348, 30517, 24694, 24052], 64, -104, 18, -46, 42, 17, [5558, -896, -30330, -18004], 118, -121, -11, -122, 51, 6, [23869, 14629, -3689, 5496], 19, -122, -106]
 
     def d_setMovie(self):
-        print "about to send setMovie"
+        print("about to send setMovie")
         msg = self.getMovie()
         # msg = self.badMovie()
-        print "movie message: ", msg
+        print("movie message: ", msg)
         self.sendUpdate('setMovie', msg)
         stime = globalClock.getRealTime() + 2.0
         self.sendUpdate('setState', ['PlayMovie', globalClockDelta.localToNetworkTime(stime)])
-        print "sent setMovie"
+        print("sent setMovie")
 
     def sendMovieLoop(self, task):
         self.d_setMovie()

@@ -15,7 +15,7 @@ TEMP_MG_ID_COUNTER = ToontownGlobals.TravelGameId - 1
 TempMgCtors = {}
 
 def _printMessage(message):
-    print "\n\n!!!", message, "\n\n"
+    print("\n\n!!!", message, "\n\n")
 
 def _registerTempMinigame(name, Class, id, minPlayers=1, maxPlayers=4):
     """
@@ -30,7 +30,7 @@ def _registerTempMinigame(name, Class, id, minPlayers=1, maxPlayers=4):
         return
 
     assert minPlayers >= 1 and minPlayers <= 4 and maxPlayers >=1 and maxPlayers <= 4 and minPlayers <= maxPlayers
-    assert ToontownGlobals.MinigameNames.has_key(name) == False
+    assert (name in ToontownGlobals.MinigameNames) == False
     assert id is not None and id not in ToontownGlobals.MinigameIDs and id < ToontownGlobals.TravelGameId
 
     ToontownGlobals.MinigameIDs += (id,)

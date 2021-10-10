@@ -1,4 +1,4 @@
-from CatalogSurfaceItem import *
+from .CatalogSurfaceItem import *
 
 # Indicies into Wainscoting Textures Dictionary
 WSTTextureName = 0
@@ -112,7 +112,7 @@ class CatalogWainscotingItem(CatalogSurfaceItem):
             if colorIndex < len(colors):
                 return colors[colorIndex]
             else:
-                print "Warning: colorIndex not in colors. Returning white."
+                print("Warning: colorIndex not in colors. Returning white.")
                 return CT_WHITE
         else:
             return CT_WHITE
@@ -181,7 +181,7 @@ def getWainscotingRange(fromIndex, toIndex, *otherRanges):
         tos.append(otherRanges[i+1])
         i += 2
     
-    for patternIndex in WainscotingTypes.keys():
+    for patternIndex in list(WainscotingTypes.keys()):
         for fromIndex, toIndex in zip(froms,tos):
             if patternIndex >= fromIndex and patternIndex <= toIndex:
                 colors = WainscotingTypes[patternIndex][WSTColor]

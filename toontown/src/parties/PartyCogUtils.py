@@ -8,7 +8,7 @@ import math
 
 from pandac.PandaModules import NodePath, Point3
 
-import PartyGlobals
+from . import PartyGlobals
 
 inverse_e = 1.0/math.e
 

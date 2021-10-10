@@ -38,13 +38,13 @@ class DistributedTrophyMgrAI(DistributedObjectAI.DistributedObjectAI):
         Computes a list of score,avId pairs in sorted order, highest first
         """
         # Make a copy so we can manipulate it
-        i = map(lambda t: list(t), self.trophyDict.items())
+        i = [list(t) for t in list(self.trophyDict.items())]
             
         # Recompute only if the score is greater than the lowest score
         # or if there are less than 10 players in the list
         if ((score > self.__minLeaderScore) or (len(i) < 10)):        
             # Reverse the items so we have score first
-            map(lambda r: r.reverse(),i)
+            list(map(lambda r: r.reverse(),i))
             # Sort by score
             i.sort()
             # Reverse that score so highest are first
@@ -55,10 +55,10 @@ class DistributedTrophyMgrAI(DistributedObjectAI.DistributedObjectAI):
             
             # Keep some side tracking variables as an optimization so we
             # do not need to compute them every time.
-            self.__leaderScores = map(lambda t: t[0], self.__leaders)
+            self.__leaderScores = [t[0] for t in self.__leaders]
             self.__minLeaderScore = min(self.__leaderScores)
-            self.__leaderAvIds = map(lambda t: t[1], self.__leaders)
-            self.__leaderNames = map(lambda avId: self.nameDict[avId], self.__leaderAvIds)
+            self.__leaderAvIds = [t[1] for t in self.__leaders]
+            self.__leaderNames = [self.nameDict[avId] for avId in self.__leaderAvIds]
     
             self.notify.debug("recomputed leaders:\n leaderScores: %s\n leaderAvIds: %s\n leaderNames: %s" %
                               (self.__leaderScores, self.__leaderAvIds, self.__leaderNames))
@@ -94,7 +94,7 @@ class DistributedTrophyMgrAI(DistributedObjectAI.DistributedObjectAI):
             'trophy', avId, "%s|%s" % (score, addedScore))
 
     def removeTrophy(self, avId, numFloors):
-        if self.trophyDict.has_key(avId):
+        if avId in self.trophyDict:
             removedScore = self.getScoreFromNumFloors(numFloors)
             score = self.getTrophyScore(avId) - removedScore
             self.trophyDict[avId] = score
@@ -124,8 +124,8 @@ class DistributedTrophyMgrAI(DistributedObjectAI.DistributedObjectAI):
         """
         Returns a list of score,avId pairs in sorted order, highest first
         """
-        i = map(lambda t: list(t), self.trophyDict.items())
-        map(lambda r: r.reverse(),i)
+        i = [list(t) for t in list(self.trophyDict.items())]
+        list(map(lambda r: r.reverse(),i))
         i.sort()
         i.reverse()
         return i

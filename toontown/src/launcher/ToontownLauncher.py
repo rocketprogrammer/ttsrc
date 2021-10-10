@@ -138,11 +138,11 @@ if 1:   # flip this as necessary
     sys.stderr = logErr
 
     # Write to the log
-    print "\n\nStarting Toontown..."
-    print ("Current time: " + time.asctime(time.localtime(time.time()))
-           + " " + time.tzname[0])
-    print "sys.path = ", sys.path
-    print "sys.argv = ", sys.argv
+    print("\n\nStarting Toontown...")
+    print(("Current time: " + time.asctime(time.localtime(time.time()))
+           + " " + time.tzname[0]))
+    print("sys.path = ", sys.path)
+    print("sys.argv = ", sys.argv)
 
 from otp.launcher.LauncherBase import LauncherBase
 from otp.otpbase import OTPLauncherGlobals
@@ -186,7 +186,7 @@ class ToontownLauncher(LauncherBase):
             self.testServerFlag = int(sys.argv[4])
         else:
             # This error message is a little too helpful for potential hackers
-            print "Error: Launcher: incorrect number of parameters"
+            print("Error: Launcher: incorrect number of parameters")
             sys.exit()
 
         # Used to pass to server for authentication
@@ -279,14 +279,14 @@ class ToontownLauncher(LauncherBase):
                 dict[name] = int(value)
 
         self.secretNeedsParentPasswordKey = 1                
-        if dict.has_key('secretsNeedsParentPassword'):
+        if 'secretsNeedsParentPassword' in dict:
             self.secretNeedsParentPasswordKey = 1 and dict['secretsNeedsParentPassword']
         else:
             self.notify.warning('no secretNeedsParentPassword token in webAcctParams')
         self.notify.info('secretNeedsParentPassword = %d' % self.secretNeedsParentPasswordKey)
 
         self.chatEligibleKey = 0
-        if dict.has_key('chatEligible'):
+        if 'chatEligible' in dict:
             self.chatEligibleKey = 1 and dict['chatEligible']
         else:
             self.notify.warning('no chatEligible token in webAcctParams')
@@ -339,15 +339,15 @@ class ToontownLauncher(LauncherBase):
 
         # You can only set strings and integers in here
         t = type(value)
-        if (t == types.IntType):
+        if (t == int):
             WindowsRegistry.setIntValue(self.toontownRegistryKey, name, value)
 
-        elif (t == types.StringType):
+        elif (t == bytes):
             WindowsRegistry.setStringValue(self.toontownRegistryKey, name,
                                            value)
         else:
             self.notify.warning("setRegistry: Invalid type for registry value: "
-                                + `value`)
+                                + repr(value))
 
     def getRegistry(self, name, missingValue = None):
         # Return the value of this key.

@@ -8,8 +8,8 @@ from direct.fsm import State
 from direct.task import Task
 import random
 from toontown.toonbase import ToontownGlobals
-import DistributedCCharBaseAI
-import CharStateDatasAI
+from . import DistributedCCharBaseAI
+from . import CharStateDatasAI
 from toontown.toonbase import TTLocalizer
 
 class DistributedSuperGoofyAI(DistributedGoofySpeedwayAI.DistributedGoofySpeedwayAI):

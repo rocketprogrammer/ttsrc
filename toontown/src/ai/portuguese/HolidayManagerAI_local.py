@@ -39,7 +39,7 @@ Holidays = {
     ToontownGlobals.NEWYEARS_FIREWORKS : HolidayInfo_Yearly(
     FireworkManagerAI.FireworkManagerAI,
     # PST: December 31, 07:00 - December 31, 22:00
-    [ (Month.DECEMBER, 31, 07, 0, 0),
+    [ (Month.DECEMBER, 31, 0o7, 0, 0),
     # Stop them in the middle of the final hour so we do not interrupt a show in the middle
       (Month.DECEMBER, 31, 22, 30, 0) ]
     ),

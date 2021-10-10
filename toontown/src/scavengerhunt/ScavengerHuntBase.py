@@ -35,7 +35,7 @@ class ScavengerHuntBase:
         """
         milestones = []
 
-        for milestone in self.milestones.keys():
+        for milestone in list(self.milestones.keys()):
             if mostRecentGoal in milestone and milestone.issubset(goals):
                 milestones.append(self.milestones[milestone])
         return milestones
@@ -48,7 +48,7 @@ class ScavengerHuntBase:
         """
         milestones = []
 
-        for milestone in self.milestones.keys():
+        for milestone in list(self.milestones.keys()):
             if(milestone.issubset(goals)):
                 milestones.append(self.milestones[milestone])
                                 

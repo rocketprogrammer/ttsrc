@@ -1,8 +1,8 @@
 import sys
 import time
 import socket
-import Queue
-import sbConfig
+import queue
+from . import sbConfig
 
 class sbLog:
     def __init__(self,name,clHost=None,clPort=6060):
@@ -10,7 +10,7 @@ class sbLog:
         self.clHost = clHost
         self.clPort = clPort
 
-        self.inMemLog = Queue.Queue()
+        self.inMemLog = queue.Queue()
 
         if clHost:
             # init UDP stuff
@@ -22,13 +22,13 @@ class sbLog:
 
     def output(self,level,msg):
         str = "%s %s(%s): %s"%(self.timeString(),self.name,level,msg)
-        print str
+        print(str)
         self.memLog(str)
         sys.stdout.flush()
 
     def chatoutput(self,msg):
         str = "%s %s(chat): %s"%(self.timeString(),self.name,msg)
-        print str
+        print(str)
         self.memLog(str)
         sys.stdout.flush()
 
@@ -39,7 +39,7 @@ class sbLog:
 
     def getMemLog(self):
         res = ""
-        for i in xrange(self.inMemLog.qsize()):
+        for i in range(self.inMemLog.qsize()):
             s = self.inMemLog.get()
             res += s + "\n"
             self.inMemLog.put(s)

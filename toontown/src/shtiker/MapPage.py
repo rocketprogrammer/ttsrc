@@ -1,6 +1,6 @@
 """MapPage module: contains the MapPage class"""
 
-import ShtikerPage
+from . import ShtikerPage
 from toontown.toonbase import ToontownGlobals
 from direct.showbase import PythonUtil
 from toontown.hood import ZoneUtil

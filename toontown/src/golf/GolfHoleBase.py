@@ -2,7 +2,7 @@ from direct.distributed import DistributedObjectAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from pandac.PandaModules import *
-import DistributedPhysicsWorldAI
+from . import DistributedPhysicsWorldAI
 from direct.fsm.FSM import FSM
 from toontown.ai.ToonBarrier import *
 from toontown.golf import GolfGlobals
@@ -95,7 +95,7 @@ class GolfHoleBase:
             self.golfBarrier = self.terrainModel.find('**/collision1')
             if not self.golfBarrier.isEmpty():
                 golfBarrierCollection = self.terrainModel.findAllMatches('**/collision?')
-                for i in xrange(golfBarrierCollection.getNumPaths()):
+                for i in range(golfBarrierCollection.getNumPaths()):
                     oneBarrier = golfBarrierCollection.getPath(i)
                     if oneBarrier != self.golfBarrier:
                         oneBarrier.wrtReparentTo(self.golfBarrier)

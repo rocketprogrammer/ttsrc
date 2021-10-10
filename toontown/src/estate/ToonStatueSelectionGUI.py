@@ -237,7 +237,7 @@ class ToonStatueSelectionGUI(DirectFrame):
             else:
                 # The request to the database takes too long, so we cache off the value
                 # everytime a new family avatar is clicked. Check this list before making a new database request.
-                if self.doId2Dna.has_key(friendId):
+                if friendId in self.doId2Dna:
                     self.createPreviewToon(self.doId2Dna[friendId])
                 else:
                     familyAvatar = DistributedToon.DistributedToon(base.cr)

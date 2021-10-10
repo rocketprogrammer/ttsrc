@@ -6,8 +6,8 @@ from direct.distributed import DistributedObject
 from direct.showutil import Rope
 import math
 from toontown.toonbase import ToontownGlobals
-import VineGameGlobals
-import VineSpider
+from . import VineGameGlobals
+from . import VineSpider
 
 class SwingVine(NodePath.NodePath):
     notify = DirectNotifyGlobal.directNotify.newCategory('SwingVine')
@@ -117,7 +117,7 @@ class SwingVine(NodePath.NodePath):
         if self.hasSpider:
             self.spider.destroy()
             del self.spider
-        for toonInfo in self.attachedToons.values():
+        for toonInfo in list(self.attachedToons.values()):
             attachNode = toonInfo[4]
             if attachNode:
                 attachNode.removeNode()
@@ -135,7 +135,7 @@ class SwingVine(NodePath.NodePath):
         self.links.append((self.topLink, Point3(0,0,0)))
 
         anchor = self.topLink
-        for linkNum in xrange(self.numLinks):
+        for linkNum in range(self.numLinks):
             anchor = self.__makeLink(anchor, linkNum)
             
         self.bottomLink = self.links[-1][0]
@@ -201,7 +201,7 @@ class SwingVine(NodePath.NodePath):
         self.tubes = []
         self.tubes2 = []
         radius = 0.5
-        for tubeIndex in xrange(self.numTubes):
+        for tubeIndex in range(self.numTubes):
             az = self.tubeLength / 2.0
             bz = - self.tubeLength / 2.0
             ct = CollisionTube(0, 0, az, 0, 0, bz, radius)
@@ -261,17 +261,17 @@ class SwingVine(NodePath.NodePath):
         # the cable.
         
         rope = Rope.Rope()
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             pass
             #self.notify.debug('%s %s' % (self.links[i][0], self.links[i][0].getPos()))
             
         rope.setup(min(len(self.links), 4), self.links)
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             pass
             #self.notify.debug('%s %s' % (self.links[i][0], self.links[i][0].getPos()))        
         rope.curve.normalizeKnots()
         self.notify.debug('after normalize Knots')
-        for i in xrange(len(self.links)):
+        for i in range(len(self.links)):
             pass
             #self.notify.debug('%s %s' % (self.links[i][0], self.links[i][0].getPos()))           
             
@@ -378,7 +378,7 @@ class SwingVine(NodePath.NodePath):
     def getAttachNode(self, toonId):
         """Return the attachNode for a toon, create one if needed."""
         retval = None
-        if self.attachedToons.has_key(toonId):
+        if toonId in self.attachedToons:
             existingAttachNode = self.attachedToons[toonId][4]
             if existingAttachNode:
                 retval = existingAttachNode
@@ -405,7 +405,7 @@ class SwingVine(NodePath.NodePath):
 
     def doubleCheckOffset(self, toonId):
         """In case we somehow got an offset of zero, recalculate it."""
-        if self.attachedToons.has_key(toonId):
+        if toonId in self.attachedToons:
             curOffset = self.attachedToons[toonId][3]
             if curOffset == Point3.zero():
                 newOffset = self.calcOffset(toonId)
@@ -447,7 +447,7 @@ class SwingVine(NodePath.NodePath):
         """
         the toon climbed up or down the vine
         """
-        if self.attachedToons.has_key(toonId):
+        if toonId in self.attachedToons:
             oldT = self.attachedToons[toonId][0]
             self.attachedToons[toonId][0] = t
             oldSwingType = self.calcSwingAnimType(oldT)
@@ -463,7 +463,7 @@ class SwingVine(NodePath.NodePath):
         """
         the toon climbed up or down the vine
         """
-        if self.attachedToons.has_key(toonId):
+        if toonId in self.attachedToons:
             curT = self.attachedToons[toonId][0]
             self.detachToon(toonId)
             self.attachToon(toonId, curT, facing)
@@ -475,7 +475,7 @@ class SwingVine(NodePath.NodePath):
     def detachToon(self, toonId):
         assert self.notify.debugStateCall(self)
         self.notify.debug('detachToon toonId=%d vineIndex=%d' % (toonId, self.vineIndex))
-        if self.attachedToons.has_key(toonId):
+        if toonId in self.attachedToons:
             self.attachedToons[toonId][4].removeNode()
             swingIval = self.attachedToons[toonId][6]
             if swingIval:
@@ -487,7 +487,7 @@ class SwingVine(NodePath.NodePath):
             del self.attachedToons[toonId]
 
     def getAttachedToonInfo(self, toonId):
-        if self.attachedToons.has_key(toonId):
+        if toonId in self.attachedToons:
             return self.attachedToons[toonId]
         else:
             return None
@@ -499,7 +499,7 @@ class SwingVine(NodePath.NodePath):
     def updateTubes(self):
         newPoint = Vec3(0,0,0)
         curve = self.rope.ropeNode.getCurve().evaluate()
-        for tubeIndex in xrange(self.numTubes):
+        for tubeIndex in range(self.numTubes):
             tube = self.tubes[tubeIndex]
             t = self.getCenterTForTube(tubeIndex)
             curve.evalPoint(t, newPoint)
@@ -514,7 +514,7 @@ class SwingVine(NodePath.NodePath):
             rAngle = -90 - degrees
             tube.setR(rAngle)
 
-        for tubeIndex in xrange(self.numTubes):
+        for tubeIndex in range(self.numTubes):
             tube = self.tubes2[tubeIndex]
             t = self.getCenterTForTube(tubeIndex)
             curve.evalPoint(t, newPoint)
@@ -559,7 +559,7 @@ class SwingVine(NodePath.NodePath):
 
     def updateAttachedToons(self):
         curve = self.rope.ropeNode.getCurve().evaluate()            
-        for avId in self.attachedToons.keys():
+        for avId in list(self.attachedToons.keys()):
             self.doubleCheckOffset(avId)
             t = self.attachedToons[avId][0]
             newPoint = Vec3(0,0,0)
@@ -832,7 +832,7 @@ class SwingVine(NodePath.NodePath):
     def setupSwingAnim(self, avId):
         """Figure out the swing anim when a toon has just attached to the vine."""
         #assert self.notify.debugStateCall(self)
-        if not self.attachedToons.has_key(avId):
+        if avId not in self.attachedToons:
             return
         av = base.cr.doId2do.get(avId)
         if not av:
@@ -868,6 +868,6 @@ class SwingVine(NodePath.NodePath):
         if self.unloading:
             return
         
-        for avId in self.attachedToons.keys():
+        for avId in list(self.attachedToons.keys()):
             #self.notify.debugStateCall(self)
             self.setupSwingAnim(avId)

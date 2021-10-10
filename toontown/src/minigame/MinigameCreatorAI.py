@@ -5,25 +5,25 @@ import time
 from toontown.toonbase import ToontownGlobals
 
 # Import all the minigames because we create them
-import DistributedMinigameTemplateAI
-import DistributedRaceGameAI
-import DistributedCannonGameAI
-import DistributedTagGameAI
-import DistributedPatternGameAI
-import DistributedRingGameAI
-import DistributedMazeGameAI
-import DistributedTugOfWarGameAI
-import DistributedCatchGameAI
-import DistributedDivingGameAI
-import DistributedTargetGameAI
-import DistributedPairingGameAI
-import DistributedPhotoGameAI
-import DistributedVineGameAI
-import DistributedIceGameAI
-import DistributedCogThiefGameAI
-import DistributedTwoDGameAI
-import DistributedTravelGameAI
-import TravelGameGlobals
+from . import DistributedMinigameTemplateAI
+from . import DistributedRaceGameAI
+from . import DistributedCannonGameAI
+from . import DistributedTagGameAI
+from . import DistributedPatternGameAI
+from . import DistributedRingGameAI
+from . import DistributedMazeGameAI
+from . import DistributedTugOfWarGameAI
+from . import DistributedCatchGameAI
+from . import DistributedDivingGameAI
+from . import DistributedTargetGameAI
+from . import DistributedPairingGameAI
+from . import DistributedPhotoGameAI
+from . import DistributedVineGameAI
+from . import DistributedIceGameAI
+from . import DistributedCogThiefGameAI
+from . import DistributedTwoDGameAI
+from . import DistributedTravelGameAI
+from . import TravelGameGlobals
 
 #------------------------------------------------------------------------------
 # This config allows devs to temporarily register temp games created with the minigame framework
@@ -140,9 +140,9 @@ def createMinigame(air, playerArray, trolleyZone,
 
     if ALLOW_TEMP_MINIGAMES:
         # Adds the temp minigames to the list of minigame creators...
-        from TempMinigameAI import TempMgCtors
+        from .TempMinigameAI import TempMgCtors
 
-        for key, value in TempMgCtors.items():
+        for key, value in list(TempMgCtors.items()):
             mgCtors[key] = value
 
 
@@ -161,7 +161,7 @@ def createMinigame(air, playerArray, trolleyZone,
         #import pdb; pdb.set_trace()
         mg = mgCtors[mgId](air, mgId)
     except KeyError:
-        raise Exception, "unknown minigame ID: %s" % mgId
+        raise Exception("unknown minigame ID: %s" % mgId)
 
     # Tell the minigame who we are expecting
     # do this before generating the minigame;
@@ -184,7 +184,7 @@ def createMinigame(air, playerArray, trolleyZone,
             avId = playerArray[index]
             votes = startingVotes[index]
             if votes < 0:
-                print('createMinigame negative votes, avId=%s votes=%s' %(avId, votes))
+                print(('createMinigame negative votes, avId=%s votes=%s' %(avId, votes)))
                 votes = 0
             mg.setStartingVote(avId, votes )
             #print('setting starting vote of %d to %d' % (avId,votes))

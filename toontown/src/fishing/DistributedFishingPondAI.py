@@ -1,8 +1,8 @@
 from direct.distributed import DistributedObjectAI
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
-import DistributedFishingTargetAI
-import FishingTargetGlobals
+from . import DistributedFishingTargetAI
+from . import FishingTargetGlobals
 from toontown.hood import ZoneUtil
 import random
 
@@ -32,7 +32,7 @@ class DistributedFishingPondAI(DistributedObjectAI.DistributedObjectAI):
     def delete(self):
         self.notify.debug("delete")
         # Delete all the targets
-        for target in self.targets.values():
+        for target in list(self.targets.values()):
             target.requestDelete()
         del self.targets
         DistributedObjectAI.DistributedObjectAI.delete(self)

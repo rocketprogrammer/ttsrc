@@ -18,7 +18,7 @@ class DistributedGagAI(DistributedObjectAI.DistributedObjectAI):
 
     def announceGenerate(self):
         DistributedObjectAI.DistributedObjectAI.announceGenerate(self)
-        print "I'm Here!!!!"
+        print("I'm Here!!!!")
 
     def delete(self):
         DistributedObjectAI.DistributedObjectAI.delete(self)

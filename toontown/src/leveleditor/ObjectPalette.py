@@ -1,7 +1,7 @@
 """
 ToonTown Object Palette will be automatically generated while loading storage DNA files
 """
-import __builtin__, os, glob
+import builtins, os, glob
 from pandac.PandaModules import *
 from direct.leveleditor.ObjectPaletteBase import *
 
@@ -238,13 +238,12 @@ class ObjectPalette(ObjectPaletteBase):
 
         if hoodName != 'Generic':
             codes = BUILDING_TYPES
-            codes.extend(map(lambda x: 'random%s'%x, ['10', '14', '20', '24', '25', '30']))
-            codes = map(lambda x:'%s_%s'%(hoodName, x), codes)
+            codes.extend(['random%s'%x for x in ['10', '14', '20', '24', '25', '30']])
+            codes = ['%s_%s'%(hoodName, x) for x in codes]
             codes.sort()
             self.populateTree(hoodName, 'Flat Buildings', codes, ObjectFlatBuilding)
 
-            codes = map(lambda s: s[7:],
-                      self.getCatalogCodes('street'))
+            codes = [s[7:] for s in self.getCatalogCodes('street')]
 
             for pond in ['BR', 'DD', 'DG', 'DL', 'MM', 'TT']:
                 if '%s_pond'%pond in codes:
@@ -252,14 +251,14 @@ class ObjectPalette(ObjectPaletteBase):
 
             if hoodName in ['BR', 'DD', 'DG', 'DL', 'MM', 'TT']:
                 codes.append('pond')
-            codes = map(lambda x:'%s_%s'%(hoodName, x), codes)
+            codes = ['%s_%s'%(hoodName, x) for x in codes]
 
             codes.sort()
             self.populateTree(hoodName, 'Streets', codes, ObjectStreet)
 
     def populateTree(self, hoodName, groupName, codeList, objClass):
         registeredList = []
-        for key in self.hoodDict.keys():
+        for key in list(self.hoodDict.keys()):
             if self.hoodDict[key].get(groupName):
                 registeredList.extend(self.hoodDict[key][groupName])
         newList = []
@@ -274,7 +273,7 @@ class ObjectPalette(ObjectPaletteBase):
                 self.hoodDict[hoodName][groupName].append(code)
 
     def populate(self):
-        __builtin__.DNASTORE = DNASTORE = DNAStorage()
+        builtins.DNASTORE = DNASTORE = DNAStorage()
         # adding some hidden object type
         self.data['__sys__'] = ObjectBase('__sys__', createFunction=('.createSys', {}))
         self.data['__group__'] = ObjectToon('__group__', createFunction=('.createGroup', {'name':OG.ARG_NAME}), movable=False, named=True)

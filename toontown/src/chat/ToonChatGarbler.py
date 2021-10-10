@@ -35,7 +35,7 @@ class ToonChatGarbler(ChatGarbler.ChatGarbler):
 
         animalType = toon.getStyle().getType()
 
-        if (ToonChatGarbler.animalSounds.has_key(animalType)):
+        if (animalType in ToonChatGarbler.animalSounds):
             wordlist = ToonChatGarbler.animalSounds[animalType]
         else:
             wordlist = ToonChatGarbler.animalSounds["default"]
@@ -61,7 +61,7 @@ class ToonChatGarbler(ChatGarbler.ChatGarbler):
 
         animalType = toon.getStyle().getType()
 
-        if (ToonChatGarbler.animalSounds.has_key(animalType)):
+        if (animalType in ToonChatGarbler.animalSounds):
             wordlist = ToonChatGarbler.animalSounds[animalType]
         else:
             wordlist = ToonChatGarbler.animalSounds["default"]

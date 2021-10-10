@@ -1,7 +1,7 @@
 
 # NOTE: This file is imported on the client and AI, so do not import anything
 # that the AI will have a problem with (like opening a window)
-import FishGlobals
+from . import FishGlobals
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 

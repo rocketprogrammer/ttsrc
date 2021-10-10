@@ -1,4 +1,4 @@
-from SpecImports import *
+from .SpecImports import *
 from toontown.toonbase import ToontownGlobals
 
 ###### TO BE CONVERTED TO ENTITY SYSTEM ######

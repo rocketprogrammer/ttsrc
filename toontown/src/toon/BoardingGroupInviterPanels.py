@@ -204,7 +204,7 @@ class BoardingGroupInvitingPanel(BoardingGroupInviterPanelBase):
         
     def setupUnexpectedExitHooks(self):
         """Setup hooks to inform us when other toons exit unexpectedly."""
-        if base.cr.doId2do.has_key(self.avId):
+        if self.avId in base.cr.doId2do:
             toon = base.cr.doId2do[self.avId]
             self.unexpectedExitEventName = toon.uniqueName('disable')
             self.accept(self.unexpectedExitEventName, self.forceCleanup)

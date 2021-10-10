@@ -7,7 +7,6 @@
 from pandac.PandaModules import *
 
 import random
-import string
 from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import ZoneUtil
 
@@ -69,7 +68,7 @@ class SuitPlannerBase:
             simbase.air.loadDNAFileAI( self.dnaStore, dnaFileName)
         except:
             loader.loadDNAFileAI( self.dnaStore, dnaFileName)
-            
+
 
         # now create vis group (zone) information
         self.initDNAInfo()
@@ -128,7 +127,7 @@ class SuitPlannerBase:
         # "345:safe_zone:exit_zone"... These are hypotheticals. The main
         # idea is that there are colon separated flags after the initial
         # zone name.
-        return(string.split(groupFullName, ":", 1)[0])
+        return(groupFullName.split(":", 1)[0])
 
     def initDNAInfo( self ):
         """
@@ -142,7 +141,7 @@ class SuitPlannerBase:
         numGraphs = self.dnaStore.discoverContinuity()
         if numGraphs != 1:
             self.notify.info("zone %s has %s disconnected suit paths." % (self.zoneId, numGraphs))
-        
+
         # Construct a dictionary of zone ids to battle cell center points
         self.battlePosDict = {}
         self.cellToGagBonusDict = {}
@@ -166,7 +165,7 @@ class SuitPlannerBase:
                         self.notify.debug("got interactive prop %s" % childDnaGroup)
                         battleCellId = childDnaGroup.getCellId()
                         if battleCellId == -1:
-                            self.notify.warning(                                
+                            self.notify.warning(
                                 "interactive prop %s  at %s not associated with a a battle" %
                                 (childDnaGroup, zoneId))
                         elif battleCellId == 0:
@@ -214,7 +213,7 @@ class SuitPlannerBase:
         # generate a path from two points given to us by the DNAStorage
         #
 #        self.performPathTest()
-        
+
         return None
 
 
@@ -230,7 +229,7 @@ class SuitPlannerBase:
 
         if not self.notify.getDebug():
             return None
-        
+
         #self.notify.debug( 'street points: ' + str( self.streetPointList ) )
         #self.notify.debug( 'front door points: ' +
         #                   str( self.frontdoorPointList ) )

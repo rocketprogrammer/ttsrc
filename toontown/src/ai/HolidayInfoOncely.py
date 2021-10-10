@@ -14,6 +14,7 @@ from toontown.ai.HolidayInfo import *
 import random
 import time
 import datetime
+import functools
 
 #################################################################
 # Class: HolidayInfo_Oncely
@@ -25,7 +26,7 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
     # Method: __init__
     # Purpose: Provides initial construction of the Oncely Holiday
     #          Info object. This type of holiday only happens once!
-    #   
+    #
     # Input: holidayClass - class type of the holiday, for
     #                       instance - Fireworks.
     #       dateDict - a dictionary containing the Months,
@@ -44,19 +45,19 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
         # Implicit in this definition, if a holiday has 1 phase date, there are 2 phases
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in range(len(dateList)//2):
             start = dateElemIter.current()
             end = next(dateElemIter)
 
             self.tupleList.append((start, end))
             next(dateElemIter)
 
-        self.tupleList.sort(cmpDates)
+        self.tupleList.sort(key=functools.cmp_to_key(cmpDates))
         self.phaseDates = None
         self.curPhase = 0
         if phaseDates:
             self.processPhaseDates(phaseDates)
-            
+
         self.testHolidays = testHolidays
 
     #############################################################
@@ -82,7 +83,7 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
     #############################################################
     # Method: getNextHolidayTime
     # Purpose: This type of holiday only happens once, so just return None
-    #          
+    #
     # Input: currTime - current time
     # Output: returns the next start time of the holiday
     #############################################################
@@ -107,22 +108,22 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
 
             startNextTime = self.getTime(None, startTuple)
             endNextTime = self.getTime(None, endTuple)
-            
+
             if startNextTime <= currTime and \
                currTime <= endNextTime:
                 # we are between a start time and end time tuple
                 # start it now
                 result = currTime
                 break;
-            
+
             if currTime < startNextTime and \
                currTime < endNextTime:
                 # we are waiting for the next pair of start,end times to arrive
                 result = startNextTime
-                break;            
+                break;
             next(self.currElemIter)
         return result
-    
+
     #############################################################
     # Method: adjustDate
     # Purpose: This method adjusts the current day by a year. This
@@ -151,11 +152,11 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
             return True
         else:
             return False
-            
+
     #############################################################
     # Run holiday in test mode
-    # Used to invoke other holidays for debugging purposes        
-    #############################################################    
+    # Used to invoke other holidays for debugging purposes
+    #############################################################
 
     def isTestHoliday(self):
         """ Returns true if running the holiday in test mode """
@@ -163,6 +164,6 @@ class HolidayInfo_Oncely(HolidayInfo_Base):
             return True
         else:
             return False
-            
+
     def getTestHolidays(self):
         return self.testHolidays

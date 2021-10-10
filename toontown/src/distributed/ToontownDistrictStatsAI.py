@@ -10,47 +10,49 @@ class ToontownDistrictStatsAI(DistributedObjectAI.DistributedObjectAI):
     See Also: "toontown/src/distributed/DistributedDistrictAi.py"
     """
     notify = DirectNotifyGlobal.directNotify.newCategory("ToontownDistrictStatsAI")
-    
+
     defaultParent = OTP_DO_ID_TOONTOWN
     defaultZone =  OTP_ZONE_ID_DISTRICTS_STATS
-            
-                
-    
+
+
+
     def __init__(self, air):
         DistributedObjectAI.DistributedObjectAI.__init__(self, air)
         self.updateFreq = 5
         self.toontownDistrictId = 0
-        
+        self.avatarCount = 0
+        self.newAvatarCount = 0
+
     def gettoontownDistrictId(self):
-        return self.toontownDistrictId        
-        
-    def generate(self):        
+        return self.toontownDistrictId
+
+    def generate(self):
         DistributedObjectAI.DistributedObjectAI.generate(self)
         self.pushDistrictStats(firstTime=True)
 
 
     def delete(self):
         taskMgr.remove("DistributedToonDistrictAIStatsUpdate")
-        DistributedObjectAI.DistributedObjectAI.delete(self)        
-    
+        DistributedObjectAI.DistributedObjectAI.delete(self)
+
     # set avatar count
     def setAvatarCount(self, avatarCount):
         pass
-    
+
     def d_setAvatarCount(self, avatarCount):
          self.sendUpdate("setAvatarCount", [avatarCount])
-    
+
     def b_setAvatarCount(self, avatarCount):
          self.setAvatarCount(avatarCount)
          self.d_setAvatarCount(avatarCount)
-         
-    ##   avatars in bewbe zone...     
+
+    ##   avatars in bewbe zone...
     def setNewAvatarCount(self, newAvatarCount):
         pass
 
     def d_setNewAvatarCount(self, newAvatarCount):
          self.sendUpdate("setAvatarCount", [newAvatarCount])
-        
+
     def b_setNewAvatarCount(self, newAvatarCount):
         self.setNewAvatarCount(newAvatarCount)
         self.d_setNewAvatarCount(newAvatarCount)
@@ -67,8 +69,8 @@ class ToontownDistrictStatsAI(DistributedObjectAI.DistributedObjectAI):
     def b_setStats(self, avatarCount,  newAvatarCount):
         self.setStats(avatarCount,  newAvatarCount)
         self.d_setStats(avatarCount,  newAvatarCount)
-        
-        
+
+
     def pushDistrictStats(self, task=None, firstTime=False):
         if self.isDeleted():
             return
@@ -81,3 +83,29 @@ class ToontownDistrictStatsAI(DistributedObjectAI.DistributedObjectAI):
         self.b_setStats(avatar_count, wvCount)
         taskMgr.doMethodLater(self.updateFreq, self.pushDistrictStats, "DistributedDistrictUpdate")
         self.air.writeServerStatus("", avatar_count, len(self.air.doId2do))
+
+    def setAvatarCount(self, avatarCount):
+        self.avatarCount = avatarCount
+
+    def d_setAvatarCount(self, avatarCount):
+        self.sendUpdate("setAvatarCount", [avatarCount])
+
+    def b_setAvatarCount(self, avatarCount):
+        self.setAvatarCount(avatarCount)
+        self.d_setAvatarCount(avatarCount)
+
+    def getAvatarCount(self):
+        return self.avatarCount
+
+    def setNewAvatarCount(self, newAvatarCount):
+        self.newAvatarCount = newAvatarCount
+
+    def d_setNewAvatarCount(self, newAvatarCount):
+        self.sendUpdate("setNewAvatarCount", [newAvatarCount])
+
+    def b_setNewAvatarCount(self, newAvatarCount):
+        self.setNewAvatarCount(newAvatarCount)
+        self.d_setNewAvatarCount(newAvatarCount)
+
+    def getNewAvatarCount(self):
+        return self.newAvatarCount

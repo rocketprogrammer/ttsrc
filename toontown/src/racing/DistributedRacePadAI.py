@@ -1,6 +1,6 @@
 ##########################################################################
 # Module: DistributedRacePadAI.py
-# Purpose: This class provides the necessary functionality for 
+# Purpose: This class provides the necessary functionality for
 # Date: 6/28/05
 # Author: jjtaylor
 ##########################################################################
@@ -116,7 +116,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
 
         grandPrixWeekendRunning = self.air.holidayManager.isHolidayRunning(
             ToontownGlobals.CIRCUIT_RACING_EVENT)
-        
+
         # trialer restriction - only Speedway Practice races
         if not paid and not grandPrixWeekendRunning:
             genre = RaceGlobals.getTrackGenre(self.trackId)
@@ -125,16 +125,16 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
 
         if not(self.state == 'WaitEmpty' or self.state == 'WaitCountdown'):
             #you can only join a racepad in one of these states
-            return KartGlobals.ERROR_CODE.eTooLate            
-        
+            return KartGlobals.ERROR_CODE.eTooLate
+
         # Only check for non-practice races
         if( av.hasKart() and  (not self.trackType == RaceGlobals.Practice) ):
             # Check if the toon owns enough tickets for the race
             raceFee = RaceGlobals.getEntryFee(self.trackId, self.trackType)
             avTickets = av.getTickets()
-       
+
             if( avTickets < raceFee ):
-                self.notify.debug( "addAvBlock: Avatar %s does not own enough tickets for the race!" )           
+                self.notify.debug( "addAvBlock: Avatar %s does not own enough tickets for the race!" )
                 return KartGlobals.ERROR_CODE.eTickets
 
         # Call the Super Class Method
@@ -171,7 +171,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
             self.timerTask = None
 
             self.request( 'WaitEmpty' )
-            
+
     def __startCountdown( self, name, callback, time, params = [] ):
         """
         Purpose: The __startCountdown Method generates a task that acts as
@@ -228,7 +228,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
                 self.avId2BlockDict[ avId ].raceExit()
 
         # Let's now restart for a new race.
-        self.request( 'WaitEmpty' )            
+        self.request( 'WaitEmpty' )
         return Task.done
 
     def isOccupied( self ):
@@ -243,7 +243,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
         """
         for block in self.startingBlocks:
             block.setActive( True )
-    
+
     def disableStartingBlocks( self ):
         """
         Comment:
@@ -256,7 +256,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
         Comment:
         """
         return self.state, globalClockDelta.getRealNetworkTime()
-            
+
     ######################################################################
     # Distributed Methods
     ######################################################################
@@ -302,17 +302,17 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
         #  - Enable Accepting of Toons for the next race.
         #  - Signal to the client that we are in wait empty state.
 
-        self.d_setState( 'WaitEmpty' )       
+        self.d_setState( 'WaitEmpty' )
         self.enableStartingBlocks()
         self.cycleTrack()
-        
+
     def exitWaitEmpty( self ):
         """
         Comment
         """
         self.notify.debug( "exitWaitEmpty: Exiting WaitEmpty State for RacePad %s" % ( self.id ) )
         taskMgr.remove(self.cycleTrackTask)
-        
+
     def enterWaitCountdown( self ):
         """
         Comment
@@ -328,7 +328,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
                                self.handleWaitTimeout,
                                KartGlobals.COUNTDOWN_TIME,
                                [ 'WaitBoarding' ] )
-        
+
     def filterWaitCountdown( self, request, args ):
         """
         Comment
@@ -336,8 +336,8 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
         if request == 'WaitBoarding' and self.allMoviesDone():
             return 'AllAboard'
         elif( request in DistributedRacePadAI.defaultTransitions.get( 'WaitCountdown' ) ):
-            return request       
-        elif( request is 'WaitCountdown' ):
+            return request
+        elif( request == 'WaitCountdown' ):
             # If in the WaitCountdown state, no need to loop back into
             # itself since it is already counting down to the race.
             return None
@@ -368,7 +368,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
                                self.handleWaitTimeout,
                                KartGlobals.BOARDING_TIME,
                                [ 'AllAboard' ] )
-        
+
     def exitWaitBoarding( self ):
         """
         Comment
@@ -410,7 +410,7 @@ class DistributedRacePadAI( DistributedKartPadAI, FSM ):
             self.__startCountdown( "setRaceZoneTask",
                                    self.__handleSetRaceCountdownTimeout,
                                    KartGlobals.ENTER_RACE_TIME,
-                                   [] )     
+                                   [] )
         else:
             self.notify.warning( "The RacePad was empty, so no one entered a race. Returning to WaitEmpty State." )
             self.d_setState( 'WaitEmpty' )

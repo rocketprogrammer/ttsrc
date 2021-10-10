@@ -27,7 +27,6 @@ from direct.directutil import DirectMySQLdb
 import MySQLdb
 import random
 import datetime
-import MySQLdb
 import os
 import subprocess
 import time
@@ -907,7 +906,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         return nowStr
 
     def createManualLot(self, name, code, rewardType, rewardItemId, expirationDate=None):
-        self.notify.info('creating manual code lot \'%s\', code=%s' % (name, u2ascii(code), ))
+        self.notify.info('creating manual code lot \'%s\', code=%s' % (name, (code), ))
         self._doCleanup()
 
         code = TTCodeDict.getFromReadableCode(code)
@@ -1163,7 +1162,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name']
+            lotName = row['name'].decode()
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue
@@ -1187,7 +1186,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name']
+            lotName = row['name'].decode()
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue
@@ -1211,7 +1210,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name']
+            lotName = row['name'].decode()
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue
@@ -1235,7 +1234,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name']
+            lotName = row['name'].decode()
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue
@@ -1432,10 +1431,9 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         cursor = conn.getDictCursor()
 
         cursor.execute(
-            str("""
+            """
             SELECT redemptions FROM code_set_%s WHERE code='%s';
-            """, 'utf-8') % (lotName, code)
-            )
+            """, 'utf-8') % (lotName.encode(), code)
         rows = cursor.fetchall()
 
         conn.destroy()
@@ -1549,7 +1547,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
 
         if not self._testing:
             self.air.writeServerEvent('codeRedeemed', avId, '%s|%s|%s|%s' % (
-                u2ascii(choice(manualCode, code, TTCodeDict.getReadableCode(code))),
+                (choice(manualCode, code, TTCodeDict.getReadableCode(code))),
                 lotName, rewardTypeId, rewardItemId, ))
 
         callback(TTCodeRedemptionConsts.RedeemErrors.Success, awardMgrResult)

@@ -30,10 +30,10 @@ from toontown.uberdog import PartiesUdConfig
 
 print("Initializing the Toontown UberDog (Uber Distributed Object Globals server)...")
 
-uber.mdip = uber.config.GetString("msg-director-ip", "localhost")
+uber.mdip = uber.config.GetString("msg-director-ip", "127.0.0.1")
 uber.mdport = uber.config.GetInt("msg-director-port", 6666)
 
-uber.esip = uber.config.GetString("event-server-ip", "localhost")
+uber.esip = uber.config.GetString("event-server-ip", "127.0.0.1")
 uber.esport = uber.config.GetInt("event-server-port", 4343)
 
 stateServerId = uber.config.GetInt("state-server-id", 20100000)
@@ -46,7 +46,7 @@ maxChannel = uber.config.GetInt("uberdog-max-channel", 200449999)
 uber.sbNSHost = uber.config.GetString("sb-host","")
 uber.sbNSPort = uber.config.GetInt("sb-port",6053)
 uber.sbListenPort = 6060
-uber.clHost = "localhost"
+uber.clHost = "127.0.0.1"
 uber.clPort = 9090
 uber.allowUnfilteredChat = uber.config.GetInt("allow-unfiltered-chat",0)
 uber.bwDictPath = ""

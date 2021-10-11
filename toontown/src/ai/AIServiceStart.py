@@ -58,9 +58,9 @@ if len(opts) < 4:
     sys.exit(1)
 
 # Default values
-mdip = "localhost"
+mdip = "127.0.0.1"
 mdport = 6666
-esip = "localhost"
+esip = "127.0.0.1"
 esport = 4343
 logpath = ""
 dcFileNames = []
@@ -99,7 +99,7 @@ for opt in opts:
 
 if not dcFileNames:
     dcFileNames = ['otp.dc', 'toon.dc']
-    
+
 # Setup the log files
 # We want C++ and Python to both go to the same log so they
 # will be interlaced properly.
@@ -141,7 +141,7 @@ nout.addSystemDebug()
 # so we can more easily grep for a restart on a particular date in the
 # log files.
 print("\n\nStarting %s (number: %s) on %s port %s. %s %s" % (
-    districtName, districtNumber, mdip, mdport, 
+    districtName, districtNumber, mdip, mdport,
     time.asctime(time.localtime(time.time())), time.tzname[0]))
 
 print("Initializing...")

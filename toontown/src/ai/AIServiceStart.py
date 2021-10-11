@@ -13,12 +13,6 @@ import sys
 import string
 import getopt
 
-# Initialize ihooks importer On the production servers, we run genPyCode -n
-# meaning no squeeze, so nobody else does this. When we squeeze, the
-# unpacker does this for us and it does not hurt to do in either case.
-import ihooks
-ihooks.install()
-
 from direct.directnotify import RotatingLog
 
 # Define a usage string

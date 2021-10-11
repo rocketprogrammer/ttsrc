@@ -1,5 +1,7 @@
 #!python -S
 
+import builtins
+
 class game:
     name = "toontown"
     process = "ai"

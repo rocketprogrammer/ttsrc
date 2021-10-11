@@ -3,7 +3,7 @@
 class game:
     name = "toontown"
     process = "ai"
-__builtins__.game = game()
+builtins.game = game()
 
 import time
 import os
@@ -23,13 +23,13 @@ from direct.directnotify import RotatingLog
 helpString ="""
 python AIServiceStart.py [--mdip=<msgdirector ip/name>] [--mdport=<msgdirector port>] [--esip=<eventserver ip/name>] [--esport=<eventserver port>] [--logpath=<logpath>] --district_number=<number> --district_name=<name> --ssid=<id> --min_objid=<id> --max_objid=<id>
 
-Starts an ai district. Default message director is localhost.  Default
+Starts an ai district. Default message director is 127.0.0.1.  Default
 port is 6666. In the district name, underbars will be converted into
 spaces.
 
 Example:
 
-python AIServiceStart.py --mdip=localhost --mdport=6665 --logpath=D:\toonlog\ --district_number=200000000 --district_name="Kooky_Summit" --ssid=20100000 --min_objid=30000000 --max_objid=39999999
+python AIServiceStart.py --mdip=127.0.0.1 --mdport=6665 --logpath=D:\toonlog\ --district_number=200000000 --district_name="Kooky_Summit" --ssid=20100000 --min_objid=30000000 --max_objid=39999999
 """
 
 # Get the options

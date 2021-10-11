@@ -1663,7 +1663,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             if len(rows):
                 conn.destroy()
                 row = rows[0]
-                row['code'] = str(row['code'])
+                row['code'] = row['code'].decode()
                 return row
 
         self.notify.error('code \'%s\' not found' % u2ascii(code))

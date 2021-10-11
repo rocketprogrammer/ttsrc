@@ -460,14 +460,30 @@ class CatalogItem:
         # to each instance.
         return None
 
-    def __cmp__(self, other):
+    def __lt__(self, other):
         # If the classes are different, they must be different objects.
-        c = cmp(self.__class__, other.__class__)
-        if c != 0:
-            return c
+        c = self.__class__ == other.__class__
+        if not c:
+            return 0
 
         # Otherwise, they are the same class; use compareTo.
-        return self.compareTo(other)
+        return self.compareTo(other) < 0
+
+    def __gt__(self, other):
+        # If the classes are different, they must be different objects.
+        c = self.__class__ == other.__class__
+        if not c:
+            return 0
+
+        # Otherwise, they are the same class; use compareTo.
+        return self.compareTo(other) > 0
+
+    def __eq__(self, other):
+        c = self.__class__ == other.__class__
+        if not c:
+            return 0
+
+        return self.compareTo(other) == 0
 
     def __hash__(self):
         return hash((self.__class__, self.getHashContents()))

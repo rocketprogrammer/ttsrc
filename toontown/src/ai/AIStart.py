@@ -84,10 +84,10 @@ simbase.air = ToontownAIRepository.ToontownAIRepository(
 simbase.aiService = 0
 
 try:
-    simbase.air.fsm.request("districtReset")        
+    simbase.air.fsm.request("districtReset")
     run()
 except:
     info = PythonUtil.describeException()
     simbase.air.writeServerEvent('ai-exception', districtNumber, info)
     raise
-    
+

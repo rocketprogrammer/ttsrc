@@ -65,6 +65,44 @@ for i in range(1, 20+1):
         if i != 1:
             break
 
+# Setup the log files
+# We want C++ and Python to both go to the same log so they
+# will be interlaced properly.
+
+ltime = time.localtime()
+
+# date_hour_sequence.log will be added to the logfile name by RotatingLog():
+logfile = "aidistrict-dev-%02d%02d%02d_%02d%02d%02d.log" % (ltime[0]-2000,ltime[1],ltime[2],ltime[3],ltime[4],ltime[5])
+
+# Redirect Python output and err to the same file
+class LogAndOutput:
+    def __init__(self, orig, log):
+        self.orig = orig
+        self.log = log
+    def write(self, str):
+        self.log.write(str)
+        self.log.flush()
+        self.orig.write(str)
+        self.orig.flush()
+    def flush(self):
+        self.log.flush()
+        self.orig.flush()
+
+log = open(logfile, 'a')
+logOut = LogAndOutput(sys.__stdout__, log)
+logErr = LogAndOutput(sys.__stderr__, log)
+sys.stdout = logOut
+sys.stderr = logErr
+
+from toontown.toonbase.ToontownModules import *
+
+# Give Panda the same log we use
+nout = MultiplexStream()
+Notify.ptr().setOstreamPtr(nout, 0)
+nout.addFile(Filename(logfile))
+nout.addStandardOutput()
+nout.addSystemDebug()
+
 print("-"*30, "creating toontown district %s" % districtNumber, "-"*30)
 
 simbase.air = ToontownAIRepository.ToontownAIRepository(

@@ -12,3 +12,4 @@ news/*
 .latestissue
 useropt
 inject.py
+*.log

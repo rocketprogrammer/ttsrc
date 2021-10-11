@@ -94,7 +94,7 @@ logErr = LogAndOutput(sys.__stderr__, log)
 sys.stdout = logOut
 sys.stderr = logErr
 
-from toontown.toonbase.ToontownModules import *
+from pandac.PandaModules import *
 
 # Give Panda the same log we use
 nout = MultiplexStream()

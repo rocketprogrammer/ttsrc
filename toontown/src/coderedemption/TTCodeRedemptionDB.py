@@ -642,7 +642,7 @@ class TTCodeRedemptionDBTester(Job):
                 self._redeemResult = []
                 self._db.redeemCode(codes[1], self.TestRewarder.FakeAvId, self.TestRewarder(),
                                     self._handleRedeemResult)
-                if self._redeemResult[0] != TTCodeRedemptionConsts.RedeemErrors.CodeIsExpired:
+                if self._redeemResult[0] != TTCodeRedemptionConsts.RedeemErrors.CodeIsInactive:
                     self.notify.error('expired code %s was not flagged upon redeem' % (codes[1]))
                 db._testing = False
                 yield None
@@ -906,7 +906,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         return nowStr
 
     def createManualLot(self, name, code, rewardType, rewardItemId, expirationDate=None):
-        self.notify.info('creating manual code lot \'%s\', code=%s' % (name, (code), ))
+        self.notify.info('creating manual code lot \'%s\', code=%s' % (name, u2ascii(code), ))
         self._doCleanup()
 
         code = TTCodeDict.getFromReadableCode(code)
@@ -1234,7 +1234,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         rows = cursor.fetchall()
         conn.destroy()
         for row in rows:
-            lotName = row['name'].decode()
+            lotName = row['name']
             if not self._testing:
                 if TTCodeRedemptionDBTester.TestLotName in lotName:
                     continue
@@ -1347,10 +1347,9 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             # client hack prevention:
             # safe; code is between quotes and can only contain letters, numbers and dashes
             cursor.execute(
-                str("""
+                """
                 SELECT code FROM code_set_%s WHERE code='%s';
-                """, 'utf-8') % (lotName, code)
-                )
+                """ % (lotName, code))
             rows = cursor.fetchall()
 
             if conn.WantTableLocking:
@@ -1395,10 +1394,10 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         # client hack prevention:
         # safe; code is between quotes and can only contain letters, numbers and dashes
         cursor.execute(
-            str("""
+            """
             SELECT %s, %s FROM code_set_%s INNER JOIN lot
             WHERE lot.lot_id=code_set_%s.lot_id AND CODE='%s';
-            """, 'utf-8') % (self.RewardTypeFieldName, self.RewardItemIdFieldName, lotName, lotName, code)
+            """ % (self.RewardTypeFieldName, self.RewardItemIdFieldName, lotName, lotName, code)
             )
         rows = cursor.fetchall()
 
@@ -1433,7 +1432,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         cursor.execute(
             """
             SELECT redemptions FROM code_set_%s WHERE code='%s';
-            """, 'utf-8') % (lotName.encode(), code)
+            """ % (lotName, code))
         rows = cursor.fetchall()
 
         conn.destroy()
@@ -1482,10 +1481,10 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             # client hack prevention:
             # safe; code is between quotes and can only contain letters, numbers and dashes
             cursor.execute(
-                str("""
+                """
                 SELECT redemptions FROM code_set_%s INNER JOIN lot WHERE
                 code_set_%s.lot_id=lot.lot_id AND code='%s' AND ((expiration IS NULL) OR (CURDATE()<=expiration));
-                """, 'utf-8') % (lotName, lotName, code)
+                """ % (lotName, lotName, code)
                 )
 
             rows = cursor.fetchall()
@@ -1496,7 +1495,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         if not manualCode:
             if len(rows) == 0:
                 # code is expired
-                callback(TTCodeRedemptionConsts.RedeemErrors.CodeIsExpired, 0)
+                callback(TTCodeRedemptionConsts.RedeemErrors.CodeIsInactive, 0)
                 return
 
             redemptions = rows[0]['redemptions']
@@ -1515,9 +1514,9 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         # client hack prevention:
         # safe; code is between quotes and can only contain letters, numbers and dashes
         cursor.execute(
-            str("""
+            """
             UPDATE code_set_%s SET redemptions=redemptions+%s%s WHERE code='%s';
-            """, 'utf-8') % (lotName, count, choice(manualCode, '', ', av_id=%s' % avId), code)
+            """ % (lotName, count, choice(manualCode, '', ', av_id=%s' % avId), code)
             )
 
     def _handleRewardResult(self, code, manualCode, avId, lotName, rewardTypeId, rewardItemId,
@@ -1547,7 +1546,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
 
         if not self._testing:
             self.air.writeServerEvent('codeRedeemed', avId, '%s|%s|%s|%s' % (
-                (choice(manualCode, code, TTCodeDict.getReadableCode(code))),
+                u2ascii(choice(manualCode, code, TTCodeDict.getReadableCode(code))),
                 lotName, rewardTypeId, rewardItemId, ))
 
         callback(TTCodeRedemptionConsts.RedeemErrors.Success, awardMgrResult)
@@ -1584,7 +1583,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
                     )
 
             for row in rows:
-                code = str(row['code'], 'utf-8')
+                code = row['code'].decode()
                 codes.append(code)
 
         conn.destroy()
@@ -1664,7 +1663,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
             if len(rows):
                 conn.destroy()
                 row = rows[0]
-                row['code'] = str(row['code'], 'utf-8')
+                row['code'] = str(row['code'])
                 return row
 
         self.notify.error('code \'%s\' not found' % u2ascii(code))

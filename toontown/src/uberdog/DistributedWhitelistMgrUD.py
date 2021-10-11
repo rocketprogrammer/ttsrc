@@ -1,10 +1,8 @@
-from direct.directnotify import DirectNotifyGlobal
+from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 
-
 class DistributedWhitelistMgrUD(DistributedObjectGlobalUD):
-    notify = DirectNotifyGlobal.directNotify.newCategory(
-        "DistributedWhitelistMgrUD")
+    notify = directNotify.newCategory('DistributedWhitelistMgrUD')
 
     def updateWhitelist(self):
         pass

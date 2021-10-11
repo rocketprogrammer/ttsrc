@@ -16,7 +16,7 @@ class DatabaseObject:
 
     notify = directNotify.newCategory("DatabaseObject")
     notify.setInfo(0)
-    
+
     def __init__(self, air, doId=None, doneEvent="DatabaseObject"):
         self.air = air
         self.doId = doId
@@ -50,7 +50,7 @@ class DatabaseObject:
             from toontown.pets import DistributedPetProxyAI
             petProxy = DistributedPetProxyAI.DistributedPetProxyAI(self.air)
             self.readObject(petProxy, None)
-            return petProxy   
+            return petProxy
 
     def readObject(self, do, fields = None):
         # Reads a DistributedObject from the database and fills in its
@@ -89,7 +89,7 @@ class DatabaseObject:
                     values[field] = self.values[field]
                 else:
                     self.notify.warning("Field %s not defined." % (field))
-                    
+
         self.setFields(values)
 
     def getFields(self, fields):
@@ -98,7 +98,7 @@ class DatabaseObject:
         context = self.air.dbObjContext
         self.air.dbObjContext += 1
         self.air.dbObjMap[context] = self
-        
+
         dg = PyDatagram()
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_GET_STORED_VALUES)
         dg.addUint32(context)
@@ -106,7 +106,7 @@ class DatabaseObject:
         dg.addUint16(len(fields))
         for f in fields:
             dg.addString(f)
-            
+
         self.air.send(dg)
 
     def getFieldsResponse(self, di):
@@ -127,11 +127,11 @@ class DatabaseObject:
 
         else:
             values = []
-            for i in range(count):
-                value = di.getString()
+            for i in range(0, count):
+                value = di.getString().encode('ISO-8859-1')
                 values.append(value)
 
-            for i in range(count):
+            for i in range(0, count):
                 found = di.getUint8()
 
                 if not found:
@@ -159,7 +159,7 @@ class DatabaseObject:
     def setFields(self, values):
         dg = PyDatagram()
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_SET_STORED_VALUES)
-        
+
         dg.addUint32(self.doId)
         dg.addUint16(len(values))
 
@@ -168,7 +168,7 @@ class DatabaseObject:
             dg.addString(field)
         for field, value in items:
             dg.addString(value.getMessage())
-            
+
         self.air.send(dg)
 
     def getDatabaseFields(self, dclass):
@@ -186,7 +186,7 @@ class DatabaseObject:
                     fields.append(af.getName())
 
         return fields
-    
+
     def fillin(self, do, dclass):
         """fillin(self, DistributedObjectAI do, DCClass dclass)
 
@@ -202,7 +202,7 @@ class DatabaseObject:
                 self.notify.warning("Ignoring broken setZonesVisited")
             else:
                 dclass.directUpdate(do, field, value)
-            
+
     def reload(self, do, dclass, fields):
         """reload(self, DistributedObjectAI do, DCClass dclass)
 
@@ -221,7 +221,7 @@ class DatabaseObject:
                 packOk = dclass.packRequiredField(dg, do, field)
                 assert(packOk)
                 self.values[fieldName] = dg
-            
+
     def createObject(self, objectType):
         # If we just want the default values for the new object's fields,
         # there's no need to specify any field values here. (Upon generation,
@@ -252,7 +252,7 @@ class DatabaseObject:
 
         dg = PyDatagram()
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_CREATE_STORED_OBJECT)
-        
+
         dg.addUint32(context)
         dg.addString('')
         dg.addUint16(objectType)
@@ -284,7 +284,7 @@ class DatabaseObject:
 
         dg = PyDatagram()
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_DELETE_STORED_OBJECT)
-        
+
         dg.addUint32(self.doId)
         dg.addUint32(0xdeadbeef)
 

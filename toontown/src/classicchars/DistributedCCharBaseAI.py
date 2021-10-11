@@ -5,6 +5,7 @@ from direct.distributed.ClockDelta import *
 from otp.avatar import DistributedAvatarAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
+import functools
 
 class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
     """
@@ -123,7 +124,7 @@ class DistributedCCharBaseAI(DistributedAvatarAI.DistributedAvatarAI):
             else:
                 return 1
 
-        self.nearbyAvatars.sort(nAv_compare)
+        self.nearbyAvatars.sort(key=functools.cmp_to_key(nAv_compare))
 
     def getNearbyAvatars(self):
         return self.nearbyAvatars

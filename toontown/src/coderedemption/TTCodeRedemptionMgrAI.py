@@ -20,7 +20,7 @@ class TTCRMAIRetryMgr(DirectObject):
         self._serialGen = SerialNumGen()
         self._retryPeriod = self.MinRetryPeriod
         self._redemptions = {}
-            
+
     def addRedemption(self, avId, context, code):
         assert self.notify.debugCall()
         serial = next(self._serialGen)

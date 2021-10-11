@@ -85,7 +85,7 @@ if __name__ == "__main__":
         if "-ai" in sys.argv:
             from toontown.ai import AIStart
 
-        elif "--prod-ai" in sys.argv:
+        elif "-prod-ai" in sys.argv:
             from toontown.ai import AIServiceStart
 
         elif "-ud" in sys.argv:

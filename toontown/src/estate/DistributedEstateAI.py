@@ -445,6 +445,9 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
         tupleNewTime = time.localtime(currentTime - self.epochHourInSeconds)
         tupleOldTime = time.localtime(self.lastEpochTimeStamp)
 
+        if (tupleOldTime < time.gmtime(0)):
+            tupleOldTime = time.gmtime(0)
+
         #tupleOldTime = (2006, 6, 18, 0, 36, 45, 0, 170, 1)
         #tupleNewTime = (2006, 6, 19, 3, 36, 45, 0, 170, 1)
 
@@ -509,7 +512,7 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
 
         tupleNextEpoch = time.localtime(whenNextEpoch)
 
-        self.notify.info("Next epoch to happen at %s" % (tupleNextEpoch))
+        self.notify.info("Next epoch to happen at %s" % (str(tupleNextEpoch)))
 
 
 
@@ -770,7 +773,7 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
                 else:
                     someLawnDecor = self.gardenTable[index][specificHardPoint]
                     if someLawnDecor and hasattr(someLawnDecor,'b_setGrowthLevel'):
-                        someLawnDecor.b_setGrowthLevel(growthLevel)                        
+                        someLawnDecor.b_setGrowthLevel(growthLevel)
 
     def wiltMyGarden(self, avId, specificHardPoint = -1):
         self.notify.debug("wilting my garden %s" % (avId))
@@ -836,7 +839,7 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
             elif plantType == GardenGlobals.STATUARY_TYPE:
                 #print("STATUARY")
                 plantClass = DistributedStatuaryAI.DistributedStatuaryAI
-                if type in GardenGlobals.ToonStatuaryTypeIndices: 
+                if type in GardenGlobals.ToonStatuaryTypeIndices:
                     # Some hardcoded optional values for testing
                     # optional = 2325 #Pig = 3861 #Bear = 3349 #Monkey = 2837 #Duck = 2325 #Rabbit = 1813 #Mouse = 1557 #Horse = 1045 #Cat = 533 #Dog = 21
                     testPlant = DistributedToonStatuaryAI.DistributedToonStatuaryAI(type, waterLevel, growthLevel, optional, slot, hardPoint)
@@ -893,7 +896,7 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
         self.removePlant(slot, hardPoint)
         itemId = self.addGardenPlot(slot,hardPoint)
         return itemId
-    
+
     def addGardenPlot(self, slot, hardPoint):
 
             #print("HARDPOINT")
@@ -1472,10 +1475,10 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
         secondsUntil = endTime - currentTime
         taskMgr.remove(self.uniqueName("endGameTable"))
         taskMgr.doMethodLater(secondsUntil, self.endGameTable, self.uniqueName("endGameTable"))
-        
+
     def startGameTable(self, avatar = 0):
         if self.gameTableFlag:
-            return        
+            return
         if not self.picnicTable:
             self.notify.debug('creating game table')
             # Create the game table
@@ -1485,7 +1488,7 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
                                                                                  pos[0], pos[1], pos[2],
                                                                                  hpr[0], hpr[1], hpr[2])
         self.gameTableFlag = True
-    
+
     def endGameTable(self, avatar = 0):
         self.notify.debug('endGameTable')
         if not self.gameTableFlag:
@@ -1495,14 +1498,14 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
             self.picnicTable.requestDelete()
             del self.picnicTable
             self.picnicTable = None
-            
+
         # Tell the client that the game table rental is over
         self.sendUpdate("gameTableOver", [])
-        
+
         self.gameTableFlag = False
-    
+
     def rentItem(self, type, duration):
-        timeleft = 0        
+        timeleft = 0
         currentTime = time.time()
         if self.rentalType == type:
             timeleft = self.rentalTimeStamp - currentTime
@@ -1510,7 +1513,7 @@ class DistributedEstateAI(DistributedObjectAI.DistributedObjectAI):
                 timeleft = 0
         newTime = currentTime + (duration * 60) + timeleft
         self.air.writeServerEvent('rental', self.doId, "New rental end time %s." % (newTime))
-        
+
         self.b_setRentalTimeStamp(newTime)
         self.b_setRentalType(type)
         if type == ToontownGlobals.RentalCannon:

@@ -432,7 +432,7 @@ class WelcomeValleyManagerAI(DistributedObjectAI.DistributedObjectAI):
         assert((hoodId % 2000) == 0)
 
         del self.welcomeValleys[hoodId]
-        self.welcomeValleyAllocator.free(hoodId / 2000)
+        self.welcomeValleyAllocator.free(hoodId // 2000)
         self.air.shutdownHood(hood[0])
         self.air.shutdownHood(hood[1])
 

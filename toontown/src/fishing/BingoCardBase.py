@@ -44,7 +44,7 @@ class BingoCardBase:
         
         self.cellList = []
         self.gameType = None
-        self.gameState = 1<<self.cardSize/2
+        self.gameState = 1<<self.cardSize//2
 
     #################################################################
     # Method: destroy
@@ -88,7 +88,7 @@ class BingoCardBase:
 
         # Now, fill up the the card by randomly placing the fish in a cell.
         for index in range(self.cardSize):
-            if index != self.cardSize/2:
+            if index != self.cardSize//2:
                 choice = rng.randrange(0,len(fishList))
                 self.cellList.append( fishList.pop(choice) )
             else:
@@ -295,7 +295,7 @@ class BingoCardBase:
     # Output: returns 1 or 0 whether cell is on the specified row.
     ################################################################# 
     def onRow(self, row, id):
-        if int( id / self.rowSize ) == row:
+        if int( id // self.rowSize ) == row:
             return 1
         return 0
 

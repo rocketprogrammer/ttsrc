@@ -414,7 +414,7 @@ class TTCodeRedemptionDBTester(Job):
 
     def _getUnusedUtf8ManualCode(self):
         chars = u'\u65e5\u672c\u8a9e'
-        code = str('', 'utf-8')
+        code = ''
         while 1:
             code += random.choice(chars)
             if not self._db.codeExists(code):

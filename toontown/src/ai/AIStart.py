@@ -88,7 +88,7 @@ class LogAndOutput:
         self.log.flush()
         self.orig.flush()
 
-log = open(logfile, 'a')
+log = open('logs/' + logfile, 'a')
 logOut = LogAndOutput(sys.__stdout__, log)
 logErr = LogAndOutput(sys.__stderr__, log)
 sys.stdout = logOut
@@ -99,7 +99,7 @@ from pandac.PandaModules import *
 # Give Panda the same log we use
 nout = MultiplexStream()
 Notify.ptr().setOstreamPtr(nout, 0)
-nout.addFile(Filename(logfile))
+nout.addFile(Filename('logs/' + logfile))
 nout.addStandardOutput()
 nout.addSystemDebug()
 

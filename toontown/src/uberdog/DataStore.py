@@ -37,7 +37,7 @@ class DataStore:
 
     notify = DirectNotifyGlobal.directNotify.newCategory('DataStore')
 
-    wantAnyDbm = ConfigVariableBool('want-ds-anydbm',1).getValue()
+    wantAnyDbm = ConfigVariableBool('want-ds-anydbm',False).getValue()
 
     def __init__(self,filepath,writePeriod = 300, writeCountTrigger = 100):
         """

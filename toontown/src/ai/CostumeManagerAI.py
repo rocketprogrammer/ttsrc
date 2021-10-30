@@ -16,6 +16,9 @@ from toontown.hood import *
 from direct.showbase import DirectObject
 from toontown.toonbase import TTLocalizer
 from toontown.classicchars import *
+from toontown.classicchars import DistributedVampireMickeyAI, DistributedSuperGoofyAI, DistributedWesternPlutoAI
+from toontown.classicchars import DistributedWitchMinnieAI, DistributedMinnieAI, DistributedPlutoAI
+from toontown.hood import MMHoodDataAI, BRHoodDataAI
 
 class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('CostumeManagerAI')

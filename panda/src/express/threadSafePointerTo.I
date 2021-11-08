@@ -104,7 +104,7 @@ p() const {
 template<class T>
 INLINE ThreadSafePointerTo<T> &ThreadSafePointerTo<T>::
 operator = (To *ptr) {
-  reassign(ptr);
+  this->reassign(ptr);
   return *this;
 }
 
@@ -116,7 +116,7 @@ operator = (To *ptr) {
 template<class T>
 INLINE ThreadSafePointerTo<T> &ThreadSafePointerTo<T>::
 operator = (const ThreadSafePointerTo<T> &copy) {
-  reassign((const ThreadSafePointerToBase<T> &)copy);
+  this->reassign((const ThreadSafePointerToBase<T> &)copy);
   return *this;
 }
 
@@ -226,7 +226,7 @@ p() const {
 template<class T>
 INLINE ThreadSafeConstPointerTo<T> &ThreadSafeConstPointerTo<T>::
 operator = (const To *ptr) {
-  reassign((To *)ptr);
+  this->reassign((To *)ptr);
   return *this;
 }
 
@@ -238,7 +238,7 @@ operator = (const To *ptr) {
 template<class T>
 INLINE ThreadSafeConstPointerTo<T> &ThreadSafeConstPointerTo<T>::
 operator = (const ThreadSafePointerTo<T> &copy) {
-  reassign((const ThreadSafePointerToBase<T> &)copy);
+  this->reassign((const ThreadSafePointerToBase<T> &)copy);
   return *this;
 }
 
@@ -250,6 +250,6 @@ operator = (const ThreadSafePointerTo<T> &copy) {
 template<class T>
 INLINE ThreadSafeConstPointerTo<T> &ThreadSafeConstPointerTo<T>::
 operator = (const ThreadSafeConstPointerTo<T> &copy) {
-  reassign((const ThreadSafePointerToBase<T> &)copy);
+  this->reassign((const ThreadSafePointerToBase<T> &)copy);
   return *this;
 }

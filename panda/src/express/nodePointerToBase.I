@@ -21,7 +21,7 @@
 template<class T>
 INLINE NodePointerToBase<T>::
 NodePointerToBase(To *ptr) {
-  reassign(ptr);
+  this->reassign(ptr);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ NodePointerToBase(To *ptr) {
 template<class T>
 INLINE NodePointerToBase<T>::
 NodePointerToBase(const NodePointerToBase<T> &copy) {
-  reassign(copy);
+  this->reassign(copy);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ NodePointerToBase(const NodePointerToBase<T> &copy) {
 template<class T>
 INLINE NodePointerToBase<T>::
 ~NodePointerToBase() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ reassign(To *ptr) {
 template<class T>
 INLINE void NodePointerToBase<T>::
 reassign(const NodePointerToBase<To> &copy) {
-  reassign((To *)copy._void_ptr);
+  this->reassign((To *)copy._void_ptr);
 }
 
 
@@ -111,7 +111,7 @@ reassign(const NodePointerToBase<To> &copy) {
 template<class T>
 INLINE void NodePointerToBase<T>::
 clear() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////

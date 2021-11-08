@@ -21,7 +21,7 @@
 template<class T>
 INLINE PointerToBase<T>::
 PointerToBase(To *ptr) {
-  reassign(ptr);
+  this->reassign(ptr);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ PointerToBase(To *ptr) {
 template<class T>
 INLINE PointerToBase<T>::
 PointerToBase(const PointerToBase<T> &copy) {
-  reassign(copy);
+  this->reassign(copy);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ PointerToBase(const PointerToBase<T> &copy) {
 template<class T>
 INLINE PointerToBase<T>::
 ~PointerToBase() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ reassign(To *ptr) {
 template<class T>
 INLINE void PointerToBase<T>::
 reassign(const PointerToBase<To> &copy) {
-  reassign((To *)copy._void_ptr);
+  this->reassign((To *)copy._void_ptr);
 }
 
 #ifdef DO_MEMORY_USAGE
@@ -124,7 +124,7 @@ update_type(To *ptr) {
 template<class T>
 INLINE void PointerToBase<T>::
 clear() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////

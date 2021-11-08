@@ -21,7 +21,7 @@
 template<class T>
 INLINE WeakPointerToBase<T>::
 WeakPointerToBase(To *ptr) {
-  reassign(ptr);
+  this->reassign(ptr);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ WeakPointerToBase(To *ptr) {
 template<class T>
 INLINE WeakPointerToBase<T>::
 WeakPointerToBase(const PointerToBase<T> &copy) {
-  reassign(copy);
+  this->reassign(copy);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ WeakPointerToBase(const PointerToBase<T> &copy) {
 template<class T>
 INLINE WeakPointerToBase<T>::
 WeakPointerToBase(const WeakPointerToBase<T> &copy) {
-  reassign(copy);
+  this->reassign(copy);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ WeakPointerToBase(const WeakPointerToBase<T> &copy) {
 template<class T>
 INLINE WeakPointerToBase<T>::
 ~WeakPointerToBase() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -109,7 +109,7 @@ reassign(const PointerToBase<To> &copy) {
   // This double-casting is a bit of a cheat to get around the
   // inheritance issue--it's difficult to declare a template class to
   // be a friend.
-  reassign((To *)((const WeakPointerToBase<To> *)&copy)->_void_ptr);
+  this->reassign((To *)((const WeakPointerToBase<To> *)&copy)->_void_ptr);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -121,7 +121,7 @@ template<class T>
 INLINE void WeakPointerToBase<T>::
 reassign(const WeakPointerToBase<To> &copy) {
   nassertv(!copy.was_deleted());
-  reassign((To *)copy._void_ptr);
+  this->reassign((To *)copy._void_ptr);
 }
 
 #ifndef CPPPARSER
@@ -392,7 +392,7 @@ operator < (const PointerToBase<To> &other) const {
 template<class T>
 INLINE void WeakPointerToBase<T>::
 clear() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////

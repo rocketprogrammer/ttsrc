@@ -21,7 +21,7 @@
 template<class T>
 INLINE ThreadSafePointerToBase<T>::
 ThreadSafePointerToBase(To *ptr) {
-  reassign(ptr);
+  this->reassign(ptr);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -32,7 +32,7 @@ ThreadSafePointerToBase(To *ptr) {
 template<class T>
 INLINE ThreadSafePointerToBase<T>::
 ThreadSafePointerToBase(const ThreadSafePointerToBase<T> &copy) {
-  reassign(copy);
+  this->reassign(copy);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ ThreadSafePointerToBase(const ThreadSafePointerToBase<T> &copy) {
 template<class T>
 INLINE ThreadSafePointerToBase<T>::
 ~ThreadSafePointerToBase() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -99,7 +99,7 @@ reassign(To *ptr) {
 template<class T>
 INLINE void ThreadSafePointerToBase<T>::
 reassign(const ThreadSafePointerToBase<To> &copy) {
-  reassign((To *)copy._void_ptr);
+  this->reassign((To *)copy._void_ptr);
 }
 
 #ifdef DO_MEMORY_USAGE
@@ -134,7 +134,7 @@ update_type(To *ptr) {
 template<class T>
 INLINE void ThreadSafePointerToBase<T>::
 clear() {
-  reassign((To *)NULL);
+  this->reassign((To *)NULL);
 }
 
 ////////////////////////////////////////////////////////////////////

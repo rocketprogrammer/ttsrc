@@ -22,6 +22,12 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+#elif defined(__SWITCH__)
+
+// Switch case.
+#include <unistd.h>
+#include <sys/types.h>
+
 #else
 
 // Posix case.
@@ -119,6 +125,10 @@ MemoryHook() {
 
   _page_size = (size_t)sysinfo.dwPageSize;
 
+#elif defined(__SWITCH__)
+  // SWITCH_TODO: Until we figure out how to get pagesize, it'll be 4096 bytes
+  _page_size = 4096;
+	
 #else
 
   // Posix case.
@@ -440,6 +450,10 @@ mmap_alloc(size_t size, bool allow_exec) {
 
   return ptr;
 
+#elif defined(__SWITCH__)
+  // SWITCH_TODO: Make it use nintendo kernel mmap functions
+  return malloc(size);
+  
 #else
 
   // Posix case.
@@ -475,6 +489,9 @@ mmap_free(void *ptr, size_t size) {
 
 #ifdef WIN32
   VirtualFree(ptr, 0, MEM_RELEASE);
+#elif defined(__SWITCH__)
+  // SWITCH_TODO: same as above
+  free(ptr);
 #else  
   munmap(ptr, size);
 #endif

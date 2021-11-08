@@ -203,9 +203,17 @@ eof_pipe() const {
 ////////////////////////////////////////////////////////////////////
 bool PipeStreamBuf::
 open_pipe(const string &cmd) {
+#ifdef __SWITCH__
+  // SWITCH_TODO: pretty sure there are no alternatives,
+  // but I'm leaving that here just in case
+  return false;
+  
+#else
   const char *typ = (_dir == Output)?"w":"r";
   _pipe = popen(cmd.c_str(), typ);
   return (_pipe != NULL);
+  
+#endif // __SWITCH__
 }
 
 ////////////////////////////////////////////////////////////////////

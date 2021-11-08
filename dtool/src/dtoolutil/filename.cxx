@@ -2381,7 +2381,7 @@ touch() const {
   CloseHandle(fhandle);
   return true;
 
-#elif defined(PHAVE_UTIME_H)
+#elif defined(PHAVE_UTIME_H) && !defined(__SWITCH__)
   // Most Unix systems can do this explicitly.
 
   string os_specific = to_os_specific();
@@ -2419,7 +2419,7 @@ touch() const {
   // modification time.  For these systems, we'll just temporarily
   // open the file in append mode, then close it again (it gets closed
   // when the pfstream goes out of scope).
-  pfstream file;
+  ofstream file;
   return open_append(file);
 #endif  // WIN32, PHAVE_UTIME_H
 }
@@ -2827,11 +2827,14 @@ atomic_compare_and_exchange_contents(string &orig_contents,
 
   orig_contents = string();
 
+#ifndef __SWITCH__
+// SWITCH_TODO: apparently there's no lock
   if (lockf(fd, F_LOCK, 0) != 0) {
     perror(os_specific.c_str());
     close(fd);
     return false;
   }
+#endif
     
   size_t bytes_read = read(fd, buf, buf_size);
   while (bytes_read > 0) {
@@ -2944,11 +2947,14 @@ atomic_read_contents(string &contents) const {
 
   contents = string();
 
+#ifndef __SWITCH__
+// SWITCH_TODO: apparently there's no lock
   if (lockf(fd, F_LOCK, 0) != 0) {
     perror(os_specific.c_str());
     close(fd);
     return false;
   }
+#endif
     
   size_t bytes_read = read(fd, buf, buf_size);
   while (bytes_read > 0) {

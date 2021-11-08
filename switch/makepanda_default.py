@@ -34,24 +34,20 @@ def GetIncludes(opts):
     res = [
         "thirdparty/switch-python",
         "thirdparty/switch-python/Include",
-        #"/opt/devkitpro/libnx/include" # switch
-        r"D:\devkitPro\libnx\include", # switch but without devkitpro
-        r"D:\devkitPro\portlibs\switch\include"
+        LIBNX_INCLUDE,
+        PORTLIBS_INCLUDE
     ]
     if opts:
-        for opt in set(opts):
-            if opt == "zlib":
-                res.append("thirdparty/switch-libs/zlib/include")
-            elif opt == "fftw":
-                res.append("thirdparty/switch-libs/fftw/include")
-            elif opt == "freetype":
-                res.append("thirdparty/switch-libs/freetype/include")
-            elif opt == "jpeg":
-                res.append("thirdparty/switch-libs/jpeg/include")
-            elif opt == "png":
-                res.append("thirdparty/switch-libs/png/include")
-            else:
-                print("!! Unknown option %r" % opt)
+        if "zlib" in opts:
+            res.append("thirdparty/switch-libs/zlib/include")
+        if "fftw" in opts:
+            res.append("thirdparty/switch-libs/fftw/include")
+        if "freetype" in opts:
+            res.append("thirdparty/switch-libs/freetype/include")
+        if "jpeg" in opts:
+            res.append("thirdparty/switch-libs/jpeg/include")
+        if "png" in opts:
+            res.append("thirdparty/switch-libs/png/include")
     
     return res
     

@@ -96,6 +96,11 @@
 #define GL_FUNC_SUBTRACT GL_FUNC_SUBTRACT_OES
 #define GL_FUNC_REVERSE_SUBTRACT GL_FUNC_REVERSE_SUBTRACT_OES
 
+#ifdef __SWITCH__
+// Missing on switch, for some reason
+#define GL_BGRA GL_BGRA_EXT
+#endif
+
 #undef SUPPORT_IMMEDIATE_MODE
 #define APIENTRY
 #define APIENTRYP *

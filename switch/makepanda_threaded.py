@@ -9,9 +9,12 @@ import time
 # Filesystem necessary locks
 FsLock = threading.Lock()
 
+_MakeDirs = mp.MakeDirs
 def MakeDirs(path):
     with FsLock:
-        mp.MakeDirs(path)
+        _MakeDirs(path)
+
+mp.MakeDirs = MakeDirs
 
 
 class TaskType(enum.IntEnum):

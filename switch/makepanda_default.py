@@ -78,8 +78,6 @@ def Compile(path, opts=None, building=None, output=None):
         cmd = [CXX, "-fPIC", "-pthread", "-Wno-register", "-ftemplate-depth-30"]
     else:
         raise Exception("Invalid file %r" % path)
-        
-    cmd += ["-include", "debug.h"]
     
     # ARCH
     cmd += ["-march=armv8-a+crc+crypto", "-mtune=cortex-a57", "-mtp=soft"]

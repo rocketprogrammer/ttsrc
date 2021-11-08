@@ -210,19 +210,23 @@ HTTPDate(const string &format) {
   }
 
   // Everything checks out; convert the date.
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__SWITCH__)
   _time = timegm(&t);
 
 #else  // __GNUC__
   // Without the GNU extension timegm, we have to use mktime() instead.
   _time = mktime(&t);
 
+#ifndef __SWITCH__
+  // SWITCH_TODO: check that timestamp stuff
   if (_time != (time_t)-1) {
     // Unfortunately, mktime() assumes local time; convert this back
     // to GMT.
     extern long int timezone;
     _time -= timezone;
   }
+#endif // __SWITCH__
+
 #endif  // __GNUC__
 }
 

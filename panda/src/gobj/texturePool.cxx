@@ -542,7 +542,7 @@ ns_load_3d_texture(const Filename &filename_pattern,
   }
 
   // Set the original filename, before we searched along the path.
-  nassertr(tex != (Texture *)NULL, false);
+  nassertr(tex != (Texture *)NULL, NULL);
   tex->set_filename(filename_pattern);
   tex->set_fullpath(filename);
   tex->_texture_pool_key = filename;
@@ -641,7 +641,7 @@ ns_load_cube_map(const Filename &filename_pattern, bool read_mipmaps,
   }
     
   // Set the original filename, before we searched along the path.
-  nassertr(tex != (Texture *)NULL, false);
+  nassertr(tex != (Texture *)NULL, NULL);
   tex->set_filename(filename_pattern);
   tex->set_fullpath(filename);
   tex->_texture_pool_key = filename;

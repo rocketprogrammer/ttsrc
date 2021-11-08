@@ -244,7 +244,7 @@ const int LOCAL_CONNECT_BLOCKING = EINPROGRESS;
 * LINUX and FreeBSD STUFF
 ************************************************************************/
 
-#elif defined(IS_LINUX) || defined(IS_OSX) || defined(IS_FREEBSD)
+#elif defined(IS_LINUX) || defined(IS_OSX) || defined(IS_FREEBSD) || defined(__SWITCH__)
 
 #include <sys/types.h>
 #include <sys/time.h>

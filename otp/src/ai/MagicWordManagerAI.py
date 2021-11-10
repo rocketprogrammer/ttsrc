@@ -488,7 +488,7 @@ class MagicWordManagerAI(DistributedObjectAI.DistributedObjectAI):
             for doId, do in list(simbase.air.doId2do.items()):
                 if isinstance(do, DistributedPlayerAI):
                     if doId != simbase.air.districtId and do.isPlayerControlled():
-                        do.d_setSystemMessage(0, 'Administrator: ' + message)
+                        do.d_setSystemMessage(0, f'{do.getName()} {message}')
 
             self.down_setMagicWordResponse(senderId, 'Broadcasted message to shard.')
 

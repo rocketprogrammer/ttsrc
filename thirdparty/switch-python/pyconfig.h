@@ -949,7 +949,7 @@
 // #undef HAVE_WORKING_TZSET
 
 /* Define if the zlib library has inflateCopy */
-// #undef HAVE_ZLIB_COPY
+#define HAVE_ZLIB_COPY 1
 
 /* Define to 1 if you have the `_getpty' function. */
 // #undef HAVE__GETPTY
@@ -999,7 +999,7 @@
 // #undef PYLONG_BITS_IN_DIGIT
 
 /* Define to printf format modifier for long long type */
-#define PY_FORMAT_LONG_LONG "I64"
+#define PY_FORMAT_LONG_LONG "ll"
 
 /* Define to printf format modifier for Py_ssize_t */
 // #undef PY_FORMAT_SIZE_T

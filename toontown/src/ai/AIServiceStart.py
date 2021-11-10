@@ -101,7 +101,7 @@ if not dcFileNames:
 # will be interlaced properly.
 
 # date_hour_sequence.log will be added to the logfile name by RotatingLog():
-logfile = logpath + 'aidistrict_' + origDistrictName + "_" +str(districtNumber)
+logfile = logpath + 'logs/aidistrict_' + origDistrictName + "_" +str(districtNumber)
 
 # Redirect Python output and err to the same file
 class LogAndOutput:

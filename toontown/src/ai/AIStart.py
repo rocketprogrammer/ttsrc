@@ -72,7 +72,7 @@ for i in range(1, 20+1):
 ltime = time.localtime()
 
 # date_hour_sequence.log will be added to the logfile name by RotatingLog():
-logfile = "aidistrict-dev-%02d%02d%02d_%02d%02d%02d.log" % (ltime[0]-2000,ltime[1],ltime[2],ltime[3],ltime[4],ltime[5])
+logfile = "logs/aidistrict-dev-%02d%02d%02d_%02d%02d%02d.log" % (ltime[0]-2000,ltime[1],ltime[2],ltime[3],ltime[4],ltime[5])
 
 # Redirect Python output and err to the same file
 class LogAndOutput:

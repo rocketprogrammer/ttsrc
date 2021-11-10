@@ -11,7 +11,6 @@ from toontown.toonbase import TTLocalizer
 from direct.showbase import PythonUtil
 import time, types
 notify = DirectNotifyGlobal.directNotify.newCategory('Quests')
-notify.setDebug(1)
 ItemDict = TTLocalizer.QuestsItemDict
 CompleteString = TTLocalizer.QuestsCompleteString
 NotChosenString = TTLocalizer.QuestsNotChosenString

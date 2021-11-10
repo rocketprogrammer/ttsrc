@@ -7,10 +7,8 @@
 
 #include "config_glesgsg.h"
 
-#ifdef HAVE_EGL
 #include "config_nxdisplay.h"
 #include "nxGraphicsPipe.h"
-#endif
 
 // By including checkPandaVersion.h, we guarantee that runtime
 // attempts to load libpandagles.so/.dll will fail if they inadvertently
@@ -29,10 +27,7 @@
 void
 init_libpandanx() {
   init_libglesgsg();
-
-#ifdef HAVE_EGL
   init_libnxdisplay();
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -42,9 +37,5 @@ init_libpandanx() {
 ////////////////////////////////////////////////////////////////////
 int
 get_pipe_type_pandanx() {
-#ifdef HAVE_EGL
   return nxGraphicsPipe::get_class_type().get_index();
-#endif
-
-  return 0;
 }

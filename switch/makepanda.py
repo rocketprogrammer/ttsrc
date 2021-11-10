@@ -565,7 +565,7 @@ Library("libpandanx.a", [
 
 # Unfortunately the ode header is not correct,
 # so we're disabling ode for now
-"""
+
 CopyHeaders("panda/src/ode")
 CopyHeaders("panda/metalibs/pandaode")
 
@@ -586,7 +586,7 @@ Library("libpandaode.a", [
         "libpandaode.in",
     ])
 ])
-"""
+
 
 
 #########################################
@@ -664,7 +664,7 @@ Library("libdirect.a", [
     Compile("direct/src/distributed/cDistributedSmoothNodeBase.cxx", building="DIRECT"),
     Interrogate("libdistributed.in",
         module="direct", library="libdistributed",
-        srcdir="direct/src/distributed", files=["*.h", "*_composite.cxx"],
+        srcdir="direct/src/distributed", files=["*.h", "*.cxx"],
         building="DIRECT"
     ),
     
@@ -875,7 +875,7 @@ for path, file in walk("thirdparty/switch-python/Lib"):
 #   modules we have built:
 pandacModules = ("libpandaexpress", "libpanda",
                  "libpandaskel", "libpandafx",
-                 "libpandaphysics", "libdirect",
+                 "libpandaphysics", "libpandaode", "libdirect",
                  "libotp", "libtoontown")
                  
 #   extension map

@@ -45,7 +45,7 @@
 #undef HAVE_MAYA
 #undef HAVE_MESA
 #define HAVE_NAMESPACE 1
-#undef HAVE_NET
+#define HAVE_NET 1
 #undef HAVE_NVIDIACG
 #define HAVE_ODE 1
 #undef HAVE_OPENAL

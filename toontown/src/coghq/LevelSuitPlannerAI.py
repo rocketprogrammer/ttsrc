@@ -6,6 +6,7 @@ from direct.directnotify import DirectNotifyGlobal
 from . import LevelBattleManagerAI
 import types
 import random
+import functools
 
 class LevelSuitPlannerAI(DirectObject.DirectObject):
 
@@ -45,7 +46,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         del self.cogCtor
         del self.level
         del self.air
-        
+
     def __genJoinChances( self, num ):
         """
         ////////////////////////////////////////////////////////////////////
@@ -57,7 +58,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         joinChances = []
         for currChance in range( num ):
             joinChances.append( random.randint( 1, 100 ) )
-        joinChances.sort( cmp )
+        joinChances.sort( key=functools.cmp_to_key(cmp) )
         return joinChances
 
     def __genSuitInfos(self, level, track):
@@ -76,7 +77,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             suitDict['level'] += level
             suitDict['cogId'] = cogId
             return suitDict
-        
+
         # Build a dictionary with types, levels, and locations for suits
         self.suitInfos = {}
         self.suitInfos['activeSuits'] = []
@@ -85,7 +86,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             self.suitInfos['activeSuits'].append(getSuitDict(spec, i))
 
         # reserveSuits
-        
+
         numReserve = len(self.reserveCogSpecs)
         joinChances = self.__genJoinChances(numReserve)
         self.suitInfos['reserveSuits'] = []
@@ -179,7 +180,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
                              battle.fsm.getCurrentState().getName(), toonId))
                     else:
                         self.notify.warning('battle not joinable: no battle for cell %s, toonId=%s' % (cellIndex, toonId))
-                        
+
                     return 0
 
         return 1
@@ -236,7 +237,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
 
                 # SDN: fsm-ify this?
                 self.reservesJoining(battle)
-                
+
                 level.d_setSuits()
                 return
 
@@ -254,7 +255,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
 
     def __handleBattleFinished(self, zoneId):
         pass
-    
+
     def reservesJoining(self, battle):
         # note, once we put in the animation for suits joining battle
         # we should delay this code by the time it takes to play the animation
@@ -262,7 +263,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             battle.suitRequestJoin(info[0])
         battle.resume()
         self.joinedReserves = []
-            
+
     def getDoId(self):
         # This is a dummy function so we don't need to modify DistributedSuit
         return 0
@@ -288,7 +289,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
 
             # register suit with the blocker for this newCell
             def addSuitToBlocker(self=self):
-                blocker = self.battleMgr.battleBlockers.get(newCell) 
+                blocker = self.battleMgr.battleBlockers.get(newCell)
                 if blocker:
                     blocker.addSuit(suit)
                     return 1
@@ -297,6 +298,6 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
             if not addSuitToBlocker():
                 # wait for the creation of this blocker, then add this suit
                 self.accept(self.getBattleBlockerEvent(newCell), addSuitToBlocker)
-                
+
     def getBattleBlockerEvent(self, cellId):
         return "battleBlockerAdded-"+str(self.level.doId)+"-"+str(cellId)

@@ -30,7 +30,7 @@ class LevelBattleManagerAI(BattleManagerAI.BattleManagerAI):
         del self.battleBlockers
         del self.cellId2battle
         del self.battleExpAggreg
-    
+
     def newBattle(self, cellId, zoneId, pos, suit, toonId,
                   roundCallback=None, finishCallback=None,
                   maxSuits=4):
@@ -67,7 +67,7 @@ class LevelBattleManagerAI(BattleManagerAI.BattleManagerAI):
 
             battle.generateWithRequired(zoneId)
             self.cellId2battle[cellId] = battle
-            
+
         return battle
 
     def addBattleBlocker(self, blocker, cellId):

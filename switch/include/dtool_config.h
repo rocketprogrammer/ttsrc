@@ -23,8 +23,8 @@
 #undef HAVE_DIRECTCAM
 #undef HAVE_DX8
 #undef HAVE_DX9
-#define HAVE_EGG 1
-#define HAVE_EGL 1
+#undef HAVE_EGG
+#undef HAVE_EGL
 #undef HAVE_FCOLLADA
 #undef HAVE_FFMPEG
 #define HAVE_FFTW 1
@@ -33,9 +33,9 @@
 #define HAVE_GETOPT 1
 #undef HAVE_GETOPT_LONG_ONLY
 #define HAVE_GETTIMEOFDAY 1
-#define HAVE_GL 1
+#undef HAVE_GL
 #define HAVE_GLES 1
-#define HAVE_GLES2 1
+#undef HAVE_GLES2
 #undef HAVE_GLOBAL_ARGV
 #undef HAVE_GLX
 #undef HAVE_IMG

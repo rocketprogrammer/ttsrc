@@ -172,7 +172,7 @@ def StartThreads():
     TaskCount = TaskQueue.qsize()
     
     print("Starting threads!")
-    for n in range(6):
+    for n in range(8):
         th = threading.Thread(target=HandleQueue)
         th.start()
         

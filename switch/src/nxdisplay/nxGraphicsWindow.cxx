@@ -27,6 +27,9 @@ nxGraphicsWindow(GraphicsEngine *engine, GraphicsPipe *pipe,
 	DCAST_INTO_V(nx_pipe, _pipe);
 	_egl_display = nx_pipe->_egl_display;
 	_egl_surface = 0;
+	
+	GraphicsWindowInputDevice device = GraphicsWindowInputDevice::pointer_and_keyboard(this, "keyboard_mouse");
+	add_input_device(device);
 }
 
 nxGraphicsWindow::

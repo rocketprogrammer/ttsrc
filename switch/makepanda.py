@@ -866,9 +866,7 @@ else:
 # python
 for path, file in walk("thirdparty/switch-python/Lib"):
     if file.endswith(".py"):
-        if path and (path[0] in ("test", "unittest", "lib-tk", "lib2to3", "msilib", "idlelib",
-                                 "hotshot", "ensurepip", "distutils", "multiprocessing", "sqlite3")
-                     or path[0].startswith("plat-")):
+        if path and path[0].startswith("plat-"):
             continue
             
         doPyFile(
@@ -918,7 +916,7 @@ doPyFile("direct/src/extensions_native/extension_native_helpers.py", os.path.joi
 # direct
 doPyFile(os.path.join(TMPDIR, "__init__.py"), os.path.join(DIRECT, "__init__.py"))
 for path, file in walk("direct/src"):
-    if path and path[0] == "extensions":
+    if path and path[0] in ("extensions", "extensions-native"):
         continue
         
     if file.endswith(".py"):

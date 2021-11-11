@@ -72,7 +72,7 @@ def Module(name, module, library, files, opts=None):
     
 def HandleQueue():
     print("Started thread")
-    while True:
+    while TaskQueue.qsize():
         try:
             task = TaskQueue.get(False)
         except queue.Empty:
@@ -172,7 +172,14 @@ def StartThreads():
     TaskCount = TaskQueue.qsize()
     
     print("Starting threads!")
-    for n in range(12):
+    for n in range(6):
         th = threading.Thread(target=HandleQueue)
         th.start()
         
+    try:
+        while TaskQueue.qsize():
+            time.sleep(1)
+            
+    finally:
+        with TaskQueue.mutex:
+            TaskQueue.queue.clear()

@@ -554,7 +554,7 @@
 // #undef HAVE_PTH
 
 /* Define to 1 if you have the `pthread_atfork' function. */
-// #undef HAVE_PTHREAD_ATFORK
+#define HAVE_PTHREAD_ATFORK 1
 
 /* Defined for Solaris 2.6 bug in pthread header. */
 // #undef HAVE_PTHREAD_DESTRUCTOR
@@ -563,10 +563,10 @@
 #define HAVE_PTHREAD_H 1
 
 /* Define to 1 if you have the `pthread_init' function. */
-// #undef HAVE_PTHREAD_INIT
+#define HAVE_PTHREAD_INIT 1
 
 /* Define to 1 if you have the `pthread_sigmask' function. */
-// #undef HAVE_PTHREAD_SIGMASK
+#define HAVE_PTHREAD_SIGMASK 1
 
 /* Define to 1 if you have the <pty.h> header file. */
 // #undef HAVE_PTY_H
@@ -866,7 +866,7 @@
 #define HAVE_TGAMMA 1
 
 /* Define to 1 if you have the <thread.h> header file. */
-// #undef HAVE_THREAD_H
+#define HAVE_THREAD_H 1
 
 /* Define to 1 if you have the `timegm' function. */
 // #undef HAVE_TIMEGM
@@ -1059,7 +1059,7 @@
 // #undef SIZEOF_PID_T
 
 /* The size of `pthread_t', as computed by sizeof. */
-// #undef SIZEOF_PTHREAD_T
+#define SIZEOF_PTHREAD_T 8
 
 /* The size of `short', as computed by sizeof. */
 #define SIZEOF_SHORT 2
@@ -1068,7 +1068,7 @@
 #define SIZEOF_SIZE_T 8
 
 /* The size of `time_t', as computed by sizeof. */
-// #undef SIZEOF_TIME_T
+#define SIZEOF_TIME_T 8
 
 /* The size of `uintptr_t', as computed by sizeof. */
 #define SIZEOF_UINTPTR_T 8
@@ -1158,7 +1158,7 @@
 // #undef WITH_PYMALLOC
 
 /* Define if you want to compile in rudimentary thread support */
-// #undef WITH_THREAD
+#define WITH_THREAD 1
 
 /* Define to profile with the Pentium timestamp counter */
 // #undef WITH_TSC
@@ -1222,10 +1222,10 @@
 // #undef _POSIX_SOURCE
 
 /* Define if you have POSIX threads, and your system does not define that. */
-// #undef _POSIX_THREADS
+#define _POSIX_THREADS 1
 
 /* Define to force use of thread-safe errno, h_errno, and other functions */
-// #undef _REENTRANT
+#define _REENTRANT 1
 
 /* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
    <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the

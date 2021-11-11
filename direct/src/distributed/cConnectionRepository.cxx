@@ -59,7 +59,12 @@ CConnectionRepository(bool has_owner_view, bool threaded_net) :
   _qcr(&_qcm, threaded_net ? 1 : 0),
 #endif
 #ifdef WANT_NATIVE_NET
+#ifdef __SWITCH__
+  // Switch does not support same buffer size
+  _bdc(4096,4090,1400),
+#else
   _bdc(4096000,4096000,1400),
+#endif
   _native(false),
 #endif
   _client_datagram(true),

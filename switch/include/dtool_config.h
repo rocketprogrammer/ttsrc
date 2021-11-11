@@ -56,7 +56,7 @@
 // #undef HAVE_P3D_PLUGIN
 #define HAVE_PNG 1
 #define HAVE_PNM 1
-// #undef HAVE_POSIX_THREADS
+#define HAVE_POSIX_THREADS 1
 // #undef HAVE_PROC_CURPROC_FILE
 // #undef HAVE_PROC_CURPROC_MAP
 // #undef HAVE_PROC_SELF_CMDLINE
@@ -75,7 +75,7 @@
 #define HAVE_STREAMSIZE 1
 // #undef HAVE_SWSCALE
 // #undef HAVE_TGA
-// #undef HAVE_THREADS
+#define HAVE_THREADS 1
 // #undef HAVE_TIFF
 #define HAVE_TYPENAME 1
 // #undef HAVE_VIDEO4LINUX

@@ -857,6 +857,12 @@ def walk(root, curpath=[]):
 open(os.path.join(TMPDIR, "__init__.py"), "w").close()
 
 
+if False:
+    doPyFile = lambda src, dst: Compile(src, dst + "c")
+else:
+    doPyFile = lambda src, dst: CopyFile(src, dst)
+
+
 # python
 for path, file in walk("thirdparty/switch-python/Lib"):
     if file.endswith(".py"):
@@ -865,9 +871,9 @@ for path, file in walk("thirdparty/switch-python/Lib"):
                      or path[0].startswith("plat-")):
             continue
             
-        Compile(
+        doPyFile(
             os.path.join("thirdparty/switch-python/Lib", *path, file),
-            os.path.join(PYTHON_LIB, *path, file + "c")
+            os.path.join(PYTHON_LIB, *path, file)
         )
         
         
@@ -902,23 +908,23 @@ with open(os.path.join(TMPDIR, "PandaModules.py"), "w") as pmfile:
                     
                 mfile.write("\n\n")
                 
-        Compile(os.path.join(TMPDIR, module + "Modules.py"), os.path.join(PANDAC, module + "Modules.pyc"))
+        doPyFile(os.path.join(TMPDIR, module + "Modules.py"), os.path.join(PANDAC, module + "Modules.py"))
     
-Compile(os.path.join(TMPDIR, "PandaModules.py"), os.path.join(PANDAC, "PandaModules.pyc"))
-Compile(os.path.join(TMPDIR, "__init__.py"), os.path.join(PANDAC, "__init__.pyc"))
-Compile("direct/src/extensions_native/extension_native_helpers.py", os.path.join(PANDAC, "extension_native_helpers.pyc"))
+doPyFile(os.path.join(TMPDIR, "PandaModules.py"), os.path.join(PANDAC, "PandaModules.py"))
+doPyFile(os.path.join(TMPDIR, "__init__.py"), os.path.join(PANDAC, "__init__.py"))
+doPyFile("direct/src/extensions_native/extension_native_helpers.py", os.path.join(PANDAC, "extension_native_helpers.py"))
 
 
 # direct
-Compile(os.path.join(TMPDIR, "__init__.py"), os.path.join(DIRECT, "__init__.pyc"))
+doPyFile(os.path.join(TMPDIR, "__init__.py"), os.path.join(DIRECT, "__init__.py"))
 for path, file in walk("direct/src"):
     if path and path[0] == "extensions":
         continue
         
     if file.endswith(".py"):
-        Compile(
+        doPyFile(
             os.path.join("direct/src", *path, file),
-            os.path.join(DIRECT, *path, file + "c")
+            os.path.join(DIRECT, *path, file)
         )
 
 

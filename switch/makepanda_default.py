@@ -15,6 +15,7 @@ def MakeDirs(path):
     
     
 def CopyFile(path, target):
+    MakeDirs(os.path.dirname(target))
     with FsLock:
         if ShouldUpdate(path, target):
             shutil.copyfile(path, target)
@@ -28,7 +29,6 @@ def MoveFile(path, target):
     
     
 def CopyFileTo(path, target, name=None):
-    MakeDirs(target)        
     targetpath = os.path.join(target, name or os.path.basename(path))
     CopyFile(path, targetpath)
 

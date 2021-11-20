@@ -6,10 +6,7 @@
 #include "pStatTimer.h"
 
 #include "graphicsPipe.h"
-
-namespace libnx {
-#include <switch.h>
-}
+#include "mouseButton.h"
 
 TypeHandle nxGraphicsWindow::_type_handle;
 
@@ -21,15 +18,17 @@ nxGraphicsWindow(GraphicsEngine *engine, GraphicsPipe *pipe,
                   int flags,
                   GraphicsStateGuardian *gsg,
                   GraphicsOutput *host) :
-	GraphicsWindow(engine, pipe, name, fb_prop, win_prop, flags, gsg, host)
+    GraphicsWindow(engine, pipe, name, fb_prop, win_prop, flags, gsg, host)
 {
-	nxGraphicsPipe *nx_pipe;
-	DCAST_INTO_V(nx_pipe, _pipe);
-	_egl_display = nx_pipe->_egl_display;
-	_egl_surface = 0;
-	
-	GraphicsWindowInputDevice device = GraphicsWindowInputDevice::pointer_and_keyboard(this, "keyboard_mouse");
-	add_input_device(device);
+    nxGraphicsPipe *nx_pipe;
+    DCAST_INTO_V(nx_pipe, _pipe);
+    _egl_display = nx_pipe->_egl_display;
+    _egl_surface = 0;
+    _win = 0;
+    _touchcount = 0;
+    
+    GraphicsWindowInputDevice device = GraphicsWindowInputDevice::pointer_and_keyboard(this, "keyboard_mouse");
+    add_input_device(device);
 }
 
 nxGraphicsWindow::
@@ -100,54 +99,91 @@ end_frame(FrameMode mode, Thread *current_thread) {
 
 void nxGraphicsWindow::
 begin_flip() {
-	if (_gsg != (GraphicsStateGuardian *)NULL) {
-		eglSwapBuffers(_egl_display, _egl_surface);
-	}
+    if (_gsg != (GraphicsStateGuardian *)NULL) {
+        eglSwapBuffers(_egl_display, _egl_surface);
+    }
 }
 
 bool nxGraphicsWindow::
-open_window() {
-	printf("open_window()\n");
-	
-	nxGraphicsPipe *nx_pipe;
-	DCAST_INTO_R(nx_pipe, _pipe, false);
-	
-	// GSG Creation/Initialization
-	nxGraphicsStateGuardian *nxgsg;
-	if (_gsg == 0) {
-	// There is no old gsg.  Create a new one.
-		nxgsg = new nxGraphicsStateGuardian(_engine, _pipe, NULL);
-		nxgsg->choose_pixel_format(_fb_properties, _egl_display, false, false);
-		_gsg = nxgsg;
-	} else {
-		// If the old gsg has the wrong pixel format, create a
-		// new one that shares with the old gsg.
-		DCAST_INTO_R(nxgsg, _gsg, false);
-		if (!nxgsg->get_fb_properties().subsumes(_fb_properties)) {
-			nxgsg = new nxGraphicsStateGuardian(_engine, _pipe, nxgsg);
-			nxgsg->choose_pixel_format(_fb_properties, _egl_display, false, false);
-			_gsg = nxgsg;
-		}
-	}
-	
-	libnx::NWindow* win = libnx::nwindowGetDefault();
-	
-	// Create an EGL window surface
-	_egl_surface = eglCreateWindowSurface(_egl_display, nxgsg->_fbconfig, win, nullptr);	
-	if (!_egl_surface) {
-		printf("eglCreateWindowSurface failed\n");
-		return false;
-	}
-	
+open_window() {    
+    nxGraphicsPipe *nx_pipe;
+    DCAST_INTO_R(nx_pipe, _pipe, false);
+    
+    // GSG Creation/Initialization
+    nxGraphicsStateGuardian *nxgsg;
+    if (_gsg == 0) {
+    // There is no old gsg.  Create a new one.
+        nxgsg = new nxGraphicsStateGuardian(_engine, _pipe, NULL);
+        nxgsg->choose_pixel_format(_fb_properties, _egl_display, false, false);
+        _gsg = nxgsg;
+    } else {
+        // If the old gsg has the wrong pixel format, create a
+        // new one that shares with the old gsg.
+        DCAST_INTO_R(nxgsg, _gsg, false);
+        if (!nxgsg->get_fb_properties().subsumes(_fb_properties)) {
+            nxgsg = new nxGraphicsStateGuardian(_engine, _pipe, nxgsg);
+            nxgsg->choose_pixel_format(_fb_properties, _egl_display, false, false);
+            _gsg = nxgsg;
+        }
+    }
+    
+    _win = libnx::nwindowGetDefault();
+    
+    // Create an EGL window surface
+    _egl_surface = eglCreateWindowSurface(_egl_display, nxgsg->_fbconfig, _win, nullptr);    
+    if (!_egl_surface) {
+        printf("eglCreateWindowSurface failed\n");
+        return false;
+    }
+    
     if (!eglMakeCurrent(_egl_display, _egl_surface, _egl_surface, nxgsg->_context)) {
-		printf("eglMakeCurrent failed\n");
-	}
-	nxgsg->reset_if_new();
-	_fb_properties = nxgsg->get_fb_properties();
-	return true;
+        printf("eglMakeCurrent failed\n");
+    }
+    
+    // Configure our supported input layout: a single player with standard controller styles,
+    // then initialize the gamepad
+    libnx::padConfigureInput(1, libnx::HidNpadStyleSet_NpadStandard);
+    libnx::padInitializeDefault(&_pad);
+    
+    // Initialize touchscreen
+    libnx::hidInitializeTouchScreen();
+    
+    nxgsg->reset_if_new();
+    _fb_properties = nxgsg->get_fb_properties();
+    return true;
 }
 
 void nxGraphicsWindow::
 close_window() {
-	printf("close_window()\n");
+    printf("close_window()\n");
+}
+
+void nxGraphicsWindow::
+process_events() {
+    GraphicsWindow::process_events();
+    
+    if (_win == NULL)
+        return;
+    
+    if (libnx::appletMainLoop()) {
+        libnx::padUpdate(&_pad);
+        libnx::u64 kDown = padGetButtonsDown(&_pad);
+        
+        libnx::HidTouchScreenState state={0};
+        if (libnx::hidGetTouchScreenStates(&state, 1)) {
+            // we just released, so it's a click
+            if (state.count == 0 && _touchcount != 0) {
+                _input_devices[0].button_up(MouseButton::button(0));
+                
+            } else if (state.count == 1) {
+                if (_touchcount != 1)
+                    _input_devices[0].button_down(MouseButton::button(0));
+                
+                libnx::HidTouchState touch = state.touches[0];
+                _input_devices[0].set_pointer_in_window(touch.x, touch.y);
+            }
+            
+            _touchcount = state.count;
+        }
+    }
 }

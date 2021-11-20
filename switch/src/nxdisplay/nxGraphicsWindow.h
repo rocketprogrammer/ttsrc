@@ -6,6 +6,10 @@
 #include "nxGraphicsPipe.h"
 #include "graphicsWindow.h"
 
+namespace libnx {
+#include <switch.h>
+}
+
 class nxGraphicsWindow : public GraphicsWindow {
 public:
   nxGraphicsWindow(GraphicsEngine *engine, GraphicsPipe *pipe,
@@ -21,6 +25,8 @@ public:
   virtual void end_frame(FrameMode mode, Thread *current_thread);
   virtual void begin_flip();
   
+  virtual void process_events();
+  
 protected:
   virtual void close_window();
   virtual bool open_window();
@@ -28,6 +34,10 @@ protected:
 private:
   EGLDisplay _egl_display;
   EGLSurface _egl_surface;
+  
+  libnx::NWindow* _win;
+  libnx::PadState _pad;
+  libnx::s32 _touchcount;
 
 public:
   static TypeHandle get_class_type() {

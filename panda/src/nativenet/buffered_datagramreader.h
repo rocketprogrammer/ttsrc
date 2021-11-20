@@ -52,7 +52,10 @@ public:
             Compress();
             readsize = BufferAvailabe();
         }
-
+#ifdef __SWITCH__
+        if (readsize > 4096)
+            readsize = 4096;
+#endif        
         if(readsize > 0)
         {
             char * ff = GetBufferOpen();

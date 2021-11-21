@@ -58,8 +58,7 @@ make_output(const string &name,
             GraphicsOutput *host,
             int retry,
             bool &precertify) {	
-
-	printf("making output\n");
+            
 	if (!_is_valid) {
 		return NULL;
 	}
@@ -79,7 +78,6 @@ make_output(const string &name,
 
 	// First thing to try: a nxGraphicsWindow
 	if (retry == 0) {
-		printf("trying nxgraph window\n");
 		if (((flags&BF_require_parasite)!=0)||
 				((flags&BF_refuse_window)!=0)||
 				((flags&BF_resizeable)!=0)||
@@ -96,7 +94,6 @@ make_output(const string &name,
 				return NULL;
 			}
 		}
-		printf("returning it\n");
 		return new nxGraphicsWindow(engine, this, name, fb_prop, win_prop,
 									 flags, gsg, host);
 	}
@@ -104,7 +101,6 @@ make_output(const string &name,
 
 	
 	if (retry == 1) {
-		printf("trying gles2graf buf\n");
 		if (//(!gl_support_fbo)||
 				(host==0)||
 				((flags&BF_require_parasite)!=0)||
@@ -129,11 +125,9 @@ make_output(const string &name,
 				(fb_prop.is_basic())) {
 			precertify = true;
 		}
-		printf("returning it (graf)\n");
 		return new GLESGraphicsBuffer(engine, this, name, fb_prop, win_prop,
 									flags, gsg, host);
 	}
 	
-	printf("we failed sorry\n");
 	return NULL;
 }

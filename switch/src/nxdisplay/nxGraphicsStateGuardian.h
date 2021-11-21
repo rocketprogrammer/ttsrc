@@ -4,11 +4,6 @@
 #include "pandabase.h"
 #include "nxGraphicsPipe.h"
 
-////////////////////////////////////////////////////////////////////
-//       Class : nxGraphicsStateGuardian
-// Description : A tiny specialization on GLES2GraphicsStateGuardian
-//               to add some egl-specific information.
-////////////////////////////////////////////////////////////////////
 class nxGraphicsStateGuardian : public GLESGraphicsStateGuardian {
 public:
   INLINE const FrameBufferProperties &get_fb_properties() const;

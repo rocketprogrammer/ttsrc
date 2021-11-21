@@ -54,17 +54,15 @@ get_properties(FrameBufferProperties &properties,
 	eglGetConfigAttrib(_egl_display, config, EGL_CONFIG_CAVEAT, &caveat);
 	int err = eglGetError();
 	if (err != EGL_SUCCESS) {
-		printf("failed to get egl config attrib\n");
+        return;
 	}
 
 	pbuffer_supported = ((surface_type & EGL_PBUFFER_BIT)!=0);
 	pixmap_supported =  ((surface_type & EGL_PIXMAP_BIT)!=0);
 	slow = (caveat == EGL_SLOW_CONFIG);
 	
-	printf("stencil color %d %d %d alpha %d depth %d stencil %d\n", red_size, green_size, blue_size, alpha_size, depth_size, stencil_size);
 	// We really want those red green blue alpha depth stencil
 	if ((red_size != 8 || green_size != 8 || blue_size != 8 || alpha_size != 8 || depth_size != 24 || stencil_size != 8)) {
-		printf("Ignoring one of the configs\n");
 		return;
 	}
 	
@@ -117,14 +115,12 @@ choose_pixel_format(const FrameBufferProperties &properties,
 	int best_quality = 0;
 	int best_result = 0;
 	FrameBufferProperties best_props;
-	
-	printf("num_configs %d\n", num_configs);
 
 	if (configs != 0) {
 		for (int i = 0; i < num_configs; ++i) {
 			FrameBufferProperties fbprops;
 			bool pbuffer_supported, pixmap_supported, slow;
-			printf("testing config\n");
+            
 			get_properties(fbprops, pbuffer_supported, pixmap_supported, slow, configs[i]);
 			
 			int quality = fbprops.get_quality(properties);
@@ -136,8 +132,6 @@ choose_pixel_format(const FrameBufferProperties &properties,
 			if (need_pixmap && !pixmap_supported) {
 				continue;
 			}
-			
-			printf("nice %d > %d\n", quality, best_quality);
 
 			if (quality > best_quality) {
 				best_quality = quality;
@@ -167,7 +161,6 @@ choose_pixel_format(const FrameBufferProperties &properties,
 		_fbconfig = 0;
 		_context = 0;
 	}
-	printf("no usable pixel fmt\n");
 }
 
 void nxGraphicsStateGuardian::
@@ -205,9 +198,8 @@ query_gl_version() {
 
 	// Calling eglInitialize on an already-initialized display will
 	// just provide us the version numbers.
-	printf("eglInitialize(_egl_display, &_egl_version_major, &_egl_version_minor)\n");
 	if (!eglInitialize(_egl_display, &_egl_version_major, &_egl_version_minor)) {
-		printf("failed to get ver num\n");
+		printf("failed to get gl version\n");
 	}
 	
 	printf("gl version %d.%d\n", _egl_version_major, _egl_version_minor);

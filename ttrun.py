@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     # we need some sql config
     loadPrcFileData("", "mysql-user root")
-    loadPrcFileData("", "mysql-passwd")
+    loadPrcFileData("", "mysql-passwd bTLMcKB8qR6s8Tth0kRMuMD7EIklTLp65JEHN")
     loadPrcFileData("", "want-code-redemption-init-db 1")
 
     loadPrcFileData("", "dc-file resources/phase_3/etc/otp.dc")

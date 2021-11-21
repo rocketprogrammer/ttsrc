@@ -72,10 +72,10 @@ def rgb2yuv(r,g,b):
     y =  .299*r + .587*g + .114*b
     u = -.169*r - .331*g + .500*b + .5
     v =  .500*r - .419*g - .081*b + .5
-    return tuple(map(lambda x: min(max(x,0),1), (y,u,v)))
+    return tuple([min(max(x,0),1) for x in (y,u,v)])
 
 def yuv2rgb(y,u,v):
     r = y - 0.0009267*(u-.5) + 1.4016868*(v-.5)
     g = y - 0.3436954*(u-.5) - 0.7141690*(v-.5)
     b = y + 1.7721604*(u-.5) + 0.0009902*(v-.5)
-    return tuple(map(lambda x: min(max(x,0),1), (r,g,b)))
+    return tuple([min(max(x,0),1) for x in (r,g,b)])

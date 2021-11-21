@@ -1,6 +1,6 @@
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
-from AIMsgTypes import *
+from .AIMsgTypes import *
 from direct.showbase.PythonUtil import Functor, randUint32
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
@@ -275,14 +275,14 @@ class AIDistrict(AIRepository):
 
         try:
             return AIRepository.readerPollUntilEmpty(self, task)
-        except Exception, e:
+        except Exception as e:
             appendStr(e, '\nSENDER ID: %s' % self.getAvatarIdFromSender())
             raise
 
     def handleReaderOverflow(self):
         # may as well delete the shard at this point
         self.deleteDistrict(self.districtId)
-        raise StandardError, ("incoming-datagram buffer overflowed, "
+        raise Exception("incoming-datagram buffer overflowed, "
                               "aborting AI process")
 
     ##### General Purpose functions #####

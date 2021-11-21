@@ -18,7 +18,7 @@ class DistributedInterestOpenerAI(DistributedObjectAI):
 
     def announceGenerate(self):
         DistributedObjectAI.announceGenerate(self)
-        print 'DistributedInterestOpenerAI.announceGenerate: %s' % self.doId
+        print('DistributedInterestOpenerAI.announceGenerate: %s' % self.doId)
 
     def setRequiredDoIds(self, requiredDoIds):
         # call this to change the list of required doIds

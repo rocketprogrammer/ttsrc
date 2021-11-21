@@ -1,9 +1,9 @@
 """SpeedChat.py: contains the SpeedChat class"""
 
 from direct.showbase.PythonUtil import boolEqual
-from SpeedChatTypes import *
-from SCSettings import SCSettings
-from SCTerminal import SCWhisperModeChangeEvent
+from .SpeedChatTypes import *
+from .SCSettings import SCSettings
+from .SCTerminal import SCWhisperModeChangeEvent
 from otp.otpbase import OTPLocalizer
 
 # for speedchat tech details, see the bottom of this file.

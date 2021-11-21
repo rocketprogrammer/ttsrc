@@ -14,10 +14,10 @@ class PickANamePattern:
         nameParts = self._getNameParts(gender)
         # convert from string->index to index->string
         invNameParts = []
-        for i in xrange(len(nameParts)):
+        for i in range(len(nameParts)):
             invNameParts.append(invertDict(nameParts[i]))
         name = ''
-        for i in xrange(len(pattern)):
+        for i in range(len(pattern)):
             if pattern[i] != -1:
                 if len(name):
                     name += ' '
@@ -134,9 +134,9 @@ class PickANamePatternTwoPartLastName(PickANamePattern):
         combinedIndex2indices = {}
         lastNamePrefixesCapped = set(self._getLastNameCapPrefixes())
         k = 0
-        for first, i in nameParts[-2].iteritems():
+        for first, i in nameParts[-2].items():
             capitalize = first in lastNamePrefixesCapped
-            for second, j in nameParts[-1].iteritems():
+            for second, j in nameParts[-1].items():
                 combinedLastName = first
                 # capitalize the last name suffix if appropriate (Mc, Mac, etc.)
                 if capitalize:

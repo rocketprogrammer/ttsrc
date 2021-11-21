@@ -6,7 +6,7 @@ from direct.distributed.ClockDelta import *
 
 from direct.directnotify import DirectNotifyGlobal
 from direct.fsm import ClassicFSM
-import DistributedEntity
+from . import DistributedEntity
 
 class DistributedInteractiveEntity(DistributedEntity.DistributedEntity):
     """
@@ -68,7 +68,7 @@ class DistributedInteractiveEntity(DistributedEntity.DistributedEntity):
         required dc field.
         """
         assert self.debugPrint("setAvatarInteract(%s)"%(avatarId,))
-        assert not self.__dict__.has_key(avatarId)
+        assert avatarId not in self.__dict__
         self.avatarId=avatarId
     
     def setOwnerDoId(self, ownerDoId):
@@ -76,7 +76,7 @@ class DistributedInteractiveEntity(DistributedEntity.DistributedEntity):
         required dc field.
         """
         assert self.debugPrint("setOwnerDoId(%s)"%(ownerDoId,))
-        assert not self.__dict__.has_key("ownerDoId")
+        assert "ownerDoId" not in self.__dict__
         self.ownerDoId=ownerDoId
         
     def setState(self, state, timestamp):

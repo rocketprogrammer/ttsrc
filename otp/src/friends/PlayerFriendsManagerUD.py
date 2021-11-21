@@ -171,11 +171,11 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
                                               accountInfo.openChatEnabledYesNo)
 
             if accountInfo.onlineYesNo:
-                self.sendUpdateToChannel((3L<<32)+accountId,
+                self.sendUpdateToChannel((3<<32)+accountId,
                                          "updatePlayerFriend",
                                          [friendId,friendInfo,0])
 
-            self.sendUpdateToChannel((3L<<32)+friend[0],
+            self.sendUpdateToChannel((3<<32)+friend[0],
                                      "updatePlayerFriend",
                                      [accountId,accountInfo,0])
 
@@ -215,28 +215,28 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
         self.removeFriendship(accountId,otherAccountId)
 
     def recvInviteNotice(self, inviteeId, inviterId, inviterAvName):
-        self.sendUpdateToChannel((3L<<32)+inviteeId, "invitationFrom", [inviterId,inviterAvName])
+        self.sendUpdateToChannel((3<<32)+inviteeId, "invitationFrom", [inviterId,inviterAvName])
 
     def recvInviteRetracted(self, inviteeId, inviterId):
-        self.sendUpdateToChannel((3L<<32)+inviteeId, "retractInvite", [inviterId])
+        self.sendUpdateToChannel((3<<32)+inviteeId, "retractInvite", [inviterId])
 
     def recvInviteRejected(self, inviterId, inviteeId, reason):
-        self.sendUpdateToChannel((3L<<32)+inviterId, "rejectInvite", [inviteeId, reason])
+        self.sendUpdateToChannel((3<<32)+inviterId, "rejectInvite", [inviteeId, reason])
 
     def recvFriendshipRemoved(self,accountId,otherAccountId):
         self.notify.debug("recvFriendshipRemoved on %d,%d"%(accountId,otherAccountId))
 
-        self.sendUpdateToChannel((3L<<32)+accountId,"removePlayerFriend",[otherAccountId])
-        self.sendUpdateToChannel((3L<<32)+otherAccountId,"removePlayerFriend",[accountId])        
+        self.sendUpdateToChannel((3<<32)+accountId,"removePlayerFriend",[otherAccountId])
+        self.sendUpdateToChannel((3<<32)+otherAccountId,"removePlayerFriend",[accountId])        
 
 
     # SECRETS
     def requestUnlimitedSecret(self,senderId):
-        print "# got unlimited secret request"
+        print("# got unlimited secret request")
         self.sendSecretRequest(senderId)
         
     def requestLimitedSecret(self,senderId,parentUsername,parentPassword):
-        print "# got limited secret request"
+        print("# got limited secret request")
         self.sendSecretRequest(senderId,parentUsername,parentPassword)
 
     def requestUseUnlimitedSecret(self,senderId,secret):
@@ -246,16 +246,16 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
         self.sendSecretRedeem(senderId,secret,parentUsername,parentPassword)
 
     def recvAddFriendshipError(self,playerId,error):
-        self.sendUpdateToChannel((3L<<32)+playerId,"rejectInvite",[error])
+        self.sendUpdateToChannel((3<<32)+playerId,"rejectInvite",[error])
 
     def recvSecretGenerated(self,playerId,secret):
-        self.sendUpdateToChannel((3L<<32)+playerId,"secretResponse",[secret])
+        self.sendUpdateToChannel((3<<32)+playerId,"secretResponse",[secret])
 
     def recvSecretRequestError(self,playerId,error):
-        self.sendUpdateToChannel((3L<<32)+playerId,"rejectSecret",[error])
+        self.sendUpdateToChannel((3<<32)+playerId,"rejectSecret",[error])
 
     def recvSecretRedeemError(self,playerId,error):
-        self.sendUpdateToChannel((3L<<32)+playerId,"rejectUseSecret",[error])
+        self.sendUpdateToChannel((3<<32)+playerId,"rejectUseSecret",[error])
 
 
     # WHISPERS
@@ -371,15 +371,15 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
 
     def recvWhisper(self,recipientId,senderId,msgText):
         self.log.debug("Received open whisper from %d to %d: %s" % (senderId,recipientId,msgText))
-        self.sendUpdateToChannel((3L<<32)+recipientId,"whisperFrom",[senderId,msgText])
+        self.sendUpdateToChannel((3<<32)+recipientId,"whisperFrom",[senderId,msgText])
 
     def recvWLWhisper(self,recipientId,senderId,msgText):
         self.log.debug("Received WLwhisper from %d to %d: %s" % (senderId,recipientId,msgText))
-        self.sendUpdateToChannel((3L<<32)+recipientId,"whisperWLFrom",[senderId,msgText])
+        self.sendUpdateToChannel((3<<32)+recipientId,"whisperWLFrom",[senderId,msgText])
 
     def recvSCWhisper(self,recipientId,senderId,msgText):
         self.log.debug("Received SCwhisper from %d to %d: %s" % (senderId,recipientId,msgText))
-        self.sendUpdateToChannel((3L<<32)+recipientId,"whisperSCFrom",[senderId,msgText])
+        self.sendUpdateToChannel((3<<32)+recipientId,"whisperSCFrom",[senderId,msgText])
 
     def recvEnterPlayer(self,playerId,playerInfo,friendsList):
         self.log.debug("Saw player %d enter."%playerId)
@@ -392,7 +392,7 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
             playerInfo.understandableYesNo = friendInfo.openChatFriendshipYesNo or \
                                              (friendInfo.openChatEnabledYesNo and \
                                               playerInfo.openChatEnabledYesNo)
-            self.sendUpdateToChannel((3L<<32)+friend,
+            self.sendUpdateToChannel((3<<32)+friend,
                                      "updatePlayerFriend",
                                      [playerId,playerInfo,0])
 
@@ -408,7 +408,7 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
             playerInfo.understandableYesNo = friendInfo.openChatFriendshipYesNo or \
                                              (friendInfo.openChatEnabledYesNo and \
                                               playerInfo.openChatEnabledYesNo)
-            self.sendUpdateToChannel((3L<<32)+friend,
+            self.sendUpdateToChannel((3<<32)+friend,
                                      "updatePlayerFriend",
                                      [playerId,playerInfo,0])
 
@@ -418,12 +418,12 @@ class PlayerFriendsManagerUD(DistributedObjectGlobalUD,sbWedge):
     def _getFriendView(self, viewerId, friendId, info=None):
         if info is None:
             info = self.accountId2Info[friendId]
-        if self.accountId2Friends.has_key(viewerId):
+        if viewerId in self.accountId2Friends:
             if [friendId,True] in self.accountId2Friends[viewerId]:
                 info.openChatFriendshipYesNo = 1
             else:
                 info.openChatFriendshipYesNo = 0
-        elif self.accountId2Friends.has_key(friendId):
+        elif friendId in self.accountId2Friends:
             if [viewerId,True] in self.accountId2Friends[friendId]:
                 info.openChatFriendshipYesNo = 1
             else:

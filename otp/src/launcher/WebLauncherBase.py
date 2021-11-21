@@ -8,7 +8,7 @@ import sys
 import time
 import os
 import subprocess
-import __builtin__
+import builtins
 
 class WebLauncherBase(DirectObject):
 
@@ -79,7 +79,7 @@ class WebLauncherBase(DirectObject):
                 del self.postProcessCallbacks[0]
                 if taskChain != currentTaskChain:
                     # Switch to the next task chain.
-                    print "switching to %s" % (taskChain)
+                    print("switching to %s" % (taskChain))
                     taskMgr.add(self.__nextCallback, 'phaseCallback-%s' % (self.phase),
                                 taskChain = taskChain, extraArgs = [callback, taskChain])
                     return
@@ -91,7 +91,7 @@ class WebLauncherBase(DirectObject):
 
     def __init__(self, appRunner):
         self.appRunner = appRunner
-        __builtin__.launcher = self
+        builtins.launcher = self
 
         appRunner.exceptionHandler = self.exceptionHandler
 
@@ -137,12 +137,12 @@ class WebLauncherBase(DirectObject):
         self.notify.info("isTestServer: %s" % (self.testServerFlag))
             
         # Write to the log
-        print "\n\nStarting %s..." % self.GameName
-        print ("Current time: " + time.asctime(time.localtime(time.time()))
-               + " " + time.tzname[0])
-        print "sys.argv = ", sys.argv
-        print "tokens = ", appRunner.tokens
-        print "gameInfo = ", self.gameInfo
+        print("\n\nStarting %s..." % self.GameName)
+        print(("Current time: " + time.asctime(time.localtime(time.time()))
+               + " " + time.tzname[0]))
+        print("sys.argv = ", sys.argv)
+        print("tokens = ", appRunner.tokens)
+        print("gameInfo = ", self.gameInfo)
 
         # Run an external command to get the system hardware
         # information into a log file.  First, we have to change the
@@ -186,14 +186,14 @@ class WebLauncherBase(DirectObject):
             # Already sent.
             return
 
-        for phaseData in self.phaseData.values():
+        for phaseData in list(self.phaseData.values()):
             if not phaseData.complete:
                 # More to come later.
                 return
 
         # All phases are now complete.  Tell the world.
         self.allPhasesComplete = True
-        print "launcherAllPhasesComplete"
+        print("launcherAllPhasesComplete")
         messenger.send("launcherAllPhasesComplete", taskChain = 'default')
             
 
@@ -471,7 +471,7 @@ class WebLauncherInstaller(PackageInstaller):
 
         PackageInstaller.packageFinished(self, package, success)
         if not success:
-            print "Failed to download %s" % (package.packageName)
+            print("Failed to download %s" % (package.packageName))
             self.launcher.setPandaErrorCode(6)
             sys.exit()
         
@@ -489,7 +489,7 @@ class WebLauncherInstaller(PackageInstaller):
 
         PackageInstaller.downloadFinished(self, success)
         if not success:
-            print "Failed to download all packages."
+            print("Failed to download all packages.")
 
         # We don't immediately trigger launcherAllPhasesComplete here,
         # because we might still be waiting on one or more

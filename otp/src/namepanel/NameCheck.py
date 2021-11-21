@@ -254,7 +254,7 @@ def checkName(name, otherCheckFuncs=[], font=None):
                 TextEncoder.upper(
                 TextEncoder().encodeWtext(letters)))
             # some unicode characters can't be capitalized
-            for i in xrange(len(upperLetters)):
+            for i in range(len(upperLetters)):
                 if not upperLetters[0].isupper():
                     # at least one letter is not upper-case
                     # name is not all-caps
@@ -280,11 +280,11 @@ def checkName(name, otherCheckFuncs=[], font=None):
         # but, allows not ASCII and kanji(CJK) characters for a name
         # All Japanese characters are three-byte-encoded utf-8 characters from unicode
         # Reference: http://unicode.org/charts/
-        asciiSpace = range(0x20, 0x21)
-        asciiDigits = range(0x30, 0x40)
-        hiragana = range(0x3041, 0x30A0)
-        katakana = range(0x30A1, 0x3100)
-        halfwidthKatakana = range(0xFF65, 0xFFA0)
+        asciiSpace = list(range(0x20, 0x21))
+        asciiDigits = list(range(0x30, 0x40))
+        hiragana = list(range(0x3041, 0x30A0))
+        katakana = list(range(0x30A1, 0x3100))
+        halfwidthKatakana = list(range(0xFF65, 0xFFA0))
         halfwidthCharacter = set(asciiSpace + halfwidthKatakana)
         allowedUtf8 = set(asciiSpace + hiragana + katakana + halfwidthKatakana)
         te = TextEncoder()
@@ -299,7 +299,7 @@ def checkName(name, otherCheckFuncs=[], font=None):
                     return OTPLocalizer.NCNoDigits
                 else:
                     notify.info('name contains not allowed utf8 char: 0x%04x' % char)
-                    return OTPLocalizer.NCBadCharacter % te.encodeWtext(unichr(char))
+                    return OTPLocalizer.NCBadCharacter % te.encodeWtext(chr(char))
             else:
                 # Restrict the number of characters, if three-byte-encoded utf-8 character
                 # The full-width characters would fit into a single display cell, 
@@ -373,7 +373,7 @@ def checkName(name, otherCheckFuncs=[], font=None):
             nName = name[:]
             bName.reverse()
             problem = check(bName)
-            print "problem = %s" % (problem)
+            print("problem = %s" % (problem))
 
         if problem:
             return problem
@@ -392,11 +392,11 @@ assert not checkName('Jo')
 # empty name
 assert     checkName('')
 assert     checkName('\t')
-assert     checkName(TextEncoder().encodeWtext(u'\xa0'))
-assert     checkName(TextEncoder().encodeWtext(u'\u1680'))
-assert     checkName(TextEncoder().encodeWtext(u'\u2001'))
+assert     checkName(TextEncoder().encodeWtext('\xa0'))
+assert     checkName(TextEncoder().encodeWtext('\u1680'))
+assert     checkName(TextEncoder().encodeWtext('\u2001'))
 # printable chars
-for i in xrange(32):
+for i in range(32):
     assert checkName(chr(i))
 assert     checkName(chr(0x7f))
 # bad characters
@@ -412,7 +412,7 @@ assert not checkName('MD')
 # mono letter
 assert     checkName('Eeee')
 assert     checkName('Jjj')
-assert     checkName(TextEncoder().encodeWtext(u'\u30a1\u30a1\u30a1'))
+assert     checkName(TextEncoder().encodeWtext('\u30a1\u30a1\u30a1'))
 # dashes
 assert     checkName('-Conqueror')
 assert     checkName('Conqueror-')

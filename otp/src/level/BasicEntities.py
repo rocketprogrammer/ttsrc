@@ -1,7 +1,7 @@
 """BasicEntities module: contains fundamental entity types and base classes"""
 
-import Entity
-import DistributedEntity
+from . import Entity
+from . import DistributedEntity
 from pandac.PandaModules import NodePath
 
 # base class for entities that support NodePath attributes

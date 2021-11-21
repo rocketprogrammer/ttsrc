@@ -16,7 +16,7 @@ try:
                                'dislurl='
                                ])
 except getopt.GetoptError:
-    print "Please pass a node name with --name=."
+    print("Please pass a node name with --name=.")
     sys.exit(1)
 
 #defaults
@@ -50,11 +50,11 @@ for o,a in opts:
     elif o == "--dislurl":
         dislurl = a
     else:
-        print "Error: Illegal option: " + o
+        print("Error: Illegal option: " + o)
         sys.exit(1)        
 
 if nodename == "":
-    print "Please pass a node name with --name=."
+    print("Please pass a node name with --name=.")
     sys.exit(2)
     
 cm = ChannelManager()

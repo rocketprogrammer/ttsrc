@@ -1,7 +1,7 @@
 """EntityTypeDesc module: contains the EntityTypeDesc class"""
 
 from direct.directnotify import DirectNotifyGlobal
-import AttribDesc
+from . import AttribDesc
 from direct.showbase.PythonUtil import mostDerivedLast
 
 class EntityTypeDesc:
@@ -27,12 +27,12 @@ class EntityTypeDesc:
 
     def isConcrete(self):
         """ means that entity of this exact type can be created """
-        return not self.__class__.__dict__.has_key('abstract')
+        return 'abstract' not in self.__class__.__dict__
 
     def isPermanent(self):
         """ means that entity of this exact type cannot be inserted or
         removed in the editor """
-        return self.__class__.__dict__.has_key('permanent')
+        return 'permanent' in self.__class__.__dict__
 
     def getOutputType(self):
         return self.output
@@ -48,7 +48,7 @@ class EntityTypeDesc:
     def getAttribsOfType(self, type):
         """returns list of attrib names of the given type"""
         names = []
-        for attribName, desc in self.attribDescDict.items():
+        for attribName, desc in list(self.attribDescDict.items()):
             if desc.getDatatype() == type:
                 names.append(attribName)
         return names
@@ -59,7 +59,7 @@ class EntityTypeDesc:
         passed in. The attribute descriptors describe the properties of each
         of the Entity type's attributes"""
         # has someone already compiled the info?
-        if entTypeClass.__dict__.has_key('_attribDescs'):
+        if '_attribDescs' in entTypeClass.__dict__:
             return
 
         c = entTypeClass
@@ -99,7 +99,7 @@ class EntityTypeDesc:
         # now that we have all of the descriptors from our base classes,
         # add the descriptors from this class
         attribDescs = []
-        if c.__dict__.has_key('attribs'):
+        if 'attribs' in c.__dict__:
             for attrib in c.attribs:
                 desc = AttribDesc.AttribDesc(*attrib)
                 

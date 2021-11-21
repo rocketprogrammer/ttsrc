@@ -3,9 +3,9 @@
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from direct.task import Task
-from SCConstants import *
+from .SCConstants import *
 from direct.interval.IntervalGlobal import *
-from SCObject import SCObject
+from .SCObject import SCObject
 from direct.showbase.PythonUtil import makeTuple
 import types
 
@@ -160,7 +160,7 @@ class SCMenu(SCObject, NodePath):
         Emotes are attached to terminal elements using dictionaries:
          {terminal:emoteId}
         """
-        from SpeedChatTypes import SCMenuHolder, SCStaticTextTerminal, SCGMTextTerminal
+        from .SpeedChatTypes import SCMenuHolder, SCStaticTextTerminal, SCGMTextTerminal
         from otp.otpbase import OTPLocalizer
         
         def addChildren(menu, childList):
@@ -172,8 +172,8 @@ class SCMenu(SCObject, NodePath):
                 # if it's a dictionary, there's an emote attached
                 emote = None
                 if type(child) == type({}):
-                    assert len(child.keys()) == 1
-                    item = child.keys()[0]
+                    assert len(list(child.keys())) == 1
+                    item = list(child.keys())[0]
                     emote = child[item]
                     child = item
 
@@ -205,8 +205,8 @@ class SCMenu(SCObject, NodePath):
                         subMenu = menuType()
                         subMenuChildren = child[2:]
                     if emote:
-                        print ('warning: tried to link emote %s '
-                               'to a menu holder' % emote)
+                        print(('warning: tried to link emote %s '
+                               'to a menu holder' % emote))
                     holder = SCMenuHolder(holderTitle, menu=subMenu)
                     menu.append(holder)
                     addChildren(subMenu, subMenuChildren)
@@ -214,8 +214,8 @@ class SCMenu(SCObject, NodePath):
                     terminal = SCGMTextTerminal(child)
                     menu.append(terminal)
                 else:
-                    raise ('error parsing speedchat structure. '
-                           'invalid child: %s' % child)
+                    raise 'error parsing speedchat structure. '
+                           'invalid child: %s'
 
         addChildren(self, structure)
         # clean up memory leak
@@ -506,7 +506,7 @@ class SCMenu(SCObject, NodePath):
 
         # put the members in the right place, and tell them what size
         # they should be
-        for i in xrange(len(visibleMembers)):
+        for i in range(len(visibleMembers)):
             member = visibleMembers[i]
             member.setPos(0,0,-i * maxHeight)
             member.setDimensions(memberWidth, memberHeight)
@@ -583,7 +583,7 @@ class SCMenu(SCObject, NodePath):
     # above.
     def append(self, element):
         # Appends a single element to the list so far.
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         self.__members.append(element)
         self.privMemberListChanged(added=[element])
@@ -603,40 +603,40 @@ class SCMenu(SCObject, NodePath):
         return self.__members[index]
 
     def __setitem__(self, index, value):
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         removedMember = self.__members[index]
         self.__members[index] = value
         self.privMemberListChanged(added=[value], removed=[removedMember])
 
     def __delitem__(self, index):
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         removedMember = self.__members[index]
         del self.__members[index]
         self.privMemberListChanged(removed=[removedMember])
 
     def __getslice__(self, i, j):
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         return self.__members[i:j]
 
     def __setslice__(self, i, j, s):
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         removedMembers = self.__members[i:j]
         self.__members[i:j] = list(s)
         self.privMemberListChanged(added=list(s), removed=removedMembers)
 
     def __delslice__(self, i, j):
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         removedMembers = self.__members[i:j]
         del self.__members[i:j]
         self.privMemberListChanged(removed=removedMembers)
 
     def __iadd__(self, other):
-        if isinstance(self.__members, types.TupleType):
+        if isinstance(self.__members, tuple):
             self.__members = list(self.__members)
         if isinstance(other, SCMenu):
             otherMenu = other

@@ -3,7 +3,7 @@
 # Purpose: Module to ban avatars while inside the game and kick
 #          them out of the game
 #################################################################
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import os
 from pandac.PandaModules import HTTPClient, Ramfile
 from direct.directnotify import DirectNotifyGlobal
@@ -39,7 +39,7 @@ class BanManagerAI:
         parameters += "&event_name=%s" % self.EventName
         commentWithAvatarId = "avId-%s " % avatarId
         commentWithAvatarId += comment
-        parameters += "&comments=%s" % urllib.quote(str(commentWithAvatarId))
+        parameters += "&comments=%s" % urllib.parse.quote(str(commentWithAvatarId))
 
         # get the base ban url from the environment variable first
         baseUrlToUse = self.BanUrl

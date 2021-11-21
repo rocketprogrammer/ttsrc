@@ -1,7 +1,7 @@
 """ZoneEntity module: contains the ZoneEntity class"""
 
-import ZoneEntityBase
-import BasicEntities
+from . import ZoneEntityBase
+from . import BasicEntities
 
 class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
     def __init__(self, level, entId):
@@ -33,7 +33,7 @@ class ZoneEntity(ZoneEntityBase.ZoneEntityBase, BasicEntities.NodePathAttribs):
         return self.nodePath
 
     def getVisibleZoneNums(self):
-        return self.visibleZoneNums.keys()
+        return list(self.visibleZoneNums.keys())
 
     # call these with lists of zoneNums to increment or decrement their
     # 'visible' reference counts

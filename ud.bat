@@ -1,4 +1,4 @@
 :main
-"built\python\ppython" ttrun.py -ud %*
+python ttrun.py -ud %*
 pause
 goto :main

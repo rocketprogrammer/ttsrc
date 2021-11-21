@@ -1,6 +1,6 @@
 """SCColorScheme.py: contains the SCColorScheme class"""
 
-from ColorSpace import *
+from .ColorSpace import *
 
 class SCColorScheme:
     """ SCColorScheme is a class that holds all the information

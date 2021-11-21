@@ -2,7 +2,7 @@
 
 from direct.directnotify import DirectNotifyGlobal
 import string
-import LevelConstants
+from . import LevelConstants
 from direct.showbase.PythonUtil import lineInfo, uniqueElements
 import types
 
@@ -233,7 +233,7 @@ class Level:
         entId = entity.entId
         spec = self.levelSpec.getEntitySpec(entId)
         # on initialization, set items directly on entity
-        for key,value in spec.items():
+        for key,value in list(spec.items()):
             if key in ('type', 'name', 'comment',):
                 continue
             entity.setAttribInit(key, value)

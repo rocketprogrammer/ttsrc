@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from otp.otpbase import OTPGlobals
 from direct.directnotify import DirectNotifyGlobal
-import BasicEntities
+from . import BasicEntities
 
 class CollisionSolidEntity(BasicEntities.NodePathEntity):
     notify = DirectNotifyGlobal.directNotify.newCategory('CollisionSolidEntity')
@@ -38,6 +38,6 @@ class CollisionSolidEntity(BasicEntities.NodePathEntity):
 
     if __dev__:
         def attribChanged(self, attrib, value):
-            print 'attribChanged'
+            print('attribChanged')
             self.initSolid()
             

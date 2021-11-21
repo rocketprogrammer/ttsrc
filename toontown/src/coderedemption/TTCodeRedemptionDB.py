@@ -1585,8 +1585,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
                     )
 
             for row in rows:
-                code = str(row['code'])
-                codes.append(code)
+                codes.append(row['code'].encode())
 
         conn.destroy()
 

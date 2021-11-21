@@ -7,7 +7,6 @@
 from pandac.PandaModules import *
 
 import random
-import string
 from direct.directnotify import DirectNotifyGlobal
 from toontown.hood import ZoneUtil
 
@@ -128,7 +127,7 @@ class SuitPlannerBase:
         # "345:safe_zone:exit_zone"... These are hypotheticals. The main
         # idea is that there are colon separated flags after the initial
         # zone name.
-        return(string.split(groupFullName, ":", 1)[0])
+        return(groupFullName.split(":", 1)[0])
 
     def initDNAInfo( self ):
         """

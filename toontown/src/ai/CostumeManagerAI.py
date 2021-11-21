@@ -16,6 +16,9 @@ from toontown.hood import *
 from direct.showbase import DirectObject
 from toontown.toonbase import TTLocalizer
 from toontown.classicchars import *
+from toontown.classicchars import DistributedVampireMickeyAI, DistributedSuperGoofyAI, DistributedWesternPlutoAI
+from toontown.classicchars import DistributedWitchMinnieAI, DistributedMinnieAI, DistributedPlutoAI
+from toontown.hood import MMHoodDataAI, BRHoodDataAI
 
 class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('CostumeManagerAI')
@@ -28,7 +31,7 @@ class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
         self.runningState = 1
 
         self.cCharsSwitched = 0
-        
+
         # For use with magic words
         self.stopForever = False
 
@@ -131,7 +134,6 @@ class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
     # Trigger the switching of the character
     ########################################################
     def triggerSwitch(self, curWalkNode, curChar):
-        from toontown.classicchars import *
         if(self.holidayId == ToontownGlobals.HALLOWEEN_COSTUMES):
             for hood in self.hoods:
                 if hood.classicChar == curChar:
@@ -177,14 +179,14 @@ class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
     def __switchChars(self, newChar, walkNode, hood):
         self.notify.debug("SwitchingChars %s to %s" %(hood.classicChar, newChar))
         self.notify.debugStateCall(self)
-        hood.classicChar.requestDelete()        
+        hood.classicChar.requestDelete()
         if hasattr(hood, "air") and hood.air:
             hood.classicChar = newChar(hood.air)
             hood.classicChar.generateWithRequired(hood.zoneId)
             hood.addDistObj(hood.classicChar)
             hood.classicChar.walk.setCurNode(walkNode)
-            hood.classicChar.fsm.request('Walk')            
-        else:        
+            hood.classicChar.fsm.request('Walk')
+        else:
             self.notify.warning("Hood empty during character switch")
         holidayDone = 1
         for classicChar in self.__classicChars.values():

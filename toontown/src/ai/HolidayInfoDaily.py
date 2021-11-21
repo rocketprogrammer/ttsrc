@@ -35,7 +35,7 @@ class HolidayInfo_Daily(HolidayInfo_Base):
     def __init__(self, holidayClass, dateList, displayOnCalendar):
         HolidayInfo_Base.__init__(self, holidayClass, displayOnCalendar)
         dateElemIter = ModifiedIter(dateList)
-        for i in range(len(dateList)/2):
+        for i in range(len(dateList)//2):
             start = dateElemIter.current()
             end = next(dateElemIter)
 
@@ -57,12 +57,12 @@ class HolidayInfo_Daily(HolidayInfo_Base):
                  localTime[1],  # month
                  localTime[2],  # day
                  )
-        
+
         for i in range(len(self.tupleList)):
             # Retrieve the Start/End Tuples for the next time
             # the holiday should be scheduled.
             startTuple, endTuple = self.currElemIter.peekNext()
-            
+
             # Retrieve the current Start Time and
             # the next Start Time.
             cStartTime = self.currElemIter.current()[0]
@@ -70,7 +70,7 @@ class HolidayInfo_Daily(HolidayInfo_Base):
 
             # If the current Start Time is larger than the
             # next, we have reached the end of the list so
-            # we must schedule the 
+            # we must schedule the
             if cStartTime > nStartTime:
                 sTime = self.getTime((date[0], date[1], date[2]+1,), startTuple)
                 eTime = self.getTime((date[0], date[1], date[2]+1,), endTuple)
@@ -87,7 +87,7 @@ class HolidayInfo_Daily(HolidayInfo_Base):
             next(self.currElemIter)
             if (currTime < eTime):
                 return sTime
-                
+
         # We are back to the original element, thus we should
         # schedule it for the next day.
         start = self.currElemIter.current()[0]

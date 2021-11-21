@@ -35,8 +35,8 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
         #golfKart.generateWithRequired(self.zoneId)
         #golfKart.start()
         #self.addDistObj(golfKart)
-        #self.golfKart = golfKart        
-        
+        #self.golfKart = golfKart
+
         #Create Leader boards
         #self.cycleDuration = 10
         #self.createLeaderBoards()
@@ -61,7 +61,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
         #        print "viewPad %s has starting blocks %s\n" %( viewPadId, vBlockAI.get( viewPadId )  )
 
         #    pdb.set_trace()
-        
+
     def cleanup(self):
             #put away those billboards
         taskMgr.removeTasksMatching( str(self)+"_leaderBoardSwitch" )
@@ -72,17 +72,17 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
     def createLeaderBoards(self):
         #find the leader boards from the level dna
         #and add distributed object based on that
-        
-        
+
+
         self.leaderBoards = []
         dnaStore = DNAStorage()
         dnaData = simbase.air.loadDNAFileAI(dnaStore,
                   simbase.air.lookupDNAFileName("goofy_speedway_sz.dna"))
-        
+
         if( isinstance( dnaData, DNAData ) ):
              self.leaderBoards = self.air.findLeaderBoards( dnaData, self.zoneId )
-                
-        
+
+
         for distObj in self.leaderBoards:
                 if distObj:
                     # Set Initial Subscriptions of leader boards
@@ -91,7 +91,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
                     if distObj.getName().count("city"):
                         type = "city"
                     #elif( "stadium" in distObj.getName() ):
-                    elif distObj.getName().count("stadium"):                        
+                    elif distObj.getName().count("stadium"):
                         type = "stadium"
                     #elif( "country" in distObj.getName() ):
                     elif distObj.getName().count("country"):
@@ -99,7 +99,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
 
                     for subscription in LBSubscription[ type ]:
                         distObj.subscribeTo( subscription )
-                        
+
                     self.addDistObj( distObj )
 
     def __cycleLeaderBoards( self, task = None ):
@@ -107,7 +107,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
         # prep for the next cycle
         #self.notify.info( "__cycleLeaderBoards: Cycling Leader Boards." )
         taskMgr.doMethodLater( self.cycleDuration, self.__cycleLeaderBoards, str(self)+"_leaderBoardSwitch" )
-                
+
     def createStartingBlocks(self):
         """
         Purpose: The createStartingBlocks Method...
@@ -148,7 +148,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
             startingBlocks = self.air.findStartingBlocks( dnaGroup, distRacePad )
             self.startingBlocks += startingBlocks
             for startingBlock in startingBlocks:
-                distRacePad.addStartingBlock( startingBlock )            
+                distRacePad.addStartingBlock( startingBlock )
 
         for distObj in self.startingBlocks:
             self.addDistObj( distObj )
@@ -163,7 +163,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
 
         for viewPad in self.viewingPads:
             self.addDistObj( viewPad )
-        
+
         # Place each RacePad into the proper WaitEmpty State. Handle this
         # after each starting block has been generated so that they are
         # placed in the proper active state.
@@ -176,7 +176,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
         golfKarts = []
         golfKartGroups = []
 
-        if ((isinstance(dnaGroup, DNAGroup)) and (string.find(dnaGroup.getName(), type) >= 0)):
+        if ((isinstance(dnaGroup, DNAGroup)) and (dnaGroup.getName().find(type) >= 0)):
             golfKartGroups.append(dnaGroup)
             if (type == 'golf_kart'):
                 nameInfo = dnaGroup.getName().split('_')
@@ -190,7 +190,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
                 for i in range(dnaGroup.getNumChildren()):
                     childDnaGroup = dnaGroup.at(i)
                     # TODO - check if DNAProp instance
-                    if ((string.find(childDnaGroup.getName(), 'starting_block') >= 0)):
+                    if ((childDnaGroup.getName().find('starting_block') >= 0)):
                         padLocation = dnaGroup.getName().split('_')[2]
                         pos = childDnaGroup.getPos()
                         hpr = childDnaGroup.getHpr()
@@ -198,7 +198,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
 
                 # lift the karts off the ground a bit so we can see their shadows in the tunnel
                 pos += Point3(0, 0, 0.05)
-                
+
                 golfKart = DistributedGolfKartAI.DistributedGolfKartAI(self.air, golfCourse,
                                                                        pos[0], pos[1], pos[2],
                                                                        hpr[0], hpr[1], hpr[2])
@@ -250,7 +250,7 @@ class GZHoodDataAI(HoodDataAI.HoodDataAI):
             dnaGroup = dnaRacingPadGroup.at(i)
 
             # TODO - check if DNAProp instance
-            if ((string.find(dnaGroup.getName(), 'starting_block') >= 0)):
+            if ((dnaGroup.getName().find('starting_block') >= 0)):
                 padLocation = dnaGroup.getName().split('_')[2]
                 pos = dnaGroup.getPos()
                 hpr = dnaGroup.getHpr()

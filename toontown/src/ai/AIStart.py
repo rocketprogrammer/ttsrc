@@ -22,12 +22,12 @@ from direct.showbase import PythonUtil
 from pandac.PandaModules import loadPrcFileData
 loadPrcFileData("AIStart.py", "default-model-extension")
 
-simbase.mdip = simbase.config.GetString("msg-director-ip", "localhost")
+simbase.mdip = simbase.config.GetString("msg-director-ip", "127.0.0.1")
 
 # Now the AI connects directly to the state server instead of the msg director
 simbase.mdport = simbase.config.GetInt("msg-director-port", 6666)
 
-simbase.esip = simbase.config.GetString("event-server-ip", "localhost")
+simbase.esip = simbase.config.GetString("event-server-ip", "127.0.0.1")
 simbase.esport = simbase.config.GetInt("event-server-port", 4343)
 
 
@@ -65,6 +65,44 @@ for i in range(1, 20+1):
         if i != 1:
             break
 
+# Setup the log files
+# We want C++ and Python to both go to the same log so they
+# will be interlaced properly.
+
+ltime = time.localtime()
+
+# date_hour_sequence.log will be added to the logfile name by RotatingLog():
+logfile = "logs/aidistrict-dev-%02d%02d%02d_%02d%02d%02d.log" % (ltime[0]-2000,ltime[1],ltime[2],ltime[3],ltime[4],ltime[5])
+
+# Redirect Python output and err to the same file
+class LogAndOutput:
+    def __init__(self, orig, log):
+        self.orig = orig
+        self.log = log
+    def write(self, str):
+        self.log.write(str)
+        self.log.flush()
+        self.orig.write(str)
+        self.orig.flush()
+    def flush(self):
+        self.log.flush()
+        self.orig.flush()
+
+log = open(logfile, 'a')
+logOut = LogAndOutput(sys.__stdout__, log)
+logErr = LogAndOutput(sys.__stderr__, log)
+sys.stdout = logOut
+sys.stderr = logErr
+
+from pandac.PandaModules import *
+
+# Give Panda the same log we use
+nout = MultiplexStream()
+Notify.ptr().setOstreamPtr(nout, 0)
+nout.addFile(Filename(logfile))
+nout.addStandardOutput()
+nout.addSystemDebug()
+
 print("-"*30, "creating toontown district %s" % districtNumber, "-"*30)
 
 simbase.air = ToontownAIRepository.ToontownAIRepository(
@@ -84,10 +122,9 @@ simbase.air = ToontownAIRepository.ToontownAIRepository(
 simbase.aiService = 0
 
 try:
-    simbase.air.fsm.request("districtReset")        
+    simbase.air.fsm.request("districtReset")
     run()
 except:
     info = PythonUtil.describeException()
     simbase.air.writeServerEvent('ai-exception', districtNumber, info)
     raise
-    

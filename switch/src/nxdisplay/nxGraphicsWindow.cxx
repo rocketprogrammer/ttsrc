@@ -167,13 +167,12 @@ process_events() {
     
     if (libnx::appletMainLoop()) {
         libnx::padUpdate(&_pad);
-        libnx::u64 kDown = padGetButtonsDown(&_pad);
         
         libnx::HidTouchScreenState state={0};
         if (libnx::hidGetTouchScreenStates(&state, 1)) {
-            // we just released, so it's a click
             if (state.count == 0 && _touchcount != 0) {
                 _input_devices[0].button_up(MouseButton::button(0));
+                _input_devices[0].set_pointer_out_of_window();
                 
             } else if (state.count == 1) {
                 if (_touchcount != 1)
@@ -185,5 +184,73 @@ process_events() {
             
             _touchcount = state.count;
         }
+        
+        libnx::u64 kDown = libnx::padGetButtonsDown(&_pad);
+        if (kDown & libnx::HidNpadButton_Left) {
+            _input_devices[0].button_down(KeyboardButton::left());
+        }
+        if (kDown & libnx::HidNpadButton_Up) {
+            _input_devices[0].button_down(KeyboardButton::up());
+        }
+        if (kDown & libnx::HidNpadButton_Right) {
+            _input_devices[0].button_down(KeyboardButton::right());
+        }
+        if (kDown & libnx::HidNpadButton_Down) {
+            _input_devices[0].button_down(KeyboardButton::down());
+        }
+        if (kDown & libnx::HidNpadButton_A) {
+            _input_devices[0].button_down(KeyboardButton::rcontrol());
+        }
+        if (kDown & libnx::HidNpadButton_X) {
+            _input_devices[0].button_down(KeyboardButton::del());
+        }
+        if (kDown & libnx::HidNpadButton_L) {
+            _input_devices[0].button_down(KeyboardButton::home());
+        }
+        if (kDown & libnx::HidNpadButton_R) {
+            _input_devices[0].button_down(KeyboardButton::end());
+        }
+        if (kDown & libnx::HidNpadButton_StickL) {
+            _input_devices[0].button_down(KeyboardButton::escape());
+        }
+        if (kDown & libnx::HidNpadButton_StickR) {
+            _input_devices[0].button_down(KeyboardButton::tab());
+        }
+        
+        libnx::u64 kUp = libnx::padGetButtonsUp(&_pad);
+        if (kUp & libnx::HidNpadButton_Left) {
+            _input_devices[0].button_up(KeyboardButton::left());
+        }
+        if (kUp & libnx::HidNpadButton_Up) {
+            _input_devices[0].button_up(KeyboardButton::up());
+        }
+        if (kUp & libnx::HidNpadButton_Right) {
+            _input_devices[0].button_up(KeyboardButton::right());
+        }
+        if (kUp & libnx::HidNpadButton_Down) {
+            _input_devices[0].button_up(KeyboardButton::down());
+        }
+        if (kUp & libnx::HidNpadButton_A) {
+            _input_devices[0].button_up(KeyboardButton::rcontrol());
+        }
+        if (kUp & libnx::HidNpadButton_X) {
+            _input_devices[0].button_up(KeyboardButton::del());
+        }
+        if (kUp & libnx::HidNpadButton_L) {
+            _input_devices[0].button_up(KeyboardButton::home());
+        }
+        if (kUp & libnx::HidNpadButton_R) {
+            _input_devices[0].button_up(KeyboardButton::end());
+        }
+        if (kUp & libnx::HidNpadButton_StickL) {
+            _input_devices[0].button_up(KeyboardButton::escape());
+        }
+        if (kUp & libnx::HidNpadButton_StickR) {
+            _input_devices[0].button_up(KeyboardButton::tab());
+        }
+        
+    } else {
+        close_window();
+        
     }
 }

@@ -1,7 +1,7 @@
 from otp.ai.AIBase import *
-import DistributedLawnDecorAI
+from . import DistributedLawnDecorAI
 from direct.directnotify import DirectNotifyGlobal
-import GardenGlobals
+from . import GardenGlobals
 
 from direct.showbase.ShowBase import *
 
@@ -112,7 +112,7 @@ class DistributedPlantBaseAI(DistributedLawnDecorAI.DistributedLawnDecorAI):
             growthLevel = self.getGrowthLevel()
 
             if waterLevel > 0:
-                print "growing plant"
+                print("growing plant")
                 # grow the plant
                 growthLevel += 1
                 waterLevel -= 1

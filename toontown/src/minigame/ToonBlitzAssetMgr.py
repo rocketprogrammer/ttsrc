@@ -52,7 +52,7 @@ class ToonBlitzAssetMgr(DirectObject):
         self.particleGlow = loader.loadModel("phase_4/models/minigames/particleGlow")
         
         self.blockTypes = []
-        for i in xrange(4):
+        for i in range(4):
             blockType = loader.loadModel("phase_4/models/minigames/toonblitz_game_block0" + str(i))
             self.blockTypes.append(blockType)
             
@@ -91,7 +91,7 @@ class ToonBlitzAssetMgr(DirectObject):
         self.progressLine.setPos(0, 0, self.faceStartPos[2])
         
         self.cardMaker.setName('RaceProgressLineHash')
-        for n in xrange(ToonBlitzGlobals.NumSections[self.game.getSafezoneId()] + 1):
+        for n in range(ToonBlitzGlobals.NumSections[self.game.getSafezoneId()] + 1):
             hash = self.aspect2dRoot.attachNewNode(self.cardMaker.generate())
             hash.setScale(self.progressLine.getScale()[2],1,self.progressLine.getScale()[2] * 5)
             t = float(n) / ToonBlitzGlobals.NumSections[self.game.getSafezoneId()]

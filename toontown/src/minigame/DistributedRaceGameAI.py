@@ -1,12 +1,12 @@
 
 from math import *
-from DistributedMinigameAI import *
+from .DistributedMinigameAI import *
 from direct.distributed.ClockDelta import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 import random
 from direct.task.Task import Task
-import RaceGameGlobals
+from . import RaceGameGlobals
 
 """
 # Trolley manager code:
@@ -102,7 +102,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
         DistributedMinigameAI.gameOver(self)
 
     def anyAvatarWon(self, positionDict):
-        for avId, position in positionDict.items():
+        for avId, position in list(positionDict.items()):
             if position >= RaceGameGlobals.NumberToWin:
                 # If any single avatar won, return true
                 self.notify.debug("anyAvatarWon: Somebody won")
@@ -113,7 +113,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
 
     def allAvatarsChosen(self):
         # Returns true if all avatars playing have chosen their number
-        for choice in self.avatarChoices.values():
+        for choice in list(self.avatarChoices.values()):
             # If the choice is -1, that avId has not chosen yet
             if (choice == -1):
                 return 0
@@ -195,7 +195,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
         self.notify.debug("waitClientsChoicesTimeout: did not hear from all clients")
 
         # Anybody who did not choose gets a 0 for their input
-        for avId in self.avatarChoices.keys():
+        for avId in list(self.avatarChoices.keys()):
             if self.avatarChoices[avId] == -1:
                 self.avatarChoices[avId] = 0
 
@@ -213,7 +213,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
         # start from the the left most lane and process move
         for avId in self.avIdList:
             choice = self.avatarChoices[avId]
-            freq = self.avatarChoices.values().count(choice)
+            freq = list(self.avatarChoices.values()).count(choice)
             self.processChoice(avId, choice, freq)
             
         # make this list once and just use copies
@@ -358,7 +358,7 @@ class DistributedRaceGameAI(DistributedMinigameAI):
             reward = -1
             if choice != 0:
                 # See how many people chose this number
-                freq = self.avatarChoices.values().count(choice)
+                freq = list(self.avatarChoices.values()).count(choice)
 
                 # If this is not a recursive call (ie the result
                 # of a chance card) only update if the choice is unique

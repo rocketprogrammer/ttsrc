@@ -3,13 +3,13 @@ from direct.distributed.ClockDelta import *
 from pandac.PandaModules import *
 from toontown.ai.ToontownAIMsgTypes import *
 from direct.distributed import DistributedObjectAI
-import DistributedHouseAI
+from . import DistributedHouseAI
 # import DistributedGardenAI
-import DistributedCannonAI
-import DistributedHouseInteriorAI
-import DistributedHouseDoorAI
-import DistributedMailboxAI
-import DistributedFurnitureManagerAI
+from . import DistributedCannonAI
+from . import DistributedHouseInteriorAI
+from . import DistributedHouseDoorAI
+from . import DistributedMailboxAI
+from . import DistributedFurnitureManagerAI
 from toontown.toon import DistributedToonAI
 from toontown.catalog import CatalogItemList
 from toontown.catalog import CatalogItem
@@ -24,8 +24,8 @@ from direct.fsm import ClassicFSM
 from direct.fsm import State
 from direct.task import Task
 import random
-import HouseGlobals
-import CannonGlobals
+from . import HouseGlobals
+from . import CannonGlobals
 from toontown.ai import DatabaseObject
 from direct.showbase import PythonUtil
 from toontown.toonbase import ToontownGlobals
@@ -687,7 +687,7 @@ class DistributedHouseAI(DistributedObjectAI.DistributedObjectAI):
             db.getFields(['setDeliverySchedule', 'setMailboxContents', 'setMaxHp', 'setAwardMailboxContents'])
                                  
     def __gotOwnerAv(self, db, retcode):
-        assert(self.notify.debug("__gotOwnerAv(%s, %s): %s" % (db.values.keys(), retcode, self.doId)))
+        assert(self.notify.debug("__gotOwnerAv(%s, %s): %s" % (list(db.values.keys()), retcode, self.doId)))
         if retcode != 0:
             self.notify.warning("Avatar %s for house %s does not exist!" % (self.ownerId, self.doId))
             return

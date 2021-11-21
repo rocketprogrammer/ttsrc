@@ -36,7 +36,7 @@ class GetToonIdListRequest(AsyncRequest):
 
     def finish(self):
         resDict = self.neededObjects[("ACCOUNT_AV_SET",)]
-        assert resDict.has_key("ACCOUNT_AV_SET")
+        assert "ACCOUNT_AV_SET" in resDict
         self.resultQueue.put(resDict["ACCOUNT_AV_SET"])
         self.delete()
 

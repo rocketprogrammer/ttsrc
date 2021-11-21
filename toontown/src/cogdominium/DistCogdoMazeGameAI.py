@@ -9,8 +9,8 @@ from direct.task.Task import Task
 from toontown.minigame.DistributedMinigameAI import DistributedMinigameAI
 from toontown.minigame.DistributedMinigameAI import EXITED, EXPECTED, JOINED, READY
 
-import CogdoMazeGameGlobals
-from CogdoMazeGameGlobals import CogdoMazeLockInfo
+from . import CogdoMazeGameGlobals
+from .CogdoMazeGameGlobals import CogdoMazeLockInfo
 
 from direct.fsm.FSM import FSM
 class DistCogdoMazeGameAI(DistributedMinigameAI, FSM):
@@ -93,7 +93,7 @@ class DistCogdoMazeGameAI(DistributedMinigameAI, FSM):
         toonIds = []
         spawnPointsX = []
         spawnPointsY = []
-        for lock in self.locks.values():
+        for lock in list(self.locks.values()):
             toonIds.append(lock.toonId)
             spawnPointsX.append(lock.tileX)
             spawnPointsY.append(lock.tileY)
@@ -106,7 +106,7 @@ class DistCogdoMazeGameAI(DistributedMinigameAI, FSM):
         self._initLocks()
 
     def areAllPlayersReady(self):
-        return False not in [(state == READY) for state in self.stateDict.values()]
+        return False not in [(state == READY) for state in list(self.stateDict.values())]
 
     def setGameStart(self, timestamp):
         DistributedMinigameAI.setGameStart(self, timestamp)
@@ -126,7 +126,7 @@ class DistCogdoMazeGameAI(DistributedMinigameAI, FSM):
         DistributedMinigameAI.gameOver(self)
 
     def isDoorLocked(self):
-        return True in [lock.locked for lock in self.locks.values()]
+        return True in [lock.locked for lock in list(self.locks.values())]
 
     def areAllToonsInDoor(self):
         return len(self.avIdList) == len(self.toonsInDoor)

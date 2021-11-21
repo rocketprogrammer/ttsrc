@@ -1,5 +1,5 @@
 """EventsPage module: contains the EventsPage class"""
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from pandac.PandaModules import Vec4, Vec3, TextNode, PNMImage, StringStream, Texture, HTTPClient, DocumentSpec, Ramfile, Point3
 
@@ -24,7 +24,7 @@ from toontown.parties.Party import Party
 from toontown.parties.ServerTimeGui import ServerTimeGui
 # from toontown.parties import feedparser
 
-import ShtikerPage
+from . import ShtikerPage
 
 # display tab modes
 EventsPage_Host = 0
@@ -1133,7 +1133,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
 
         def makeButton(itemName, itemNum, *extraArgs):
             def buttonCommand():
-                print itemName, itemNum
+                print(itemName, itemNum)
             return DirectLabel(text = itemName,
                         relief = None,
                         text_align = TextNode.ALeft,
@@ -1303,7 +1303,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
         self.articleImages = {}
         self.articleText = {}
         try:
-            urlfile = urllib.urlopen(self.getNewsUrl())
+            urlfile = urllib.request.urlopen(self.getNewsUrl())
         except IOError:
             self.notify.warning("Could not open %s" % self.getNewsUrl())
             self.newsStatusLabel["text"] = TTLocalizer.EventsPageNewsUnavailable
@@ -1313,7 +1313,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
         urlfile.close()
         urls = urlStrings.split("\r\n")
 
-        for index in xrange(len(urls)/2):
+        for index in range(len(urls)/2):
             imageUrl = urls[(index*2)]
             textUrl = urls[(index*2) +1]
             
@@ -1322,7 +1322,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
             self.articleImages[index] = img
             try:
                 self.notify.info("opening %s" % imageUrl)
-                imageFile = urllib.urlopen(imageUrl)
+                imageFile = urllib.request.urlopen(imageUrl)
                 data = imageFile.read()
                 img.read(StringStream(data))
                 imageFile.close()
@@ -1335,7 +1335,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
                 self.notify.info("opening %s" % textUrl)
                 #if "garden" in textUrl:
                 #    import pdb; pdb.set_trace()
-                textFile = urllib.urlopen(textUrl)
+                textFile = urllib.request.urlopen(textUrl)
                 data = textFile.read()
                 data = data.replace("\\1","\1")
                 data = data.replace("\\2","\2")
@@ -1620,7 +1620,7 @@ class EventsPage(ShtikerPage.ShtikerPage):
         result = True
         urlStrings = ""
         try: 
-            urlfile = urllib.urlopen(fileUrl)
+            urlfile = urllib.request.urlopen(fileUrl)
             urlStrings = urlfile.read()
             urlfile.close()
         except IOError:

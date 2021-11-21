@@ -734,7 +734,7 @@ class ObjectManager(NodePath, DirectObject):
                 self.selectedObject.collisionNodePath.unstash()
                 self.selectedObject.dfitem.stopAdjustPosHpr()
             # Make sure collision nodes are unstashed
-            for object in self.objectDict.values():
+            for object in list(self.objectDict.values()):
                 object.unstashBuiltInCollisionNodes()
             # Adjust center marker image
             self.centerMarker['image'] = [self.grabUp,self.grabDown,
@@ -757,7 +757,7 @@ class ObjectManager(NodePath, DirectObject):
         messenger.send('wakeup')
         # If user selected an object
         if self.selectedObject:
-            for object in self.objectDict.values():
+            for object in list(self.objectDict.values()):
                 object.stashBuiltInCollisionNodes()
             # And stash furniture collision node of selected object
             self.selectedObject.collisionNodePath.stash()
@@ -964,7 +964,7 @@ class ObjectManager(NodePath, DirectObject):
         # We detected some collisions, try to sum up offsets to fix
         if offsetDict:
             # Find orthogonal components
-            keys = offsetDict.keys()
+            keys = list(offsetDict.keys())
             # Pick first offset as first cardinal direction
             ortho1 = offsetDict[keys[0]]
             ortho2 = Vec3(0)
@@ -1202,7 +1202,7 @@ class ObjectManager(NodePath, DirectObject):
         self.selectedObject.wrtReparentTo(self.collisionOffsetNP)
 
     def resetFurniture(self):
-        for o in self.objectDict.values():
+        for o in list(self.objectDict.values()):
             o.resetMovableObject()
         self.objectDict = {}
         self.deselectObject()
@@ -1635,7 +1635,7 @@ class ObjectManager(NodePath, DirectObject):
         # the room.
         # First, generate a list of FurnitureItemPanels.
         self.inRoomPanels = []
-        for objectId, object in self.objectDict.items():
+        for objectId, object in list(self.objectDict.items()):
             panel = FurnitureItemPanel(object.dfitem.item, objectId,
                                        command = self.requestReturnToAttic,
                                        deleteMode = self.deleteMode,
@@ -1944,7 +1944,7 @@ class ObjectManager(NodePath, DirectObject):
 
         if item.getFlags() & CatalogFurnitureItem.FLPainting:
             # Paintings are started out on a wall.
-            for object in self.objectDict.values():
+            for object in list(self.objectDict.values()):
                 object.stashBuiltInCollisionNodes()
             self.gridSnapNP.iPosHpr()
             target = self.targetNodePath
@@ -1955,7 +1955,7 @@ class ObjectManager(NodePath, DirectObject):
                 origin = Point3(0, 0, 6),
                 dir = Vec3(0, 1, 0),
                 skipFlags = SKIP_BACKFACE | SKIP_CAMERA | SKIP_UNPICKABLE)
-            for object in self.objectDict.values():
+            for object in list(self.objectDict.values()):
                 object.unstashBuiltInCollisionNodes()
             if entry:
                 self.alignObject(entry, target, fClosest = 0, wallOffset = 0.1)
@@ -2574,7 +2574,7 @@ class ObjectManager(NodePath, DirectObject):
                 self.helpText['text'] = helpText
                 self.helpText.show()
             else:
-                print "category: %s not found"
+                print("category: %s not found")
 
         # Give it a pause before displaying
         taskMgr.doMethodLater(0.75, showIt, "showHelpTextDoLater")

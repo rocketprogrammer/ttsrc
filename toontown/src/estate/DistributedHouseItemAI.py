@@ -5,7 +5,7 @@ from direct.fsm import ClassicFSM
 from direct.distributed import ClockDelta
 from direct.fsm import State
 import random
-import HouseGlobals
+from . import HouseGlobals
 
 class DistributedHouseItemAI(DistributedObjectAI.DistributedObjectAI):
 

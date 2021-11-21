@@ -81,7 +81,7 @@ class RATManagerUD(DistributedObjectGlobalUD):
             assert toonId < (1<<32)
             assert beanAmount > 0
             assert beanAmount < (1<<16)
-        except Exception,e:
+        except Exception as e:
             self.notify.warning("Invalid giveToonBeansRAT request from %s: %s" % (replyTo.getSourceAddress(),str(kw)))
             replyTo.respondXML(RATResponses.giveToonBeansRATFailureXML % "INVALID_REQUEST")
             return

@@ -134,10 +134,10 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         DistributedObject.DistributedObject.delete(self)
         self.boss = None
         self.ignoreAll()
-        for indicator in self.dinerStatusIndicators.values():
+        for indicator in list(self.dinerStatusIndicators.values()):
             indicator.delete()
         self.dinerStatusIndicators = {}
-        for diner in self.diners.values():
+        for diner in list(self.diners.values()):
             diner.delete()
         self.diners = {}        
         self.powerBar.destroy()
@@ -202,7 +202,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
     def setDinerInfo(self, hungryDurations, eatingDurations, dinerLevels):
         """Handle the AI telling us how long each suit will be hungry or eating."""
         self.dinerInfo = {}
-        for i in xrange(len(hungryDurations)):
+        for i in range(len(hungryDurations)):
             hungryDur = hungryDurations[i]
             eatingDur = eatingDurations[i]
             dinerLevel = dinerLevels[i]
@@ -235,7 +235,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
 
     def setupDiners(self):
         """Create the suits seated on the chairs."""
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             newDiner = self.createDiner(i)
             self.diners[i] = newDiner
             self.dinerStatus[i] = self.HUNGRY
@@ -293,7 +293,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
 
     def setupChairCols(self):
         """Setup the chair collisions of all chairs."""        
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             chairCol = self.tableGroup.find('**/collision_chair_%d' % (i +1))
             colName = 'ChairCol-%d-%d' % (self.index,i)
             chairCol.setTag('chairIndex',str(i))
@@ -361,7 +361,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         """Remove the food in front of any diner."""
         serviceLoc = self.serviceLocs.get(chairIndex)
         if serviceLoc:
-            for i in xrange(serviceLoc.getNumChildren()):
+            for i in range(serviceLoc.getNumChildren()):
                 serviceLoc.getChild(0).removeNode()             
         
     def changeDinerToEating(self, chairIndex):
@@ -508,7 +508,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
 
     def setAllDinersToSitNeutral(self):
         startFrame = 0
-        for diner in self.diners.values():
+        for diner in list(self.diners.values()):
             if not diner.isHidden():
                 diner.loop('sit', fromFrame = startFrame)
                 startFrame += 1
@@ -517,20 +517,20 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
 
     def cleanupIntervals(self):
         """Cleanup all intervals."""
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
         self.activeIntervals = {}
 
     def clearInterval(self, name, finish=1):
         """ Clean up the specified Interval
         """
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             ival = self.activeIntervals[name]
             if finish:
                 ival.finish()
             else:
                 ival.pause()
-            if self.activeIntervals.has_key(name):
+            if name in self.activeIntervals:
                 del self.activeIntervals[name]
         else:
             self.notify.debug('interval: %s already cleared' % name)
@@ -538,7 +538,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
     def finishInterval(self, name):
         """ Force the specified Interval to jump to the end
         """ 
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             interval = self.activeIntervals[name]
             interval.finish()
 
@@ -546,7 +546,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
     def getNotDeadInfo(self):
         """Return a list of (<table index>, <chair Index>, <suit level>) suits that are not dead."""
         notDeadList  = []
-        for i in xrange(self.numDiners):
+        for i in range(self.numDiners):
             if self.dinerStatus[i] != self.DEAD:
                 notDeadList.append( (self.index, i, 12))
         return notDeadList
@@ -563,7 +563,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
 
     def enterInactive(self):
         """Handle entering the inactive state."""
-        for chairIndex in xrange(self.numDiners):
+        for chairIndex in range(self.numDiners):
             indicator = self.dinerStatusIndicators.get(chairIndex)
             if indicator:
                 indicator.request('Inactive')
@@ -624,16 +624,16 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
         """Set up geometry and collisions for phase four."""
         if not self.preparedForPhaseFour:
             # hide the chairs and chair collisions
-            for i in xrange(8):
+            for i in range(8):
                 chair = self.tableGroup.find('**/chair_%d' % (i +1))
                 if not chair.isEmpty():
                     chair.hide()
                 colChairs = self.tableGroup.findAllMatches('**/ChairCol*')
-                for i in xrange(colChairs.getNumPaths()):
+                for i in range(colChairs.getNumPaths()):
                     col = colChairs.getPath(i)
                     col.stash()
                 colChairs = self.tableGroup.findAllMatches('**/collision_chair*')
-                for i in xrange(colChairs.getNumPaths()):
+                for i in range(colChairs.getNumPaths()):
                     col = colChairs.getPath(i)
                     col.stash()
             # make colliding against the table do something
@@ -1450,7 +1450,7 @@ class DistributedBanquetTable(DistributedObject.DistributedObject, FSM.FSM, Banq
     def __updateWaterPower(self, task):
         """Change the value of the power meter."""
         if not self.powerBar:
-            print "### no power bar!!!"
+            print("### no power bar!!!")
             return task.done
 
         newPower =  self.__getWaterPower(globalClock.getFrameTime())

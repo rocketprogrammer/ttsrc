@@ -79,15 +79,15 @@ class PartyLoader(SafeZoneLoader.SafeZoneLoader):
         self.underwaterSound = base.loadSfx('phase_4/audio/sfx/AV_ambient_water.mp3')
         self.swimSound = base.loadSfx('phase_4/audio/sfx/AV_swim_single_stroke.mp3')
         self.submergeSound = base.loadSfx('phase_5.5/audio/sfx/AV_jump_in_water.mp3')
-        self.birdSound=map(base.loadSfx, [
+        self.birdSound=list(map(base.loadSfx, [
                 'phase_4/audio/sfx/SZ_TC_bird1.mp3',
                 'phase_4/audio/sfx/SZ_TC_bird2.mp3',
-                'phase_4/audio/sfx/SZ_TC_bird3.mp3'])
+                'phase_4/audio/sfx/SZ_TC_bird3.mp3']))
         # SDN: use birds as a place holder for crickets for now
-        self.cricketSound=map(base.loadSfx, [
+        self.cricketSound=list(map(base.loadSfx, [
                 'phase_4/audio/sfx/SZ_TC_bird1.mp3',
                 'phase_4/audio/sfx/SZ_TC_bird2.mp3',
-                'phase_4/audio/sfx/SZ_TC_bird3.mp3'])
+                'phase_4/audio/sfx/SZ_TC_bird3.mp3']))
         
     def unload(self):
         assert(self.notify.debug("unload()"))
@@ -300,19 +300,19 @@ class PartyLoader(SafeZoneLoader.SafeZoneLoader):
         return track
 
     def debugGeom(self, decomposed):
-        print 'numPrimitives = %d' % decomposed.getNumPrimitives()
+        print('numPrimitives = %d' % decomposed.getNumPrimitives())
         
         for primIndex in range(decomposed.getNumPrimitives()):
             prim = decomposed.getPrimitive(primIndex)
-            print 'prim = %s' % prim
-            print 'isIndexed = %d' % prim.isIndexed()            
-            print 'prim.getNumPrimitives = %d' % prim.getNumPrimitives()
+            print('prim = %s' % prim)
+            print('isIndexed = %d' % prim.isIndexed())            
+            print('prim.getNumPrimitives = %d' % prim.getNumPrimitives())
 
             #import pdb; pdb.set_trace()            
             for basicPrim in range(prim.getNumPrimitives()):
                 pass
-                print '%d start=%d' % (basicPrim, prim.getPrimitiveStart(basicPrim))
-                print '%d end=%d' % (basicPrim, prim.getPrimitiveEnd(basicPrim))
+                print('%d start=%d' % (basicPrim, prim.getPrimitiveStart(basicPrim)))
+                print('%d end=%d' % (basicPrim, prim.getPrimitiveEnd(basicPrim)))
 
 
 

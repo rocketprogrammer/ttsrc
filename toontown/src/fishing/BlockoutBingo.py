@@ -44,7 +44,7 @@ class BlockoutBingo(BingoCardBase.BingoCardBase):
     # Output: None
     ################################################################# 
     def checkForWin(self, id=0):
-        for i in xrange(self.rowSize):
+        for i in range(self.rowSize):
             if not self.rowCheck(i):
                 return BingoGlobals.NO_UPDATE
         return BingoGlobals.WIN

@@ -110,7 +110,7 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
 
     # get, b_set, d_set, and set funcs are generated for each trait
     def __generateDistTraitFuncs(self):
-        for i in xrange(PetTraits.PetTraits.NumTraits):
+        for i in range(PetTraits.PetTraits.NumTraits):
             traitName = PetTraits.getTraitNames()[i]
             getterName = self.getSetterName(traitName, 'get')
             b_setterName = self.getSetterName(traitName, 'b_set')
@@ -347,7 +347,7 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
         # don't use the trait values from the DB, this should circumvent
         # the corrupted doodle problem
         self.traits = PetTraits.PetTraits(self.traitSeed, self.safeZone)
-        print self.traits.traits
+        print(self.traits.traits)
         """
         self.traits = PetTraits.PetTraits(
             self.traitSeed, self.safeZone,
@@ -357,7 +357,7 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
 
         # if there are any new traits, we need to set their generated value in
         # the DB.
-        for i in xrange(len(self.traitList)):
+        for i in range(len(self.traitList)):
             value = self.traitList[i]
             if value == 0.:
                 traitName = PetTraits.getTraitNames()[i]
@@ -372,7 +372,7 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
         self.mood = PetMood.PetMood(self)
 
         # pass in the cached required mood component values
-        for mood, value in self.requiredMoodComponents.items():
+        for mood, value in list(self.requiredMoodComponents.items()):
             self.mood.setComponent(mood, value, announce=0)
         self.requiredMoodComponents = {}
 
@@ -416,10 +416,10 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
         else:
             self.setMoodComponent(component, lerp(curVal, 1., factor))
     def addToMoods(self, mood2delta):
-        for mood, delta in mood2delta.items():
+        for mood, delta in list(mood2delta.items()):
             self.addToMood(mood, delta)
     def lerpMoods(self, mood2factor):
-        for mood, factor in mood2factor.items():
+        for mood, factor in list(mood2factor.items()):
             self.lerpMood(mood, factor)
 
     def isContented(self):
@@ -445,7 +445,7 @@ class DistributedPetProxyAI(DistributedObjectAI.DistributedObjectAI):
         if self.mood.isComponentActive('fatigue'):
             cutoff *= .5
         # Apply base accuracy for the specific trick
-        assert(PetTricks.TrickAccuracies.has_key(trickId))
+        assert(trickId in PetTricks.TrickAccuracies)
         cutoff *= PetTricks.TrickAccuracies[trickId]
         DistributedPetProxyAI.notify.debug('_willDoTrick: %s / %s' % (
             randVal, cutoff))

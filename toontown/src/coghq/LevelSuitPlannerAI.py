@@ -3,7 +3,7 @@ from pandac.PandaModules import *
 from direct.showbase import DirectObject
 from toontown.suit import SuitDNA
 from direct.directnotify import DirectNotifyGlobal
-import LevelBattleManagerAI
+from . import LevelBattleManagerAI
 import types
 import random
 
@@ -33,7 +33,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
         # create a dict that will keep track of what suits are attached
         # to what battle cell
         self.battleCellId2suits = {}
-        for id in self.battleCellSpecs.keys():
+        for id in list(self.battleCellSpecs.keys()):
             self.battleCellId2suits[id] = []
 
     def destroy(self):
@@ -62,7 +62,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
 
     def __genSuitInfos(self, level, track):
         if __dev__:
-            assert type(level) == types.IntType
+            assert type(level) == int
 
         def getSuitDict(spec, cogId, level=level, track=track):
             suitDict = {}
@@ -278,7 +278,7 @@ class LevelSuitPlannerAI(DirectObject.DirectObject):
                 self.battleCellId2suits[oldCell].remove(suit)
             else:
                 self.notify.warning('FIXME crash bandaid suitBattleCellChange suit.doId =%s, oldCell=%s not in battleCellId2Suits.keys %s' %
-                                    (suit.doId, oldCell, self.battleCellId2suits.keys()))
+                                    (suit.doId, oldCell, list(self.battleCellId2suits.keys())))
             # remove suit from battle blocker
             blocker = self.battleMgr.battleBlockers.get(oldCell)
             if blocker:

@@ -401,7 +401,7 @@ class BingoCardGui(DirectFrame):
     #################################################################
     def loadCard(self):
         cardSize = self.game.getCardSize()
-        for index in xrange(cardSize):
+        for index in range(cardSize):
             self.cellGuiList[index].generateLogo()
             if index == cardSize/2:
                 self.cellGuiList[index].generateMarkedLogo()
@@ -418,7 +418,7 @@ class BingoCardGui(DirectFrame):
     #################################################################
     def disableCard(self):
         self.stopCellBlinking()
-        for index in xrange(self.game.getCardSize()):
+        for index in range(self.game.getCardSize()):
             self.cellGuiList[index].disable()
 
     #################################################################
@@ -432,7 +432,7 @@ class BingoCardGui(DirectFrame):
     def enableCard(self, callback=None):
         self.notify.info("enable Bingo card")
         self.stopCellBlinking()
-        for index in xrange(len(self.cellGuiList)):
+        for index in range(len(self.cellGuiList)):
             if index != self.game.getCardSize()/2:
                 self.cellGuiList[index].enable(callback)
 
@@ -462,7 +462,7 @@ class BingoCardGui(DirectFrame):
         # There is no need to generate a Fish object. Tuples (genus, species)
         # can effectively be used to identify the type of fish for a specific
         # BingoCardCell.
-        for i in xrange(len(fishList)):
+        for i in range(len(fishList)):
             fishTuple = fishList.pop(0)
             weight = FishGlobals.getRandomWeight(fishTuple[0], fishTuple[1])
             fish = FishBase.FishBase(fishTuple[0], fishTuple[1], weight)
@@ -474,7 +474,7 @@ class BingoCardGui(DirectFrame):
         # Fill up the empty cells with randomly generated fish. In order to
         # maintain fairness, iterate through the rods as well.
         rodId = 0
-        for i in xrange(emptyCells):
+        for i in range(emptyCells):
             fishVitals = FishGlobals.getRandomFishVitals(zoneId, rodId, rng)
             while( not fishVitals[0] ):
                 fishVitals = FishGlobals.getRandomFishVitals(zoneId, rodId, rng)
@@ -488,8 +488,8 @@ class BingoCardGui(DirectFrame):
         # it is time to actually generate a BingoCardCell for every fish. This
         # cell will be parented to the GUI instance and its position and scale
         # are based on the CardImageScale. (See base positions above)
-        for i in xrange(rowSize):
-            for j in xrange(self.game.getColSize()):
+        for i in range(rowSize):
+            for j in range(self.game.getColSize()):
                 color = self.getCellColor(i*rowSize+j)
                 if i*rowSize+j == self.game.getCardSize()/2:
                     tmpFish = 'Free'

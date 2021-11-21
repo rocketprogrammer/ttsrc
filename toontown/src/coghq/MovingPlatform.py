@@ -36,7 +36,7 @@ class MovingPlatform(DirectObject.DirectObject, NodePath):
             parentToken, model, floorNodeName)))
         if floorNodeName is None:
             floorNodeName = 'floor'
-        if type(parentToken) == types.IntType:
+        if type(parentToken) == int:
             parentToken = ToontownGlobals.SPDynamic + parentToken
         self.parentToken = parentToken
         self.name = "MovingPlatform-%s" % (parentToken)

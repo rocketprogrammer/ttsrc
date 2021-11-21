@@ -3,19 +3,19 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from toontown.toonbase.ToontownGlobals import GlobalDialogColor
-from DistributedMinigame import *
+from .DistributedMinigame import *
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownTimer
-import TravelGameGlobals
+from . import TravelGameGlobals
 import math
 from pandac.PandaModules   import rad2Deg
 from toontown.toontowngui import TTDialog
 
 from direct.interval.IntervalGlobal import *
-import VoteResultsPanel
-import VoteResultsTrolleyPanel
+from . import VoteResultsPanel
+from . import VoteResultsTrolleyPanel
 
 # For each minigame, what's the corresponding icon
 IconDict = {
@@ -101,9 +101,9 @@ def map3dToAspect2d(node, point):
 # invert a dictionary, turn the keys into values and vice versa
 def invertTable(table):
     index = { }				#empty dictionary
-    for key in table.keys():
+    for key in list(table.keys()):
         value = table[key]
-        if not index.has_key(value):
+        if value not in index:
             index[value] = key			# empty list
     return index        
 
@@ -244,7 +244,7 @@ class DistributedTravelGame(DistributedMinigame):
         for i in range(self.numKeys):
             key = self.keys[i]
             key.setTwoSided(1)
-            ref = self.trolleyCar.attachNewNode('key' + `i` + 'ref')
+            ref = self.trolleyCar.attachNewNode('key' + repr(i) + 'ref')
             ref.iPosHpr(key)
             self.keyRef.append(ref)
             self.keyInit.append(key.getTransform())
@@ -255,7 +255,7 @@ class DistributedTravelGame(DistributedMinigame):
         self.frontWheelRef = []
         for i in range(self.numFrontWheels):
             wheel = self.frontWheels[i]
-            ref = self.trolleyCar.attachNewNode('frontWheel' + `i` + 'ref')
+            ref = self.trolleyCar.attachNewNode('frontWheel' + repr(i) + 'ref')
             ref.iPosHpr(wheel)
             self.frontWheelRef.append(ref)
             self.frontWheelInit.append(wheel.getTransform())
@@ -266,7 +266,7 @@ class DistributedTravelGame(DistributedMinigame):
         self.backWheelRef = []
         for i in range(self.numBackWheels):
             wheel = self.backWheels[i]
-            ref = self.trolleyCar.attachNewNode('backWheel' + `i` + 'ref')
+            ref = self.trolleyCar.attachNewNode('backWheel' + repr(i) + 'ref')
             ref.iPosHpr(wheel)
             self.backWheelRef.append(ref)
             self.backWheelInit.append(wheel.getTransform())
@@ -285,7 +285,7 @@ class DistributedTravelGame(DistributedMinigame):
 
         self.fullLength = maxPoint[0]
 
-        for key in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
+        for key in list(TravelGameGlobals.BoardLayouts[self.boardIndex].keys()):
             info = TravelGameGlobals.BoardLayouts[self.boardIndex][key]
 
             switchModel = turnTable.find('**/turntable1').copyTo(render)
@@ -315,7 +315,7 @@ class DistributedTravelGame(DistributedMinigame):
 
         # lay more extra tracks for the trolley going out
         tunnelX = None
-        for key in TravelGameGlobals.BoardLayouts[self.boardIndex].keys():
+        for key in list(TravelGameGlobals.BoardLayouts[self.boardIndex].keys()):
             if self.isLeaf(key):
                 info = TravelGameGlobals.BoardLayouts[self.boardIndex][key]
                 switchX, switchY, switchZ = info['pos']
@@ -545,17 +545,17 @@ class DistributedTravelGame(DistributedMinigame):
         self.trolleyCar.removeNode()
         del self.trolleyCar
 
-        for key in self.trainSwitches.keys():
+        for key in list(self.trainSwitches.keys()):
             self.trainSwitches[key].removeNode()
             del self.trainSwitches[key]
         self.trainSwitches = {}
 
-        for key in self.tunnels.keys():
+        for key in list(self.tunnels.keys()):
             self.tunnels[key].removeNode()
             del self.tunnels[key]
         self.tunnels = {}
 
-        for key in self.trainTracks.keys():
+        for key in list(self.trainTracks.keys()):
             self.trainTracks[key].removeNode()
             del self.trainTracks[key]
         self.trainTracks = {}
@@ -639,10 +639,10 @@ class DistributedTravelGame(DistributedMinigame):
 
         self.trolleyCar.reparentTo(render)
 
-        for key in self.trainSwitches.keys():
+        for key in list(self.trainSwitches.keys()):
             self.trainSwitches[key].reparentTo(render)
 
-        for key in self.trainTracks.keys():
+        for key in list(self.trainTracks.keys()):
             self.trainTracks[key].reparentTo(render)
 
         for trainTrack in self.extraTrainTracks:
@@ -679,10 +679,10 @@ class DistributedTravelGame(DistributedMinigame):
 
         self.hideMinigamesAndBonuses()
 
-        for key in self.trainSwitches.keys():
+        for key in list(self.trainSwitches.keys()):
             self.trainSwitches[key].hide()
 
-        for key in self.trainTracks.keys():
+        for key in list(self.trainTracks.keys()):
             self.trainTracks[key].hide()            
 
         for trainTrack in self.extraTrainTracks:
@@ -1043,7 +1043,7 @@ class DistributedTravelGame(DistributedMinigame):
         localAvatarWon = False
         localAvatarLost = False
         noWinner = True
-        for avId in self.avIdBonuses.keys():
+        for avId in list(self.avIdBonuses.keys()):
             name = ''
             avatar = self.getAvatar(avId)
             if avatar:
@@ -1135,7 +1135,7 @@ class DistributedTravelGame(DistributedMinigame):
         for index  in range(len( self.avIdList)):
             avId = self.avIdList[index]
             self.startingVotes[avId] = startingVotesArray[index]
-            if not self.currentVotes.has_key(avId):
+            if avId not in self.currentVotes:
                 self.currentVotes[avId] = startingVotesArray[index]
 
         self.notify.debug('starting votes = %s' % self.startingVotes)
@@ -1212,7 +1212,7 @@ class DistributedTravelGame(DistributedMinigame):
         retval = 0
         if hasattr(self,'scrollList'):
             selectedIndex = self.scrollList.getSelectedIndex()
-            if self.indexToVotes.has_key(selectedIndex):
+            if selectedIndex in self.indexToVotes:
                 retval = self.indexToVotes[selectedIndex]
 
         return retval
@@ -1367,13 +1367,13 @@ class DistributedTravelGame(DistributedMinigame):
         load an icon, if missing use a direct Label
         """
         self.mg_icons = loader.loadModel('phase_4/models/minigames/mg_icons')
-        for switch in self.switchToMinigameDict.keys():
+        for switch in list(self.switchToMinigameDict.keys()):
             minigame = self.switchToMinigameDict[switch]
             switchPos = self.trainSwitches[switch].getPos()
             labelPos = map3dToAspect2d(render, switchPos)
             useText = True
             iconName = None
-            if minigame in IconDict.keys():
+            if minigame in list(IconDict.keys()):
                 iconName = IconDict[minigame]
             icon = None
             if self.mg_icons:
@@ -1433,7 +1433,7 @@ class DistributedTravelGame(DistributedMinigame):
                                 
     def loadBonuses(self):
         self.switchToBonusLabelDict = {}
-        for avId in self.avIdBonuses.keys():
+        for avId in list(self.avIdBonuses.keys()):
             # make sure we show only this local toon's bonus
             if avId == self.localAvId:
                 switch = self.avIdBonuses[avId][0]

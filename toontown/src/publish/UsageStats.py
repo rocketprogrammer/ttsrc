@@ -7,14 +7,14 @@ import os
 import shutil
 import pprint
 import math
-import stats
+from . import stats
 from direct.showbase.PythonUtil import *
 
 filterIps = ['^206\.16', '^206\.18']
-filterIpsCompiled = map(re.compile, filterIps)
+filterIpsCompiled = list(map(re.compile, filterIps))
 
 filterAccounts = ['^NeverSet',]
-filterAccountsCompiled = map(re.compile, filterAccounts)
+filterAccountsCompiled = list(map(re.compile, filterAccounts))
 
 TABLE_ACCOUNT = 0
 TABLE_TIME = 1
@@ -38,7 +38,7 @@ toon27Offset = 12867601.0
 
 
 fileName = "usage.txt"
-print ("Opening %s" % fileName)
+print(("Opening %s" % fileName))
 file = open(fileName)
 # lines = file.readlines()
 # print ("parsing %s lines" % len(lines))
@@ -58,7 +58,7 @@ def addOneInDict(dict, key):
     """
     If dict has key, return the value, otherwise insert the newValue and return it
     """
-    if dict.has_key(key):
+    if key in dict:
         dict[key] += 1
     else:
         dict[key] = 1
@@ -117,19 +117,19 @@ while 1:
     line = file.readline()
     lineNum += 1
     if (lineNum % 1000) == 0:
-        print "Line: %s" % lineNum
+        print("Line: %s" % lineNum)
 
     if not line:
-        print "end of file"
+        print("end of file")
         break
         
     data = line.split('|')
 
     if len(data) < LOG_NUMCOLUMNS:
-        print ("Bad data, len=%s line=%s" % (len(data), line))
+        print(("Bad data, len=%s line=%s" % (len(data), line)))
         continue
     elif len(data) > 14:
-        print ("Bad data, len=%s line=%s" % (len(data), line))        
+        print(("Bad data, len=%s line=%s" % (len(data), line)))        
         continue        
 
     filtered = 0
@@ -161,7 +161,7 @@ while 1:
     s = s - s % resolution
 
     for t in range(s, e, resolution):
-        if simDict.has_key(t):
+        if t in simDict:
             simDict[t] += 1
         else:
             simDict[t] = 1
@@ -197,7 +197,7 @@ while 1:
         accounts[accountName] = len(table[TABLE_ACCOUNT]) - 1
 
 
-for accountName, startTime in signUps.items():
+for accountName, startTime in list(signUps.items()):
     year, month, day = getDay(startTime)
     monthDict = signUpsYearDict.setdefault(year, {})
     dayDict = monthDict.setdefault(month, {})
@@ -210,110 +210,110 @@ for i in range(len(table[TABLE_LOGINS])):
         playTime = table[TABLE_TIME][i]
         onlySessions.append(playTime)
 
-print
+print()
 print ("ACCOUNTS")
 print ("--------------------------------------------------")
-print ("Number of accounts: %s" % (len(accounts)))
+print(("Number of accounts: %s" % (len(accounts))))
 
-print
+print()
 print ("HOURS OF PLAY")
 print ("--------------------------------------------------")
-print ("Total play time: %s" %
-       getHourString(stats.sum(table[TABLE_TIME])))
-print ("Largest play time for a single account: %s" %
-       getHourString(max(table[TABLE_TIME])))
-print ("Median total play time for all accounts: %s" %
-       getHourString(stats.median(table[TABLE_TIME])))
-print ("Macro Histogram play time: \n%s" %
-       getHistogramString(stats.histogram(table[TABLE_TIME], 10, [0,100*3600]), getHourString))
-print ("Micro Histogram play time: \n%s" %
-       getHistogramString(stats.histogram(table[TABLE_TIME], 10, [0,10*3600]), getHourString))
-print ("Pico Histogram play time: \n%s" %
-       getHistogramString(stats.histogram(table[TABLE_TIME], 12, [0,1*3600]), getHourString))
+print(("Total play time: %s" %
+       getHourString(stats.sum(table[TABLE_TIME]))))
+print(("Largest play time for a single account: %s" %
+       getHourString(max(table[TABLE_TIME]))))
+print(("Median total play time for all accounts: %s" %
+       getHourString(stats.median(table[TABLE_TIME]))))
+print(("Macro Histogram play time: \n%s" %
+       getHistogramString(stats.histogram(table[TABLE_TIME], 10, [0,100*3600]), getHourString)))
+print(("Micro Histogram play time: \n%s" %
+       getHistogramString(stats.histogram(table[TABLE_TIME], 10, [0,10*3600]), getHourString)))
+print(("Pico Histogram play time: \n%s" %
+       getHistogramString(stats.histogram(table[TABLE_TIME], 12, [0,1*3600]), getHourString)))
 
-print
+print()
 print ("LOGINS")
 print ("--------------------------------------------------")
-print ("Total logins: %s" %
-       stats.sum(table[TABLE_LOGINS]))
-print ("Largest logins for a single account: %s" %
-       max(table[TABLE_LOGINS]))
-print ("Median number of logins for all accounts: %s" %
-       stats.median(table[TABLE_LOGINS]))
-print ("Macro Histogram logins: \n%s" %
-       getHistogramString(stats.histogram(table[TABLE_LOGINS], 10, [0,100])))
-print ("Micro Histogram logins: \n%s" %
-       getHistogramString(stats.histogram(table[TABLE_LOGINS], 10, [0,10])))
+print(("Total logins: %s" %
+       stats.sum(table[TABLE_LOGINS])))
+print(("Largest logins for a single account: %s" %
+       max(table[TABLE_LOGINS])))
+print(("Median number of logins for all accounts: %s" %
+       stats.median(table[TABLE_LOGINS])))
+print(("Macro Histogram logins: \n%s" %
+       getHistogramString(stats.histogram(table[TABLE_LOGINS], 10, [0,100]))))
+print(("Micro Histogram logins: \n%s" %
+       getHistogramString(stats.histogram(table[TABLE_LOGINS], 10, [0,10]))))
 
 
-print
+print()
 print ("SESSIONS")
 print ("--------------------------------------------------")
-print ("Largest session length: %s" %
-       getHourString(max(sessions)))
-print ("Median session length: %s" %
-       getHourString(stats.median(sessions)))
-print ("Macro Histogram session length: \n%s" %
-       getHistogramString(stats.histogram(sessions, 10, [0,10*3600]), getHourString))
-print ("Micro Histogram session length: \n%s" %
-       getHistogramString(stats.histogram(sessions, 12, [0,1*3600]), getHourString))
+print(("Largest session length: %s" %
+       getHourString(max(sessions))))
+print(("Median session length: %s" %
+       getHourString(stats.median(sessions))))
+print(("Macro Histogram session length: \n%s" %
+       getHistogramString(stats.histogram(sessions, 10, [0,10*3600]), getHourString)))
+print(("Micro Histogram session length: \n%s" %
+       getHistogramString(stats.histogram(sessions, 12, [0,1*3600]), getHourString)))
 
 
-print
+print()
 print ("FIRST SESSIONS")
 print ("--------------------------------------------------")
-print ("Largest first session length: %s" %
-       getHourString(max(firstSessions)))
-print ("Median first session length: %s" %
-       getHourString(stats.median(firstSessions)))
-print ("Macro Histogram first session length: \n%s" %
-       getHistogramString(stats.histogram(firstSessions, 10, [0,10*3600]), getHourString))
-print ("Micro Histogram first session length: \n%s" %
-       getHistogramString(stats.histogram(firstSessions, 12, [0,1*3600]), getHourString))
+print(("Largest first session length: %s" %
+       getHourString(max(firstSessions))))
+print(("Median first session length: %s" %
+       getHourString(stats.median(firstSessions))))
+print(("Macro Histogram first session length: \n%s" %
+       getHistogramString(stats.histogram(firstSessions, 10, [0,10*3600]), getHourString)))
+print(("Micro Histogram first session length: \n%s" %
+       getHistogramString(stats.histogram(firstSessions, 12, [0,1*3600]), getHourString)))
 
 
 
-print
+print()
 print ("FIRST SESSIONS THAT ONLY PLAYED ONCE")
 print ("--------------------------------------------------")
-print ("Largest first session length: %s" %
-       getHourString(max(onlySessions)))
-print ("Median first session length: %s" %
-       getHourString(stats.median(onlySessions)))
-print ("Macro Histogram first session length: \n%s" %
-       getHistogramString(stats.histogram(onlySessions, 10, [0,10*3600]), getHourString))
-print ("Micro Histogram first session length: \n%s" %
-       getHistogramString(stats.histogram(onlySessions, 12, [0,1*3600]), getHourString))
+print(("Largest first session length: %s" %
+       getHourString(max(onlySessions))))
+print(("Median first session length: %s" %
+       getHourString(stats.median(onlySessions))))
+print(("Macro Histogram first session length: \n%s" %
+       getHistogramString(stats.histogram(onlySessions, 10, [0,10*3600]), getHourString)))
+print(("Micro Histogram first session length: \n%s" %
+       getHistogramString(stats.histogram(onlySessions, 12, [0,1*3600]), getHourString)))
 
 
-print
+print()
 print ("Dailies")
 print ("Sum of play per day: \n")
-for year, monthDict in yearDict.items():
-    for month, dayDict in monthDict.items():
-        for day, dayList in dayDict.items():
-            print ("%s-%s-%s, %s" % (year, month, day, getHours(stats.sum(dayList))))
-print
+for year, monthDict in list(yearDict.items()):
+    for month, dayDict in list(monthDict.items()):
+        for day, dayList in list(dayDict.items()):
+            print(("%s-%s-%s, %s" % (year, month, day, getHours(stats.sum(dayList)))))
+print()
 print ("Median session length per day: \n")
-for year, monthDict in yearDict.items():
-    for month, dayDict in monthDict.items():
-        for day, dayList in dayDict.items():
-            print ("%s-%s-%s, %s" % (year, month, day, getHourString(stats.median(dayList))))
+for year, monthDict in list(yearDict.items()):
+    for month, dayDict in list(monthDict.items()):
+        for day, dayList in list(dayDict.items()):
+            print(("%s-%s-%s, %s" % (year, month, day, getHourString(stats.median(dayList)))))
 
-print
+print()
 print ("Logins per day: \n")
-for year, monthDict in yearDict.items():
-    for month, dayDict in monthDict.items():
-        for day, dayList in dayDict.items():
-            print ("%s-%s-%s, %s" % (year, month, day, len(dayList)))
+for year, monthDict in list(yearDict.items()):
+    for month, dayDict in list(monthDict.items()):
+        for day, dayList in list(dayDict.items()):
+            print(("%s-%s-%s, %s" % (year, month, day, len(dayList))))
 
-print
+print()
 print ("Signups per day: \n")
-for year, monthDict in signUpsYearDict.items():
-    for month, dayDict in monthDict.items():
-        for day, dayList in dayDict.items():
-            print ("%s-%s-%s, %s" % (year, month, day, len(dayList)))
+for year, monthDict in list(signUpsYearDict.items()):
+    for month, dayDict in list(monthDict.items()):
+        for day, dayList in list(dayDict.items()):
+            print(("%s-%s-%s, %s" % (year, month, day, len(dayList))))
 
-print
+print()
 print ("Simutaneous users\n")
-print ("Most simultanous users: %s\n" % (max(simDict.values())))
+print(("Most simultanous users: %s\n" % (max(simDict.values()))))

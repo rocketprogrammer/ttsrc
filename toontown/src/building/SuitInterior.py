@@ -9,7 +9,7 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from toontown.town import TownBattle
 from toontown.suit import Suit
-import Elevator
+from . import Elevator
 from direct.task.Task import Task
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals

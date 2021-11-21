@@ -1,4 +1,4 @@
-import ScavengerHuntMgrAI
+from . import ScavengerHuntMgrAI
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toonbase import ToontownGlobals
 from toontown.ai import DistributedWinterCarolingTargetAI
@@ -35,7 +35,7 @@ class WinterCarolingMgrAI(ScavengerHuntMgrAI.ScavengerHuntMgrAI):
         """
         Create the listeners that will look for an event in the relavent zone
         """
-        for id in self.goals.keys():
+        for id in list(self.goals.keys()):
             mgrAI = DistributedWinterCarolingTargetAI.DistributedWinterCarolingTargetAI(self.air,
                                                                                 self.hunt,
                                                                                 id,

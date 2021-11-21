@@ -38,7 +38,7 @@ class QuickLauncher(LauncherBase):
     PatchExt = 'pch'
 
     def __init__(self):        
-        print "Running: ToontownQuickLauncher"
+        print("Running: ToontownQuickLauncher")
         
         # Used to pass to server for authentication
         self.toontownBlueKey = "TOONTOWN_BLUE"
@@ -59,7 +59,7 @@ class QuickLauncher(LauncherBase):
             self.toontownPlayTokenKey = "LOGIN_TOKEN"            
         else:
             self.toontownPlayTokenKey = "PLAYTOKEN"
-        print ("useTTSpecificLogin=%s" % self.useTTSpecificLogin)
+        print(("useTTSpecificLogin=%s" % self.useTTSpecificLogin))
         self.contentDir = '/'
 
         # HACK: to make connecting to server happy
@@ -192,7 +192,7 @@ class QuickLauncher(LauncherBase):
             self.cleanup()            
             return
 
-        raise StandardError, 'Some phases not listed in LauncherPhases: %s' % (self.requiredInstallFiles)
+        raise Exception('Some phases not listed in LauncherPhases: %s' % (self.requiredInstallFiles))
 
     def getDecompressMultifile(self, mfname):
         if not self.DecompressMultifiles:
@@ -287,10 +287,10 @@ class QuickLauncher(LauncherBase):
 
         self.finalizePhase()
 
-        self.notify.info('Done updating multifiles in phase: ' + `self.currentPhase`)
+        self.notify.info('Done updating multifiles in phase: ' + repr(self.currentPhase))
         self.progressSoFar += int(round(self.phaseOverallMap[self.currentPhase]*100))
-        self.notify.info('progress so far ' + `self.progressSoFar`)
-        messenger.send('phaseComplete-' + `self.currentPhase`)
+        self.notify.info('progress so far ' + repr(self.progressSoFar))
+        messenger.send('phaseComplete-' + repr(self.currentPhase))
 
         self.resumeInstall()
 
@@ -362,12 +362,12 @@ class QuickLauncher(LauncherBase):
             elif len(args) == 2:
                 name, value = args
                 dict[name] = int(value)
-        if dict.has_key('secretsNeedsParentPassword'):
+        if 'secretsNeedsParentPassword' in dict:
             self.secretNeedsParentPasswordKey = 1 and dict['secretsNeedsParentPassword']
             self.notify.info('secretNeedsParentPassword = %d' % self.secretNeedsParentPasswordKey)
         else:
             self.notify.warning('no secretNeedsParentPassword token in webAcctParams')
-        if dict.has_key('chatEligible'):
+        if 'chatEligible' in dict:
             self.chatEligibleKey = 1 and dict['chatEligible']
             self.notify.info('chatEligibleKey = %d' % self.chatEligibleKey)
         else:

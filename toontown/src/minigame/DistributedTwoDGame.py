@@ -28,12 +28,12 @@ from direct.gui.DirectGui import DGG
 from direct.task.Task import Task
 from direct.fsm import ClassicFSM, State
 from direct.directnotify import DirectNotifyGlobal
-from DistributedMinigame import *
-import MinigameAvatarScorePanel, ArrowKeys, ToonBlitzAssetMgr, TwoDCamera
-import TwoDSectionMgr, ToonBlitzGlobals, TwoDGameToonSD
+from .DistributedMinigame import *
+from . import MinigameAvatarScorePanel, ArrowKeys, ToonBlitzAssetMgr, TwoDCamera
+from . import TwoDSectionMgr, ToonBlitzGlobals, TwoDGameToonSD
 from toontown.toonbase import ToontownTimer
-from TwoDWalk import *
-from TwoDDrive import *
+from .TwoDWalk import *
+from .TwoDDrive import *
 
 COLOR_RED = VBase4(1, 0, 0, 0.3)
 
@@ -151,7 +151,7 @@ class DistributedTwoDGame(DistributedMinigame):
         taskMgr.remove(self.UpdateLocalToonTask)
         
         # unload resources and delete objects from load() here        
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             toonSD = self.toonSDs[avId]
             toonSD.destroy()
         del self.toonSDs
@@ -209,7 +209,7 @@ class DistributedTwoDGame(DistributedMinigame):
         # stop the minigame; parent things to hidden, stop the music...
         self.assetMgr.offstage()
         
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             self.toonSDs[avId].exit()
         
         base.localAvatar.setTransparency(0)
@@ -275,7 +275,7 @@ class DistributedTwoDGame(DistributedMinigame):
         # Initialize the scoreboard
         self.scores = [0] * self.numPlayers
         spacing = .4
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             avId = self.avIdList[i]
             avName = self.getAvatarName(avId)
             scorePanel = \
@@ -376,7 +376,7 @@ class DistributedTwoDGame(DistributedMinigame):
             ((lX,tY),(rX,tY),(lX,bY),(rX,bY)),
             )
         scorePanelLocs = scorePanelLocs[self.numPlayers - 1]
-        for i in xrange(self.numPlayers):
+        for i in range(self.numPlayers):
             panel = self.scorePanels[i]
             pos = scorePanelLocs[i]
             lerpTrack.append(Parallel(
@@ -453,7 +453,7 @@ class DistributedTwoDGame(DistributedMinigame):
         if (base.localAvatar.getZ() < -2.):
             self.localToonFellDown()
             
-        for avId in self.toonSDs.keys():
+        for avId in list(self.toonSDs.keys()):
             self.toonSDs[avId].update()
                     
         return task.cont

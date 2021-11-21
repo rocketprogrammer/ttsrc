@@ -170,7 +170,7 @@ class SuitPlannerBase:
                                 "interactive prop %s  at %s not associated with a a battle" %
                                 (childDnaGroup, zoneId))
                         elif battleCellId == 0:
-                            if self.cellToGagBonusDict.has_key(zoneId):
+                            if zoneId in self.cellToGagBonusDict:
                                 self.notify.error(
                                     "FIXME battle cell at zone %s has two props %s %s linked to it" %
                                     (zoneId, self.cellToGagBonusDict[zoneId], childDnaGroup))
@@ -264,10 +264,10 @@ class SuitPlannerBase:
                                    path.getPointIndex(i+1),
                                    self.suitWalkSpeed )
             self.notify.debug(
-                'edge from point ' + `i` +
-                ' to point ' + `i+1` +
-                ' is in zone: ' + `zone` +
-                ' and will take ' + `travelTime` +
+                'edge from point ' + repr(i) +
+                ' to point ' + repr(i+1) +
+                ' is in zone: ' + repr(zone) +
+                ' and will take ' + repr(travelTime) +
                 ' seconds to walk.' )
 
         return None

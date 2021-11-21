@@ -18,7 +18,7 @@ from direct.task import Task
 from toontown.fishing.FishPhoto import DirectRegion
 from toontown.shtiker.ShtikerPage import ShtikerPage
 from toontown.toonbase import ToontownGlobals, TTLocalizer
-from FishPage import FishingTrophy
+from .FishPage import FishingTrophy
 from toontown.golf import GolfGlobals
 
 ##########################################################################
@@ -249,7 +249,7 @@ class GolfPage( ShtikerPage ):
             self.trophyTab[ 'state' ] = DGG.DISABLED
             
         else:
-            raise StandardError, "GolfPage::setMode - Invalid Mode %s" % ( mode )
+            raise Exception("GolfPage::setMode - Invalid Mode %s" % ( mode ))
 
         self.updatePage()
 
@@ -269,7 +269,7 @@ class GolfPage( ShtikerPage ):
             self.golfTrophies.show()
             self.golfRecords.hide()
         else:
-            raise StandardError, "GolfPage::updatePage - Invalid Mode %s" % ( self.mode )
+            raise Exception("GolfPage::updatePage - Invalid Mode %s" % ( self.mode ))
 
 
 class GolfingRecordsUI( DirectFrame ):
@@ -459,16 +459,16 @@ class GolfingRecordsUI( DirectFrame ):
         bestCourses = self.avatar.getGolfCourseBest()
         # but only if they have changed
         if bestHoles != self.lastHoleBest or bestCourses != self.lastCourseBest:
-            numCourse = len(GolfGlobals.CourseInfo.keys())
-            numHoles = len(GolfGlobals.HoleInfo.keys())
-            for i in xrange(numCourse):
+            numCourse = len(list(GolfGlobals.CourseInfo.keys()))
+            numHoles = len(list(GolfGlobals.HoleInfo.keys()))
+            for i in range(numCourse):
                 score = bestCourses[i]
                 if score != 0:
                     # use their best score
                     self.bestDisplayList[i]['text'] = str(score),
                 else:
                     self.bestDisplayList[i]['text'] = TTLocalizer.KartRace_Unraced
-            for i in xrange(numHoles):
+            for i in range(numHoles):
                 score = bestHoles[i]
                 if score != 0:
                     self.bestDisplayList[i+numCourse]['text'] = str(score)
@@ -479,7 +479,7 @@ class GolfingRecordsUI( DirectFrame ):
         DirectFrame.show( self )
         
     def regenerateScrollList(self):
-        print "### regen scroll"
+        print("### regen scroll")
         selectedIndex = 0
         if self.scrollList:
             selectedIndex = self.scrollList.getSelectedIndex()

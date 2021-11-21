@@ -6,7 +6,7 @@
 #          and can send you to the party grounds to plan your party
 #-------------------------------------------------------------------------------
 
-from DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
+from .DistributedNPCToonBaseAI import DistributedNPCToonBaseAI
 from toontown.toonbase import TTLocalizer
 from direct.task import Task
 from toontown.toonbase import ToontownGlobals
@@ -31,7 +31,7 @@ class DistributedNPCPartyPersonAI(DistributedNPCToonBaseAI):
         # this avatar has come within range
         assert self.notify.debug("avatar enter " + str(avId))
         
-        if not self.air.doId2do.has_key(avId):
+        if avId not in self.air.doId2do:
             self.notify.warning("Avatar: %s not found" % (avId))
             return
 

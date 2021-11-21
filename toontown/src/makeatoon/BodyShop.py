@@ -4,12 +4,12 @@ from pandac.PandaModules import *
 from toontown.toon import ToonDNA
 from direct.fsm import StateData
 from direct.gui.DirectGui import *
-from MakeAToonGlobals import *
+from .MakeAToonGlobals import *
 import random
 from toontown.toonbase import TTLocalizer
 from direct.directnotify import DirectNotifyGlobal
 from toontown.toontowngui import TeaserPanel
-import ShuffleButton
+from . import ShuffleButton
 
 class BodyShop(StateData.StateData):
     """

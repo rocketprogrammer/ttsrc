@@ -49,7 +49,7 @@ class DistributedLawOfficeElevatorIntAI(DistributedElevatorFloorAI.DistributedEl
                     pass
             for avId in self.avIds:
                 if not avId in sittingAvIds:
-                    print("THIS AV ID %s IS NOT ON BOARD" % (avId))
+                    print(("THIS AV ID %s IS NOT ON BOARD" % (avId)))
                     
             self.bldg.startNextFloor()                    
             
@@ -58,7 +58,7 @@ class DistributedLawOfficeElevatorIntAI(DistributedElevatorFloorAI.DistributedEl
         self.fsm.request("closed")
 
     def enterClosed(self):
-        print("DistributedLawOfficeElevatorIntAI.elevatorClosed %s" % (self.doId))
+        print(("DistributedLawOfficeElevatorIntAI.elevatorClosed %s" % (self.doId)))
         #import pdb; pdb.set_trace()
         DistributedElevatorFloorAI.DistributedElevatorFloorAI.enterClosed(self)
         # Switch back into opening mode since we allow other Toons onboard

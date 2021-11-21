@@ -103,7 +103,7 @@ class DistributedPartyDanceActivityBaseAI(DistributedPartyActivityAI):
         Gets from client when a dancing toon performs a dance move.
         """
         senderId = self.air.getAvatarIdFromSender()
-        if anim != "" and anim not in self.dancePatternToAnims.values():
+        if anim != "" and anim not in list(self.dancePatternToAnims.values()):
             # TODO: Log suspicious behavior?
             return
         self.d_setDancingToonState(senderId, state, anim)

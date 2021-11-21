@@ -10,8 +10,8 @@ import random
 from pandac.PandaModules import Point3
 from direct.directnotify import DirectNotifyGlobal
 from toontown.battle import SuitBattleGlobals
-import SuitTimings
-import SuitDNA
+from . import SuitTimings
+from . import SuitDNA
 from toontown.toonbase import TTLocalizer
 
 # extra time to add (in seconds) to any time calculations for path movement
@@ -133,11 +133,11 @@ class SuitBase:
         """
         # print out the path
         #
-        print "%d points in path" % self.pathLength
+        print("%d points in path" % self.pathLength)
 #        print self.path
         for currPathPt in range( self.pathLength ):
             indexVal = self.path.getPointIndex( currPathPt )
-            print "\t", self.sp.dnaStore.getSuitPointWithIndex( indexVal )
+            print("\t", self.sp.dnaStore.getSuitPointWithIndex( indexVal ))
 
     def makeLegList(self):
         """makeLegList(self)

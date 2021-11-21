@@ -2,7 +2,7 @@
 Landmark object
 """
 
-from ToonTownObj import *
+from .ToonTownObj import *
 
 class LandmarkObj(ToonTownObj):
     def __init__(self, editor, landmarkType, dna=None, nodePath=None):

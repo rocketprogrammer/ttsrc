@@ -28,7 +28,7 @@ class TTCodeRedemptionMgr(DistributedObject):
         # if result is non-zero, there was an error (see TTCodeRedemptionConsts.RedeemErrors)
         # if result is TTCodeRedemptionConsts.AwardCouldntBeGiven, awardMgrResult holds the error code
         #   (see AwardManagerConsts.GiveAwardErrors)
-        context = self._contextGen.next()
+        context = next(self._contextGen)
         self._context2callback[context] = callback
         self.notify.debug('redeemCode(%s, %s)' % (context, code))
         self.sendUpdate('redeemCode', [context, code])

@@ -3,7 +3,7 @@
 
 from pandac.PandaModules import *
 from direct.distributed import DistributedObject
-import SuitPlannerBase
+from . import SuitPlannerBase
 from toontown.toonbase import ToontownGlobals
 
 class DistributedSuitPlanner( DistributedObject.DistributedObject,
@@ -107,7 +107,7 @@ class DistributedSuitPlanner( DistributedObject.DistributedObject,
         # cell.
         cnode = CollisionNode('battleCells')
         cnode.setCollideMask(BitMask32.allOff())
-        for zoneId, cellPos in self.battlePosDict.items():
+        for zoneId, cellPos in list(self.battlePosDict.items()):
             cnode.addSolid(CollisionSphere(cellPos, 9))
 
             text = "%s" % (zoneId)

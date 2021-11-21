@@ -46,8 +46,8 @@ class DistributedLevelBattle(DistributedBattle.DistributedBattle):
             spec = self.level.getBattleCellSpec(self.battleCellId)
             self.level.requestReparent(self, spec['parentEntId'])
             self.setPos(spec['pos'])
-            print "spec = %s" % (spec)
-            print "h = %s" % (spec.get('h'))
+            print("spec = %s" % (spec))
+            print("h = %s" % (spec.get('h')))
             # Battles really want to be parented to render.
             self.wrtReparentTo(render)
 

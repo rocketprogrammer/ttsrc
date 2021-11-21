@@ -1,7 +1,7 @@
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedObjectAI
 from direct.directutil import DistributedLargeBlobSenderAI
-from SpecImports import *
+from .SpecImports import *
 
 class DistributedInGameEditorAI(DistributedObjectAI.DistributedObjectAI):
     notify = DirectNotifyGlobal.directNotify.newCategory(
@@ -48,7 +48,7 @@ class DistributedInGameEditorAI(DistributedObjectAI.DistributedObjectAI):
         return self.levelDoId
 
     def requestCurrentLevelSpec(self):
-        print "requestCurrentLevelSpec"
+        print("requestCurrentLevelSpec")
         # send an up-to-date copy of the level spec to this client
         #senderId = self.air.getAvatarIdFromSender()
         spec = self.level.levelSpec

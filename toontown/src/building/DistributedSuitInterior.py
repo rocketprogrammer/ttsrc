@@ -2,9 +2,9 @@
 
 from direct.interval.IntervalGlobal import *
 from direct.distributed.ClockDelta import *
-from ElevatorConstants import *
+from .ElevatorConstants import *
 
-import ElevatorUtils
+from . import ElevatorUtils
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from direct.directnotify import DirectNotifyGlobal
@@ -233,7 +233,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
     def __finishInterval(self, name):
         """ Force the specified interval to jump to the end
         """
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             interval = self.activeIntervals[name]
             if (interval.isPlaying()):
                 assert(self.notify.debug('finishInterval(): %s' % \
@@ -241,7 +241,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
                 interval.finish()
 
     def __cleanupIntervals(self):
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
         self.activeIntervals = {}
 
@@ -279,7 +279,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
         self.toons = []
         for toonId in toonIds:
             if (toonId != 0):
-                if (self.cr.doId2do.has_key(toonId)):
+                if (toonId in self.cr.doId2do):
                     toon = self.cr.doId2do[toonId]
                     toon.stopSmooth()
                     self.toons.append(toon)
@@ -300,7 +300,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
         self.suits = []
         self.joiningReserves = []
         for suitId in suitIds:
-            if (self.cr.doId2do.has_key(suitId)):
+            if (suitId in self.cr.doId2do):
                 suit = self.cr.doId2do[suitId]
                 self.suits.append(suit)
                 # Set this on the client
@@ -319,7 +319,7 @@ class DistributedSuitInterior(DistributedObject.DistributedObject):
         assert(len(reserveIds) == len(values))
         for index in range(len(reserveIds)):
             suitId = reserveIds[index]
-            if (self.cr.doId2do.has_key(suitId)):
+            if (suitId in self.cr.doId2do):
                 suit = self.cr.doId2do[suitId]
                 self.reserveSuits.append((suit, values[index]))
             else:

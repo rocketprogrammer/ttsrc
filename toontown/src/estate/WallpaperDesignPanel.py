@@ -6,25 +6,25 @@ from toontown.toonbase import ToontownGlobals
 
 wallpaperDict = {}
 wallpaperTextures = []
-keys = WallpaperTypes.keys()
+keys = list(WallpaperTypes.keys())
 keys.sort()
 
 for key in keys:
     wallpaperData = WallpaperTypes[key]
     wallTexture = wallpaperData[WTTextureName]
-    if not wallpaperDict.has_key(wallTexture):
+    if wallTexture not in wallpaperDict:
         wallpaperDict[wallTexture] = key
         wallpaperTextures.append(wallTexture)
 
 borderDict = {}
 borderTextures = []
-bkeys = BorderTypes.keys()
+bkeys = list(BorderTypes.keys())
 bkeys.sort()
 
 for key in bkeys:
     borderData = BorderTypes[key]
     borderTexture = borderData[BDTextureName]
-    if not borderDict.has_key(borderTexture):
+    if borderTexture not in borderDict:
         borderDict[borderTexture] = key
         borderTextures.append(borderTexture)
 

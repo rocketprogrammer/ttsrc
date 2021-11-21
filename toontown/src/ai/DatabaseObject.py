@@ -1,5 +1,5 @@
 from pandac.PandaModules import *
-from ToontownAIMsgTypes import *
+from .ToontownAIMsgTypes import *
 from direct.directnotify.DirectNotifyGlobal import *
 from toontown.toon import DistributedToonAI
 from direct.distributed.PyDatagram import PyDatagram
@@ -85,7 +85,7 @@ class DatabaseObject:
             # If fields is supplied, it is a subset of fields to update.
             values = {}
             for field in fields:
-                if self.values.has_key(field):
+                if field in self.values:
                     values[field] = self.values[field]
                 else:
                     self.notify.warning("Field %s not defined." % (field))
@@ -163,7 +163,7 @@ class DatabaseObject:
         dg.addUint32(self.doId)
         dg.addUint16(len(values))
 
-        items = values.items()
+        items = list(values.items())
         for field, value in items:
             dg.addString(field)
         for field, value in items:
@@ -196,7 +196,7 @@ class DatabaseObject:
 
         """
         do.doId = self.doId
-        for field, value in self.values.items():
+        for field, value in list(self.values.items()):
             # Special-case kludge for broken fields.
             if field == "setZonesVisited" and value.getLength() == 1:
                 self.notify.warning("Ignoring broken setZonesVisited")
@@ -235,12 +235,12 @@ class DatabaseObject:
         # AIDistUpdate.insertArg().
         values = {}
 
-        for key, value in values.items():
+        for key, value in list(values.items()):
             values[key] = PyDatagram(str(value))
 
         # objectType is an integer that the DB uses to distinguish object
         # types, i.e. ToontownAIMsgTypes.DBSERVER_PET_OBJECT_TYPE
-        assert type(objectType) is types.IntType
+        assert type(objectType) is int
 
         # Get a unique context for this query and associate ourselves
         # in the map.
@@ -258,9 +258,9 @@ class DatabaseObject:
         dg.addUint16(objectType)
         dg.addUint16(len(values))
 
-        for field in values.keys():
+        for field in list(values.keys()):
             dg.addString(field)
-        for value in values.values():
+        for value in list(values.values()):
             dg.addString(value.getMessage())
 
         self.air.send(dg)
@@ -286,7 +286,7 @@ class DatabaseObject:
         dg.addServerHeader(DBSERVER_ID, self.air.ourChannel, DBSERVER_DELETE_STORED_OBJECT)
         
         dg.addUint32(self.doId)
-        dg.addUint32(0xdeadbeefL)
+        dg.addUint32(0xdeadbeef)
 
         # bye bye
         self.air.send(dg)

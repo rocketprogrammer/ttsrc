@@ -6,9 +6,9 @@ from direct.showbase import DirectObject
 from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.directnotify import DirectNotifyGlobal
-import DistributedToon
+from . import DistributedToon
 from toontown.friends import FriendInviter
-import ToonTeleportPanel
+from . import ToonTeleportPanel
 from toontown.toonbase import TTLocalizer
 from toontown.hood import ZoneUtil
 from toontown.toonbase.ToontownBattleGlobals import Tracks, Levels
@@ -53,7 +53,7 @@ class ToonAvatarDetailPanel(DirectFrame):
     def __init__(self, avId, avName,  playerId = None, parent = aspect2dp, **kw):
         # Inherits from DirectFrame
         # Must specify avId and avName on creation
-        print("ToonAvatarDetailPanel %s" % (playerId))
+        print(("ToonAvatarDetailPanel %s" % (playerId)))
         
         # Load required models
         buttons = loader.loadModel(

@@ -1,10 +1,10 @@
 
 from pandac.PandaModules import *
-import ToonHood
+from . import ToonHood
 from toontown.safezone import GSSafeZoneLoader
 from toontown.toonbase.ToontownGlobals import *
 from toontown.racing import DistributedVehicle
-import SkyUtil
+from . import SkyUtil
 
 class GSHood(ToonHood.ToonHood):
     def __init__(self, parentFSM, doneEvent, dnaStore, hoodId):

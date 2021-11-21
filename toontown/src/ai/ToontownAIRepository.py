@@ -11,11 +11,11 @@ from toontown.safezone import DistributedTrolleyAI
 #from otp.friends import FriendManagerAI
 from toontown.shtiker import DeleteManagerAI
 from toontown.safezone import SafeZoneManagerAI
-import ToontownMagicWordManagerAI
+from . import ToontownMagicWordManagerAI
 from toontown.tutorial import TutorialManagerAI
 from toontown.catalog import CatalogManagerAI
 from otp.ai import TimeManagerAI
-import WelcomeValleyManagerAI
+from . import WelcomeValleyManagerAI
 from toontown.building import DistributedBuildingMgrAI
 from toontown.building import DistributedTrophyMgrAI
 from toontown.estate import DistributedBankMgrAI
@@ -39,7 +39,7 @@ from toontown.coghq import FactoryManagerAI
 from toontown.coghq import MintManagerAI
 from toontown.coghq import LawOfficeManagerAI
 from toontown.coghq import CountryClubManagerAI
-import NewsManagerAI
+from . import NewsManagerAI
 from toontown.hood import ZoneUtil
 from toontown.fishing import DistributedFishingPondAI
 from toontown.safezone import DistributedFishingSpotAI
@@ -51,7 +51,7 @@ from toontown.toon import NPCToons
 from toontown.safezone import ButterflyGlobals
 from toontown.estate import EstateManagerAI
 from toontown.suit import SuitInvasionManagerAI
-import HolidayManagerAI
+from . import HolidayManagerAI
 from toontown.effects import FireworkManagerAI
 from toontown.coghq import CogSuitManagerAI
 from toontown.coghq import PromotionManagerAI
@@ -73,10 +73,10 @@ import string
 import os
 import time
 
-import DatabaseObject
+from . import DatabaseObject
 from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.PyDatagramIterator import PyDatagramIterator
-from ToontownAIMsgTypes import *
+from .ToontownAIMsgTypes import *
 from otp.otpbase.OTPGlobals import *
 from toontown.distributed.ToontownDistrictAI import ToontownDistrictAI
 #from otp.distributed.DistributedDirectoryAI import DistributedDirectoryAI
@@ -89,7 +89,7 @@ from toontown.parties import ToontownTimeManager
 from toontown.coderedemption.TTCodeRedemptionMgrAI import TTCodeRedemptionMgrAI
 from toontown.distributed.NonRepeatableRandomSourceAI import NonRepeatableRandomSourceAI
 
-import ToontownGroupManager
+from . import ToontownGroupManager
 
 if __debug__:
     import pdb
@@ -209,7 +209,7 @@ class ToontownAIRepository(AIDistrict):
             # This is a special mode for development: we don't want
             # suits walking around all over the world.  Turn off all
             # the SuitPlanner flags.
-            for zones in self.zoneTable.values():
+            for zones in list(self.zoneTable.values()):
                 for zone in zones:
                     zone[2] = 0
 
@@ -311,7 +311,7 @@ class ToontownAIRepository(AIDistrict):
         Saves the state of all the buildings on all the managed
         streets, so it will be restored on AI restart.
         """
-        for mgr in self.buildingManagers.values():
+        for mgr in list(self.buildingManagers.values()):
             mgr.save()
 
     def genDNAFileName(self, zoneId):
@@ -361,7 +361,7 @@ class ToontownAIRepository(AIDistrict):
         """
         self.dnaStoreMap = {}
         self.dnaDataMap = {}
-        for zones in self.zoneTable.values():
+        for zones in list(self.zoneTable.values()):
             for zone in zones:
                 zoneId=zone[0]
                 dnaStore = DNAStorage()
@@ -536,7 +536,7 @@ class ToontownAIRepository(AIDistrict):
         # them can be used to fill the world with requests for suit
         # buildings.
         if self.suitPlanners:
-            self.suitPlanners.values()[0].assignInitialSuitBuildings()
+            list(self.suitPlanners.values())[0].assignInitialSuitBuildings()
             
         # mark district as avaliable
         self.district.b_setAvailable(1)
@@ -743,25 +743,25 @@ class ToontownAIRepository(AIDistrict):
 
     def getRacingPadList(self):
         list = []
-        for do in self.doId2do.values():
+        for do in list(self.doId2do.values()):
             if (isinstance(do, DistributedRacePadAI)):
                 list.append(do.doId)
         return list
 
     def getViewPadList(self):
         list = []
-        for do in self.doId2do.values():
+        for do in list(self.doId2do.values()):
             if (isinstance(do, DistributedViewPadAI)):
                 list.append(do.doId)
         return list
 
     def getStartingBlockDict(self):
         dict = {}
-        for do in self.doId2do.values():
+        for do in list(self.doId2do.values()):
             if (isinstance(do, DistributedStartingBlockAI)):
                 if (isinstance(do.kartPad, DistributedRacePadAI)):
                     # Add the do to the dict
-                    if (dict.has_key(do.kartPad.doId)):
+                    if (do.kartPad.doId in dict):
                         dict[do.kartPad.doId].append(do.doId)
                     else:
                         dict[do.kartPad.doId] = [do.doId]
@@ -769,11 +769,11 @@ class ToontownAIRepository(AIDistrict):
 
     def getViewingBlockDict(self):
         dict = {}
-        for do in self.doId2do.values():
+        for do in list(self.doId2do.values()):
             if (isinstance(do, DistributedStartingBlockAI)):
                 if (isinstance(do.kartPad, DistributedViewPadAI)):
                     # Add the do to the dict
-                    if (dict.has_key(do.kartPad.doId)):
+                    if (do.kartPad.doId in dict):
                         dict[do.kartPad.doId].append(do.doId)
                     else:
                         dict[do.kartPad.doId] = [do.doId]
@@ -959,7 +959,7 @@ class ToontownAIRepository(AIDistrict):
 
             numPets = di.getUint16()
             petIds = []
-            for i in xrange(numPets):
+            for i in range(numPets):
                 petIds.append(di.getUint32())
 
             # create estate with houses
@@ -969,12 +969,12 @@ class ToontownAIRepository(AIDistrict):
             callback(estateId, estateVal, numHouses, houseId, houseVal,
                      petIds, estateVal)
         else:
-            print "ret code != 0, something went wrong with estate creation"
+            print("ret code != 0, something went wrong with estate creation")
 
     def getFirstBattle(self):
         # Return the first battle in the repository (for testing purposes)
         from toontown.battle import DistributedBattleBaseAI
-        for dobj in self.doId2do.values():
+        for dobj in list(self.doId2do.values()):
             if isinstance(
                     dobj, DistributedBattleBaseAI.DistributedBattleBaseAI):
                 return dobj

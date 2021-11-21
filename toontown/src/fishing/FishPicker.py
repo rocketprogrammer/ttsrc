@@ -5,7 +5,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
-import FishPanel
+from . import FishPanel
 
 
 class FishPicker(DirectScrolledList):

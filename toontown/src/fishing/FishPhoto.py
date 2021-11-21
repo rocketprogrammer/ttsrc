@@ -4,7 +4,7 @@ from direct.directnotify import DirectNotifyGlobal
 #from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-import FishGlobals
+from . import FishGlobals
 
 class DirectRegion(NodePath):
     notify = DirectNotifyGlobal.directNotify.newCategory("DirectRegion")
@@ -59,18 +59,18 @@ class DirectRegion(NodePath):
             cm = CardMaker('displayRegionCard')
             
             assert hasattr(self, "bounds")
-            apply(cm.setFrame, self.bounds)
+            cm.setFrame(*self.bounds)
             
             self.card = card = self.attachNewNode(cm.generate())
             assert hasattr(self, "color")
-            apply(card.setColor, self.color)
+            card.setColor(*self.color)
             
             newBounds=card.getTightBounds()
             ll=render2d.getRelativePoint(card, newBounds[0])
             ur=render2d.getRelativePoint(card, newBounds[1])
             newBounds=[ll.getX(), ur.getX(), ll.getZ(), ur.getZ()]
             # scale the -1.0..2.0 range to 0.0..1.0:
-            newBounds=map(lambda x: max(0.0, min(1.0, (x+1.0)/2.0)), newBounds)
+            newBounds=[max(0.0, min(1.0, (x+1.0)/2.0)) for x in newBounds]
 
             self.cDr = base.win.makeDisplayRegion(*newBounds)
             self.cDr.setSort(10)
@@ -145,8 +145,8 @@ class FishPhoto(NodePath):
         # scale the actor to the frame
         if not hasattr(self, "fishDisplayRegion"):
             self.fishDisplayRegion = DirectRegion(parent=self)
-            apply(self.fishDisplayRegion.setBounds, self.swimBounds)
-            apply(self.fishDisplayRegion.setColor, self.swimColor)
+            self.fishDisplayRegion.setBounds(*self.swimBounds)
+            self.fishDisplayRegion.setColor(*self.swimColor)
         frame = self.fishDisplayRegion.load()
         pitch = frame.attachNewNode('pitch')
         rotate = pitch.attachNewNode('rotate')

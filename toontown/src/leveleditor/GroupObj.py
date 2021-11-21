@@ -2,7 +2,7 @@
 ToonTown Group object
 """
 
-from ToonTownObj import *
+from .ToonTownObj import *
 
 class GroupObj(ToonTownObjBase):
     def __init__(self, editor, groupName, dna=None, nodePath=None):

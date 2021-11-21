@@ -471,8 +471,8 @@ class DirectNewsFrame(DirectObject.DirectObject):
         cacheIndexFilename = Filename(self.newsDir, self.CacheIndexFilename)
 
         file = open(cacheIndexFilename.toOsSpecific(), 'w')
-        for filename, (size, date) in self.newsCache.items():
-            print >> file, '%s\t%s\t%s' % (filename, size, date)
+        for filename, (size, date) in list(self.newsCache.items()):
+            print('%s\t%s\t%s' % (filename, size, date), file=file)
         
     def handleNewIssueOut(self):
         """Handle getting this newIssueOut message."""

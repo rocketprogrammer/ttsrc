@@ -7,8 +7,8 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import BattleExperience
 from toontown.battle import BattleBase
-import BossCog
-import SuitDNA
+from . import BossCog
+from . import SuitDNA
 from toontown.coghq import CogDisguiseGlobals
 from direct.showbase import Transitions
 from toontown.hood import ZoneUtil
@@ -233,7 +233,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar,
         self.activeIntervals[name] = interval
 
     def cleanupIntervals(self):
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
             DelayDelete.cleanupDelayDeletes(interval)
         self.activeIntervals = {}
@@ -241,13 +241,13 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar,
     def clearInterval(self, name, finish=1):
         """ Clean up the specified Interval
         """
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             ival = self.activeIntervals[name]
             if finish:
                 ival.finish()
             else:
                 ival.pause()
-            if self.activeIntervals.has_key(name):
+            if name in self.activeIntervals:
                 DelayDelete.cleanupDelayDeletes(ival)
                 del self.activeIntervals[name]
         else:
@@ -256,7 +256,7 @@ class DistributedBossCog(DistributedAvatar.DistributedAvatar,
     def finishInterval(self, name):
         """ Force the specified Interval to jump to the end
         """ 
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             interval = self.activeIntervals[name]
             interval.finish()
 

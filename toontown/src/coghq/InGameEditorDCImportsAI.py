@@ -4,4 +4,4 @@ development environment. """
 
 if __dev__:
     from direct.directutil import DistributedLargeBlobSenderAI
-    import DistributedInGameEditorAI
+    from . import DistributedInGameEditorAI

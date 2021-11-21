@@ -92,7 +92,7 @@ class DistributedInGameNewsMgrUD(DistributedObjectGlobalUD):
             replyTo.respondXML(InGameNewsResponses.setLatestIssueSuccessXML % (self.getLatestIssueStr()))
             
             pass
-        except Exception,e:
+        except Exception as e:
             replyTo.respondXML(InGameNewsResponses.setLatestIssueFailureXML  % ("Catastrophic failure setting latest issue %s" % str(e)))
             pass
 

@@ -1,5 +1,5 @@
-import DistributedFurnitureItemAI
-import PhoneGlobals
+from . import DistributedFurnitureItemAI
+from . import PhoneGlobals
 from toontown.catalog import CatalogItem
 from toontown.toonbase import ToontownGlobals
 from toontown.ai import DatabaseObject
@@ -141,7 +141,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI):
                       'setAtticWindows', 'setInteriorItems'])
                                  
     def __gotHouse(self, db, retcode):
-        assert(self.notify.debug("__gotHouse(%s, %s): %s" % (db.values.keys(), retcode, self.doId)))
+        assert(self.notify.debug("__gotHouse(%s, %s): %s" % (list(db.values.keys()), retcode, self.doId)))
         if retcode != 0:
             self.notify.warning("House %s for avatar %s does not exist!" % (self.av.houseId, self.av.doId))
             self.sendCatalog(0)
@@ -275,7 +275,7 @@ class DistributedPhoneAI(DistributedFurnitureItemAI.DistributedFurnitureItemAI):
         db.getFields(fields)
         
     def __gotAvGiftCheck(self, targetDoID, sAvId, item, context, db, data2):
-        valid = db.values.has_key('setDNAString')
+        valid = 'setDNAString' in db.values
         if valid:
             simbase.air.deliveryManager.sendRequestPurchaseGift(item, targetDoID, sAvId, context, self)
         else:

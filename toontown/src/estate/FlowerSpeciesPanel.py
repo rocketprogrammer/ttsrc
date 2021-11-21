@@ -6,8 +6,8 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
 #import FishBase
-import GardenGlobals
-import FlowerPhoto
+from . import GardenGlobals
+from . import FlowerPhoto
 from toontown.estate import BeanRecipeGui
 
 class FlowerSpeciesPanel(DirectFrame):

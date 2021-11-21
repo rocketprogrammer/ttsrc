@@ -14,7 +14,7 @@ from toontown.toon import ToonHead
 from toontown.effects import Splash
 from toontown.effects import DustCloud
 from toontown.minigame import CannonGameGlobals
-import CannonGlobals
+from . import CannonGlobals
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -425,7 +425,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
 
                 self.incrementPinballInfo(0,0)
                 
-            if (self.cr.doId2do.has_key(self.avId)):
+            if (self.avId in self.cr.doId2do):
                 # If the toon exists, look it up
                 self.av = self.cr.doId2do[self.avId]
                 self.acceptOnce(self.av.uniqueName('disable'), 
@@ -1117,7 +1117,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
                 self.sndCannonMove.stop()
                 # make sure everyone has the correct final position
                 self.__broadcastLocalCannonPosition()
-                print("Cannon Rot:%s Angle:%s" % (pos[0], pos[1]))
+                print(("Cannon Rot:%s Angle:%s" % (pos[0], pos[1])))
 
         return Task.cont
 
@@ -1231,7 +1231,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
         flightResults = self.__calcFlightResults(avId, launchTime)
         # pull all the results into the local namespace
         for key in flightResults:
-            exec "%s = flightResults['%s']" % (key, key)
+            exec("%s = flightResults['%s']" % (key, key))
 
         self.notify.debug("start position: " + str(startPos))
         self.notify.debug("start velocity: " + str(startVel))
@@ -1256,7 +1256,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
         # head was
         av = self.toonModel
         av.reparentTo(render)
-        print("start Pos%s Hpr%s" % (startPos, startHpr))
+        print(("start Pos%s Hpr%s" % (startPos, startHpr)))
         av.setPos(startPos)
         barrelHpr = self.barrel.getHpr(render)
         # subtract 90 degrees from hpr since barrels hpr measures the angle from the ground
@@ -1349,7 +1349,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
             if not hasattr(place, 'fsm'):
                 return
             placeState = place.fsm.getCurrentState().getName()
-            print placeState
+            print(placeState)
             if ((self.inWater) or place.toonSubmerged) and (placeState != "fishing"):
                 if (self.av != None):
                     self.av.startSmooth()

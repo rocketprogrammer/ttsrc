@@ -1,9 +1,9 @@
 
 from otp.ai.AIBaseGlobal import *
 from pandac.PandaModules import *
-from DistributedNPCToonBaseAI import *
+from .DistributedNPCToonBaseAI import *
 
-import ToonDNA
+from . import ToonDNA
 from direct.task.Task import Task
 from toontown.ai import DatabaseObject
 from toontown.estate import ClosetGlobals
@@ -34,7 +34,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
         # this avatar has come within range
         assert self.notify.debug("avatar enter " + str(avId))
         
-        if (not self.air.doId2do.has_key(avId)):
+        if (avId not in self.air.doId2do):
             self.notify.warning("Avatar: %s not found" % (avId))
             return
 
@@ -155,7 +155,7 @@ class DistributedNPCTailorAI(DistributedNPCToonBaseAI):
             self.air.writeServerEvent('suspicious', avId, 'DistributedNPCTailorAI.setDNA: invalid dna: %s' % blob)
             return
 
-        if (self.air.doId2do.has_key(avId)):
+        if (avId in self.air.doId2do):
             av = self.air.doId2do[avId]
             if (finished == 2 and which > 0):
                 # Make sure client was actually able to purchase

@@ -187,7 +187,7 @@ class CostumeManagerAI(HolidayBaseAI.HolidayBaseAI, DirectObject.DirectObject):
         else:        
             self.notify.warning("Hood empty during character switch")
         holidayDone = 1
-        for classicChar in self.__classicChars.itervalues():
+        for classicChar in self.__classicChars.values():
             if classicChar == 1:
                 holidayDone = 0
         if holidayDone:

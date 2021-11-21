@@ -77,7 +77,7 @@ class BingoCardBase:
         emptyCells = (self.cardSize-1) - len(fishList)
 
         rodId = 0
-        for i in xrange(emptyCells):
+        for i in range(emptyCells):
             fish = FishGlobals.getRandomFishVitals(zoneId, rodId, rng)
             while( not fish[0] ):
                 fish = FishGlobals.getRandomFishVitals(zoneId, rodId, rng)
@@ -87,7 +87,7 @@ class BingoCardBase:
             if rodId > 4: rodId = 0
 
         # Now, fill up the the card by randomly placing the fish in a cell.
-        for index in xrange(self.cardSize):
+        for index in range(self.cardSize):
             if index != self.cardSize/2:
                 choice = rng.randrange(0,len(fishList))
                 self.cellList.append( fishList.pop(choice) )
@@ -217,7 +217,7 @@ class BingoCardBase:
     # Output: None
     ################################################################# 
     def rowCheck(self, rowId):
-        for colId in xrange(self.colSize):
+        for colId in range(self.colSize):
             if not (self.gameState & (1 << (self.rowSize*rowId+colId) )):
                 return 0
         return 1
@@ -231,7 +231,7 @@ class BingoCardBase:
     # Output: None
     ################################################################# 
     def colCheck(self, colId):
-        for rowId in xrange(self.rowSize):
+        for rowId in range(self.rowSize):
             if not (self.gameState & (1 << (self.rowSize*rowId+colId) )):
                 return 0
         return 1
@@ -247,7 +247,7 @@ class BingoCardBase:
     def fDiagCheck(self, id):
         checkNum = self.rowSize+1
         if not (id % checkNum):
-            for i in xrange(self.rowSize):
+            for i in range(self.rowSize):
                 if not (self.gameState & (1 << i*checkNum)):
                     return 0
             return 1
@@ -266,7 +266,7 @@ class BingoCardBase:
     def bDiagCheck(self, id):
         checkNum = self.rowSize-1
         if not(id % checkNum) and (not(id==(self.cardSize-1))):
-            for i in xrange(self.rowSize):
+            for i in range(self.rowSize):
                 if not (self.gameState & (1 << (i*checkNum+checkNum))):
                     return 0
             return 1

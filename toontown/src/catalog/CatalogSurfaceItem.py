@@ -1,8 +1,8 @@
-import CatalogItem
-import CatalogAtticItem
+from . import CatalogItem
+from . import CatalogAtticItem
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
-from CatalogSurfaceColors import *
+from .CatalogSurfaceColors import *
 
 # Surface type.  This must be a contiguous series in the range 0-3 to
 # index into DistributedHouse.activeWallpaper.

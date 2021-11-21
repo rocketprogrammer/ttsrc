@@ -1,8 +1,8 @@
 """DropPlacer module: contains the DropPlacer base class and derived drop placer classes"""
 
 from direct.showbase.RandomNumGen import RandomNumGen
-import CatchGameGlobals
-import DropScheduler
+from . import CatchGameGlobals
+from . import DropScheduler
 from toontown.parties.PartyGlobals import CatchActivityDuration as PartyCatchDuration
 
 # in order to cleanly support different drop 'behaviors', we
@@ -89,8 +89,7 @@ class DropPlacer:
         dropTypeName is the name of the type of object to drop
         gridColumn and gridRow are grid coordinates, zero-based
         """
-        raise RuntimeError, \
-              'DropPlacer.getNextDrop should never be called'
+        raise RuntimeError('DropPlacer.getNextDrop should never be called')
 
 class RandomDropPlacer(DropPlacer):
     """
@@ -258,12 +257,12 @@ class RegionDropPlacer(DropPlacer):
             rowList = self.DropRegionTable[row]
             for column in range(len(rowList)):
                 region = rowList[column]
-                if not self.DropRegion2GridCoordList.has_key(region):
+                if region not in self.DropRegion2GridCoordList:
                     self.DropRegion2GridCoordList[region] = []
                 self.DropRegion2GridCoordList[region].append(
                     [row,column])
         # and create a sorted list of drop regions
-        self.DropRegions = self.DropRegion2GridCoordList.keys()
+        self.DropRegions = list(self.DropRegion2GridCoordList.keys())
         self.DropRegions.sort()
 
         # keep track of which drop regions have an object in them
@@ -357,7 +356,7 @@ class PathDropPlacer(DropPlacer):
         # be careful to create N *unique* descriptors, not N
         # references to a single descriptor
         self.paths = []
-        for i in xrange(self.game.getNumPlayers()):
+        for i in range(self.game.getNumPlayers()):
             # create a new path descriptor and add it to the list
             dir = self.rng.randrange(0,len(self.moves))
             col,row = self.getRandomColRow()

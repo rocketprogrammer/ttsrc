@@ -58,7 +58,7 @@ class RaceResultsPanel(DirectFrame):
                 parent = frame,
                 relief = None,
                 pos = (0.0,0.0,-0.01),
-                text = `x+1`+' -',
+                text = repr(x+1)+' -',
                 text_fg = (0.5, 0.5, 0.5, 1.0),
                 text_scale = TTLocalizer.REPraceEnd,
                 text_align = TextNode.ARight,
@@ -586,7 +586,7 @@ class RaceWinningsPanel(DirectFrame):
         if ticBonus > 0:
             if (not endOfCircuitRace):
                 # tasty reverse lookup!
-                bonusType = RaceGlobals.PeriodDict.values().index(ticBonus)
+                bonusType = list(RaceGlobals.PeriodDict.values()).index(ticBonus)
             else:
                 #do not generate a bonus ticket sequence since we've done that when the last race ended
                 ticBonus = 0

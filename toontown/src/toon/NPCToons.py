@@ -3,7 +3,7 @@ from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 import random
 from toontown.hood import ZoneUtil
-import ToonDNA
+from . import ToonDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
 import sys, os
@@ -81,17 +81,17 @@ def getRandomDNA(seed, gender):
     return randomDNA.asTuple()
 
 def createNPC(air, npcId, desc, zoneId, posIndex=0, questCallback=None):
-    import DistributedNPCToonAI
-    import DistributedNPCClerkAI
-    import DistributedNPCTailorAI
-    import DistributedNPCBlockerAI
-    import DistributedNPCFishermanAI
-    import DistributedNPCPetclerkAI
-    import DistributedNPCKartClerkAI
-    import DistributedNPCPartyPersonAI
-    import DistributedNPCSpecialQuestGiverAI
-    import DistributedNPCFlippyInToonHallAI
-    import DistributedNPCScientistAI
+    from . import DistributedNPCToonAI
+    from . import DistributedNPCClerkAI
+    from . import DistributedNPCTailorAI
+    from . import DistributedNPCBlockerAI
+    from . import DistributedNPCFishermanAI
+    from . import DistributedNPCPetclerkAI
+    from . import DistributedNPCKartClerkAI
+    from . import DistributedNPCPartyPersonAI
+    from . import DistributedNPCSpecialQuestGiverAI
+    from . import DistributedNPCFlippyInToonHallAI
+    from . import DistributedNPCScientistAI
     canonicalZoneId, name, dnaType, gender, protected, type = desc
     if (type == NPC_REGULAR):
         npc = DistributedNPCToonAI.DistributedNPCToonAI(
@@ -122,7 +122,7 @@ def createNPC(air, npcId, desc, zoneId, posIndex=0, questCallback=None):
     elif(type == NPC_SCIENTIST):
         npc = DistributedNPCScientistAI.DistributedNPCScientistAI(air, npcId)
     else:
-        print 'createNPC() error!!!'
+        print('createNPC() error!!!')
     npc.setName(name)
     dna = ToonDNA.ToonDNA()
     
@@ -185,8 +185,8 @@ def createNpcsInZone(air, zoneId):
     return npcs
 
 def createLocalNPC(npcId):
-    import Toon
-    if (not NPCToonDict.has_key(npcId)):
+    from . import Toon
+    if (npcId not in NPCToonDict):
         return None
     desc = NPCToonDict[npcId]
     canonicalZoneId, name, dnaType, gender, protected, type = desc
@@ -973,9 +973,9 @@ zone2NpcDict = {}
 
 # Fill out the zone2NpcDict so we can efficiently lookup toons by zoneId
 def generateZone2NpcDict():
-    for id, npcDesc in NPCToonDict.items():
+    for id, npcDesc in list(NPCToonDict.items()):
         zoneId = npcDesc[0]
-        if zone2NpcDict.has_key(zoneId):
+        if zoneId in zone2NpcDict:
             zone2NpcDict[zoneId].append(id)
         else:
             zone2NpcDict[zoneId] = [id]
@@ -1091,24 +1091,24 @@ npcFriends = {
     }
 
 def getNPCTrack(npcId):
-    if (npcFriends.has_key(npcId)):
+    if (npcId in npcFriends):
         return npcFriends[npcId][0]
     return None
 
 def getNPCTrackHp(npcId):
-    if (npcFriends.has_key(npcId)):
+    if (npcId in npcFriends):
         track, level, hp, rarity = npcFriends[npcId]
         return track,  hp
     return None, None
 
 def getNPCTrackLevelHp(npcId):
-    if (npcFriends.has_key(npcId)):
+    if (npcId in npcFriends):
         track, level, hp, rarity = npcFriends[npcId]
         return track, level, hp
     return None, None, None
 
 
 def getNPCTrackLevelHpRarity(npcId):
-    if (npcFriends.has_key(npcId)):
+    if (npcId in npcFriends):
         return npcFriends[npcId]
     return None, None, None, None

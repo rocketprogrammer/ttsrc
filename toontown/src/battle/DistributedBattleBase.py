@@ -1,7 +1,7 @@
 from pandac.PandaModules import *
 from toontown.toonbase.ToonBaseGlobal import *
 from direct.interval.IntervalGlobal import *
-from BattleBase import *
+from .BattleBase import *
 from direct.distributed.ClockDelta import *
 
 from toontown.toonbase import ToontownBattleGlobals
@@ -10,13 +10,13 @@ from direct.fsm import ClassicFSM, State
 from direct.fsm import State
 from direct.task.Task import Task
 from direct.directnotify import DirectNotifyGlobal
-import Movie
-import MovieUtil
+from . import Movie
+from . import MovieUtil
 from toontown.suit import Suit
 from direct.actor import Actor
-import BattleProps
+from . import BattleProps
 from direct.particles import ParticleEffect
-import BattleParticles
+from . import BattleParticles
 from toontown.hood import ZoneUtil
 from toontown.distributed import DelayDelete
 from toontown.toon import TTEmote
@@ -192,7 +192,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.activeIntervals[name] = interval
 
     def __cleanupIntervals(self):
-        for interval in self.activeIntervals.values():
+        for interval in list(self.activeIntervals.values()):
             interval.finish()
             DelayDelete.cleanupDelayDeletes(interval)
         self.activeIntervals = {}
@@ -200,18 +200,18 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def clearInterval(self, name, finish=0):
         """ Clean up the specified Interval
         """
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             ival = self.activeIntervals[name]
             if finish:
                 ival.finish()
             else:
                 ival.pause()
-            if self.activeIntervals.has_key(name):
+            if name in self.activeIntervals:
                 DelayDelete.cleanupDelayDeletes(ival)
                 # cleanupDelayDeletes might cause the involved avatar to be deleted,
                 # which would clear the interval out of self.activeIntervals. Check
                 # again to see if it's still in the dict
-                if self.activeIntervals.has_key(name):
+                if name in self.activeIntervals:
                     del self.activeIntervals[name]
         else:
             self.notify.debug('interval: %s already cleared' % name)
@@ -219,7 +219,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     def finishInterval(self, name):
         """ Force the specified Interval to jump to the end
         """ 
-        if (self.activeIntervals.has_key(name)):
+        if (name in self.activeIntervals):
             interval = self.activeIntervals[name]
             interval.finish()
 
@@ -513,7 +513,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.suits = []
         suitGone = 0
         for s in suits:
-            if (self.cr.doId2do.has_key(s)):
+            if (s in self.cr.doId2do):
                 suit = self.cr.doId2do[s]
                 suit.setState('Battle')
                 self.suits.append(suit)
@@ -1286,7 +1286,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.storeInterval(runMTrack, runName)
 
     def getToon(self, toonId):
-        if (self.cr.doId2do.has_key(toonId)):
+        if (toonId in self.cr.doId2do):
             return self.cr.doId2do[toonId]
         else:
             self.notify.warning('getToon() - toon: %d not in repository!' \
@@ -1452,7 +1452,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         return None
 
     def __handleLocalToonBattleEvent(self, response):
-        assert(response.has_key('mode'))
+        assert('mode' in response)
         mode = response['mode']
         noAttack = 0
         if (mode == 'Attack'):
@@ -1535,7 +1535,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             petProxyId = response['id']
             self.notify.debug('got a PETSOSINFO for pet: %d' % petProxyId)
             # Check to see if the proxy object has already been generated
-            if base.cr.doId2do.has_key(petProxyId):
+            if petProxyId in base.cr.doId2do:
                 self.notify.debug("pet: %d was already in the repository" % petProxyId)
                 # Throw the event that pet info is available
                 proxyGenerateMessage = "petProxy-%d-generated" % petProxyId

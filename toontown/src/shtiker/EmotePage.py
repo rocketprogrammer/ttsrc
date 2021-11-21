@@ -1,7 +1,7 @@
 """EmotePage module: contains the EmotePage class"""
 
 from toontown.toonbase import ToontownGlobals
-import ShtikerPage
+from . import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -70,7 +70,7 @@ class EmoteFrame(DirectFrame):
         try:
             anim = emoteAnimDict[self.name]
         except:
-            print "we didnt get the right animation"
+            print("we didnt get the right animation")
             anim = 'neutral'
             
         #self.toon.pose(anim, self.toon.getNumFrames(anim)/2)

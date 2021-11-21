@@ -1,7 +1,7 @@
 """GardenPage module: contains the GardenPage class"""
 
 from direct.directnotify import DirectNotifyGlobal
-import ShtikerPage
+from . import ShtikerPage
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import TTLocalizer
@@ -415,7 +415,7 @@ class GardenPage(ShtikerPage.ShtikerPage):
         self.specialsInfo['text'] = GardenGlobals.Specials[entry[0]]['description']
         self.selectedSpecial = type
         specialInfo = GardenGlobals.Specials[entry[0]]
-        if specialInfo.has_key('useFromShtiker') and specialInfo['useFromShtiker']:
+        if 'useFromShtiker' in specialInfo and specialInfo['useFromShtiker']:
             self.useSpecialButton.show()
         else:
             self.useSpecialButton.hide()
@@ -476,7 +476,7 @@ class GardenPage(ShtikerPage.ShtikerPage):
             self.trophies = []
             hOffset = -0.5
             vOffset = 0.4
-            for level, trophyDesc in GardenGlobals.TrophyDict.items():
+            for level, trophyDesc in list(GardenGlobals.TrophyDict.items()):
                 trophy = GardenTrophy(-1)
                 trophy.nameLabel['text'] = trophyDesc[0]
                 trophy.reparentTo(self.trophyFrame)

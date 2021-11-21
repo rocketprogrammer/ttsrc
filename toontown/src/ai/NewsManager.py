@@ -5,9 +5,9 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownBattleGlobals
 from toontown.battle import SuitBattleGlobals
 from toontown.toonbase import TTLocalizer
-import HolidayDecorator
-import HalloweenHolidayDecorator
-import CrashedLeaderBoardDecorator
+from . import HolidayDecorator
+from . import HalloweenHolidayDecorator
+from . import CrashedLeaderBoardDecorator
 from direct.interval.IntervalGlobal import *
 import calendar
 from copy import deepcopy
@@ -254,11 +254,11 @@ class NewsManager(DistributedObject.DistributedObject):
         def isStarting(id):
             return id not in self.holidayIdList
         # Which holidays are ending?
-        toEnd = filter(isEnding, self.holidayIdList)
+        toEnd = list(filter(isEnding, self.holidayIdList))
         for endingHolidayId in toEnd:
             self.endHoliday(endingHolidayId)
         # Which holidays are starting?
-        toStart = filter(isStarting, holidayIdList)
+        toStart = list(filter(isStarting, holidayIdList))
         for startingHolidayId in toStart:
             self.startHoliday(startingHolidayId)
         messenger.send("setHolidayIdList", [holidayIdList])

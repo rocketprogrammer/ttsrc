@@ -2,7 +2,7 @@
 
 from direct.interval.IntervalGlobal import *
 from otp.level import BasicEntities
-import MovingPlatform
+from . import MovingPlatform
 from pandac.PandaModules import Vec3
 
 class GearEntity(BasicEntities.NodePathEntity):

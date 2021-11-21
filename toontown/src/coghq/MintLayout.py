@@ -7,21 +7,21 @@ import random
 
 def printAllCashbotInfo():
     # print out roomId->room name
-    print 'roomId: roomName'
-    for roomId, roomName in MintRoomSpecs.CashbotMintRoomId2RoomName.items():
-        print '%s: %s' % (roomId, roomName)
+    print('roomId: roomName')
+    for roomId, roomName in list(MintRoomSpecs.CashbotMintRoomId2RoomName.items()):
+        print('%s: %s' % (roomId, roomName))
     # print out # of battles in each room
-    print '\nroomId: numBattles'
-    for roomId, numBattles in MintRoomSpecs.roomId2numBattles.items():
-        print '%s: %s' % (roomId, numBattles)
+    print('\nroomId: numBattles')
+    for roomId, numBattles in list(MintRoomSpecs.roomId2numBattles.items()):
+        print('%s: %s' % (roomId, numBattles))
     # print out all of the rooms in all mint floors
-    print '\nmintId floor roomIds'
+    print('\nmintId floor roomIds')
     printMintRoomIds()
     # print out # of rooms in each mint floor
-    print '\nmintId floor numRooms'
+    print('\nmintId floor numRooms')
     printNumRooms()
     # print out # of non-skippable battles in each mint floor
-    print '\nmintId floor numForcedBattles'
+    print('\nmintId floor numForcedBattles')
     printNumBattles()
     
 # print out info on all mint levels for Cashbot
@@ -31,23 +31,23 @@ def iterateCashbotMints(func):
     for mintId in [ToontownGlobals.CashbotMintIntA,
                    ToontownGlobals.CashbotMintIntB,
                    ToontownGlobals.CashbotMintIntC,]:
-        for floorNum in xrange(ToontownGlobals.MintNumFloors[mintId]):
+        for floorNum in range(ToontownGlobals.MintNumFloors[mintId]):
             func(MintLayout(mintId, floorNum))
 
 def printMintInfo():
-    def func(ml): print ml
+    def func(ml): print(ml)
     iterateCashbotMints(func)
 def printMintRoomIds():
-    def func(ml): print ml.getMintId(), ml.getFloorNum(), ml.getRoomIds()
+    def func(ml): print(ml.getMintId(), ml.getFloorNum(), ml.getRoomIds())
     iterateCashbotMints(func)
 def printMintRoomNames():
-    def func(ml): print ml.getMintId(), ml.getFloorNum(), ml.getRoomNames()
+    def func(ml): print(ml.getMintId(), ml.getFloorNum(), ml.getRoomNames())
     iterateCashbotMints(func)
 def printNumRooms():
-    def func(ml): print ml.getMintId(), ml.getFloorNum(), ml.getNumRooms()
+    def func(ml): print(ml.getMintId(), ml.getFloorNum(), ml.getNumRooms())
     iterateCashbotMints(func)
 def printNumBattles():
-    def func(ml): print ml.getMintId(), ml.getFloorNum(), ml.getNumBattles()
+    def func(ml): print(ml.getMintId(), ml.getFloorNum(), ml.getNumBattles())
     iterateCashbotMints(func)
 
 BakedFloorLayouts = {
@@ -215,7 +215,7 @@ class MintLayout:
         # pick the hallways
         hallwayRng = self.getRng()
         connectorRoomNames = MintRoomSpecs.CashbotMintConnectorRooms
-        for i in xrange(self.numHallways):
+        for i in range(self.numHallways):
             self.hallways.append(hallwayRng.choice(connectorRoomNames))
 
     def _genFloorLayout(self):
@@ -247,7 +247,7 @@ class MintLayout:
 
         # get list of all battle rooms
         allBattleRooms = []
-        for num, roomIds in numBattles2middleRoomIds.items():
+        for num, roomIds in list(numBattles2middleRoomIds.items()):
             if num > 0:
                 allBattleRooms.extend(roomIds)
 
@@ -269,7 +269,7 @@ class MintLayout:
         if middleRoomsLeft > 0:
             # choose action rooms for the rest of the middle rooms
             actionRoomIds = numBattles2middleRoomIds[0]
-            for i in xrange(middleRoomsLeft):
+            for i in range(middleRoomsLeft):
                 roomId = rng.choice(actionRoomIds)
                 actionRoomIds.remove(roomId)
                 middleRoomIds.append(roomId)

@@ -12,9 +12,9 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from otp.chat import ChatManager
-from TTChatInputSpeedChat import TTChatInputSpeedChat
-from TTChatInputNormal import TTChatInputNormal
-from TTChatInputWhiteList import TTChatInputWhiteList
+from .TTChatInputSpeedChat import TTChatInputSpeedChat
+from .TTChatInputNormal import TTChatInputNormal
+from .TTChatInputWhiteList import TTChatInputWhiteList
 #from toontown.launcher import QuickLauncher
 
 # hack class to simulate radio buttons (prevent radio button from clearing
@@ -941,7 +941,7 @@ class ToontownChatManager(ChatManager.ChatManager):
             else:
                 self.fsm.request("normalChat")
         else:
-            print ("ChatManager: productName: %s not recognized" % (base.cr.productName))
+            print(("ChatManager: productName: %s not recognized" % (base.cr.productName)))
         
     def __scButtonPressed(self):
         assert self.debugFunction()

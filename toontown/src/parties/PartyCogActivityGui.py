@@ -19,7 +19,7 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import ToontownIntervals
 from toontown.toonbase import TTLocalizer
 
-import PartyGlobals
+from . import PartyGlobals
 
 class PartyCogTrackerGui:
     def __init__(self):

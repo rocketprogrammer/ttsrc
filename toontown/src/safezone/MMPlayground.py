@@ -4,7 +4,7 @@
 
 from pandac.PandaModules import *
 
-import Playground
+from . import Playground
 import random
 from direct.fsm import ClassicFSM, State
 from direct.actor import Actor

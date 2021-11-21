@@ -7,8 +7,8 @@
 # - Nov 2009 Migrated to DistributedPartyTeamActivityAI
 #-------------------------------------------------------------------------------
 from toontown.toonbase import ToontownGlobals
-from DistributedPartyTeamActivityAI import DistributedPartyTeamActivityAI
-import PartyGlobals
+from .DistributedPartyTeamActivityAI import DistributedPartyTeamActivityAI
+from . import PartyGlobals
 
 class DistributedPartyTugOfWarActivityAI(DistributedPartyTeamActivityAI):
     notify = directNotify.newCategory("DistributedPartyTugOfWarActivityAI")
@@ -86,7 +86,7 @@ class DistributedPartyTugOfWarActivityAI(DistributedPartyTeamActivityAI):
         toonId = self.air.getAvatarIdFromSender()
         self.toonIdsToKeyRates[toonId] = keyRate
         # sometimes the game has cleaned up and we get an old update from a client
-        if self.toonIdsToTeams.has_key(toonId):
+        if toonId in self.toonIdsToTeams:
             self.forceDictList[self.toonIdsToTeams[toonId]][toonId] = force
     
             # send the keyrate for this toonId to the clients so they can update
@@ -110,7 +110,7 @@ class DistributedPartyTugOfWarActivityAI(DistributedPartyTeamActivityAI):
         forceTotals = [0.0, 0.0] # left team force, right team force
         # total up all the toon forces on each side
         for teamIndex in [0,1]:
-            for x in self.forceDictList[teamIndex].values():
+            for x in list(self.forceDictList[teamIndex].values()):
                 forceTotals[teamIndex] += x
             
         deltaF = forceTotals[1] - forceTotals[0]

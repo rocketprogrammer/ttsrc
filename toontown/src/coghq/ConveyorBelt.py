@@ -2,7 +2,7 @@
 
 from pandac.PandaModules import *
 from direct.interval.IntervalGlobal import *
-import MovingPlatform
+from . import MovingPlatform
 from otp.level import BasicEntities
 
 # TODO: fix cracks between treads
@@ -52,7 +52,7 @@ class ConveyorBelt(BasicEntities.NodePathEntity):
 
         # make copies of the tread model
         self.treads = []
-        for i in xrange(self.numTreads):
+        for i in range(self.numTreads):
             mp = MovingPlatform.MovingPlatform()
             mp.parentingNode = render.attachNewNode('parentTarget')
             mp.setupCopyModel('conv%s-%s' % (self.getParentToken(), i),
@@ -83,7 +83,7 @@ class ConveyorBelt(BasicEntities.NodePathEntity):
         treadPeriod = self.treadLength / abs(self.speed)
         # the first tread should start fully behind the origin
         startY = -self.treadLength
-        for i in xrange(self.numTreads):
+        for i in range(self.numTreads):
             # one lerp will bring this tread to the end
             # another will bring it from the beginning to its starting point
             periodsToEnd = self.numTreads - i

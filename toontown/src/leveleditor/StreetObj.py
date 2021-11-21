@@ -2,7 +2,7 @@
 Street object
 """
 
-from ToonTownObj import *
+from .ToonTownObj import *
 
 class StreetObj(ToonTownObj):
     def __init__(self, editor, streetType, dna=None, nodePath=None):

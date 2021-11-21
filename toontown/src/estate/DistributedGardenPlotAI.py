@@ -1,7 +1,7 @@
 from otp.ai.AIBase import *
-import DistributedLawnDecorAI
+from . import DistributedLawnDecorAI
 from direct.directnotify import DirectNotifyGlobal
-import GardenGlobals
+from . import GardenGlobals
 
 from direct.showbase.ShowBase import *
 
@@ -18,12 +18,12 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI.DistributedLawnDecorAI):
         senderId = self.air.getAvatarIdFromSender()
         toon = simbase.air.doId2do.get(senderId)
         toon.takeMoney(burntBeans)
-        print("burning money%s" % (burntBeans))
+        print(("burning money%s" % (burntBeans)))
         #deliberately not burning the special, since they cost so much,
         #beside Clarabelle tells you what beans to plant it with anyway.
 
     def plantFlower(self, species, variety):
-        print "planting flower species=%d variety=%d" % (species, variety)
+        print("planting flower species=%d variety=%d" % (species, variety))
         senderId = self.air.getAvatarIdFromSender()
         
         zoneId = self.zoneId
@@ -107,7 +107,7 @@ class DistributedGardenPlotAI(DistributedLawnDecorAI.DistributedLawnDecorAI):
                 estate.doEpochNow(onlyForThisToonIndex = self.ownerIndex)
 
     def plantStatuary(self, species):
-        print "planting item species=%d " % (species)
+        print("planting item species=%d " % (species))
         if species == GardenGlobals.GardenAcceleratorSpecies:
             self.doGardenAccelerator()
         else:

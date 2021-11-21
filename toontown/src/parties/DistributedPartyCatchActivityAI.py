@@ -65,7 +65,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         # since this activity lasts for the entire party, end the activity when the party ends
         # (don't wait until players get kicked out of the party)
         # make sure everyone gets their reward
-        for toonId, reward in self.toonIdsToScores.items():
+        for toonId, reward in list(self.toonIdsToScores.items()):
             reward = self.toonIdsToScores[toonId]
             if reward > PartyGlobals.CatchMaxTotalReward:
                 # put a cap so we don't go beyond something ridiculous
@@ -87,7 +87,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
             delay, Functor(self._scheduleNextGeneration, startT),
             'schedNextGen-%s-%s' % (self.doId, nextGen))
         # cancel any pending generations that start after this one
-        for gen, item in self._schedTasks.items():
+        for gen, item in list(self._schedTasks.items()):
             if item[0] > self._lastGenerationStartTime:
                 taskMgr.remove(item[1])
             del self._schedTasks[gen]
@@ -101,7 +101,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         tCutoff = (globalClock.getFrameTime() - self.activityStartTime) - self.generationDuration
         # add a minute of wiggle room for laggy client connections
         tCutoff -= 60.
-        genIndices = self._id2gen.keys()
+        genIndices = list(self._id2gen.keys())
         genIndices.sort()
         for genIndex in genIndices:
             timestamp = self._id2gen[genIndex].startTime
@@ -128,7 +128,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
 
         # create the data list for the network
         generations = []
-        genIndices = self._id2gen.keys()
+        genIndices = list(self._id2gen.keys())
         genIndices.sort()
         for genIndex in genIndices:
             timestamp = self._id2gen[genIndex].startTime + self.activityStartTime
@@ -209,7 +209,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
     def sendToonJoinResponse(self, toonId, joined):
         # since toons can join mid-activity, make sure to add to scores dictionary if needed
         if joined:
-            if not self.toonIdsToScores.has_key(toonId): 
+            if toonId not in self.toonIdsToScores: 
                 self.toonIdsToScores[toonId] = 0
         DistributedPartyActivityAI.sendToonJoinResponse(self, toonId, joined)
         # number of players changed, start a new generation of drops
@@ -224,7 +224,7 @@ class DistributedPartyCatchActivityAI(DistributedPartyActivityAI, DistributedPar
         DistributedPartyActivityAI._handleUnexpectedToonExit(self, toonId)
         if toonId in self._playerIds:
             self._playerIds.remove(toonId)
-        if self.toonIdsToScores.has_key(toonId):
+        if toonId in self.toonIdsToScores:
             del self.toonIdsToScores[toonId]
         # number of players changed, start a new generation of drops
         self._setUpNextGenScheduleTask(globalClock.getRealTime() - self.activityStartTime)

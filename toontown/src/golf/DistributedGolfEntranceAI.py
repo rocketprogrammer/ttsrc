@@ -26,7 +26,7 @@ class DistributedGolfManagerAI(DistributedObjectAI.DistributedObjectAI):
             self.golfZone = self.air.allocateZone()
             someHole = DistributedGolfHoleAI.DistributedGolfHoleAI(self.golfZone)
             someHole.generateWithRequired(self.golfZone)
-        print("Sending %s to course %s" % (avId, self.golfZone))
+        print(("Sending %s to course %s" % (avId, self.golfZone)))
         self.sendUpdate("sendToGolfCourse", [avId, self.golfZone])
         
     

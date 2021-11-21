@@ -12,16 +12,16 @@ from direct.distributed import DistributedObjectAI
 from direct.fsm import State
 from direct.fsm import ClassicFSM, State
 from toontown.toonbase.ToontownGlobals import ToonHall
-import DistributedToonInteriorAI
-import DistributedToonHallInteriorAI
-import DistributedSuitInteriorAI
-import DistributedDoorAI
-import DoorTypes
-import DistributedElevatorExtAI
-import DistributedKnockKnockDoorAI
-import SuitPlannerInteriorAI
-import SuitBuildingGlobals
-import FADoorCodes
+from . import DistributedToonInteriorAI
+from . import DistributedToonHallInteriorAI
+from . import DistributedSuitInteriorAI
+from . import DistributedDoorAI
+from . import DoorTypes
+from . import DistributedElevatorExtAI
+from . import DistributedKnockKnockDoorAI
+from . import SuitPlannerInteriorAI
+from . import SuitBuildingGlobals
+from . import FADoorCodes
 from toontown.hood import ZoneUtil
 import random
 import time
@@ -405,7 +405,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
             self.toonTakeOver()
 
     def setVictorExited(self, avId):
-        print "victor %d exited unexpectedly for bldg %d" % (avId, self.doId)
+        print("victor %d exited unexpectedly for bldg %d" % (avId, self.doId))
         self.recordVictorResponse(avId)
         if self.allVictorsResponded():
             self.toonTakeOver()
@@ -421,7 +421,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
     ##### waitForVictors state #####
 
     def getToon(self, toonId):
-        if (self.air.doId2do.has_key(toonId)):
+        if (toonId in self.air.doId2do):
             return self.air.doId2do[toonId]
         else:
             self.notify.warning('getToon() - toon: %d not in repository!' \
@@ -472,7 +472,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         # Also, if a toon has disconnected, remove him from the list.
         for i in range(0, 4):
             victor = victorList[i]
-            if victor == None or not self.air.doId2do.has_key(victor):
+            if victor == None or victor not in self.air.doId2do:
                 victorList[i] = 0
 
             else:
@@ -526,7 +526,7 @@ class DistributedBuildingAI(DistributedObjectAI.DistributedObjectAI):
         # Also, if a toon has disconnected, remove him from the list.
         for i in range(0, 4):
             victor = victorList[i]
-            if victor == None or not self.air.doId2do.has_key(victor):
+            if victor == None or victor not in self.air.doId2do:
                 victorList[i] = 0
 
             else:

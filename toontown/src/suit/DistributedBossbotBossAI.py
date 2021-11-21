@@ -314,7 +314,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         if self.foodBelts:
             # using ~bossBattle, don't make them twice
             return
-        for i in xrange(2):
+        for i in range(2):
             newBelt = DistributedFoodBeltAI.DistributedFoodBeltAI(self.air, self, i)
             self.foodBelts.append(newBelt)
             newBelt.generateWithRequired(self.zoneId)
@@ -338,7 +338,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         dinerLevel = diffInfo[2]
         #self.numTables =2
         #self.numDinersPerTable = 8
-        for i in xrange(self.numTables):
+        for i in range(self.numTables):
             newTable = DistributedBanquetTableAI.DistributedBanquetTableAI(
                 self.air, self, i, self.numDinersPerTable, dinerLevel)
             self.tables.append(newTable)
@@ -389,7 +389,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         avId = self.air.getAvatarIdFromSender()
         if self.state != 'BattleTwo':
             grantRequest = False
-        elif not (beltIndex, foodNum) in self.toonFoodStatus.values():
+        elif not (beltIndex, foodNum) in list(self.toonFoodStatus.values()):
             # no one else is carrying it, make sure the toon isn't carrying anything
             if not avId in self.toonFoodStatus:
                 grantRequest = True
@@ -462,7 +462,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def generateDinerSuits(self):
         """Generate the diners that fight."""
         diners = []
-        for i in xrange(len(self.notDeadList)):
+        for i in range(len(self.notDeadList)):
             if simbase.config.GetBool('bossbot-boss-cheat',0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
@@ -473,7 +473,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             diners.append((suit, 100))
         active = []
         # we make 2 more than the suits left        
-        for i in xrange(2):
+        for i in range(2):
             if simbase.config.GetBool('bossbot-boss-cheat',0):
                 suit = self.__genSuitObject(self.zoneId, 2, 'c', 2, 0)
             else:
@@ -769,7 +769,7 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         if self.golfSpots:
             # using ~bossBattle, don't make them twice
             return
-        for i in xrange(self.numGolfSpots):
+        for i in range(self.numGolfSpots):
             newGolfSpot = DistributedGolfSpotAI.DistributedGolfSpotAI(
                 self.air, self, i)
             self.golfSpots.append(newGolfSpot)

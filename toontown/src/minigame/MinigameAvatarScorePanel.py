@@ -9,7 +9,7 @@ class MinigameAvatarScorePanel(DirectFrame):
 
         self.avId = avId
 
-        if base.cr.doId2do.has_key(self.avId):
+        if self.avId in base.cr.doId2do:
             self.avatar = base.cr.doId2do[self.avId]
         else:
             # Must be a suit

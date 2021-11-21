@@ -1,4 +1,4 @@
-import CatalogItem
+from . import CatalogItem
 from toontown.pets import PetTricks
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
@@ -139,7 +139,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
 def getAllPetTricks():
     # Returns a list of all valid CatalogPetTrickItems.
     list = []
-    for trickId in PetTricks.TrickId2scIds.keys():
+    for trickId in list(PetTricks.TrickId2scIds.keys()):
         list.append(CatalogPetTrickItem(trickId))
 
     return list

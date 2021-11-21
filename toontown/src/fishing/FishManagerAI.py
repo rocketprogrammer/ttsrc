@@ -5,10 +5,10 @@ from toontown.quest import Quests
 from toontown.toon import NPCToons
 import random
 from direct.showbase import PythonUtil
-import FishGlobals
+from . import FishGlobals
 from toontown.toonbase import TTLocalizer
-import FishBase
-import FishGlobals
+from . import FishBase
+from . import FishGlobals
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
 

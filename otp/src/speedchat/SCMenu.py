@@ -214,8 +214,8 @@ class SCMenu(SCObject, NodePath):
                     terminal = SCGMTextTerminal(child)
                     menu.append(terminal)
                 else:
-                    raise 'error parsing speedchat structure. '
-                           'invalid child: %s'
+                    raise('error parsing speedchat structure. '
+                           'invalid child: %s')
 
         addChildren(self, structure)
         # clean up memory leak

@@ -205,9 +205,9 @@ class Level:
         # it has all of its initial spec data; see 'initializeEntity'
         # below.
         announce = False
-        if entity is 'nonlocal':
+        if entity == 'nonlocal':
             self.nonlocalEntIds[entId] = None
-        elif entity is 'nothing':
+        elif entity == 'nothing':
             self.nothingEntIds[entId] = None
             announce = True
         else:

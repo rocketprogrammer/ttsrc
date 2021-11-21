@@ -14,10 +14,10 @@ class CatalogChatItem(CatalogItem.CatalogItem):
     that a player may purchase.
 
     """
-    
+
     def makeNewItem(self, customIndex):
         self.customIndex = customIndex
-        
+
         CatalogItem.CatalogItem.makeNewItem(self)
 
     def getPurchaseLimit(self):
@@ -33,11 +33,11 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         #print avatar.onGiftOrder
         #print "self in onGiftOrder: %s" % (self in avatar.onGiftOrder)
         if self in avatar.onOrder or self in avatar.mailboxContents or self in avatar.onGiftOrder \
-           or self in avatar.awardMailboxContents or self in avatar.onAwardOrder:        
+           or self in avatar.awardMailboxContents or self in avatar.onAwardOrder:
             return 1
         #if avatar != localAvatar:
             #pass
-            #import pdb; pdb.set_trace()   
+            #import pdb; pdb.set_trace()
         return avatar.customMessages.count(self.customIndex) != 0
 
     def getTypeName(self):
@@ -53,10 +53,10 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         if avatar.customMessages.count(self.customIndex) != 0:
             # We already have this chat item.
             return ToontownGlobals.P_ReachedPurchaseLimit
-        
+
         if len(avatar.customMessages) >= ToontownGlobals.MaxCustomMessages:
             # Oops, too many custom messages.
-            
+
             # Delete the old index if so requested by the client.
             if optional >= 0 and optional < len(avatar.customMessages):
                 del avatar.customMessages[optional]
@@ -64,11 +64,11 @@ class CatalogChatItem(CatalogItem.CatalogItem):
             if len(avatar.customMessages) >= ToontownGlobals.MaxCustomMessages:
                 # Still too many.
                 return ToontownGlobals.P_NoRoomForItem
-                
+
         avatar.customMessages.append(self.customIndex)
         avatar.d_setCustomMessages(avatar.customMessages)
         return ToontownGlobals.P_ItemAvailable
-        
+
     def getAcceptItemErrorText(self, retcode):
         # Returns a string describing the error that occurred on
         # attempting to accept the item from the mailbox.  The input
@@ -108,19 +108,19 @@ class CatalogChatItem(CatalogItem.CatalogItem):
     def encodeDatagram(self, dg, store):
         CatalogItem.CatalogItem.encodeDatagram(self, dg, store)
         dg.addUint16(self.customIndex)
-        
+
     def acceptItem(self, mailbox, index, callback):
         # Accepts the item from the mailbox.  Some items will pop up a
         # dialog querying the user for more information before
         # accepting the item; other items will accept it immediately.
-    
+
         # This method is only called on the client.
         if (len(base.localAvatar.customMessages) < ToontownGlobals.MaxCustomMessages):
             mailbox.acceptItem(self, index, callback)
         else:
             # else make them make a choice
             self.showMessagePickerOnAccept(mailbox, index, callback)
-        
+
 
     def requestPurchase(self, phone, callback):
         # make sure we have room for this in the chat menu
@@ -130,7 +130,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         else:
             # else make them make a choice
             self.showMessagePicker(phone, callback)
-            
+
     def showMessagePicker(self, phone, callback):
         # we will need these later
         self.phone = phone
@@ -140,7 +140,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         self.messagePicker = CatalogChatItemPicker.CatalogChatItemPicker(self.__handlePickerDone,
                                                                          self.customIndex)
         self.messagePicker.show()
-        
+
 
     def showMessagePickerOnAccept(self, mailbox, index, callback):
         # we will need these later
@@ -152,7 +152,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         self.messagePicker = CatalogChatItemPicker.CatalogChatItemPicker(self.__handlePickerOnAccept,
                                                                          self.customIndex)
         self.messagePicker.show()
-        
+
     def __handlePickerOnAccept(self, status, pickedMessage=None):
         print(("Picker Status%s" % (status)))
         if (status == "pick"):
@@ -161,7 +161,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         else:
             print("picker canceled")
             self.callback(ToontownGlobals.P_UserCancelled, None, self.index)
-            
+
         self.messagePicker.hide()
         self.messagePicker.destroy()
         del self.messagePicker
@@ -192,7 +192,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         #chatBalloon.setPos(-1.92,0,-1.53)
         chatBalloon.setPos(-2.19,0,-1.74)
         chatBalloon.setScale(0.4)
-        
+
         #bMin, bMax = chatBalloon.getTightBounds()
         #center = (bMin + bMax)/2.0
         #chatBalloon.setPos(-center[0], -center[1], -center[2])
@@ -204,7 +204,7 @@ class CatalogChatItem(CatalogItem.CatalogItem):
         self.hasPicture=True
 
         return (frame, None)
-        
+
         # nametag = NametagGroup()
         # nametag.setFont(ToontownGlobals.getInterfaceFont())
         # nametag.manage(base.marginManager)
@@ -224,7 +224,7 @@ def getChatRange(fromIndex, toIndex, *otherRanges):
     # Make sure we got an even number of otherRanges
     assert(len(otherRanges)%2 == 0)
 
-    list = []
+    chatItems = []
 
     froms = [fromIndex,]
     tos = [toIndex,]
@@ -234,10 +234,10 @@ def getChatRange(fromIndex, toIndex, *otherRanges):
         froms.append(otherRanges[i])
         tos.append(otherRanges[i+1])
         i += 2
-    
-    for chatId in list(OTPLocalizer.CustomSCStrings.keys()):
+
+    for chatId in OTPLocalizer.CustomSCStrings.keys():
         for fromIndex, toIndex in zip(froms, tos):
             if chatId >= fromIndex and chatId <= toIndex and (chatId not in bannedPhrases):
-                list.append(CatalogChatItem(chatId))
-                
-    return list
+                chatItems.append(CatalogChatItem(chatId))
+
+    return chatItems

@@ -15,7 +15,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
     petPicture = None
     def makeNewItem(self, trickId):
         self.trickId = trickId
-        
+
         CatalogItem.CatalogItem.makeNewItem(self)
 
     def getPurchaseLimit(self):
@@ -31,7 +31,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
            or self in avatar.awardMailboxContents or self in avatar.onAwardOrder:
             return 1
         return self.trickId in avatar.petTrickPhrases
-        
+
     def getAcceptItemErrorText(self, retcode):
         # Returns a string describing the error that occurred on
         # attempting to accept the item from the mailbox.  The input
@@ -76,7 +76,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
         if dna == None:
             dna = PetDNA.getRandomPetDNA()
         pet.setDNA(dna)
-        
+
         pet.setH(180)
         model, ival = self.makeFrameModel(pet, 0)
         pet.setScale(2.0)
@@ -100,7 +100,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
 
         assert (not self.hasPicture)
         self.hasPicture=True
-        
+
         return (model, track)
 
     def cleanupPicture(self):
@@ -108,7 +108,7 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
         assert self.petPicture
         self.petPicture.delete()
         self.petPicture = None
-        
+
     def output(self, store = ~0):
         return "CatalogPetTrickItem(%s%s)" % (
             self.trickId,
@@ -130,17 +130,17 @@ class CatalogPetTrickItem(CatalogItem.CatalogItem):
         self.dna = None
         if self.trickId not in PetTricks.TrickId2scIds:
             raise ValueError
-        
+
     def encodeDatagram(self, dg, store):
         CatalogItem.CatalogItem.encodeDatagram(self, dg, store)
         dg.addUint8(self.trickId)
-        
+
 
 def getAllPetTricks():
     # Returns a list of all valid CatalogPetTrickItems.
-    list = []
-    for trickId in list(PetTricks.TrickId2scIds.keys()):
-        list.append(CatalogPetTrickItem(trickId))
+    petTricks = []
+    for trickId in PetTricks.TrickId2scIds.keys():
+        petTricks.append(CatalogPetTrickItem(trickId))
 
-    return list
+    return petTricks
 

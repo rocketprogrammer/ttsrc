@@ -13,7 +13,7 @@ class SettingsMgrUD(DistributedObjectGlobalUD, SettingsMgrBase):
     """global object for tweaking settings across all shards and clients in realtime"""
     notify = directNotify.newCategory('SettingsMgrUD')
 
-    SessionIdAlphabet = string.letters + string.digits
+    SessionIdAlphabet = string.ascii_letters + string.digits
 
     ModifiedColor = "CCFFCC"
     

@@ -106,12 +106,12 @@ class SCTerminal(SCElement):
 
     def getCharges(self):
         return self.__numCharges
-    
+
     def setCharges(self, nCharges):
         self.__numCharges = nCharges
-        if (nCharges is 0):
+        if (nCharges == 0):
             self.setDisabled(True)
-    
+
     # support for disabled terminals
     def isDisabled(self):
         return self.__disabled or (self.isWhispering() and not self.isWhisperable())
@@ -217,7 +217,7 @@ class SCTerminal(SCElement):
             self.ignore(Emote.globalEmote.EmoteEnableStateChanged)
 
     def getDisplayText(self):
-        if self.getCharges() is not -1:
+        if self.getCharges() != -1:
             return self.text + " (%s)" % self.getCharges()
         else:
             return self.text

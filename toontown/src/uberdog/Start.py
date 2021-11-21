@@ -14,12 +14,6 @@ import time
 import os
 import sys
 
-# Initialize ihooks importer On the production servers, we run genPyCode -n
-# meaning no squeeze, so nobody else does this. When we squeeze, the
-# unpacker does this for us and it does not hurt to do in either case.
-import ihooks
-ihooks.install()
-
 if os.getenv('TTMODELS'):
     from pandac.PandaModules import getModelPath, Filename
     # In the publish environment, TTMODELS won't be on the model

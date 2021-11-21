@@ -1434,7 +1434,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
         cursor.execute(
             """
             SELECT redemptions FROM code_set_%s WHERE code='%s';
-            """, 'utf-8') % (lotName.encode(), code)
+            """) % (lotName, code)
 
         rows = cursor.fetchall()
 

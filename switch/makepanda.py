@@ -563,9 +563,6 @@ Library("libpandanx.a", [
 # PandaOde
 #########################################
 
-# Unfortunately the ode header is not correct,
-# so we're disabling ode for now
-
 CopyHeaders("panda/src/ode")
 CopyHeaders("panda/metalibs/pandaode")
 
@@ -592,6 +589,7 @@ Library("libpandaode.a", [
 #########################################
 # PandaPhysics
 #########################################
+
 CopyHeaders("panda/src/physics")
 CopyHeaders("panda/src/particlesystem")
 CopyHeaders("panda/metalibs/pandaphysics")

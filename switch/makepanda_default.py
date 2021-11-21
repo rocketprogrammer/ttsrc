@@ -323,7 +323,7 @@ def Module(name, module, library, files, opts=None):
             break
     else:
         # no files should be updated
-        return path_cxx
+        return path_obj
     
     print("Module %s" % name)
     

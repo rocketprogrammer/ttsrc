@@ -164,7 +164,7 @@ WallpaperTypes = {
     3700 : ("phase_5.5/maps/WesternBootWallpaper1.jpg", CTWhite, (0,1170,1180), 180,),
     3800 : ("phase_5.5/maps/WesternCactusWallpaper1.jpg", CTWhite, (0,1170,1180), 180,),
     3900 : ("phase_5.5/maps/WesternHatWallpaper1.jpg", CTWhite, (0,1170,1180), 180,),
-   
+
     # Holiday themed wallpapers
 
     # Halloween
@@ -184,7 +184,7 @@ WallpaperTypes = {
 
     # Valentines
     # add valentines here
-    # 
+    #
     12000 : ("phase_5.5/maps/VdayWall1.jpg", CTWhite,
              (0,12000,12010,12020), 400,),
     #
@@ -278,7 +278,7 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
     It includes wallpaper as well as moulding, wainscoting, and
     flooring.
     """
-    
+
     def makeNewItem(self, patternIndex, colorIndex = None,
                     # Default to no border
                     borderIndex = 0, borderColorIndex = 0):
@@ -434,7 +434,7 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
         # care of themselves.
         wtype = WallpaperTypes[self.patternIndex]
 
-        
+
     def encodeDatagram(self, dg, store):
         CatalogAtticItem.CatalogAtticItem.encodeDatagram(self, dg, store)
         dg.addUint16(self.patternIndex)
@@ -446,14 +446,14 @@ class CatalogWallpaperItem(CatalogSurfaceItem):
 def getWallpapers(*typeList):
     # This function returns a list of CatalogWallpaperItems
     # The returned items will all need to be customized (i.e
-    # have a color chosen by the user.  Until customization, 
+    # have a color chosen by the user.  Until customization,
     # use a default color index of 0 (if the pattern has a color
     # list) or CT_WHITE if the pattern has no color list
     list = []
     for type in typeList:
         list.append(CatalogWallpaperItem(type))
     return list
-    
+
 
 def getAllWallpapers(*typeList):
     # This function returns a list of all possible
@@ -481,7 +481,7 @@ def getAllWallpapers(*typeList):
                         list.append(CatalogWallpaperItem(
                             index, n, borderKey, borderColorIndex))
     return list
-    
+
 def getWallpaperRange(fromIndex, toIndex, *otherRanges):
     # This function returns a list of all possible
     # CatalogWallpaperItems (that is, all color variants) for the
@@ -490,7 +490,7 @@ def getWallpaperRange(fromIndex, toIndex, *otherRanges):
     # Make sure we got an even number of otherRanges
     assert(len(otherRanges)%2 == 0)
 
-    list = []
+    wallpaperList = []
 
     froms = [fromIndex,]
     tos = [toIndex,]
@@ -500,8 +500,8 @@ def getWallpaperRange(fromIndex, toIndex, *otherRanges):
         froms.append(otherRanges[i])
         tos.append(otherRanges[i+1])
         i += 2
-    
-    for patternIndex in list(WallpaperTypes.keys()):
+
+    for patternIndex in WallpaperTypes.keys():
         for fromIndex, toIndex in zip(froms,tos):
             if patternIndex >= fromIndex and patternIndex <= toIndex:
                 borderKeys = WallpaperTypes[patternIndex][WTBorderList]
@@ -514,6 +514,6 @@ def getWallpaperRange(fromIndex, toIndex, *otherRanges):
                     for borderColorIndex in range(numBorderColors):
                         colors = WallpaperTypes[patternIndex][WTColor]
                         for n in range(len(colors)):
-                            list.append(CatalogWallpaperItem(
+                            wallpaperList.append(CatalogWallpaperItem(
                                 patternIndex, n, borderKey, borderColorIndex))
-    return list
+    return wallpaperList

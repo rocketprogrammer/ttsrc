@@ -455,7 +455,7 @@ class BingoManagerAI(object):
             backup = fileName+ '.jbu'
             if os.path.exists(fileName):
                 os.rename(fileName, backup)
-            file = open(fileName, 'w')
+            file = open(fileName, 'wb')
             file.seek(0)
             self.saveTo(file)
             file.close()
@@ -491,7 +491,7 @@ class BingoManagerAI(object):
         """Load Jackpot data from default location"""
         fileName = self.getFileName()
         try:
-            file = open(fileName+'.jbu', 'r')
+            file = open(fileName+'.jbu', 'rb')
             if os.path.exists(fileName):
                 os.remove(fileName)
         except IOError:

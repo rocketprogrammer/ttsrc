@@ -167,12 +167,12 @@ def ShowProgress():
         print()
     
     
-def StartThreads():
+def StartThreads(count):
     global TaskCount
     TaskCount = TaskQueue.qsize()
     
     print("Starting threads!")
-    for n in range(6):
+    for n in range(count):
         th = threading.Thread(target=HandleQueue)
         th.start()
         

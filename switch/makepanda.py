@@ -1,12 +1,19 @@
+import argparse
+
+parser = argparse.ArgumentParser(description = "MakePanda for Switch")
+parser.add_argument("-O", dest="optimisation", type=int, help="optimisation level", default=0)
+parser.add_argument("-t", dest="threads", type=int, help="thread count")
+args = parser.parse_args()
+
 import os
 import shutil
 import sys
-
 sys.path.append("switch")
 
 from makepanda_default import *
+SetOptimisationLevel(args.optimisation)
 
-if "-t" in sys.argv:
+if args.threads:
     # threaded overrides some functions
     from makepanda_threaded import *
 
@@ -926,6 +933,5 @@ for path, file in walk("direct/src"):
         )
 
 
-if "-t" in sys.argv:
-    # Then we start the threads
-    StartThreads()
+if args.threads:
+    StartThreads(args.threads)

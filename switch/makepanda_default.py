@@ -6,23 +6,29 @@ import fnmatch
 import threading
 
 
-FsLock = threading.Lock()
+_FsLock = threading.Lock()
+_OptLevel = 0
+
+def SetOptimisationLevel(level):
+    global _OptLevel
+    _OptLevel = 3
+    
 
 def MakeDirs(path):
-    with FsLock:
+    with _FsLock:
         if not os.path.isdir(path):
             os.makedirs(path)
     
     
 def CopyFile(path, target):
     MakeDirs(os.path.dirname(target))
-    with FsLock:
+    with _FsLock:
         if ShouldUpdate(path, target):
             shutil.copyfile(path, target)
     
     
 def MoveFile(path, target):
-    with FsLock:
+    with _FsLock:
         if os.path.isfile(target):
             os.remove(target)
         os.rename(path, target)
@@ -57,11 +63,13 @@ def ShouldUpdate(source, dest):
 def GetDefines(opts):
     res = [
         "__SWITCH__",
-        "NDEBUG",
         "LINK_ALL_STATIC",
         "WITHIN_PANDA",
         "WANT_NATIVE_NET"
     ]
+    
+    if _OptLevel >= 2:
+        res.append("NDEBUG")
     
     if opts:
         if "gles" in opts:
@@ -128,8 +136,8 @@ def _CompileCxx(path, opts=None, building=None, output=None):
         raise Exception("Invalid file %r" % path)
     
     # optimisations
-    cmd += ["-O3"]
-    
+    cmd += ["-O" + str(_OptLevel)]
+        
     # ARCH
     cmd += ["-march=armv8-a+crc+crypto", "-mtune=cortex-a57", "-mtp=soft"]
     cmd += ["-c", path]

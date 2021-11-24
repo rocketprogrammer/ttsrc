@@ -103,6 +103,8 @@ def GetIncludes(opts):
             res.append("thirdparty/switch-libs/png/include")
         if "ode" in opts:
             res.append("thirdparty/switch-libs/ode/include")
+        if "openssl" in opts:
+            res.append("thirdparty/switch-libs/openssl/include")
     
     return res
         

@@ -18,6 +18,8 @@ if "-t" in sys.argv:
 CopyIncludeFiles("switch/include")
 if not os.path.exists(os.path.join(INCDIR, "parser-inc")):
     shutil.copytree("dtool/src/parser-inc", os.path.join(INCDIR, "parser-inc"))
+    
+CopyHeaders("dtool/src/parser-inc", os.path.join(INCDIR, "parser-inc/openssl"))
 
 
 #########################################
@@ -59,7 +61,7 @@ CopyHeaders("dtool/src/interrogate")
 CopyHeaders("dtool/src/test_interrogate")
 
 Library("libdtoolconfig.a", [
-    Compile("dtool/src/prc/prc_composite.cxx", building="DTOOLCONFIG"),
+    Compile("dtool/src/prc/prc_composite.cxx", building="DTOOLCONFIG", opts=["openssl"]),
     Compile("dtool/src/dconfig/dconfig_composite.cxx", building="DTOOLCONFIG"),
     Compile("dtool/src/interrogatedb/interrogatedb_composite.cxx", building="DTOOLCONFIG"),
     
@@ -85,24 +87,24 @@ Library("libpandaexpress.a", [
     Compile("panda/src/pandabase/pandabase.cxx", building="PANDAEXPRESS"),
     
     # panda/src/express
-    Compile("panda/src/express/express_composite1.cxx", building="PANDAEXPRESS", opts=["zlib"]),
-    Compile("panda/src/express/express_composite2.cxx", building="PANDAEXPRESS", opts=["zlib"]),
+    Compile("panda/src/express/express_composite1.cxx", building="PANDAEXPRESS", opts=["zlib", "openssl"]),
+    Compile("panda/src/express/express_composite2.cxx", building="PANDAEXPRESS", opts=["zlib", "openssl"]),
     Interrogate("libexpress.in", 
         module="pandaexpress", library="libexpress",
         srcdir="panda/src/express", files=["*.h", "*_composite.cxx"],
-        building="PANDAEXPRESS", opts=["zlib"]
+        building="PANDAEXPRESS", opts=["zlib", "openssl"]
     ),
     
     # panda/src/downloader
-    Compile("panda/src/downloader/downloader_composite.cxx", building="PANDAEXPRESS", opts=["zlib"]),
+    Compile("panda/src/downloader/downloader_composite.cxx", building="PANDAEXPRESS", opts=["zlib", "openssl"]),
     Interrogate("libdownloader.in", 
         module="pandaexpress", library="libdownloader",
         srcdir="panda/src/downloader", files=["*.h", "*_composite.cxx"],
-        building="PANDAEXPRESS", opts=["zlib"]
+        building="PANDAEXPRESS", opts=["zlib", "openssl"]
     ),
     
     # panda/metalibs/pandaexpress
-    Compile("panda/metalibs/pandaexpress/pandaexpress.cxx", building="PANDAEXPRESS", opts=["zlib"]),
+    Compile("panda/metalibs/pandaexpress/pandaexpress.cxx", building="PANDAEXPRESS", opts=["zlib", "openssl"]),
     Module("libpandaexpress_module.o", module="pandaexpress", library="libpandaexpress", files=[
         "libdownloader.in",
         "libexpress.in"
@@ -216,11 +218,11 @@ Library("libpanda.a", [
     ),
     
     # panda/src/nativenet
-    Compile("panda/src/nativenet/nativenet_composite1.cxx", building="PANDA", opts=[]),
+    Compile("panda/src/nativenet/nativenet_composite1.cxx", building="PANDA", opts=["openssl"]),
     Interrogate("libnativenet.in", 
         module="panda", library="libnativenet",
         srcdir="panda/src/nativenet", files=["*.h", "*_composite.cxx"],
-        building="PANDA", opts=[]
+        building="PANDA", opts=["openssl"]
     ),
     
     # panda/src/net
@@ -657,13 +659,13 @@ Library("libdirect.a", [
     ),
     
     # direct/src/distributed
-    Compile("direct/src/distributed/config_distributed.cxx", building="DIRECT"),
-    Compile("direct/src/distributed/cConnectionRepository.cxx", building="DIRECT"),
-    Compile("direct/src/distributed/cDistributedSmoothNodeBase.cxx", building="DIRECT"),
+    Compile("direct/src/distributed/config_distributed.cxx", building="DIRECT", opts=["openssl"]),
+    Compile("direct/src/distributed/cConnectionRepository.cxx", building="DIRECT", opts=["openssl"]),
+    Compile("direct/src/distributed/cDistributedSmoothNodeBase.cxx", building="DIRECT", opts=["openssl"]),
     Interrogate("libdistributed.in",
         module="direct", library="libdistributed",
         srcdir="direct/src/distributed", files=["*.h", "*.cxx"],
-        building="DIRECT"
+        building="DIRECT", opts=["openssl"]
     ),
     
     # direct/src/interval
@@ -766,12 +768,12 @@ Library("libotp.a", [
     ),
     
     # otp/src/secure
-    Compile("otp/src/secure/get_fingerprint.cxx", building="OTP", opts=["otp", "zlib"]),
-    Compile("otp/src/secure/loadClientCertificate.cxx", building="OTP", opts=["otp", "zlib"]),
+    Compile("otp/src/secure/get_fingerprint.cxx", building="OTP", opts=["otp", "zlib", "openssl"]),
+    Compile("otp/src/secure/loadClientCertificate.cxx", building="OTP", opts=["otp", "zlib", "openssl"]),
     Interrogate("libsecure.in",
         module="otp", library="libsecure",
         srcdir="otp/src/secure", files=["loadClientCertificate.cxx", "loadClientCertificate.h", "get_fingerprint.h", "get_fingerprint.cxx"],
-        building="OTP", opts=["otp", "zlib"],
+        building="OTP", opts=["otp", "zlib", "openssl"],
     ),
     
     # otp/metalibs/otp
@@ -885,7 +887,7 @@ pandacExtensions = {
     "libpanda": ["Mat3", "NodePath", "NodePathCollection", "VBase3", "VBase4"],
     "libdirect": ["CInterval"],
     "libpandaegg": ["EggGroupNode", "EggPrimitive"],
-    "libpandaexpress": ["Ramfile", "StreamReader"], # "HTTPChannel" but we don't have OPENSSL
+    "libpandaexpress": ["Ramfile", "StreamReader", "HTTPChannel"],
     "libpandaode": ["OdeBody", "OdeGeom", "OdeJoint", "OdeSpace"]
 }
 

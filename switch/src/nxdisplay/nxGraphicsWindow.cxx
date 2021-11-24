@@ -199,7 +199,7 @@ process_events() {
             _input_devices[0].button_down(KeyboardButton::down());
         }
         if (kDown & libnx::HidNpadButton_A) {
-            _input_devices[0].button_down(KeyboardButton::rcontrol());
+            _input_devices[0].button_down(KeyboardButton::control());
         }
         if (kDown & libnx::HidNpadButton_X) {
             _input_devices[0].button_down(KeyboardButton::del());
@@ -210,7 +210,7 @@ process_events() {
         if (kDown & libnx::HidNpadButton_R) {
             _input_devices[0].button_down(KeyboardButton::end());
         }
-        if (kDown & libnx::HidNpadButton_StickL) {
+        if (kDown & libnx::HidNpadButton_Y) {
             _input_devices[0].button_down(KeyboardButton::escape());
         }
         if (kDown & libnx::HidNpadButton_StickR) {
@@ -231,7 +231,7 @@ process_events() {
             _input_devices[0].button_up(KeyboardButton::down());
         }
         if (kUp & libnx::HidNpadButton_A) {
-            _input_devices[0].button_up(KeyboardButton::rcontrol());
+            _input_devices[0].button_up(KeyboardButton::control());
         }
         if (kUp & libnx::HidNpadButton_X) {
             _input_devices[0].button_up(KeyboardButton::del());
@@ -242,7 +242,7 @@ process_events() {
         if (kUp & libnx::HidNpadButton_R) {
             _input_devices[0].button_up(KeyboardButton::end());
         }
-        if (kUp & libnx::HidNpadButton_StickL) {
+        if (kUp & libnx::HidNpadButton_Y) {
             _input_devices[0].button_up(KeyboardButton::escape());
         }
         if (kUp & libnx::HidNpadButton_StickR) {

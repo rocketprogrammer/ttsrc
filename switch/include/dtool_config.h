@@ -51,7 +51,7 @@
 // #undef HAVE_OPENAL
 // #undef HAVE_OPENAL_FRAMEWORK
 // #undef HAVE_OPENCV
-// #undef HAVE_OPENSSL
+#define HAVE_OPENSSL 1
 // #undef HAVE_OPEN_MASK
 // #undef HAVE_P3D_PLUGIN
 #define HAVE_PNG 1
@@ -96,7 +96,7 @@
 // #undef LINK_IN_PHYSICS
 // #undef MAYA_PRE_5_0
 // #undef MESA_MGL
-// #undef NOTIFY_DEBUG
+#define NOTIFY_DEBUG 1
 #define OS_SIMPLE_THREADS 1
 // #undef PHAVE_ALLOCA_H
 #define PHAVE_DIRENT_H 1
@@ -125,7 +125,7 @@
 #define PRC_SAVE_DESCRIPTIONS 1
 // #undef PROTOTYPE_GLOBAL_ARGV
 // #undef PYTHON_FRAMEWORK
-// #undef REPORT_OPENSSL_ERRORS
+#define REPORT_OPENSSL_ERRORS 1
 // #undef SIMPLE_STRUCT_POINTERS
 #define SIMPLE_THREADS 1
 // #undef SSL_097

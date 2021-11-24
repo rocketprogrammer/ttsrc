@@ -88,7 +88,7 @@ class BingoCardBase:
 
         # Now, fill up the the card by randomly placing the fish in a cell.
         for index in range(self.cardSize):
-            if index != self.cardSize/2:
+            if index != self.cardSize//2:
                 choice = rng.randrange(0,len(fishList))
                 self.cellList.append( fishList.pop(choice) )
             else:

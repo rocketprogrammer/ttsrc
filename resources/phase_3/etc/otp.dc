@@ -137,7 +137,7 @@ dclass TimeManager: DistributedObject {
   // sets this at startup time.  It probably ought to be on the player
   // too, but then we have trouble sending it before the AI hears
   // about the player.
-  setSignature(string signature, char hash[16], char pyc[16]) airecv clsend;
+  setSignature(blob signature, blob(16) hash, blob(16) pyc) airecv clsend;
 
   // This is the average frame rate reported by the client, along with
   // some relevant machine and game statistics.

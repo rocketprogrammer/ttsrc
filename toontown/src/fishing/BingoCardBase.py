@@ -44,7 +44,7 @@ class BingoCardBase:
         
         self.cellList = []
         self.gameType = None
-        self.gameState = 1<<self.cardSize/2
+        self.gameState = 1<<self.cardSize//2
 
     #################################################################
     # Method: destroy

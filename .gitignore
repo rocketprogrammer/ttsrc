@@ -1,5 +1,6 @@
 built
 builtTT
+built-switch
 *.pyc
 *.pyo
 toontownD-dev.log
@@ -12,3 +13,4 @@ news/*
 .latestissue
 useropt
 inject.py
+app

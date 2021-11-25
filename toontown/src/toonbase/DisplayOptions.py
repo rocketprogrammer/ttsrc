@@ -32,7 +32,7 @@ class DisplayOptions:
         toonChatSounds = Settings.getToonChatSounds()
         musicVol = Settings.getMusicVolume()
         sfxVol = Settings.getSfxVolume()
-        resList = [(640, 480),(800,600),(1024,768),(1280,1024),(1600,1200)] #copied from Resolution in settingsFile.h
+        resList = [(640, 480),(800,600),(1024,768),(1280,1024),(1600,1200),(1280,720)] #copied from Resolution in settingsFile.h
         res = resList[Settings.getResolution()]
         embed = Settings.getEmbeddedMode()
         self.notify.debug("before prc settings embedded mode=%s" % str(embed))

@@ -36,7 +36,7 @@ class ToonBase(OTPBase.OTPBase):
             toonChatSounds = Settings.getToonChatSounds()
             musicVol = Settings.getMusicVolume()
             sfxVol = Settings.getSfxVolume()
-            resList = [(640, 480),(800,600),(1024,768),(1280,1024),(1600,1200)] #copied from Resolution in settingsFile.h
+            resList = [(640, 480),(800,600),(1024,768),(1280,1024),(1600,1200),(1280,720)] #copied from Resolution in settingsFile.h
             res = resList[Settings.getResolution()]
             
             if mode == None:
@@ -267,6 +267,12 @@ class ToonBase(OTPBase.OTPBase):
         self.walking = 0
 
         self.resetMusic = self.loadMusic("phase_3/audio/bgm/MIDI_Events_16channels.mid")
+
+        # Enable a frame rate meter.
+        base.setFrameRateMeter(True)
+
+        # Make the frame rate meter look pretty.
+        self.frameRateMeter.setFont(ToontownGlobals.getMinnieFont())
 
     def disableShowbaseMouse(self):
         # Hack:

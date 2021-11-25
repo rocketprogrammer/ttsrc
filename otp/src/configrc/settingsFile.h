@@ -48,7 +48,7 @@ PUBLISHED:
 
 // it would be simpler to just store the actual res sizes, but abstracting them makes
 // it harder to crash with a bad resolution
-  enum Resolution { R640x480, R800x600, R1024x768, R1280x1024, R1600x1200, R_NONE };
+  enum Resolution { R640x480, R800x600, R1024x768, R1280x1024, R1600x1200, R1280x720, R_NONE };
 
   virtual ~Settings(void);
 

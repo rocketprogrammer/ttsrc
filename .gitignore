@@ -12,3 +12,4 @@ news/*
 .cvsignore
 .latestissue
 useropt
+app/*

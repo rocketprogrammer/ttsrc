@@ -280,7 +280,7 @@ class UserFunnel:
             # print "Funnel URL not set. Setting now"
             patcherHTTP = HTTPClient()
             if checkParamFile() == None:
-                patcherDoc = patcherHTTP.getDocument(URLSpec('http://download.toontown.com/english/currentVersion/content/patcher.ver'))
+                patcherDoc = patcherHTTP.getDocument(URLSpec('http://download.sunrise.games/launcher/patcher.ver'))
                 # Now set vcon (Content Group) to the Release string
                 vconGroup('w', self.cgRelease)
             else:

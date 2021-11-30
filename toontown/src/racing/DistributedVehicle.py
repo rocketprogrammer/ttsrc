@@ -1269,7 +1269,7 @@ class DistributedVehicle(DistributedSmoothNode.DistributedSmoothNode,
 
         # Everything within this loop is performed n times per second
         # with the physics calculations.
-        for i in range(numFrames):
+        for i in range(int(numFrames)):
             self.physicsMgr.doPhysics(self.physicsDt)
 
             # set the new tire friction force

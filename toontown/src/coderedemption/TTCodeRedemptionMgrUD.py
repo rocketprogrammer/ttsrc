@@ -127,9 +127,6 @@ class TTCodeRedemptionMgrUD(DistributedObjectGlobalUD):
 
         self._db = TTCodeRedemptionDB(self.air, self.DBhost, self.DBport, self.DBuser, self.DBpasswd, self.DBname)
 
-        if __debug__:
-            self._db.runTests()
-
         self.air.setConnectionName("TTCodeRedemptionMgr")
         self.air.setConnectionURL("http://%s:%s/" % (socket.gethostbyname(socket.gethostname()),self.HTTPListenPort))
 

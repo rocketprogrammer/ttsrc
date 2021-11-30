@@ -1,7 +1,7 @@
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from direct.http.WebRequest import WebRequestDispatcher
-from direct.showbase import ElementTree as ET
+import xml.etree.ElementTree as ET
 from direct.showbase.HTMLTree import HTMLTree
 from direct.showbase.PythonUtil import unescapeHtmlString as uhs
 from direct.showbase.PythonUtil import str2elements

@@ -74,8 +74,8 @@ if __name__ == "__main__":
     import traceback
 
     # we need some sql config
-    loadPrcFileData("", "mysql-user game")
-    loadPrcFileData("", "mysql-passwd zt*iRqpD@dHxvyKJJdVr2rA61WZMKfqFghVOiHrirNEbT62L@SatJ9llFj8fbNrmERBUUAU0Sw")
+    loadPrcFileData("", "mysql-user root")
+    loadPrcFileData("", "mysql-passwd root")
     loadPrcFileData("", "want-code-redemption-init-db 1")
 
     loadPrcFileData("", "dc-file resources/phase_3/etc/otp.dc")

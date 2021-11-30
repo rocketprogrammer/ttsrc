@@ -803,7 +803,7 @@ class TTCodeRedemptionDB(DBInterface, DirectObject):
     RewardTypeFieldName = 'reward_type'
     RewardItemIdFieldName = 'reward_item_id'
 
-    DoSelfTest = config.GetBool('code-redemption-self-test', 1)
+    DoSelfTest = config.GetBool('code-redemption-self-test', 0)
 
     # optimization that reads in all codes and maps them to their lot
     # if the code set gets too large this might use up too much RAM

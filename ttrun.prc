@@ -137,8 +137,8 @@ server-type prod
 color-bits 8 8 8
 alpha-bits 8
 default-server-constants 1
-fake-blue test
-game-server 127.0.0.1
+fake-blue Rocketman
+game-server anesidora.sunrise.games
 want-magic-words 1
 
 

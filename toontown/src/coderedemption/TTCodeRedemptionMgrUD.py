@@ -1347,7 +1347,7 @@ class TTCodeRedemptionMgrUD(DistributedObjectGlobalUD):
                 SE(body, 'br')
 
                 img = SE(body, 'img', title='relevant this is',
-                         src='http://icanhascheezburger.files.wordpress.com/2007/01/2000455272489756911_rs.jpg')
+                         src='https://toontastic.sunrise.games/images/2000455272489756911_rs.png')
 
             elif op == self.Ops.create:
                 self._doCreateForm(body, body, replyTo)

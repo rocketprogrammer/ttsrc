@@ -68,7 +68,9 @@
 #define __glext_h_
 #define GL_GLEXT_VERSION 0
 
-#ifdef IS_OSX
+#ifdef __SWITCH__
+  #include <glad/glad.h>
+#elif defined(IS_OSX)
   #include <OpenGL/gl.h>
   #ifdef HAVE_GLU
   #include <OpenGL/glu.h>

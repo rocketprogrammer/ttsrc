@@ -21,7 +21,7 @@
 #include "lightMutex.h"
 #include "lightReMutex.h"
 
-#include "glesgsg.h"
+#include "glgsg.h"
 
 #include <EGL/egl.h>
 #include <EGL/eglext.h> // EGL extensions

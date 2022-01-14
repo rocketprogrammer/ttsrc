@@ -17,7 +17,7 @@ nxGraphicsPipe(const string &display) {
 	if (!eglInitialize(_egl_display, NULL, NULL)) {
 		printf("eglInitialize failed\n");
 	}
-	if (!eglBindAPI(EGL_OPENGL_ES_API)) {
+	if (!eglBindAPI(EGL_OPENGL_API)) {
 		printf("eglBindAPI failed\n");
 	}
 }
@@ -125,7 +125,7 @@ make_output(const string &name,
 				(fb_prop.is_basic())) {
 			precertify = true;
 		}
-		return new GLESGraphicsBuffer(engine, this, name, fb_prop, win_prop,
+		return new GLGraphicsBuffer(engine, this, name, fb_prop, win_prop,
 									flags, gsg, host);
 	}
 	

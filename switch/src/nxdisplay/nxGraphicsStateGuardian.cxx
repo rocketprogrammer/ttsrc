@@ -7,7 +7,7 @@ TypeHandle nxGraphicsStateGuardian::_type_handle;
 nxGraphicsStateGuardian::
 nxGraphicsStateGuardian(GraphicsEngine *engine, GraphicsPipe *pipe,
 		nxGraphicsStateGuardian *share_with) :
-	GLESGraphicsStateGuardian(engine, pipe)
+	GLGraphicsStateGuardian(engine, pipe)
 {
 	_share_context=0;
 	_context=0;
@@ -66,10 +66,10 @@ get_properties(FrameBufferProperties &properties,
 		return;
 	}
 	
-	if ((surface_type & EGL_WINDOW_BIT)==0) {
+	//if ((surface_type & EGL_WINDOW_BIT)==0) {
 		// We insist on having a context that will support an onscreen window.
-		return;
-	}
+		//return;
+	//}
 
 	properties.set_back_buffers(1);
 	properties.set_rgb_color(1);
@@ -94,8 +94,7 @@ choose_pixel_format(const FrameBufferProperties &properties,
 	_fbprops.clear();
 
 	static const EGLint attrib_list[] = {
-		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
-		EGL_SURFACE_TYPE, EGL_DONT_CARE,
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,
         EGL_RED_SIZE,     8,
         EGL_GREEN_SIZE,   8,
         EGL_BLUE_SIZE,    8,
@@ -145,7 +144,9 @@ choose_pixel_format(const FrameBufferProperties &properties,
 		_fbconfig = configs[best_result];
 		
 		static const EGLint context_attribs[] = {
-			EGL_CONTEXT_CLIENT_VERSION, 1,
+            EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR, EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR,
+            EGL_CONTEXT_MAJOR_VERSION_KHR, 4,
+            EGL_CONTEXT_MINOR_VERSION_KHR, 3,
 			EGL_NONE
 		};
 		_context = eglCreateContext(_egl_display, _fbconfig, _share_context, context_attribs);
@@ -157,7 +158,7 @@ choose_pixel_format(const FrameBufferProperties &properties,
 		}
 		
 		// This really shouldn't happen, so I'm not too careful about cleanup.
-		printf("failed to create egl context\n");
+		printf("failed to create egl context (%d)\n", err);
 		_fbconfig = 0;
 		_context = 0;
 	}
@@ -165,7 +166,7 @@ choose_pixel_format(const FrameBufferProperties &properties,
 
 void nxGraphicsStateGuardian::
 reset() {
-	GLESGraphicsStateGuardian::reset();
+	GLGraphicsStateGuardian::reset();
 
 	// If "Mesa" is present, assume software.  However, if "Mesa DRI" is
 	// found, it's actually a Mesa-based OpenGL layer running over a
@@ -194,7 +195,7 @@ egl_is_at_least_version(int major_version, int minor_version) const {
 
 void nxGraphicsStateGuardian::
 query_gl_version() {
-	GLESGraphicsStateGuardian::query_gl_version();
+	GLGraphicsStateGuardian::query_gl_version();
 
 	// Calling eglInitialize on an already-initialized display will
 	// just provide us the version numbers.

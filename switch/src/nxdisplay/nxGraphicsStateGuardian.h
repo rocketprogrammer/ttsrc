@@ -4,7 +4,7 @@
 #include "pandabase.h"
 #include "nxGraphicsPipe.h"
 
-class nxGraphicsStateGuardian : public GLESGraphicsStateGuardian {
+class nxGraphicsStateGuardian : public GLGraphicsStateGuardian {
 public:
   INLINE const FrameBufferProperties &get_fb_properties() const;
   void get_properties(FrameBufferProperties &properties,
@@ -41,9 +41,9 @@ public:
     return _type_handle;
   }
   static void init_type() {
-    GLESGraphicsStateGuardian::init_type();
+    GLGraphicsStateGuardian::init_type();
     register_type(_type_handle, "nxGraphicsStateGuardian",
-                  GLESGraphicsStateGuardian::get_class_type());
+                  GLGraphicsStateGuardian::get_class_type());
   }
   virtual TypeHandle get_type() const {
     return get_class_type();

@@ -5,7 +5,10 @@
 
 #include "pandanx.h"
 
-#include "config_glesgsg.h"
+#include "config_glgsg.h"
+
+#include <EGL/egl.h>
+#include <glad/glad.h>
 
 #include "config_nxdisplay.h"
 #include "nxGraphicsPipe.h"
@@ -18,7 +21,7 @@
 
 void
 init_libpandanx() {
-  init_libglesgsg();
+  init_libglgsg();
   init_libnxdisplay();
 }
 

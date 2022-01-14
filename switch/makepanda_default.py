@@ -72,6 +72,8 @@ def GetDefines(opts):
         res.append("NDEBUG")
     
     if opts:
+        if "gl" in opts:
+            res.append("OPENGL")
         if "gles" in opts:
             res.append("OPENGLES_1")
         if "gles2" in opts:
@@ -90,13 +92,6 @@ def GetIncludes(opts):
             res.append(INCDIR_OTP)
         if "toontown" in opts:
             res.append(INCDIR_TOONTOWN)
-            
-    res += [
-        "thirdparty/switch-python",
-        "thirdparty/switch-python/Include",
-        LIBNX_INCLUDE,
-        PORTLIBS_INCLUDE
-    ]
     
     if opts:
         if "zlib" in opts:
@@ -113,6 +108,19 @@ def GetIncludes(opts):
             res.append("thirdparty/switch-libs/ode/include")
         if "openssl" in opts:
             res.append("thirdparty/switch-libs/openssl/include")
+        if "opus" in opts:
+            res.append("thirdparty/switch-libs/opus/include")
+        if "gl" in opts:
+            res.append("thirdparty/switch-libs/glad/include")
+        if "egl" in opts:
+            res.append("thirdparty/switch-libs/egl/include")
+            
+            
+    res += [
+        "thirdparty/switch-python",
+        "thirdparty/switch-python/Include",
+        LIBNX_INCLUDE
+    ]
     
     return res
         

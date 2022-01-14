@@ -8,6 +8,8 @@
 #include "graphicsPipe.h"
 #include "mouseButton.h"
 
+#include <glad/glad.h>
+
 TypeHandle nxGraphicsWindow::_type_handle;
 
 nxGraphicsWindow::
@@ -109,6 +111,7 @@ open_window() {
     nxGraphicsPipe *nx_pipe;
     DCAST_INTO_R(nx_pipe, _pipe, false);
     
+    printf("trace %s:%d\n", __FILE__, __LINE__);
     // GSG Creation/Initialization
     nxGraphicsStateGuardian *nxgsg;
     if (_gsg == 0) {
@@ -129,6 +132,7 @@ open_window() {
     
     _win = libnx::nwindowGetDefault();
     
+    printf("trace %s:%d\n", __FILE__, __LINE__);
     // Create an EGL window surface
     _egl_surface = eglCreateWindowSurface(_egl_display, nxgsg->_fbconfig, _win, nullptr);    
     if (!_egl_surface) {
@@ -136,8 +140,14 @@ open_window() {
         return false;
     }
     
+    printf("trace %s:%d\n", __FILE__, __LINE__);
     if (!eglMakeCurrent(_egl_display, _egl_surface, _egl_surface, nxgsg->_context)) {
         printf("eglMakeCurrent failed\n");
+    }
+    
+    printf("trace %s:%d\n", __FILE__, __LINE__);
+    if (!gladLoadGLLoader((GLADloadproc)eglGetProcAddress)) {
+        printf("failed to load glad!\n");
     }
     
     // Configure our supported input layout: a single player with standard controller styles,

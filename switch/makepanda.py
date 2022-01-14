@@ -513,7 +513,7 @@ Library("libpandafx.a", [
 # OpenAL
 #########################################
 
-# todo
+CopyHeaders("panda/src/audiotraits")
 
 
 #########################################
@@ -528,43 +528,38 @@ Library("libframework.a", [
 
 
 #########################################
-# NxDisplay
+# Switch (libpandanx)
 #########################################
 
 CopyIncludeFiles("panda/src/glstuff")
-#CopyHeaders("panda/src/glgsg")
-CopyHeaders("panda/src/glesgsg")
-#CopyHeaders("panda/src/gles2gsg")
+CopyHeaders("panda/src/glgsg")
 CopyHeaders("switch/src/nxdisplay")
+#CopyHeaders("switch/src/nxaudio")
 CopyHeaders("switch/metalibs/pandanx")
 
 
-#Library("libglstuff.a", [
-#    Compile("panda/src/glstuff/glpure.cxx", opts=["gl", "nvidiacg", "cggl"])
-#])
-
-#glgsg = [
-#    Compile("panda/src/glgsg/config_glgsg.cxx", building="PANDAGL"),
-#    Compile("panda/src/glgsg/glgsg.cxx", building="PANDAGL")
-#]
-
-glesgsg = [
-    Compile("panda/src/glesgsg/config_glesgsg.cxx", building="PANDAGLES"),
-    Compile("panda/src/glesgsg/glesgsg.cxx", building="PANDAGLES")
+glgsg = [
+    Compile("panda/src/glgsg/config_glgsg.cxx", building="PANDAGL", opts=["gl"]),
+    Compile("panda/src/glgsg/glgsg.cxx", building="PANDAGL", opts=["gl"])
 ]
 
-#gles2gsg = [
-#    Compile("panda/src/gles2gsg/config_gles2gsg.cxx", building="PANDAGLES2"),
-#    Compile("panda/src/gles2gsg/gles2gsg.cxx", building="PANDAGLES2")
-#]
-
 Library("libpandanx.a", [
-  Compile('switch/src/nxdisplay/config_nxdisplay.cxx', building="PANDANX", opts=['gles', 'egl']),
-  Compile('switch/src/nxdisplay/nxGraphicsPipe.cxx', building="PANDANX", opts=['gles', 'egl']),
-  Compile('switch/src/nxdisplay/nxGraphicsWindow.cxx', building="PANDANX", opts=['gles', 'egl']),
-  Compile('switch/src/nxdisplay/nxGraphicsStateGuardian.cxx', building="PANDANX", opts=['gles', 'egl']),
-  *glesgsg,
-  Compile('switch/metalibs/pandanx/pandanx.cxx', building="PANDANX", opts=['gles', 'egl']),
+    # nxdisplay
+    Compile('switch/src/nxdisplay/config_nxdisplay.cxx', building="PANDANX", opts=['gl', 'egl']),
+    Compile('switch/src/nxdisplay/nxGraphicsPipe.cxx', building="PANDANX", opts=['gl', 'egl']),
+    Compile('switch/src/nxdisplay/nxGraphicsWindow.cxx', building="PANDANX", opts=['gl', 'egl']),
+    Compile('switch/src/nxdisplay/nxGraphicsStateGuardian.cxx', building="PANDANX", opts=['gl', 'egl']),
+    *glgsg,
+
+    # nxaudio
+    #Compile('switch/src/nxaudio/nxAudio.cxx', building="PANDANX", opts=["opus"]),
+    #Compile('switch/src/nxaudio/nxAudioCursor.cxx', building="PANDANX", opts=["opus"]),
+
+    # pandanx
+    Compile('switch/metalibs/pandanx/pandanx.cxx', building="PANDANX", opts=['gl', 'egl']),
+    
+    # special dependency
+    Compile('thirdparty/switch-libs/glad/src/glad.c', opts=['gl'])
 ])
 
 

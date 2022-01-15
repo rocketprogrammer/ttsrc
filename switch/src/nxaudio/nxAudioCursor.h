@@ -1,6 +1,5 @@
 #ifndef NXAUDIOCURSOR_H
 #define NXAUDIOCURSOR_H
-#ifdef __SWITCH__
 
 #include "pandabase.h"
 #include "namable.h"
@@ -8,6 +7,8 @@
 #include "pointerTo.h"
 
 #include "nxAudio.h"
+
+struct OggOpusFile;
 
 class NxAudioCursor : public MovieAudioCursor {
   friend class NxAudio;
@@ -21,7 +22,7 @@ public:
   virtual void read_samples(int n, PN_int16 *data);
   
 protected:
-  istream* _file;
+  OggOpusFile* _opus_file;
   
   
 public:
@@ -42,5 +43,4 @@ private:
   static TypeHandle _type_handle;
 };
 
-#endif // __SWITCH__
 #endif // NX_AUDIO.H

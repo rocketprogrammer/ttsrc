@@ -92,8 +92,6 @@ def GetIncludes(opts):
             res.append(INCDIR_OTP)
         if "toontown" in opts:
             res.append(INCDIR_TOONTOWN)
-    
-    if opts:
         if "zlib" in opts:
             res.append("thirdparty/switch-libs/zlib/include")
         if "fftw" in opts:
@@ -108,8 +106,8 @@ def GetIncludes(opts):
             res.append("thirdparty/switch-libs/ode/include")
         if "openssl" in opts:
             res.append("thirdparty/switch-libs/openssl/include")
-        if "opus" in opts:
-            res.append("thirdparty/switch-libs/opus/include")
+        if "openal" in opts:
+            res.append("thirdparty/switch-libs/openal/include")
         if "gl" in opts:
             res.append("thirdparty/switch-libs/glad/include")
         if "egl" in opts:
@@ -123,8 +121,8 @@ def GetIncludes(opts):
     ]
     
     return res
-        
-        
+    
+    
 def _CompileCxx(path, opts=None, building=None, output=None):
     if not output:
         output = os.path.join(TMPDIR, os.path.splitext(path)[0] + ".o")

@@ -15,6 +15,10 @@
 #include "movieAudio.h"
 #include "movieAudioCursor.h"
 
+#ifdef __SWITCH__
+#include "nxAudio.h"
+#endif
+
 TypeHandle MovieAudio::_type_handle;
 
 ////////////////////////////////////////////////////////////////////
@@ -57,7 +61,9 @@ open() {
 ////////////////////////////////////////////////////////////////////
 PT(MovieAudio) MovieAudio::
 get(const Filename &name) {
-#ifdef HAVE_FFMPEG
+#ifdef __SWITCH__
+  return new NxAudio(name);
+#elif defined(HAVE_FFMPEG)
   // Someday, I'll probably put a dispatcher here.
   // But for now, just hardwire it to go to FFMPEG.
   return new FfmpegAudio(name);

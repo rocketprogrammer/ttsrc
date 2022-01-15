@@ -194,19 +194,6 @@ egl_is_at_least_version(int major_version, int minor_version) const {
 }
 
 void nxGraphicsStateGuardian::
-query_gl_version() {
-	GLGraphicsStateGuardian::query_gl_version();
-
-	// Calling eglInitialize on an already-initialized display will
-	// just provide us the version numbers.
-	if (!eglInitialize(_egl_display, &_egl_version_major, &_egl_version_minor)) {
-		printf("failed to get gl version\n");
-	}
-	
-	printf("gl version %d.%d\n", _egl_version_major, _egl_version_minor);
-}
-
-void nxGraphicsStateGuardian::
 get_extra_extensions() {
 	save_extensions(eglQueryString(_egl_display, EGL_EXTENSIONS));
 }

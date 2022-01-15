@@ -68,7 +68,10 @@ def GetDefines(opts):
         "WANT_NATIVE_NET"
     ]
     
-    if _OptLevel >= 2:
+    if _OptLevel <= 1:
+        res.append("_DEBUG")
+        
+    elif _OptLevel >= 3:
         res.append("NDEBUG")
     
     if opts:
@@ -142,7 +145,10 @@ def _CompileCxx(path, opts=None, building=None, output=None):
         raise Exception("Invalid file %r" % path)
     
     # optimisations
-    cmd += ["-O" + str(_OptLevel)]
+    if _OptLevel >= 4:
+        cmd += ["-Ofast"]
+    else:
+        cmd += ["-O" + str(_OptLevel)]
         
     # ARCH
     cmd += ["-march=armv8-a+crc+crypto", "-mtune=cortex-a57", "-mtp=soft"]

@@ -42,7 +42,7 @@ seek(double t)
     // 48000 hz, 16 bits (2 bytes), 2 channels
     _last_seek = t;
     _file->clear();
-    _file->seekg(t * 48000 * 2 * 2, ios::beg);
+    _file->seekg(round(t * 48000) * 2 * 2, ios::beg);
     _samples_read = 0;
 }
 

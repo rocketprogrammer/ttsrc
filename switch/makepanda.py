@@ -556,10 +556,7 @@ Library("libpandanx.a", [
     #Compile('switch/src/nxaudio/nxAudioCursor.cxx', building="PANDANX", opts=["opus"]),
 
     # pandanx
-    Compile('switch/metalibs/pandanx/pandanx.cxx', building="PANDANX", opts=['gl', 'egl']),
-    
-    # special dependency
-    Compile('thirdparty/switch-libs/glad/src/glad.c', opts=['gl'])
+    Compile('switch/metalibs/pandanx/pandanx.cxx', building="PANDANX", opts=['gl', 'egl'])
 ])
 
 

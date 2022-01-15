@@ -11,7 +11,7 @@ _OptLevel = 0
 
 def SetOptimisationLevel(level):
     global _OptLevel
-    _OptLevel = 3
+    _OptLevel = level
     
 
 def MakeDirs(path):

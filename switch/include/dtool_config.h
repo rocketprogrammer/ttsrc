@@ -48,7 +48,7 @@
 #define HAVE_NET 1
 // #undef HAVE_NVIDIACG
 #define HAVE_ODE 1
-// #undef HAVE_OPENAL
+#define HAVE_OPENAL 1
 // #undef HAVE_OPENAL_FRAMEWORK
 // #undef HAVE_OPENCV
 #define HAVE_OPENSSL 1

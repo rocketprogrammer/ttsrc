@@ -515,6 +515,10 @@ Library("libpandafx.a", [
 
 CopyHeaders("panda/src/audiotraits")
 
+Library("libopenal_audio.a", [
+    Compile("panda/src/audiotraits/openal_audio_composite.cxx", building="OPENAL_AUDIO", opts=["openal"])
+])
+
 
 #########################################
 # Framework
@@ -534,7 +538,7 @@ Library("libframework.a", [
 CopyIncludeFiles("panda/src/glstuff")
 CopyHeaders("panda/src/glgsg")
 CopyHeaders("switch/src/nxdisplay")
-#CopyHeaders("switch/src/nxaudio")
+CopyHeaders("switch/src/nxaudio")
 CopyHeaders("switch/metalibs/pandanx")
 
 
@@ -552,8 +556,8 @@ Library("libpandanx.a", [
     *glgsg,
 
     # nxaudio
-    #Compile('switch/src/nxaudio/nxAudio.cxx', building="PANDANX", opts=["opus"]),
-    #Compile('switch/src/nxaudio/nxAudioCursor.cxx', building="PANDANX", opts=["opus"]),
+    Compile('switch/src/nxaudio/nxAudio.cxx', building="PANDANX", opts=[]),
+    Compile('switch/src/nxaudio/nxAudioCursor.cxx', building="PANDANX", opts=[]),
 
     # pandanx
     Compile('switch/metalibs/pandanx/pandanx.cxx', building="PANDANX", opts=['gl', 'egl'])

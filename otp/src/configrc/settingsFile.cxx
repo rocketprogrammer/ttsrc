@@ -539,7 +539,7 @@ void Settings::read_file(Filename fname) {
 // it would be simpler to just store the actual res sizes, but abstracting them makes
 // it harder to crash with a bad resolution
 
-// this array must match:  enum Resolution { R640x480, R800x600, R1024x768, R1280x1024, R1600x1200, R_NONE };
+// this array must match:  enum Resolution { R640x480, R800x600, R1024x768, R1280x1024, R1600x1200, R1280x720, R_NONE };
 const unsigned int resolution_dimensions[Settings::R_NONE][2] = {{640,480}, {800,600}, {1024,768}, {1280,1024}, {1600,1200}, {1280,720}};
 
 void Settings::

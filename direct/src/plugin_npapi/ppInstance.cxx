@@ -58,6 +58,7 @@ PPInstance(NPMIMEType pluginType, NPP instance, uint16_t mode,
   _window_handle_type = window_handle_type;
   _event_type = event_type;
   _script_object = NULL;
+  _contents_expiration = 0;
   _failed = false;
   _started = false;
 
@@ -71,8 +72,15 @@ PPInstance(NPMIMEType pluginType, NPP instance, uint16_t mode,
         v = "";
       }
 
+      // Make the token lowercase, since HTML is case-insensitive but
+      // we're not.
+      string keyword;
+      for (const char *p = argn[i]; *p; ++p) {
+        keyword += tolower(*p);
+      }
+
       P3D_token token;
-      token._keyword = strdup(argn[i]);
+      token._keyword = strdup(keyword.c_str());
       token._value = strdup(v);
       _tokens.push_back(token);
     }
@@ -171,24 +179,44 @@ begin() {
   }
 #endif  // __APPLE__
 
+  string url = PANDA_PACKAGE_HOST_URL;
+  if (!url.empty() && url[url.length() - 1] != '/') {
+    url += '/';
+  }
+  _download_url_prefix = url;
+  _standard_url_prefix = url;
+  nout << "Plugin is built with " << PANDA_PACKAGE_HOST_URL << "\n";
+
   if (!is_plugin_loaded() && !_failed) {
-    // Go download the contents file, so we can download the core DLL.
-    string url = PANDA_PACKAGE_HOST_URL;
-    if (!url.empty() && url[url.length() - 1] != '/') {
-      url += '/';
+    // We need to read the contents.xml file.  First, check to see if
+    // the version on disk is already current enough.
+    bool success = false;
+
+    string contents_filename = _root_dir + "/contents.xml";
+    if (read_contents_file(contents_filename, false)) {
+      if (time(NULL) < _contents_expiration) {
+        // Got the file, and it's good.
+        get_core_api();
+        success = true;
+      }
     }
-    _download_url_prefix = url;
-    ostringstream strm;
-    strm << url << "contents.xml";
 
-    // Append a uniquifying query string to the URL to force the
-    // download to go all the way through any caches.  We use the time
-    // in seconds; that's unique enough.
-    strm << "?" << time(NULL);
-    url = strm.str();
-
-    PPDownloadRequest *req = new PPDownloadRequest(PPDownloadRequest::RT_contents_file);
-    start_download(url, req);
+    if (!success) {
+      // Go download the latest contents.xml file.
+      _download_url_prefix = _standard_url_prefix;
+      _mirrors.clear();
+      ostringstream strm;
+      strm << _download_url_prefix << "contents.xml";
+      
+      // Append a uniquifying query string to the URL to force the
+      // download to go all the way through any caches.  We use the time
+      // in seconds; that's unique enough.
+      strm << "?" << time(NULL);
+      url = strm.str();
+      
+      PPDownloadRequest *req = new PPDownloadRequest(PPDownloadRequest::RT_contents_file);
+      start_download(url, req);
+    }
   }
 
   handle_request_loop();
@@ -562,7 +590,9 @@ url_notify(const char *url, NPReason reason, void *notifyData) {
         // there's an outstanding contents.xml file on disk, try to
         // load that one as a fallback.
         string contents_filename = _root_dir + "/contents.xml";
-        if (!read_contents_file(contents_filename)) {
+        if (read_contents_file(contents_filename, false)) {
+          get_core_api();
+        } else {
           nout << "Unable to read contents file " << contents_filename << "\n";
           set_failed();
         }
@@ -665,10 +695,11 @@ stream_as_file(NPStream *stream, const char *fname) {
 ////////////////////////////////////////////////////////////////////
 //     Function: PPInstance::handle_request
 //       Access: Public
-//  Description: Handles a request from the plugin, forwarding
-//               it to the browser as appropriate.  Returns true if we
-//               should continue the request loop, or false to return
-//               (temporarily) to JavaScript.
+//  Description: Handles a request from the Core API or the
+//               application, forwarding it to the browser as
+//               appropriate.  Returns true if we should continue the
+//               request loop, or false to return (temporarily) to
+//               JavaScript.
 ////////////////////////////////////////////////////////////////////
 bool PPInstance::
 handle_request(P3D_request *request) {
@@ -1134,42 +1165,122 @@ start_download(const string &url, PPDownloadRequest *req) {
 ////////////////////////////////////////////////////////////////////
 //     Function: PPInstance::read_contents_file
 //       Access: Private
-//  Description: Reads the contents.xml file and starts the core API
-//               DLL downloading, if necessary.
+//  Description: Attempts to open and read the contents.xml file on
+//               disk.  Copies the file to its standard location
+//               on success.  Returns true on success, false on
+//               failure.
 ////////////////////////////////////////////////////////////////////
 bool PPInstance::
-read_contents_file(const string &contents_filename) {
+read_contents_file(const string &contents_filename, bool fresh_download) {
+  _download_url_prefix = _standard_url_prefix;
+  _mirrors.clear();
+
   TiXmlDocument doc(contents_filename.c_str());
   if (!doc.LoadFile()) {
     return false;
   }
 
+  bool found_core_package = false;
+
   TiXmlElement *xcontents = doc.FirstChildElement("contents");
   if (xcontents != NULL) {
+    int max_age = P3D_CONTENTS_DEFAULT_MAX_AGE;
+    xcontents->Attribute("max_age", &max_age);
+
+    // Get the latest possible expiration time, based on the max_age
+    // indication.  Any expiration time later than this is in error.
+    time_t now = time(NULL);
+    _contents_expiration = now + (time_t)max_age;
+
+    if (fresh_download) {
+      // Update the XML with the new download information.
+      TiXmlElement *xorig = xcontents->FirstChildElement("orig");
+      while (xorig != NULL) {
+        xcontents->RemoveChild(xorig);
+        xorig = xcontents->FirstChildElement("orig");
+      }
+
+      xorig = new TiXmlElement("orig");
+      xcontents->LinkEndChild(xorig);
+      
+      xorig->SetAttribute("expiration", (int)_contents_expiration);
+
+    } else {
+      // Read the expiration time from the XML.
+      int expiration = 0;
+      TiXmlElement *xorig = xcontents->FirstChildElement("orig");
+      if (xorig != NULL) {
+        xorig->Attribute("expiration", &expiration);
+      }
+      
+      _contents_expiration = min(_contents_expiration, (time_t)expiration);
+    }
+
+    nout << "read contents.xml, max_age = " << max_age
+         << ", expires in " << max(_contents_expiration, now) - now
+         << " s\n";
+
     // Look for the <host> entry; it might point us at a different
     // download URL, and it might mention some mirrors.
     find_host(xcontents);
 
     // Now look for the core API package.
+    _coreapi_set_ver = "";
     TiXmlElement *xpackage = xcontents->FirstChildElement("package");
     while (xpackage != NULL) {
       const char *name = xpackage->Attribute("name");
       if (name != NULL && strcmp(name, "coreapi") == 0) {
         const char *platform = xpackage->Attribute("platform");
         if (platform != NULL && strcmp(platform, DTOOL_PLATFORM) == 0) {
-          get_core_api(xpackage);
-          return true;
+          _coreapi_dll.load_xml(xpackage);
+          const char *set_ver = xpackage->Attribute("set_ver");
+          if (set_ver != NULL) {
+            _coreapi_set_ver = set_ver;
+          }
+          found_core_package = true;
+          break;
         }
       }
-    
+        
       xpackage = xpackage->NextSiblingElement("package");
     }
   }
 
-  // Couldn't find the coreapi package description.
-  nout << "No coreapi package defined in contents file for "
-       << DTOOL_PLATFORM << "\n";
-  return false;
+  if (!found_core_package) {
+    // Couldn't find the coreapi package description.
+    nout << "No coreapi package defined in contents file for "
+         << DTOOL_PLATFORM << "\n";
+    return false;
+  }
+
+  // Check the coreapi_set_ver token.  If it is given, it specifies a
+  // minimum Core API version number we expect to find.  If we didn't
+  // find that number, perhaps our contents.xml is out of date.
+  string coreapi_set_ver = lookup_token("coreapi_set_ver");
+  if (!coreapi_set_ver.empty()) {
+    nout << "Instance asked for Core API set_ver " << coreapi_set_ver
+         << ", we found " << _coreapi_set_ver << "\n";
+    // But don't bother if we just freshly downloaded it.
+    if (!fresh_download) {
+      if (compare_seq(coreapi_set_ver, _coreapi_set_ver) > 0) {
+        // The requested set_ver value is higher than the one we have on
+        // file; our contents.xml file must be out of date after all.
+        nout << "expiring contents.xml\n";
+        _contents_expiration = 0;
+      }
+    }
+  }
+
+  // Success.  Now save the file in its proper place.
+  string standard_filename = _root_dir + "/contents.xml";
+
+  mkfile_complete(standard_filename, nout);
+  if (!doc.SaveFile(standard_filename.c_str())) {
+    nout << "Couldn't rewrite " << standard_filename << "\n";
+    return false;
+  }
+  
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1212,24 +1323,28 @@ void PPInstance::
 downloaded_file(PPDownloadRequest *req, const string &filename) {
   switch (req->_rtype) {
   case PPDownloadRequest::RT_contents_file:
-    // Now we have the contents.xml file.  Read this to get the
-    // filename and md5 hash of our core API DLL.
-    if (read_contents_file(filename)) {
-      // Successfully read.  Copy it into its normal place.
-      string contents_filename = _root_dir + "/contents.xml";
-      copy_file(filename, contents_filename);
-      
-    } else {
-      // Error reading the contents.xml file, or in loading the core
-      // API that it references.
-      nout << "Unable to read contents file " << filename << "\n";
-
-      // If there's an outstanding contents.xml file on disk, try to
-      // load that one as a fallback.
-      string contents_filename = _root_dir + "/contents.xml";
-      if (!read_contents_file(contents_filename)) {
-        nout << "Unable to read contents file " << contents_filename << "\n";
-        set_failed();
+    {
+      // Now we have the contents.xml file.  Read this to get the
+      // filename and md5 hash of our core API DLL.
+      if (read_contents_file(filename, true)) {
+        // Successfully downloaded and read, and it has been written
+        // into its normal place.
+        get_core_api();
+        
+      } else {
+        // Error reading the contents.xml file, or in loading the core
+        // API that it references.
+        nout << "Unable to read contents file " << filename << "\n";
+        
+        // If there's an outstanding contents.xml file on disk, try to
+        // load that one as a fallback.
+        string contents_filename = _root_dir + "/contents.xml";
+        if (read_contents_file(contents_filename, false)) {
+          get_core_api();
+        } else {
+          nout << "Unable to read contents file " << contents_filename << "\n";
+          set_failed();
+        }
       }
     }
     break;
@@ -1350,10 +1465,8 @@ send_p3d_temp_file_data() {
 //               if necessary.
 ////////////////////////////////////////////////////////////////////
 void PPInstance::
-get_core_api(TiXmlElement *xpackage) {
-  _core_api_dll.load_xml(xpackage);
-
-  if (_core_api_dll.quick_verify(_root_dir)) {
+get_core_api() {
+  if (_coreapi_dll.quick_verify(_root_dir)) {
     // The DLL file is good.  Just load it.
     do_load_plugin();
 
@@ -1365,7 +1478,7 @@ get_core_api(TiXmlElement *xpackage) {
     // Our last act of desperation: hit the original host, with a
     // query uniquifier, to break through any caches.
     ostringstream strm;
-    strm << _download_url_prefix << _core_api_dll.get_filename()
+    strm << _download_url_prefix << _coreapi_dll.get_filename()
          << "?" << time(NULL);
     url = strm.str();
     _core_urls.push_back(url);
@@ -1373,7 +1486,7 @@ get_core_api(TiXmlElement *xpackage) {
     // Before we try that, we'll hit the original host, without a
     // uniquifier.
     url = _download_url_prefix;
-    url += _core_api_dll.get_filename();
+    url += _coreapi_dll.get_filename();
     _core_urls.push_back(url);
 
     // And before we try that, we'll try two mirrors, at random.
@@ -1382,7 +1495,7 @@ get_core_api(TiXmlElement *xpackage) {
     for (vector<string>::iterator si = mirrors.begin();
          si != mirrors.end(); 
          ++si) {
-      url = (*si) + _core_api_dll.get_filename();
+      url = (*si) + _coreapi_dll.get_filename();
       _core_urls.push_back(url);
     }
 
@@ -1417,8 +1530,8 @@ downloaded_plugin(const string &filename) {
   }
 
   // Make sure the DLL was correctly downloaded before continuing.
-  if (!_core_api_dll.quick_verify_pathname(filename)) {
-    nout << "After download, " << _core_api_dll.get_filename() << " is no good.\n";
+  if (!_coreapi_dll.quick_verify_pathname(filename)) {
+    nout << "After download, " << _coreapi_dll.get_filename() << " is no good.\n";
 
     // That DLL came out wrong.  Try the next URL.
     if (!_core_urls.empty()) {
@@ -1435,14 +1548,14 @@ downloaded_plugin(const string &filename) {
   }
 
   // Copy the file onto the target.
-  string pathname = _core_api_dll.get_pathname(_root_dir);
+  string pathname = _coreapi_dll.get_pathname(_root_dir);
   if (!copy_file(filename, pathname)) {
     nout << "Couldn't copy " << pathname << "\n";
     set_failed();
     return;
   }
 
-  if (!_core_api_dll.quick_verify(_root_dir)) {
+  if (!_coreapi_dll.quick_verify(_root_dir)) {
     nout << "After copying, " << pathname << " is no good.\n";
     set_failed();
     return;
@@ -1462,7 +1575,7 @@ downloaded_plugin(const string &filename) {
 ////////////////////////////////////////////////////////////////////
 void PPInstance::
 do_load_plugin() {
-  string pathname = _core_api_dll.get_pathname(_root_dir);
+  string pathname = _coreapi_dll.get_pathname(_root_dir);
 
 #ifdef P3D_PLUGIN_P3D_PLUGIN
   // This is a convenience macro for development.  If defined and
@@ -1477,12 +1590,20 @@ do_load_plugin() {
 #endif  // P3D_PLUGIN_P3D_PLUGIN
 
   nout << "Attempting to load core API from " << pathname << "\n";
-  if (!load_plugin(pathname, "", "", true, "", "", "", false, false, 
+  string contents_filename = _root_dir + "/contents.xml";
+  if (!load_plugin(pathname, contents_filename, PANDA_PACKAGE_HOST_URL,
+                   P3D_VC_normal, "", "", "", false, false, 
                    _root_dir, nout)) {
     nout << "Unable to launch core API in " << pathname << "\n";
     set_failed();
     return;
   }
+
+  // Format the coreapi_timestamp as a string, for passing as a
+  // parameter.
+  ostringstream stream;
+  stream << _coreapi_dll.get_timestamp();
+  string coreapi_timestamp = stream.str();
 
 #ifdef PANDA_OFFICIAL_VERSION
   static const bool official = true;
@@ -1490,9 +1611,10 @@ do_load_plugin() {
   static const bool official = false;
 #endif
   P3D_set_plugin_version_ptr(P3D_PLUGIN_MAJOR_VERSION, P3D_PLUGIN_MINOR_VERSION,
-                         P3D_PLUGIN_SEQUENCE_VERSION, official,
-                         PANDA_DISTRIBUTOR,
-                         PANDA_PACKAGE_HOST_URL, _core_api_dll.get_timestamp());
+                             P3D_PLUGIN_SEQUENCE_VERSION, official,
+                             PANDA_DISTRIBUTOR,
+                             PANDA_PACKAGE_HOST_URL, coreapi_timestamp.c_str(),
+                             _coreapi_set_ver.c_str());
 
   create_instance();
 }
@@ -1727,6 +1849,88 @@ copy_file(const string &from_filename, const string &to_filename) {
 }
 
 ////////////////////////////////////////////////////////////////////
+//     Function: PPInstance::lookup_token
+//       Access: Private
+//  Description: Returns the value associated with the first
+//               appearance of the named token, or empty string if the
+//               token does not appear.
+////////////////////////////////////////////////////////////////////
+string PPInstance::
+lookup_token(const string &keyword) const {
+  Tokens::const_iterator ti;
+  for (ti = _tokens.begin(); ti != _tokens.end(); ++ti) {
+    if (keyword == (*ti)._keyword) {
+      return (*ti)._value;
+    }
+  }
+
+  return string();
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PPInstance::compare_seq
+//       Access: Private, Static
+//  Description: Compares the two dotted-integer sequence values
+//               numerically.  Returns -1 if seq_a sorts first, 1 if
+//               seq_b sorts first, 0 if they are equivalent.
+////////////////////////////////////////////////////////////////////
+int PPInstance::
+compare_seq(const string &seq_a, const string &seq_b) {
+  const char *num_a = seq_a.c_str();
+  const char *num_b = seq_b.c_str();
+  int comp = compare_seq_int(num_a, num_b);
+  while (comp == 0) {
+    if (*num_a != '.') {
+      if (*num_b != '.') {
+        // Both strings ran out together.
+        return 0;
+      }
+      // a ran out first.
+      return -1;
+    } else if (*num_b != '.') {
+      // b ran out first.
+      return 1;
+    }
+
+    // Increment past the dot.
+    ++num_a;
+    ++num_b;
+    comp = compare_seq(num_a, num_b);
+  }
+
+  return comp;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PPInstance::compare_seq_int
+//       Access: Private, Static
+//  Description: Numerically compares the formatted integer value at
+//               num_a with num_b.  Increments both num_a and num_b to
+//               the next character following the valid integer.
+////////////////////////////////////////////////////////////////////
+int PPInstance::
+compare_seq_int(const char *&num_a, const char *&num_b) {
+  long int a;
+  char *next_a;
+  long int b;
+  char *next_b;
+
+  a = strtol((char *)num_a, &next_a, 10);
+  b = strtol((char *)num_b, &next_b, 10);
+
+  num_a = next_a;
+  num_b = next_b;
+
+  if (a < b) {
+    return -1;
+  } else if (b < a) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+////////////////////////////////////////////////////////////////////
 //     Function: PPInstance::set_failed
 //       Access: Private
 //  Description: Called when something has gone wrong that prevents
@@ -1741,23 +1945,8 @@ set_failed() {
     nout << "Plugin failed.\n";
     stop_outstanding_streams();
 
-    string expression;
     // Look for the "onpluginfail" token.
-    Tokens::iterator ti;
-    for (ti = _tokens.begin(); ti != _tokens.end(); ++ti) {
-      if ((*ti)._keyword != NULL && (*ti)._value != NULL) {
-        // Make the token lowercase, since HTML is case-insensitive but
-        // we're not.
-        string keyword;
-        for (const char *p = (*ti)._keyword; *p; ++p) {
-          keyword += tolower(*p);
-        }
-        if (keyword == "onpluginfail") {
-          expression = (*ti)._value;
-          break;
-        }
-      }
-    }
+    string expression = lookup_token("onpluginfail");
 
     if (!expression.empty()) {
       // Now attempt to evaluate the expression.

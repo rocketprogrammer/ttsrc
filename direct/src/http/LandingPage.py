@@ -1,4 +1,5 @@
 import os
+import types
 from direct.directnotify.DirectNotifyGlobal import directNotify
 from pandac.PandaModules import VirtualFileSystem
 from pandac.PandaModules import Filename
@@ -62,8 +63,8 @@ class LandingPage:
         bodyTag.append(ET.Comment(''))
 
         fileStr = StringIO()
-        ET.ElementTree(headTag).write(fileStr)
-        headTagStr = fileStr.getvalue()
+        ET.ElementTree(headTag).write(fileStr, encoding='utf-8')
+        headTagStr = unicodeUtf8(fileStr.getvalue())
         # remove the tag closer
         # </head>
         headTagStr = headTagStr[:headTagStr.rindex('<')]
@@ -74,8 +75,8 @@ class LandingPage:
         LandingPageHTML.addBodyHeaderAndContent(landing, titleStr, self.getMenuTags(activeTab))
 
         fileStr = StringIO()
-        ET.ElementTree(landing).write(fileStr)
-        landingStr = fileStr.getvalue()
+        ET.ElementTree(landing).write(fileStr, encoding='utf-8')
+        landingStr = unicodeUtf8(fileStr.getvalue())
         # remove <body>
         landingStr = landingStr[landingStr.index('>')+1:]
         # remove tag closers
@@ -86,8 +87,8 @@ class LandingPage:
             landingStr = landingStr[:landingStr.rindex('<')]
         
         fileStr = StringIO()
-        ET.ElementTree(bodyTag).write(fileStr)
-        bodyTagStr = fileStr.getvalue()
+        ET.ElementTree(bodyTag).write(fileStr, encoding='utf-8')
+        bodyTagStr = unicodeUtf8(fileStr.getvalue())
         # extract <body>
         bodyStr = bodyTagStr[bodyTagStr.index('>')+1:]
         bodyTagStr = bodyTagStr[:bodyTagStr.index('>')+1]
@@ -106,8 +107,15 @@ class LandingPage:
     def getServicesPage(self, uriToHandler):
         output = ""
         
-        uriList = uriToHandler.keys()
+        # extract names of handlers
+        filteredList = {}
+        for uri,handler in uriToHandler.iteritems():
+            if type(uri) == types.TupleType:
+                filteredList[uri[0]] = handler
+            else:
+                filteredList[uri] = handler
 
+        uriList = filteredList.keys()
         uriList.sort()
 
         autoList = []
@@ -125,9 +133,9 @@ class LandingPage:
             uriList.remove("/favicon.ico")
             autoList.append("/favicon.ico")
 
-        output += LandingPageHTML.getURITable(title="Application",uriList=uriList,uriToHandler=uriToHandler)
+        output += LandingPageHTML.getURITable(title="Application",uriList=uriList,uriToHandler=filteredList)
 
-        output += LandingPageHTML.getURITable(title="Admin",uriList=autoList,uriToHandler=uriToHandler)
+        output += LandingPageHTML.getURITable(title="Admin",uriList=autoList,uriToHandler=filteredList)
         
         return output
 

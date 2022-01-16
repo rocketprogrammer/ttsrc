@@ -144,7 +144,7 @@ PUBLISHED:
   float get_linear_damping() const;
   float get_angular_damping() const;
 
-  // Vecocity
+  // Velocity
   void set_linear_velocity(const LVector3f &linVel);
   void set_angular_velocity(const LVector3f &angVel);
   void set_max_angular_velocity(float maxAngVel);
@@ -174,6 +174,11 @@ PUBLISHED:
   void wake_up(float wakeCounterValue=NX_SLEEP_INTERVAL);
   void put_to_sleep();
 
+  // Kinematic
+  void move_global_pos(const LPoint3f &pos);
+  void move_global_mat(const LMatrix4f &mat);
+  void move_global_hpr(float h, float p, float r);
+
   INLINE void ls() const;
   INLINE void ls(ostream &out, int indent_level=0) const;
 
@@ -197,6 +202,7 @@ private:
   NxActor *_ptr;
   NodePath _np;
   PT(PhysxController) _controller;
+  string _name;
 
 ////////////////////////////////////////////////////////////////////
 public:

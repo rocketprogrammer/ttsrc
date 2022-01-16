@@ -36,7 +36,8 @@ add_shape(PhysxShapeDesc &desc) {
 void PhysxActorDesc::
 set_name(const char *name) {
 
-  _desc.name = name;
+  _name = name ? name : "";
+  _desc.name = _name.c_str();
 }
 
 ////////////////////////////////////////////////////////////////////

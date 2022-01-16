@@ -453,7 +453,7 @@ class DirectManipulationControl(DirectObject):
     def disableWidgetMove(self):
         self.fMovable = 0
         if hasattr(base.direct, 'widget'):
-            base.direct.widget.disableModeColor()
+            base.direct.widget.disabledModeColor()
         else:
             self.objectHandles.disabledModeColor()        
 
@@ -1466,8 +1466,13 @@ class ObjectHandles(NodePath, DirectObject):
             # create ray from the camera to detect 3d position
             iRay = SelectionRay(base.direct.camera)
             iRay.collider.setFromLens(base.direct.camNode, base.direct.dr.mouseX, base.direct.dr.mouseY)
-            iRay.collideWithBitMask(1)
+            #iRay.collideWithBitMask(1)
+            iRay.collideWithBitMask(BitMask32.bit(21))
             iRay.ct.traverse(base.direct.grid)
+
+            if iRay.getNumEntries() == 0:
+                del iRay
+                return self.hitPt
 
             entry = iRay.getEntry(0)
             hitPt = entry.getSurfacePoint(entry.getFromNodePath())
@@ -1538,9 +1543,14 @@ class ObjectHandles(NodePath, DirectObject):
         # create ray from the camera to detect 3d position
         iRay = SelectionRay(base.direct.camera)
         iRay.collider.setFromLens(base.direct.camNode, base.direct.dr.mouseX, base.direct.dr.mouseY)
-        iRay.collideWithBitMask(1)
+        #iRay.collideWithBitMask(1)
+        iRay.collideWithBitMask(BitMask32.bit(21))
         iRay.ct.traverse(base.direct.grid)
 
+        if iRay.getNumEntries() == 0:
+            del iRay
+            return Point3(0)
+        
         entry = iRay.getEntry(0)
         hitPt = entry.getSurfacePoint(entry.getFromNodePath())
 

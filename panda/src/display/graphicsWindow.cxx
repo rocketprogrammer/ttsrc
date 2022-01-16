@@ -77,6 +77,13 @@ GraphicsWindow(GraphicsEngine *engine, GraphicsPipe *pipe,
 ////////////////////////////////////////////////////////////////////
 GraphicsWindow::
 ~GraphicsWindow() {
+#ifdef HAVE_PYTHON
+	// Clean up python event handlers.
+	PythonWinProcClasses::iterator iter;
+	for(iter = _python_window_proc_classes.begin(); iter != _python_window_proc_classes.end(); ++iter){
+		delete *iter;
+	}
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -910,7 +917,6 @@ mouse_mode_relative() {
 
 }
 
-
 ////////////////////////////////////////////////////////////////////
 //     Function: GraphicsWindow::mouse_mode_absolute
 //       Access: Protected, Virtual
@@ -920,4 +926,89 @@ mouse_mode_relative() {
 void GraphicsWindow::
 mouse_mode_absolute() {
 
+}
+
+#ifdef HAVE_PYTHON
+
+////////////////////////////////////////////////////////////////////
+//     Function: GraphicsWindow::add_custom_event_handler
+//       Access: Published
+//  Description: Adds a python event handler to be called
+//               when a window event occurs.
+//               
+////////////////////////////////////////////////////////////////////
+void GraphicsWindow::
+add_python_event_handler(PyObject* handler, PyObject* name){
+  PythonGraphicsWindowProc* pgwp = new PythonGraphicsWindowProc(handler, name);
+  _python_window_proc_classes.insert(pgwp);
+  add_window_proc(pgwp);
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: GraphicsWindow::remove_custom_event_handler
+//       Access: Published
+//  Description: Removes the specified python event handler.
+//               
+////////////////////////////////////////////////////////////////////
+void GraphicsWindow::
+remove_python_event_handler(PyObject* name){
+  list<PythonGraphicsWindowProc*> toRemove;
+  PythonWinProcClasses::iterator iter;
+  for(iter = _python_window_proc_classes.begin(); iter != _python_window_proc_classes.end(); ++iter){
+    PythonGraphicsWindowProc* pgwp = *iter;
+    if(PyObject_Compare(pgwp->get_name(), name) == 0)
+      toRemove.push_back(pgwp);
+  }
+  list<PythonGraphicsWindowProc*>::iterator iter2;
+  for(iter2 = toRemove.begin(); iter2 != toRemove.end(); ++iter2){
+    PythonGraphicsWindowProc* pgwp = *iter2;
+    remove_window_proc(pgwp);
+    _python_window_proc_classes.erase(pgwp);
+    delete pgwp;
+  }
+}
+
+#endif // HAVE_PYTHON
+
+////////////////////////////////////////////////////////////////////
+//     Function: GraphicsWindow::is_touch_event
+//       Access: Published, Virtual
+//  Description: Returns whether the specified event msg is a touch message.
+//               
+////////////////////////////////////////////////////////////////////
+bool GraphicsWindow::
+is_touch_event(GraphicsWindowProcCallbackData* callbackData){
+  return false;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: GraphicsWindow::get_num_touches
+//       Access: Published, Virtual
+//  Description: Returns the current number of touches on this window.
+//               
+////////////////////////////////////////////////////////////////////
+int GraphicsWindow::
+get_num_touches(){
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: GraphicsWindow::get_touch_info
+//       Access: Published, Virtual
+//  Description: Returns the TouchInfo object describing the specified touch.
+//               
+////////////////////////////////////////////////////////////////////
+TouchInfo GraphicsWindow::
+get_touch_info(int index){
+  return TouchInfo();
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: GraphicsWindow::supports_window_procs
+//       Access: Published, Virtual
+//  Description: Returns whether this window supports adding of Windows proc handlers.
+//               
+////////////////////////////////////////////////////////////////////
+bool GraphicsWindow::supports_window_procs() const{
+  return false;
 }

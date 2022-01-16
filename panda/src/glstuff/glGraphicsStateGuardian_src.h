@@ -1,5 +1,7 @@
 // Filename: glGraphicsStateGuardian_src.h
 // Created by:  drose (02Feb99)
+// Updated by: fperazzi, PandaSE (05May10) (added 
+//   get_supports_cg_profile)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -264,6 +266,8 @@ public:
 
   INLINE static bool report_errors(int line, const char *source_file);
   INLINE void report_my_errors(int line, const char *source_file);
+  INLINE static bool clear_errors(int line, const char *source_file);
+  INLINE void clear_my_errors(int line, const char *source_file);
 
   INLINE const string &get_gl_vendor() const;
   INLINE const string &get_gl_renderer() const;
@@ -275,6 +279,8 @@ public:
                                        const TransformState *transform);
 
   void bind_fbo(GLuint fbo);
+  virtual bool get_supports_cg_profile(const string &name) const;
+  void finish();
 
 protected:
   void do_issue_transform();

@@ -250,6 +250,17 @@
 // remaining variables are of general interest to everyone.
 
 
+// You may define this to build or develop the plugin.
+//#define HAVE_P3D_PLUGIN 1
+
+// You may define both of these to build or develop the Panda3D
+// rtdist, the environment packaged up for distribution with the
+// plugin.
+//#define PANDA_PACKAGE_VERSION local_dev
+//#define PANDA_PACKAGE_HOST_URL http://some.url/
+#defer HAVE_P3D_RTDIST $[PANDA_PACKAGE_HOST_URL]
+
+
 
 // NOTE: In the following, to indicate "yes" to a yes/no question,
 // define the variable to be a nonempty string.  To indicate "no",
@@ -303,6 +314,9 @@
 #define INTERROGATE interrogate
 #define INTERROGATE_MODULE interrogate_module
 
+// What is the name of the C# compiler binary?
+#define CSHARP csc
+
 // Is Python installed, and should Python interfaces be generated?  If
 // Python is installed, which directory is it in?
 #define PYTHON_IPATH /usr/include/python2.4
@@ -321,7 +335,7 @@
 // genPyCode.  You may wish to add to this list to add your own
 // libraries, or if you want to use some of the more obscure
 // interfaces like libpandaegg and libpandafx.
-#defer GENPYCODE_LIBS libpandaexpress libpanda libpandaphysics libdirect libpandafx libp3vision $[if $[HAVE_ODE],libpandaode] 
+#defer GENPYCODE_LIBS libpandaexpress libpanda libpandaphysics libdirect libpandafx $[if $[HAVE_ODE],libpandaode] 
 
 // Normally, Python source files are copied into the INSTALL_LIB_DIR
 // defined above, along with the compiled C++ library objects, when
@@ -351,7 +365,7 @@
 // overhead to have this option available even if it is unused, it is
 // by default enabled only in a development build.  This has no effect
 // on DirectX rendering.
-#define SUPPORT_IMMEDIATE_MODE $[<= $[OPTIMIZE], 3]
+#defer SUPPORT_IMMEDIATE_MODE $[<= $[OPTIMIZE], 3]
 
 // Do you want to compile in support for pipelining?  This enables
 // setting and accessing multiple different copies of frame-specific
@@ -588,9 +602,9 @@
 #elif $[OSX_PLATFORM]
   #defer GL_FRAMEWORK OpenGL
 #else
-  #defer GL_LPATH /usr/X11R6/lib
-  #defer GL_LIBS GL
-  #defer GLU_LIBS GLU
+  #defer GL_LPATH /usr/lib64
+  #defer GL_LIBS /usr/lib64
+  #defer GLU_LIBS /usr/lib64
 #endif
 #defer HAVE_GL $[libtest $[GL_LPATH],$[GL_LIBS]]
 
@@ -638,10 +652,26 @@
 // or if you want to be able to easily switch between Mesa and the
 // system OpenGL implementation at runtime.  If you compiled Mesa with
 // USE_MGL_NAMESPACE defined, define MESA_MGL here.
-#define MESA_IPATH
-#define MESA_LPATH
-#define MESA_LIBS
-#define MESA_MGL
+#define MESA_IPATH /usr/include
+#define MESA_LPATH /usr/lib64
+#define MESA_LIBS /usr/lib64
+#define MESA_MGL 1
+#if $[WINDOWS_PLATFORM] 
+  #define MESA_IPATH
+  #define MESA_LPATH
+  #define MESA_LIBS
+  #define MESA_MGL
+#elif $[OSX_PLATFORM]
+  #define MESA_IPATH
+  #define MESA_LPATH
+  #define MESA_LIBS
+  #define MESA_MGL
+#else
+  #define MESA_IPATH /usr/include
+  #define MESA_LPATH /usr/lib64
+  #define MESA_LIBS /usr/lib64
+  #define MESA_MGL 1
+#endif
 #defer HAVE_MESA $[libtest $[MESA_LPATH],$[MESA_LIBS]]
 
 // Similar to MIN_GL_VERSION, above.
@@ -914,12 +944,6 @@
 #define PHYSX_LPATH
 #define PHYSX_LIBS $[if $[WINDOWS_PLATFORM],PhysXLoader.lib NxCharacter.lib NxCooking.lib NxExtensions.lib,PhysXLoader NxCharacter NxCooking]
 #defer HAVE_PHYSX $[libtest $[PHYSX_LPATH],$[PHYSX_LIBS]]
-
-// Info for TinyXML library
-#define TINYXML_IPATH
-#define TINYXML_LPATH
-#define TINYXML_LIBS $[if $[WINDOWS_PLATFORM],tinyxml.lib,tinyxml]
-#defer HAVE_TINYXML $[libtest $[TINYXML_LPATH],$[TINYXML_LIBS]]
 
 // Info for http://www.sourceforge.net/projects/chromium
 #define CHROMIUM_IPATH /usr/include/chromium/include

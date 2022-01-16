@@ -73,6 +73,7 @@ extern "C" {
   EXPCL_DTOOLCONFIG int PyMapping_GetItemString(...);
   EXPCL_DTOOLCONFIG int PyModule_AddIntConstant(...);
   EXPCL_DTOOLCONFIG int PyModule_AddObject(...);
+  EXPCL_DTOOLCONFIG int PyModule_AddStringConstant(...);
   EXPCL_DTOOLCONFIG int PyNumber_Long(...);
   EXPCL_DTOOLCONFIG int PyObject_Call(...);
   EXPCL_DTOOLCONFIG int PyObject_CallFunction(...);
@@ -80,6 +81,7 @@ extern "C" {
   EXPCL_DTOOLCONFIG int PyObject_CallMethodObjArgs(...);
   EXPCL_DTOOLCONFIG int PyObject_CallObject(...);
   EXPCL_DTOOLCONFIG int PyObject_Cmp(...);
+  EXPCL_DTOOLCONFIG int PyObject_Compare(...);
   EXPCL_DTOOLCONFIG int PyObject_Free(...);
   EXPCL_DTOOLCONFIG int PyObject_GenericGetAttr(...);
   EXPCL_DTOOLCONFIG int PyObject_GenericSetAttr(...);
@@ -206,6 +208,7 @@ int PyLong_Type(...) { return 0; }
 int PyMapping_GetItemString(...) { return 0; }
 int PyModule_AddIntConstant(...) { return 0; };
 int PyModule_AddObject(...) { return 0; };
+int PyModule_AddStringConstant(...) { return 0; };
 int PyNumber_Long(...) { return 0; }
 int PyObject_Call(...) { return 0; }
 int PyObject_CallFunction(...) { return 0; }
@@ -213,6 +216,7 @@ int PyObject_CallMethod(...) { return 0; }
 int PyObject_CallMethodObjArgs(...) { return 0; }
 int PyObject_CallObject(...) { return 0; }
 int PyObject_Cmp(...) { return 0; }
+int PyObject_Compare(...) { return 0; }
 int PyObject_Free(...) { return 0; }
 int PyObject_GenericGetAttr(...) { return 0; };
 int PyObject_GenericSetAttr(...) { return 0; };

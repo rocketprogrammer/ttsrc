@@ -56,8 +56,11 @@ class ShowBase(DirectObject.DirectObject):
 
     def __init__(self, fStartDirect = True, windowType = None):
         __builtin__.__dev__ = config.GetBool('want-dev', 0)
-        if config.GetBool('want-variable-dump', 0):
-            ExceptionVarDump.install()
+        logStackDump = (config.GetBool('log-stack-dump', 0) or
+                        config.GetBool('client-log-stack-dump', 0))
+        uploadStackDump = config.GetBool('upload-stack-dump', 0)
+        if logStackDump or uploadStackDump:
+            ExceptionVarDump.install(logStackDump, uploadStackDump)
 
         # Locate the directory containing the main program
         self.mainDir = ExecutionEnvironment.getEnvironmentVariable("MAIN_DIR")
@@ -948,25 +951,41 @@ class ShowBase(DirectObject.DirectObject):
         self.a2dRight = aspectRatio
 
         self.a2dTopCenter = self.aspect2d.attachNewNode("a2dTopCenter")
+        self.a2dTopCenterNs = self.aspect2d.attachNewNode("a2dTopCenterNS")
         self.a2dBottomCenter = self.aspect2d.attachNewNode("a2dBottomCenter")
+        self.a2dBottomCenterNs = self.aspect2d.attachNewNode("a2dBottomCenterNS")
         self.a2dLeftCenter = self.aspect2d.attachNewNode("a2dLeftCenter")
+        self.a2dLeftCenterNs = self.aspect2d.attachNewNode("a2dLeftCenterNS")
         self.a2dRightCenter = self.aspect2d.attachNewNode("a2dRightCenter")
+        self.a2dRightCenterNs = self.aspect2d.attachNewNode("a2dRightCenterNS")
 
         self.a2dTopLeft = self.aspect2d.attachNewNode("a2dTopLeft")
+        self.a2dTopLeftNs = self.aspect2d.attachNewNode("a2dTopLeftNS")
         self.a2dTopRight = self.aspect2d.attachNewNode("a2dTopRight")
+        self.a2dTopRightNs = self.aspect2d.attachNewNode("a2dTopRightNS")
         self.a2dBottomLeft = self.aspect2d.attachNewNode("a2dBottomLeft")
+        self.a2dBottomLeftNs = self.aspect2d.attachNewNode("a2dBottomLeftNS")
         self.a2dBottomRight = self.aspect2d.attachNewNode("a2dBottomRight")
+        self.a2dBottomRightNs = self.aspect2d.attachNewNode("a2dBottomRightNS")
 
         # Put the nodes in their places
         self.a2dTopCenter.setPos(0, 0, self.a2dTop)
+        self.a2dTopCenterNs.setPos(0, 0, self.a2dTop)
         self.a2dBottomCenter.setPos(0, 0, self.a2dBottom)
+        self.a2dBottomCenterNs.setPos(0, 0, self.a2dBottom)
         self.a2dLeftCenter.setPos(self.a2dLeft, 0, 0)
+        self.a2dLeftCenterNs.setPos(self.a2dLeft, 0, 0)
         self.a2dRightCenter.setPos(self.a2dRight, 0, 0)
+        self.a2dRightCenterNs.setPos(self.a2dRight, 0, 0)
 
         self.a2dTopLeft.setPos(self.a2dLeft, 0, self.a2dTop)
+        self.a2dTopLeftNs.setPos(self.a2dLeft, 0, self.a2dTop)
         self.a2dTopRight.setPos(self.a2dRight, 0, self.a2dTop)
+        self.a2dTopRightNs.setPos(self.a2dRight, 0, self.a2dTop)
         self.a2dBottomLeft.setPos(self.a2dLeft, 0, self.a2dBottom)
+        self.a2dBottomLeftNs.setPos(self.a2dLeft, 0, self.a2dBottom)
         self.a2dBottomRight.setPos(self.a2dRight, 0, self.a2dBottom)
+        self.a2dBottomRightNs.setPos(self.a2dRight, 0, self.a2dBottom)
         
         # This special root, pixel2d, uses units in pixels that are relative
         # to the window. The upperleft corner of the window is (0, 0),
@@ -1704,7 +1723,53 @@ class ShowBase(DirectObject.DirectObject):
         throwNewFrame()
         return Task.cont
 
-    def restart(self):
+
+    def __igLoopSync(self, state):
+        # We render the watch variables for the onScreenDebug as soon
+        # as we reasonably can before the renderFrame().
+        onScreenDebug.render()
+
+        if self.recorder:
+            self.recorder.recordFrame()
+
+
+        self.cluster.collectData()
+
+        # Finally, render the frame.
+        self.graphicsEngine.renderFrame()
+        if self.clusterSyncFlag:
+            self.graphicsEngine.syncFrame()
+        if self.multiClientSleep:
+            time.sleep(0)
+
+        # We clear the text buffer for the onScreenDebug as soon
+        # as we reasonably can after the renderFrame().
+        onScreenDebug.clear()
+
+        if self.recorder:
+            self.recorder.playFrame()
+
+        if self.mainWinMinimized:
+            # If the main window is minimized, slow down the app a bit
+            # by sleeping here in igLoop so we don't use all available
+            # CPU needlessly.
+
+            # Note: this isn't quite right if multiple windows are
+            # open.  We should base this on whether *all* windows are
+            # minimized, not just the main window.  But it will do for
+            # now until someone complains.
+            time.sleep(0.1)
+
+        self.graphicsEngine.readyFlip()
+        self.cluster.waitForFlipCommand()
+        self.graphicsEngine.flipFrame()
+
+        # Lerp stuff needs this event, and it must be generated in
+        # C++, not in Python.
+        throwNewFrame()
+        return Task.cont    
+
+    def restart(self,clusterSync=False,cluster=None):
         self.shutdown()
         # __resetPrevTransform goes at the very beginning of the frame.
         self.taskMgr.add(
@@ -1723,7 +1788,11 @@ class ShowBase(DirectObject.DirectObject):
         
         # give the igLoop task a reasonably "late" priority,
         # so that it will get run after most tasks
-        self.taskMgr.add(self.__igLoop, 'igLoop', priority = 50)
+        self.cluster = cluster
+        if (not clusterSync or (cluster == None)):
+            self.taskMgr.add(self.__igLoop, 'igLoop', priority = 50)
+        else:
+            self.taskMgr.add(self.__igLoopSync, 'igLoop', priority = 50)
         # the audioLoop updates the positions of 3D sounds.
         # as such, it needs to run after the cull traversal in the igLoop.
         self.taskMgr.add(self.__audioLoop, 'audioLoop', priority = 60)
@@ -2359,7 +2428,7 @@ class ShowBase(DirectObject.DirectObject):
         t.frameIndex = 0  # Frame 0 is not captured.
         t.numFrames = int(duration * fps)
         t.source = source
-        t.outputString = namePrefix + '_%0' + `sd` + 'd.' + format
+        t.outputString = namePrefix + '_%0' + repr(sd) + 'd.' + format
         t.setUponDeath(lambda state: globalClock.setMode(ClockObject.MNormal))
 
     def _movieTask(self, state):
@@ -2440,6 +2509,7 @@ class ShowBase(DirectObject.DirectObject):
                         self.a2dpLeft = -aspectRatio
                         self.a2dpRight = aspectRatio                        
 
+
                     # Reposition the aspect2d marker nodes
                     self.a2dTopCenter.setPos(0, 0, self.a2dTop)
                     self.a2dBottomCenter.setPos(0, 0, self.a2dBottom)
@@ -2449,6 +2519,16 @@ class ShowBase(DirectObject.DirectObject):
                     self.a2dTopRight.setPos(self.a2dRight, 0, self.a2dTop)
                     self.a2dBottomLeft.setPos(self.a2dLeft, 0, self.a2dBottom)
                     self.a2dBottomRight.setPos(self.a2dRight, 0, self.a2dBottom)
+
+                    # Reposition the aspect2d marker nodes
+                    self.a2dTopCenterNs.setPos(0, 0, self.a2dTop)
+                    self.a2dBottomCenterNs.setPos(0, 0, self.a2dBottom)
+                    self.a2dLeftCenterNs.setPos(self.a2dLeft, 0, 0)
+                    self.a2dRightCenterNs.setPos(self.a2dRight, 0, 0)                    
+                    self.a2dTopLeftNs.setPos(self.a2dLeft, 0, self.a2dTop)
+                    self.a2dTopRightNs.setPos(self.a2dRight, 0, self.a2dTop)
+                    self.a2dBottomLeftNs.setPos(self.a2dLeft, 0, self.a2dBottom)
+                    self.a2dBottomRightNs.setPos(self.a2dRight, 0, self.a2dBottom)                    
 
                     # Reposition the aspect2dp marker nodes
                     self.a2dpTopCenter.setPos(0, 0, self.a2dpTop)
@@ -2506,6 +2586,9 @@ class ShowBase(DirectObject.DirectObject):
 
     def getRepository(self):
         return None
+
+    def getAxes(self):
+        return loader.loadModel("models/misc/xyzAxis.bam")
 
     def __doStartDirect(self):
         if self.__directStarted:

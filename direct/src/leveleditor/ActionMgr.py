@@ -51,6 +51,7 @@ class ActionBase(Functor):
     def _do__call__(self, *args, **kargs):
         self.saveStatus()
         self.result = Functor._do__call__(self, *args, **kargs)
+        self.postCall()
         return self.result
 
     def redo(self):
@@ -59,6 +60,10 @@ class ActionBase(Functor):
 
     def saveStatus(self):
         # save object status for undo here
+        pass
+
+    def postCall(self):
+        # implement post process here
         pass
         
     def undo(self):
@@ -73,6 +78,11 @@ class ActionAddNewObj(ActionBase):
         ActionBase.__init__(self, function, *args, **kargs)
         self.uid = None
 
+    def postCall(self):
+        obj = self.editor.objectMgr.findObjectByNodePath(self.result)
+        if obj:
+            self.uid = obj[OG.OBJ_UID]
+
     def redo(self):
         if self.uid is None:
             print "Can't redo this add"        
@@ -85,12 +95,18 @@ class ActionAddNewObj(ActionBase):
             print "Can't undo this add"
         else:
             print "Undo: addNewObject"
-            obj = self.editor.objectMgr.findObjectByNodePath(self.result)
-            self.uid = obj[OG.OBJ_UID]
-            self.editor.ui.sceneGraphUI.delete(self.uid)
-            base.direct.deselect(self.result)
-            base.direct.removeNodePath(self.result)
-            self.result = None
+            if self.uid:
+                obj = self.editor.objectMgr.findObjectById(self.uid)
+            else:
+                obj = self.editor.objectMgr.findObjectByNodePath(self.result)
+            if obj:
+                self.uid = obj[OG.OBJ_UID]
+                self.editor.ui.sceneGraphUI.delete(self.uid)
+                base.direct.deselect(obj[OG.OBJ_NP])
+                base.direct.removeNodePath(obj[OG.OBJ_NP])
+                self.result = None
+            else:
+                print "Can't undo this add"
 
 class ActionDeleteObj(ActionBase):
     """ Action class for deleting object """
@@ -146,8 +162,8 @@ class ActionDeleteObj(ActionBase):
                                                    uid,
                                                    obj[OG.OBJ_MODEL],
                                                    parentNP)
-                self.editor.objectMgr.updateObjectColor(objRGBA[0], objRGBA[1], objRGBA[2], objRGBA[3], uid)
-                self.editor.objectMgr.updateObjectProperties(uid, objProp)
+                self.editor.objectMgr.updateObjectColor(objRGBA[0], objRGBA[1], objRGBA[2], objRGBA[3], objNP)
+                self.editor.objectMgr.updateObjectProperties(objNP, objProp)
                 objNP.setMat(self.objTransforms[uid])
 
             while (len(self.hierarchy.keys()) > 0):
@@ -170,6 +186,79 @@ class ActionDeleteObj(ActionBase):
                     self.editor.select(obj[OG.OBJ_NP], fMultiSelect=1, fUndo=0)
 
             self.selecteUIDs = []
+            self.hierarchy = {}
+            self.objInfos = {}            
+
+class ActionDeleteObjById(ActionBase):
+    """ Action class for deleting object """
+
+    def __init__(self, editor, uid):
+        self.editor = editor
+        function = self.editor.objectMgr.removeObjectById
+        self.uid = uid
+        ActionBase.__init__(self, function, self.uid)
+        self.hierarchy = {}
+        self.objInfos = {}
+        self.objTransforms = {}
+
+    def saveStatus(self):
+        def saveObjStatus(uid_np, isUID=False):
+            if isUID:
+                obj = self.editor.objectMgr.findObjectById(uid_np)
+            else:
+                obj = self.editor.objectMgr.findObjectByNodePath(uid_np)                
+            if obj:
+                uid = obj[OG.OBJ_UID]
+                objNP = obj[OG.OBJ_NP]
+                self.objInfos[uid] = obj
+                self.objTransforms[uid] = objNP.getMat()
+                parentNP = objNP.getParent()
+                if parentNP == render:
+                    self.hierarchy[uid] = None
+                else:
+                    parentObj = self.editor.objectMgr.findObjectByNodePath(parentNP)
+                    if parentObj:
+                        self.hierarchy[uid] = parentObj[OG.OBJ_UID]
+
+                for child in objNP.getChildren():
+                    if child.hasTag('OBJRoot'):
+                        saveObjStatus(child)
+
+        saveObjStatus(self.uid, True)
+
+    def undo(self):
+        if len(self.hierarchy.keys()) == 0 or\
+           len(self.objInfos.keys()) == 0:
+            print "Can't undo this deletion"
+        else:
+            print "Undo: deleteObjectById"
+            def restoreObject(uid, parentNP):
+                obj = self.objInfos[uid]
+                objDef = obj[OG.OBJ_DEF]
+                objModel = obj[OG.OBJ_MODEL]
+                objProp = obj[OG.OBJ_PROP]
+                objRGBA = obj[OG.OBJ_RGBA]
+                objNP = self.editor.objectMgr.addNewObject(objDef.name,
+                                                   uid,
+                                                   obj[OG.OBJ_MODEL],
+                                                   parentNP)
+                self.editor.objectMgr.updateObjectColor(objRGBA[0], objRGBA[1], objRGBA[2], objRGBA[3], objNP)
+                self.editor.objectMgr.updateObjectProperties(objNP, objProp)
+                objNP.setMat(self.objTransforms[uid])
+
+            while (len(self.hierarchy.keys()) > 0):
+                for uid in self.hierarchy.keys():
+                    if self.hierarchy[uid] is None:
+                        parentNP = None
+                        restoreObject(uid, parentNP)
+                        del self.hierarchy[uid]
+                    else:
+                        parentObj = self.editor.objectMgr.findObjectById(self.hierarchy[uid])
+                        if parentObj:
+                            parentNP = parentObj[OG.OBJ_NP]
+                            restoreObject(uid, parentNP)
+                            del self.hierarchy[uid]
+
             self.hierarchy = {}
             self.objInfos = {}            
 

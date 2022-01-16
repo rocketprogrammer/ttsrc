@@ -35,6 +35,7 @@ PUBLISHED:
   static string get_version_string();
   static string get_package_version_string();
   static string get_package_host_url();
+  static string get_p3d_coreapi_version_string();
 
   static int get_major_version();
   static int get_minor_version();
@@ -67,6 +68,9 @@ PUBLISHED:
 private:
   void reset_system_names();
 
+  void set_package_version_string(const string &package_version_string);
+  void set_package_host_url(const string &package_host_url);
+
   typedef pmap<string, string> SystemTags;
   typedef pmap<string, SystemTags> Systems;
   typedef pvector<string> SystemNames;
@@ -74,6 +78,9 @@ private:
   Systems _systems;
   SystemNames _system_names;
   bool _system_names_dirty;
+
+  string _package_version_string;
+  string _package_host_url;
 
   static PandaSystem *_global_ptr;
 
@@ -87,6 +94,8 @@ public:
 
 private:
   static TypeHandle _type_handle;
+
+  friend class ConfigPageManager;
 };
 
 inline ostream &operator << (ostream &out, const PandaSystem &ps) {

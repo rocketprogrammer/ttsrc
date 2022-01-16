@@ -5,10 +5,11 @@ LevelEditor, ObjectHandler, ObjectPalette should be rewritten
 to be game specific.
 """
 
+from LevelEditorUI import *
 from LevelEditorBase import *
+from ObjectMgr import *
 from ObjectHandler import *
 from ObjectPalette import *
-from LevelEditorUI import *
 from ProtoPalette import *
 
 class LevelEditor(LevelEditorBase):
@@ -21,13 +22,22 @@ class LevelEditor(LevelEditorBase):
 
         # If you have your own ObjectPalette and ObjectHandler
         # connect them in your own LevelEditor class
+        self.objectMgr = ObjectMgr(self)
         self.objectPalette = ObjectPalette()
         self.objectHandler = ObjectHandler(self)
         self.protoPalette = ProtoPalette()
 
-        # LevelEditorUI class must declared after ObjectPalette
+        # Populating uderlined data-structures
         self.ui = LevelEditorUI(self)
-        
+        self.ui.SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
+        self.objectPalette.populate()
+        self.protoPalette.populate()
+
+        # Updating UI-panels based on the above data
+        self.ui.objectPaletteUI.populate()
+        self.ui.protoPaletteUI.populate()
+
         # When you define your own LevelEditor class inheriting LevelEditorBase
         # you should call self.initialize() at the end of __init__() function
         self.initialize()
+        self.ui.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))

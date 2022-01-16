@@ -1,3 +1,4 @@
+
 """Undocumented Module"""
 
 __all__ = ['enumerate', 'unique', 'indent', 'nonRepeatingRandomList',
@@ -11,7 +12,7 @@ __all__ = ['enumerate', 'unique', 'indent', 'nonRepeatingRandomList',
 'closestDestAngle2', 'closestDestAngle', 'binaryRepr', 'profileFunc',
 'profiled', 'startProfile', 'printProfile', 'getSetterName',
 'getSetter', 'Functor', 'Stack', 'Queue', 'ParamObj', 
-'POD', 'bound', 'lerp', 'average', 'addListsByValue',
+'POD', 'bound', 'clamp', 'lerp', 'clerp', 'triglerp', 'average', 'addListsByValue',
 'boolEqual', 'lineupPos', 'formatElapsedSeconds', 'solveQuadratic',
 'stackEntryInfo', 'lineInfo', 'callerInfo', 'lineTag',
 'findPythonModule', 'describeException', 'mostDerivedLast',
@@ -32,7 +33,7 @@ __all__ = ['enumerate', 'unique', 'indent', 'nonRepeatingRandomList',
 'pandaBreak','pandaTrace','formatTimeCompact','DestructiveScratchPad',
 'deeptype','getProfileResultString','StdoutCapture','StdoutPassthrough',
 'Averager', 'getRepository', 'formatTimeExact', 'startSuperLog', 'endSuperLog',
-'typeName', 'safeTypeName', 'histogramDict', 'unescapeHtmlString', ]
+'typeName', 'safeTypeName', 'histogramDict', 'unescapeHtmlString', 'bpdb', ]
 
 import types
 import string
@@ -46,6 +47,7 @@ import random
 import time
 import new
 import gc
+import bisect
 #if __debug__:
 import traceback
 import __builtin__
@@ -53,7 +55,10 @@ from StringIO import StringIO
 import marshal
 import ElementTree as ET
 from HTMLParser import HTMLParser
+import BpDb
 import unicodedata
+
+__report_indent = 3
 
 from direct.directutil import Verify
 # Don't import libpandaexpressModules, which doesn't get built until
@@ -317,7 +322,7 @@ def traceFunctionCall(frame):
     if co.co_flags & 4: n = n+1
     if co.co_flags & 8: n = n+1
     r=''
-    if dict.has_key('self'):
+    if 'self' in dict:
         r = '%s.'%(dict['self'].__class__.__name__,)
     r+="%s("%(f.f_code.co_name,)
     comma=0 # formatting, whether we should type a comma.
@@ -332,7 +337,7 @@ def traceFunctionCall(frame):
             comma=1
         r+=name
         r+='='
-        if dict.has_key(name):
+        if name in dict:
             v=safeRepr(dict[name])
             if len(v)>2000:
                 # r+="<too big for debug>"
@@ -508,13 +513,13 @@ def _pdir(obj, str = None, width = None,
         keys = aproposKeys + privateKeys + remainingKeys
     else:
         keys = aproposKeys + remainingKeys
-    format = '%-' + `maxWidth` + 's'
+    format = '%-' + repr(maxWidth) + 's'
     for key in keys:
         value = dict[key]
         if callable(value):
-            strvalue = `Signature(value)`
+            strvalue = repr(Signature(value))
         else:
-            strvalue = `value`
+            strvalue = repr(value)
         if fTruncate:
             # Cut off line (keeping at least 1 char)
             strvalue = strvalue[:max(1, lineWidth - maxWidth)]
@@ -570,7 +575,7 @@ def _getcode(f):
     try:
         return codedict[type(f)](f)
     except KeyError:
-        if callable(f): # eg, built-in functions and methods
+        if hasattr(f, '__call__'): # eg, built-in functions and methods
             # raise ValueError, "type %s not supported yet." % type(f)
             return f.__name__, None
         else:
@@ -600,9 +605,9 @@ class Signature:
     def full_arglist(self):
         base = list(self.ordinary_args())
         x = self.special_args()
-        if x.has_key('positional'):
+        if 'positional' in x:
             base.append(x['positional'])
-        if x.has_key('keyword'):
+        if 'keyword' in x:
             base.append(x['keyword'])
         return base
     def defaults(self):
@@ -621,13 +626,13 @@ class Signature:
             specials = self.special_args()
             l = []
             for arg in self.ordinary_args():
-                if defaults.has_key(arg):
+                if arg in defaults:
                     l.append(arg + '=' + str(defaults[arg]))
                 else:
                     l.append(arg)
-            if specials.has_key('positional'):
+            if 'positional' in specials:
                 l.append('*' + specials['positional'])
-            if specials.has_key('keyword'):
+            if 'keyword' in specials:
                 l.append('**' + specials['keyword'])
             return "%s(%s)" % (self.name, string.join(l, ', '))
         else:
@@ -1433,12 +1438,12 @@ class ParamObj:
         def getDefaultValue(cls, param):
             cls._compileDefaultParams()
             dv = cls._Params[param]
-            if callable(dv):
+            if hasattr(dv, '__call__'):
                 dv = dv()
             return dv
         @classmethod
         def _compileDefaultParams(cls):
-            if cls.__dict__.has_key('_Params'):
+            if '_Params' in cls.__dict__:
                 # we've already compiled the defaults for this class
                 return
             bases = list(cls.__bases__)
@@ -1448,7 +1453,7 @@ class ParamObj:
             for c in (bases + [cls]):
                 # make sure this base has its dict of param defaults
                 c._compileDefaultParams()
-                if c.__dict__.has_key('Params'):
+                if 'Params' in c.__dict__:
                     # apply this class' default param values to our dict
                     cls._Params.update(c.Params)
         def __repr__(self):
@@ -1779,16 +1784,16 @@ class POD:
         # as the default value itself; we need a way to specify that the
         # callable *is* the default value and not a default-value creation
         # function
-        if callable(dv):
+        if hasattr(dv, '__call__'):
             dv = dv()
         return dv
     @classmethod
     def _compileDefaultDataSet(cls):
-        if cls.__dict__.has_key('_DataSet'):
+        if '_DataSet' in cls.__dict__:
             # we've already compiled the defaults for this class
             return
         # create setters & getters for this class
-        if cls.__dict__.has_key('DataSet'):
+        if 'DataSet' in cls.__dict__:
             for name in cls.DataSet:
                 setterName = getSetterName(name)
                 if not hasattr(cls, setterName):
@@ -1870,6 +1875,7 @@ def bound(value, bound1, bound2):
         return min(max(value, bound2), bound1)
     else:
         return min(max(value, bound1), bound2)
+clamp = bound
 
 def lerp(v0, v1, t):
     """
@@ -1877,6 +1883,21 @@ def lerp(v0, v1, t):
     t == 0 maps to v0, t == 1 maps to v1
     """
     return v0 + ((v1 - v0) * t)
+
+def clerp(v0, v1, t):
+    """
+    cubic lerp
+    """
+    x = t*t
+    return lerp(v0, v1, (3. * x) - (2. * t * x))
+
+def triglerp(v0, v1, t):
+    """
+    lerp using the curve of sin(-pi/2) -> sin(pi/2)
+    """
+    x = lerp(-math.pi/2, math.pi/2, t)
+    v = math.sin(x)
+    return lerp(v0, v1, (v + 1.) / 2.)
 
 def getShortestRotation(start, end):
     """
@@ -2455,7 +2476,7 @@ def printListEnumGen(l):
     n = len(l)
     while n > 0:
         digits += 1
-        n /= 10
+        n //= 10
     format = '%0' + '%s' % digits + 'i:%s'
     for i in range(len(l)):
         print format % (i, l[i])
@@ -2481,6 +2502,7 @@ def _getSafeReprNotify():
     global safeReprNotify
     from direct.directnotify.DirectNotifyGlobal import directNotify
     safeReprNotify = directNotify.newCategory("safeRepr")
+    return safeReprNotify
 
 def safeRepr(obj):
     global dtoolSuperBase
@@ -2581,6 +2603,159 @@ def fastRepr(obj, maxLen=200, strFactor=10, _visitedIds=None):
     except:
         return '<** FAILED REPR OF %s **>' % obj.__class__.__name__
 
+baseLine = {}
+
+def baseLineCheck():
+    global baseLine
+    import gc
+    obj = gc.get_objects()
+    baseLine = {}
+    for i in obj:
+        baseLine[str(itype(i))] = 0
+    for i in obj:
+        baseLine[str(itype(i))] += 1
+
+def diffSinceBaseLine():
+    import copy
+    import gc
+    obj = gc.get_objects()    
+    since = copy.deepcopy(baseLine)
+    for i in obj:
+        since.setdefault(str(itype(i)), 0)
+    for i in obj:
+        since[str(itype(i))] -= 1
+    for i in since.keys():
+        if not since[i]:
+            del since[i]
+        else:
+            since[i] = abs(since[i])
+
+    final = [(since[x],x) for x in since]
+    final.sort()
+    final.reverse()
+    for i in final:
+        print i
+
+    final = []
+    since = []
+
+
+# Recursively expand slist's objects
+# into olist, using seen to track
+# already processed objects.
+def _getr(slist, olist, seen):
+  for e in slist:
+    if id(e) in seen:
+      continue
+    seen[id(e)] = None
+    olist.append(e)
+    tl = gc.get_referents(e)
+    if tl:
+      _getr(tl, olist, seen)
+
+# The public function.
+def get_all_objects():
+  """Return a list of all live Python
+  objects, not including the list itself."""
+  gcl = gc.get_objects()
+  olist = []
+  seen = {}
+  # Just in case:
+  seen[id(gcl)] = None
+  seen[id(olist)] = None
+  seen[id(seen)] = None
+  # _getr does the real work.
+  _getr(gcl, olist, seen)
+  return olist    
+
+def getIdList():
+    baseList = get_all_objects()
+    idList = {}
+    for i in baseList:
+        idList[id(i)] = i
+
+    return idList
+
+
+ftype = None
+
+def getTree(obj):
+    global ftype
+    if not ftype:
+        ftype = itype(sys._getframe())
+    objId = id(obj)
+    obj = None
+    idList = getIdList()
+    objList = [objId]
+    objTree = {objId:{}}
+    r_add_chain(objId, objList, objTree[objId], idList, 0 )
+    
+    return convertTree(objTree, idList)
+
+def convertTree(objTree, idList):
+    newTree = {}
+    for key in objTree.keys():
+        obj = (idList[key],)
+        newTree[obj] = {}
+        r_convertTree(objTree[key], newTree[obj], idList)
+    return newTree
+
+def r_convertTree(oldTree, newTree, idList):
+    for key in oldTree.keys():
+        
+        obj = idList.get(key)
+        if(not obj):
+            continue
+        obj = str(obj)[:100]
+        
+        newTree[obj] = {}
+        r_convertTree(oldTree[key], newTree[obj], idList)        
+
+
+def pretty_print(tree):
+    for name in tree.keys():
+        print name
+        r_pretty_print(tree[name], 0)
+        
+            
+
+def r_pretty_print(tree, num):
+    num+=1
+    for name in tree.keys():
+        print "  "*num,name
+        r_pretty_print(tree[name],num)
+        
+def r_add_chain(objId, objList, objTree, idList, num):
+    num+=1
+    obj = idList.get(objId)
+    if(not obj):
+        return
+    
+    refList = gc.get_referrers(obj)
+    for ref in refList:
+        refId = id(ref)
+        if ref == __builtins__:
+            continue
+        if ref == objList:
+            continue
+        if refId in objList:
+            continue
+        if(ref == idList):
+            continue
+        if(itype(ref) == ftype):
+            continue
+        if(itype(ref) == itype(sys)):
+            continue
+
+        objList.append(refId)
+        
+        objTree[refId] = {}
+    refList = None
+    for refId in objTree:
+        r_add_chain(refId, objList, objTree[refId], idList, num)
+                    
+        
+    
 def tagRepr(obj, tag):
     """adds a string onto the repr output of an instance"""
     def reprWithTag(oldRepr, tag, self):
@@ -2797,7 +2972,7 @@ def getNumberedTypedString(items, maxLen=5000, numPrefix=''):
     n = len(items)
     while n > 0:
         digits += 1
-        n /= 10
+        n //= 10
     digits = digits
     format = numPrefix + '%0' + '%s' % digits + 'i:%s \t%s'
     first = True
@@ -2821,7 +2996,7 @@ def getNumberedTypedSortedString(items, maxLen=5000, numPrefix=''):
     n = len(items)
     while n > 0:
         digits += 1
-        n /= 10
+        n //= 10
     digits = digits
     format = numPrefix + '%0' + '%s' % digits + 'i:%s \t%s'
     snip = '<SNIP>'
@@ -2850,7 +3025,7 @@ def getNumberedTypedSortedStringWithReferrersGen(items, maxLen=10000, numPrefix=
     n = len(items)
     while n > 0:
         digits += 1
-        n /= 10
+        n //= 10
     digits = digits
     format = numPrefix + '%0' + '%s' % digits + 'i:%s @ %s \t%s'
     snip = '<SNIP>'
@@ -2886,7 +3061,7 @@ def printNumberedTyped(items, maxLen=5000):
     n = len(items)
     while n > 0:
         digits += 1
-        n /= 10
+        n //= 10
     digits = digits
     format = '%0' + '%s' % digits + 'i:%s \t%s'
     for i in xrange(len(items)):
@@ -2901,7 +3076,7 @@ def printNumberedTypesGen(items, maxLen=5000):
     n = len(items)
     while n > 0:
         digits += 1
-        n /= 10
+        n //= 10
     digits = digits
     format = '%0' + '%s' % digits + 'i:%s'
     for i in xrange(len(items)):
@@ -2960,6 +3135,8 @@ class FrameDelayedCall:
     def destroy(self):
         self._finished = True
         self._stopTask()
+        self._callback = None
+        self._cancelFunc = None
     def finish(self):
         if not self._finished:
             self._finished = True
@@ -3025,6 +3202,8 @@ class SubframeCall:
         if (self._taskName):
             taskMgr.remove(self._taskName)
             self._taskName = None
+    def isFinished(self):
+        return self._taskName == None
 
 class ArgumentEater:
     def __init__(self, numToEat, func):
@@ -3284,8 +3463,8 @@ def report(types = [], prefix = '', xform = None, notifyFunc = None, dConfigPara
                 rArgs = []
 
             if 'args' in types:
-                rArgs += [`x`+', ' for x in args[1:]] + \
-                         [ x + ' = ' + '%s, ' % `y` for x,y in kwargs.items()]
+                rArgs += [repr(x)+', ' for x in args[1:]] + \
+                         [ x + ' = ' + '%s, ' % repr(y) for x,y in kwargs.items()]
             
             if not rArgs:
                 rArgs = '()'
@@ -3470,7 +3649,7 @@ def logMethodCalls(cls):
         raise 'logMethodCalls: class \'%s\' must have a notify' % cls.__name__
     for name in dir(cls):
         method = getattr(cls, name)
-        if callable(method):
+        if hasattr(method, '__call__'):
             def getLoggedMethodCall(method):
                 def __logMethodCall__(obj, *args, **kArgs):
                     s = '%s(' % method.__name__
@@ -3711,8 +3890,8 @@ class MiniLog:
                ('*'*50, self.name, '-'*50, '\n'.join(self.lines), '*'*50)
     
     def enterFunction(self, funcName, *args, **kw):
-        rArgs = [`x`+', ' for x in args] + \
-                [ x + ' = ' + '%s, ' % `y` for x,y in kw.items()]
+        rArgs = [repr(x)+', ' for x in args] + \
+                [ x + ' = ' + '%s, ' % repr(y) for x,y in kw.items()]
             
         if not rArgs:
             rArgs = '()'
@@ -3776,7 +3955,8 @@ def recordFunctorCreationStacks():
     global Functor
     from pandac.PandaModules import getConfigShowbase
     config = getConfigShowbase()
-    if __dev__ and config.GetBool('record-functor-creation-stacks', 1):
+    # off by default, very slow
+    if __dev__ and config.GetBool('record-functor-creation-stacks', 0):
         if not hasattr(Functor, '_functorCreationStacksRecorded'):
             Functor = recordCreationStackStr(Functor)
             Functor._functorCreationStacksRecorded = True
@@ -3787,13 +3967,13 @@ def formatTimeCompact(seconds):
     result = ''
     a = int(seconds)
     seconds = a % 60
-    a /= 60
+    a //= 60
     if a > 0:
         minutes = a % 60
-        a /= 60
+        a //= 60
         if a > 0:
             hours = a % 24
-            a /= 24
+            a //= 24
             if a > 0:
                 days = a
                 result += '%sd' % days
@@ -3820,13 +4000,13 @@ def formatTimeExact(seconds):
     result = ''
     a = int(seconds)
     seconds = a % 60
-    a /= 60
+    a //= 60
     if a > 0:
         minutes = a % 60
-        a /= 60
+        a //= 60
         if a > 0:
             hours = a % 24
-            a /= 24
+            a //= 24
             if a > 0:
                 days = a
                 result += '%sd' % days
@@ -3964,17 +4144,23 @@ def startSuperLog(customFunction = None):
         def trace_dispatch(a,b,c):
             if(b=='call' and a.f_code.co_name != '?' and a.f_code.co_name.find("safeRepr")<0):
                 vars = dict(a.f_locals)
-                if(vars.has_key('self')):
+                if 'self' in vars:
                     del vars['self']
-                if(vars.has_key('__builtins__')):
+                if '__builtins__' in vars:
                     del vars['__builtins__']
                 for i in vars:
                     vars[i] = safeReprTypeOnFail(vars[i]) 
-                if(customFunction):
-                    superLogFile.write( "before = %s"%customFunction())
+
+                if customFunction:
+                    superLogFile.write( "before = %s\n"%customFunction())
+
                 superLogFile.write( "%s(%s):%s:%s\n"%(a.f_code.co_filename.split("\\")[-1],a.f_code.co_firstlineno, a.f_code.co_name, vars))
-                if(customFunction):
-                    superLogFile.write( "after = %s"%customFunction())
+
+                if customFunction:
+                    superLogFile.write( "after = %s\n"%customFunction())
+
+        
+
                 return trace_dispatch
         sys.settrace(trace_dispatch)
       
@@ -4122,11 +4308,146 @@ if __debug__:
     assert s.c[0].text == 'testComment'
     del s
 
-def u2ascii(str):
-    if type(str) is types.UnicodeType:
-        return unicodedata.normalize('NFKD', str).encode('ascii','ignore')
+def repeatableRepr(obj):
+    if type(obj) is types.DictType:
+        keys = obj.keys()
+        keys.sort()
+        s = '{'
+        for i in xrange(len(keys)):
+            key = keys[i]
+            s += repeatableRepr(key)
+            s += ': '
+            s += repeatableRepr(obj[key])
+            if i < (len(keys)-1):
+                s += ', '
+        s += '}'
+        return s
+    elif type(obj) is type(set()):
+        l = []
+        for item in obj:
+            l.append(item)
+        l.sort()
+        return repeatableRepr(l)
+    return repr(obj)
+
+if __debug__:
+    assert repeatableRepr({1: 'a', 2: 'b'}) == repeatableRepr({2: 'b', 1: 'a'})
+    assert repeatableRepr(set([1,2,3])) == repeatableRepr(set([3,2,1]))
+
+#set up bpdb
+bpdb = BpDb.BpDb()
+def bpdbGetEnabled():
+    enabled = True
+    try:
+        enabled = __dev__
+        enabled = ConfigVariableBool('force-breakpoints', enabled).getValue()
+    finally:
+        return enabled
+bpdb.setEnabledCallback(bpdbGetEnabled)
+bpdb.setConfigCallback(lambda cfg: ConfigVariableBool('want-bp-%s' % (cfg.lower(),), 0).getValue())
+
+def u2ascii(s):
+    # Unicode -> ASCII
+    if type(s) is types.UnicodeType:
+        return unicodedata.normalize('NFKD', s).encode('ascii', 'backslashreplace')
     else:
-        return str
+        return str(s)
+
+def unicodeUtf8(s):
+    # * -> Unicode UTF-8
+    if type(s) is types.UnicodeType:
+        return s
+    else:
+        return unicode(str(s), 'utf-8')
+
+def encodedUtf8(s):
+    # * -> 8-bit-encoded UTF-8
+    return unicodeUtf8(s).encode('utf-8')
+
+class PriorityCallbacks:
+    """ manage a set of prioritized callbacks, and allow them to be invoked in order of priority """
+    TokenGen = SerialNumGen()
+
+    @classmethod
+    def GetToken(cls):
+        return 'pc-%s' % cls.TokenGen.next()
+
+    def __init__(self):
+        self._callbacks = []
+        self._token2item = {}
+
+    def clear(self):
+        while self._callbacks:
+            self._callbacks.pop()
+        self._token2item = {}
+
+    def add(self, callback, priority=None):
+        if priority is None:
+            priority = 0
+        item = (priority, callback)
+        bisect.insort(self._callbacks, item)
+        token = self.GetToken()
+        self._token2item[token] = item
+        return token
+
+    def remove(self, token):
+        item = self._token2item[token]
+        self._callbacks.pop(bisect.bisect_left(self._callbacks, item))
+
+    def __contains__(self, token):
+        return token in self._token2item
+
+    def __call__(self):
+        callbacks = self._callbacks[:]
+        for priority, callback in callbacks:
+            callback()
+
+if __debug__:
+    l = []
+    def a(l=l):
+        l.append('a')
+    def b(l=l):
+        l.append('b')
+    def c(l=l):
+        l.append('c')
+    pc = PriorityCallbacks()
+    pc.add(a)
+    pc()
+    assert l == ['a']
+    while len(l):
+        l.pop()
+    bItem = pc.add(b)
+    pc()
+    assert 'a' in l
+    assert 'b' in l
+    assert len(l) == 2
+    while len(l):
+        l.pop()
+    pc.remove(bItem)
+    pc()
+    assert l == ['a']
+    while len(l):
+        l.pop()
+    pc.add(c, 2)
+    bItem = pc.add(b, 10)
+    pc()
+    assert l == ['a', 'c', 'b']
+    while len(l):
+        l.pop()
+    pc.remove(bItem)
+    pc()
+    assert l == ['a', 'c']
+    while len(l):
+        l.pop()
+    pc.clear()
+    pc()
+    assert len(l) == 0
+    del l
+    del a
+    del b
+    del c
+    del pc
+    del bItem
 
 import __builtin__
 __builtin__.Functor = Functor
@@ -4147,7 +4468,10 @@ __builtin__.itype = itype
 __builtin__.exceptionLogged = exceptionLogged
 __builtin__.appendStr = appendStr
 __builtin__.bound = bound
+__builtin__.clamp = clamp
 __builtin__.lerp = lerp
+__builtin__.clerp = clerp
+__builtin__.triglerp = triglerp
 __builtin__.notNone = notNone
 __builtin__.clampScalar = clampScalar
 __builtin__.makeList = makeList
@@ -4186,4 +4510,8 @@ __builtin__.configIsToday = configIsToday
 __builtin__.typeName = typeName
 __builtin__.safeTypeName = safeTypeName
 __builtin__.histogramDict = histogramDict
+__builtin__.repeatableRepr = repeatableRepr
+__builtin__.bpdb = bpdb
 __builtin__.u2ascii = u2ascii
+__builtin__.unicodeUtf8 = unicodeUtf8
+__builtin__.encodedUtf8 = encodedUtf8

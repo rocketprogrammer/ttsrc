@@ -42,7 +42,7 @@ private:
 
 PUBLISHED:
   BLOCKING bool open_read(const Filename &multifile_name, const streampos &offset = 0);
-  BLOCKING bool open_read(IStreamWrapper *multifile_stream, bool owns_pointer = false);
+  BLOCKING bool open_read(IStreamWrapper *multifile_stream, bool owns_pointer = false, const streampos &offset = 0);
   BLOCKING bool open_write(const Filename &multifile_name);
   BLOCKING bool open_write(ostream *multifile_stream, bool owns_pointer = false);
   BLOCKING bool open_read_write(const Filename &multifile_name);
@@ -205,7 +205,6 @@ private:
   void add_new_subfile(Subfile *subfile, int compression_level);
   istream *open_read_subfile(Subfile *subfile);
   string standardize_subfile_name(const string &subfile_name) const;
-  static bool read_to_pvector(pvector<unsigned char> &result, istream &stream);
 
   void clear_subfiles();
   bool read_index();

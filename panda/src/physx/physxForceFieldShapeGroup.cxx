@@ -32,6 +32,8 @@ link(NxForceFieldShapeGroup *groupPtr) {
   _ptr->userData = this;
   _error_type = ET_ok;
 
+  set_name(groupPtr->getName());
+
   PhysxScene *scene = (PhysxScene *)_ptr->getScene().userData;
   scene->_ffgroups.add(this);
 
@@ -142,7 +144,9 @@ void PhysxForceFieldShapeGroup::
 set_name(const char *name) {
 
   nassertv(_error_type == ET_ok);
-  _ptr->setName(name);
+
+  _name = name ? name : "";
+  _ptr->setName(_name.c_str());
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -66,7 +66,7 @@ add_entry(CollisionEntry *entry) {
 bool CollisionHandlerFluidPusher::
 handle_entries() {
   /*
-    This pusher repeatedly calculates the first collision, calculates a new
+    This pusher repeatedly calculates the earliest collision, calculates a new
     trajectory based on that collision, and repeats until the original motion is
     exhausted or the collider becomes "stuck". This solves the "acute collisions"
     problem where colliders could bounce their way through to the other side
@@ -80,9 +80,15 @@ handle_entries() {
     M = movement vector (PosB - PosA)
     BV = bounding sphere that includes collider at PosA and PosB
     CS = 'collision set', all 'collidables' within BV (collision polys, tubes, etc)
+
+    **** need to track a 'composite collision plane' at each vetted collision event that
+    represents the appropriate deflection given M and what's been collided with
+    no angle of rotation should ever increase relative to plane perpendicular to M
+    2D case is easy: angle relative to perpendicular should never move farther from zero, or cross zero
     
     VARIABLES
     N = movement vector since most recent collision (or start of frame)
+    P = set of collision planes that have already been collided against
     SCS = 'sub collision set', all collidables that could still be collided with
     C = single collider currently being collided with
     PosX = new position given movement along N interrupted by collision with C
@@ -93,11 +99,14 @@ handle_entries() {
     1. N = M, SCS = CS, PosX = PosB
     2. compute, using SCS and N, which collidable C is the first collision
     3. if no collision found, DONE
-    4. if movement in direction M is now blocked, then
+    4. if movement in direction M is now completely blocked, then
        PosX = initial point of contact with C along N, DONE
     5. calculate PosX (and new N) assuming that there will be no more collisions
-    6. remove C from SCS (assumes that you can't collide against a solid more than once per frame)
-    7. go to 2
+    6. calculate new CP based on current CP and C's collision plane
+    7. clip PosX/N against CP
+    8. add C's collision plane to P
+    9. remove C from SCS (assumes that you can't collide against a solid more than once per frame)
+    10. go to 2
   */
   bool okflag = true;
 
@@ -147,6 +156,8 @@ handle_entries() {
       from_node_path.set_pos(wrt_node, 0,0,0);
       LPoint3f sphere_offset = (sphere->get_center() *
                                 from_node_path.get_transform(wrt_node)->get_mat());
+      // TODO: what if scale is non-uniform?
+      const float sphere_radius = sphere->get_radius() * from_node_path.get_scale(wrt_node)[0];
       from_node_path.set_pos(wrt_node, orig_pos);
       
       // this will hold the final calculated position at each iteration
@@ -161,7 +172,11 @@ handle_entries() {
       // unit vector pointing out to the right relative to the direction of motion,
       // looking into the direction of motion
       const LVector3f right_unit(LVector3f::up().cross(reverse_vec));
-      
+
+      int numCollisions = 0;
+
+      PlaneList P;
+
       // iterate until the mover runs out of movement or gets stuck
       while (true) {
         const CollisionEntry *C = 0;
@@ -180,6 +195,8 @@ handle_entries() {
         if (C == 0) {
           break;
         }
+
+        numCollisions++;
         
         // move back to initial contact position
         LPoint3f contact_pos;
@@ -211,7 +228,19 @@ handle_entries() {
         } else {
           // calculate new position given that you collided with this thing
           // project the final position onto the plane of the obstruction
-          candidate_final_pos = uncollided_pos + (norm_proj_surface_normal * push_magnitude);
+          LPoint3f fp(uncollided_pos + (norm_proj_surface_normal * push_magnitude));
+          // make sure we don't push through any of the established collision planes
+          // this should be more clever, this will probably make the collider 'stick' instead of sliding
+          PlaneList::iterator pli = P.begin();
+          while (pli != P.end()) {
+            float t;
+            LVector3f delta(fp - orig_pos);
+            if ((*pli).intersects_line(t, orig_pos, delta)) {
+              fp = orig_pos + (t * delta);
+            }
+            pli++;
+          }
+          candidate_final_pos = fp;
         }
         
         from_node_path.set_pos(wrt_node, candidate_final_pos);
@@ -227,7 +256,11 @@ handle_entries() {
 
         // recalculate the position delta
         N = from_node_path.get_pos_delta(wrt_node);
-        
+
+        LPoint3f norm_contact_normal(contact_normal);
+        norm_contact_normal.normalize();
+        P.push_back(Planef(contact_normal, contact_pos + (norm_contact_normal * sphere_radius)));
+
         // calculate new collisions given new movement vector
         Entries::iterator ei;
         Entries new_entries;

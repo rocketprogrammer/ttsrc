@@ -24,7 +24,8 @@
 void PhysxShapeDesc::
 set_name(const char *name) {
 
-  ptr()->name = name;
+  _name = name ? name : "";
+  ptr()->name = _name.c_str();
 }
 
 ////////////////////////////////////////////////////////////////////

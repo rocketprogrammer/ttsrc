@@ -70,6 +70,7 @@
 #include <maya/MFnAnimCurve.h>
 #include <maya/MFnNurbsSurface.h>
 #include <maya/MFnEnumAttribute.h>
+#include <maya/MFnSet.h>
 #include "post_maya_include.h"
 
 #include "mayaEggLoader.h"
@@ -130,6 +131,10 @@ public:
 
   void ParseFrameInfo(string comment);
   void PrintData(MayaEggMesh *mesh);
+
+private:
+  int _unnamed_idx;
+  MSelectionList _collision_nodes;
 };
 
 MPoint MakeMPoint(const LVector3d &vec)
@@ -352,6 +357,9 @@ MayaEggGroup *MayaEggLoader::MakeGroup(EggGroup *group, EggGroup *context)
   result->_name = group->get_name();
   result->_group = dgn.create("transform", MString(result->_name.c_str()), parent, &status);
   result->_addedEggFlag = false;
+
+  if (group->get_cs_type() != EggGroup::CST_none)
+    _collision_nodes.add(result->_group, true);
 
   if (group->has_transform3d()) {
     LMatrix4d tMat = group->get_transform3d();
@@ -748,9 +756,12 @@ int MayaEggGeom::GetVert(EggVertex *vert, EggGroup *context)
 {
   MayaEggVertex vtx;
   vtx._sumWeights = 0.0;
-  vtx._pos = vert->get_pos3();
+
+  const LMatrix4d &xform = context->get_vertex_to_node();
+
+  vtx._pos = vert->get_pos3() * xform;
   if (vert->has_normal()) {
-    vtx._normal = vert->get_normal();
+    vtx._normal = vert->get_normal() * xform;
   }
   if (vert->has_uv()) {
     vtx._uv = vert->get_uv();
@@ -777,7 +788,7 @@ int MayaEggGeom::GetVert(EggVertex *vert, EggGroup *context)
   if (vtx._weights.size()==0) {
     if (context != 0) {
       vtx._weights.push_back(MayaEggWeight(1.0, context));
-      vtx._sumWeights == 1.0; // [gjeon] to be used in normalizing weights
+      vtx._sumWeights = 1.0; // [gjeon] to be used in normalizing weights
     }
     //remaining_weight = 0.0;
   }/* else {
@@ -1361,7 +1372,7 @@ void MayaEggLoader::TraverseEggNode(EggNode *node, EggGroup *context, string del
   vector<int> cvertIndices;
   
   string delstring = " ";
-  
+
   if (node->is_of_type(EggPolygon::get_class_type())) {
     /*
     if (mayaloader_cat.is_debug()) {
@@ -1566,6 +1577,19 @@ void MayaEggLoader::TraverseEggNode(EggNode *node, EggGroup *context, string del
     EggGroupNode *group = DCAST(EggGroupNode, node);
     if (node->is_of_type(EggGroup::get_class_type())) {
       EggGroup *group = DCAST(EggGroup, node);
+
+      if (group->get_name() == "") {
+        ostringstream stream;
+        stream << _unnamed_idx;
+        group->set_name("unnamed" + stream.str());
+        _unnamed_idx++;
+      }
+
+      string group_name = group->get_name();
+      size_t found = group_name.find(":");
+      if (found != string::npos)
+        group->set_name(group_name.replace(int(found), 1, "_"));
+
       string parent_name = "";
       if (context)
         parent_name = context->get_name();
@@ -1621,6 +1645,7 @@ bool MayaEggLoader::ConvertEggData(EggData *data, bool merge, bool model, bool a
   _end_frame = 0;
   _frame_rate = 24;
   _timeUnit = MTime::kFilm;
+  _unnamed_idx = 1;
 
   MeshTable::const_iterator ci;
   JointTable::const_iterator ji;
@@ -1640,6 +1665,10 @@ bool MayaEggLoader::ConvertEggData(EggData *data, bool merge, bool model, bool a
   TraverseEggNode(data, NULL, "");
   
   MStatus status;
+
+  MFnSet collision_set;
+  collision_set.create(_collision_nodes, MFnSet::kNone, &status);
+
   if (mayaloader_cat.is_spam()) {
     mayaloader_cat.spam() << "num meshes : " << _mesh_tab.size() << endl;
   }

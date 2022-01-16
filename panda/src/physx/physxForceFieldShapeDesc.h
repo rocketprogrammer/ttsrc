@@ -44,8 +44,12 @@ PUBLISHED:
 public:
   virtual NxForceFieldShapeDesc *ptr() const = 0;
 
+private:
+  string _name;
+
 protected:
   INLINE PhysxForceFieldShapeDesc();
+  INLINE ~PhysxForceFieldShapeDesc();
 };
 
 #include "physxForceFieldShapeDesc.I"

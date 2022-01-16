@@ -191,7 +191,7 @@ P3DInstanceManager::
 ////////////////////////////////////////////////////////////////////
 bool P3DInstanceManager::
 initialize(int api_version, const string &contents_filename, 
-           const string &host_url, bool verify_contents,
+           const string &host_url, P3D_verify_contents verify_contents,
            const string &platform, const string &log_directory,
            const string &log_basename, bool trusted_environment,
            bool console_environment, const string &root_dir) {
@@ -261,12 +261,11 @@ initialize(int api_version, const string &contents_filename,
   create_runtime_environment();
   _is_initialized = true;
 
-  if (!_verify_contents &&
-      !host_url.empty() && !contents_filename.empty()) {
+  if (!host_url.empty() && !contents_filename.empty()) {
     // Attempt to pre-read the supplied contents.xml file, to avoid an
     // unnecessary download later.
     P3DHost *host = get_host(host_url);
-    if (!host->read_contents_file(contents_filename)) {
+    if (!host->read_contents_file(contents_filename, false)) {
       nout << "Couldn't read " << contents_filename << "\n";
     }
   }
@@ -284,15 +283,44 @@ void P3DInstanceManager::
 set_plugin_version(int major, int minor, int sequence,
                    bool official, const string &distributor,
                    const string &coreapi_host_url,
-                   time_t coreapi_timestamp) {
+                   time_t coreapi_timestamp,
+                   const string &coreapi_set_ver) {
   reconsider_runtime_environment();
   _plugin_major_version = major;
   _plugin_minor_version = minor;
   _plugin_sequence_version = sequence;
   _plugin_official_version = official;
   _plugin_distributor = distributor;
+
+  // The Core API "host URL" is both compiled in, and comes in
+  // externally; we trust the external source in the case of a
+  // conflict.
+  string internal_host_url = PANDA_PACKAGE_HOST_URL;
+  if (coreapi_host_url != internal_host_url) {
+    nout << "Warning!  Downloaded Core API from " << coreapi_host_url
+         << ", but its internal URL was " << internal_host_url << "\n";
+  }
   _coreapi_host_url = coreapi_host_url;
+  if (_coreapi_host_url.empty()) {
+    _coreapi_host_url = internal_host_url;
+  }
+
+  // The Core API timestamp is only available externally.
   _coreapi_timestamp = coreapi_timestamp;
+
+  // The Core API "set ver", or version, is both compiled in and comes
+  // in externally; for this one we trust the internal version in the
+  // case of a conflict.
+  string internal_set_ver = P3D_COREAPI_VERSION_STR;
+  if (coreapi_set_ver != internal_set_ver && !coreapi_set_ver.empty() && !internal_set_ver.empty()) {
+    nout << "Warning!  contents.xml reports Core API version number "
+         << coreapi_set_ver << ", but its actual version number is " 
+         << internal_set_ver << "\n";
+  }
+  _coreapi_set_ver = internal_set_ver;
+  if (_coreapi_set_ver.empty()) {
+    _coreapi_set_ver = coreapi_set_ver;
+  }
 
   nout << "Plugin version: "
        << _plugin_major_version << "."
@@ -304,7 +332,13 @@ set_plugin_version(int major, int minor, int sequence,
   nout << "\n";
   nout << "Plugin distributor: " << _plugin_distributor << "\n";
   nout << "Core API host URL: " <<  _coreapi_host_url << "\n";
-  nout << "Core API date: " << ctime(&_coreapi_timestamp) << "\n";
+  nout << "Core API version: " << _coreapi_set_ver << "\n";
+
+  const char *timestamp_string = ctime(&_coreapi_timestamp);
+  if (timestamp_string == NULL) {
+    timestamp_string = "";
+  }
+  nout << "Core API date: " << timestamp_string << "\n";
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1350,6 +1384,7 @@ create_runtime_environment() {
        << ", host_url = " << _host_url
        << ", verify_contents = " << _verify_contents
        << "\n";
+  nout << "api_version = " << _api_version << "\n";
 
   // Make the certificate directory.
   _certs_dir = _root_dir + "/certs";

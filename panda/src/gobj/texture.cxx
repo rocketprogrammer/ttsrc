@@ -1,5 +1,6 @@
 // Filename: texture.cxx
 // Created by:  mike (09Jan97)
+// Updated by: fperazzi, PandaSE(29Apr10) (added TT_2d_texture_array)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -193,6 +194,10 @@ Texture(const string &name) :
   _x_size = 0;
   _y_size = 1;
   _z_size = 1;
+  // Set it to something else first to
+  // avoid the check in do_set_format
+  // depending on an uninitialised value
+  _format = F_rgba;
   do_set_format(F_rgb);
   do_set_component_type(T_unsigned_byte);
 
@@ -227,8 +232,6 @@ Texture(const Texture &copy) :
   _cvar(_lock)
 {
   _reloading = false;
-  _has_read_pages = false;
-  _has_read_mipmaps = false;
   _num_mipmap_levels_read = 0;
 
   operator = (copy);
@@ -610,6 +613,9 @@ estimate_texture_memory() const {
     break;
   case Texture::F_rgba32:
     bpp = 16;
+    break;
+
+  default:
     break;
   }
 
@@ -1357,7 +1363,11 @@ write(ostream &out, int indent_level) const {
   case TT_3d_texture:
     out << "3-d, " << _x_size << " x " << _y_size << " x " << _z_size;
     break;
-
+  
+  case TT_2d_texture_array:
+    out << "2-d array, " << _x_size << " x " << _y_size << " x " << _z_size;
+    break;
+  
   case TT_cube_map:
     out << "cube map, " << _x_size << " x " << _y_size;
     break;
@@ -1377,6 +1387,9 @@ write(ostream &out, int indent_level) const {
   case T_float:
     out << " floats";
     break;
+
+  default:
+    break;
   }
 
   out << ", ";
@@ -1389,6 +1402,15 @@ write(ostream &out, int indent_level) const {
     break;
   case F_depth_component:
     out << "depth_component";
+    break;
+  case F_depth_component16:
+    out << "depth_component16";
+    break;
+  case F_depth_component24:
+    out << "depth_component24";
+    break;
+  case F_depth_component32:
+    out << "depth_component32";
     break;
 
   case F_rgba:
@@ -1475,6 +1497,10 @@ write(ostream &out, int indent_level) const {
     out << _wrap_u << " x " << _wrap_v << " x " << _wrap_w << ", ";
     break;
 
+  case TT_2d_texture_array:
+    out << _wrap_u << " x " << _wrap_v << " x " << _wrap_w << ", ";
+    break;
+  
   case TT_cube_map:
     break;
   }
@@ -2761,6 +2787,12 @@ do_read_dds(istream &in, const string &filename, bool header_only) {
           header.pf.b_mask == 0x000000ff &&
           header.pf.a_mask == 0xff000000U) {
         func = read_dds_level_rgba8;
+
+      } else if (header.pf.r_mask != 0 && 
+                 header.pf.g_mask == 0 && 
+                 header.pf.b_mask == 0) {
+        func = read_dds_level_luminance_uncompressed;
+        format = F_luminance_alpha;
       }
     } else {
       // An uncompressed format that doesn't involve alpha.
@@ -2774,8 +2806,15 @@ do_read_dds(istream &in, const string &filename, bool header_only) {
                  header.pf.g_mask == 0x0000ff00 &&
                  header.pf.b_mask == 0x00ff0000) {
         func = read_dds_level_rgb8;
+
+      } else if (header.pf.r_mask != 0 && 
+                 header.pf.g_mask == 0 && 
+                 header.pf.b_mask == 0) {
+        func = read_dds_level_luminance_uncompressed;
+        format = F_luminance;
       }
     }
+      
   }
 
   do_setup_texture(texture_type, header.width, header.height, header.depth,
@@ -3525,7 +3564,9 @@ do_compress_ram_image(Texture::CompressionMode compression,
   }
 
 #ifdef HAVE_SQUISH
-  if (_texture_type != TT_3d_texture && _component_type == T_unsigned_byte) {
+  if (_texture_type != TT_3d_texture && 
+      _texture_type != TT_2d_texture_array && 
+      _component_type == T_unsigned_byte) {
     int squish_flags = 0;
     switch (compression) {
     case CM_dxt1:
@@ -3538,6 +3579,9 @@ do_compress_ram_image(Texture::CompressionMode compression,
 
     case CM_dxt5:
       squish_flags |= squish::kDxt5;
+      break;
+
+    default:
       break;
     }
 
@@ -3556,6 +3600,9 @@ do_compress_ram_image(Texture::CompressionMode compression,
 
       case QL_best:
         squish_flags |= squish::kColourIterativeClusterFit;
+        break;
+
+      default:
         break;
       }
 
@@ -3578,7 +3625,9 @@ bool Texture::
 do_uncompress_ram_image() {
 
 #ifdef HAVE_SQUISH
-  if (_texture_type != TT_3d_texture && _component_type == T_unsigned_byte) {
+  if (_texture_type != TT_3d_texture && 
+      _texture_type != TT_2d_texture_array && 
+      _component_type == T_unsigned_byte) {
     int squish_flags = 0;
     switch (_ram_image_compression) {
     case CM_dxt1:
@@ -3591,6 +3640,9 @@ do_uncompress_ram_image() {
 
     case CM_dxt5:
       squish_flags |= squish::kDxt5;
+      break;
+
+    default:
       break;
     }
 
@@ -3652,9 +3704,10 @@ do_reconsider_z_size(int z) {
   if (z >= _z_size) {
     // If we're loading a page past _z_size, treat it as an implicit
     // request to enlarge _z_size.  However, this is only legal if
-    // this is, in fact, a 3-d texture (cube maps always have z_size
-    // 6, and other types have z_size 1).
-    nassertr(_texture_type == Texture::TT_3d_texture, false);
+    // this is, in fact, a 3-d texture or a 2d texture array (cube maps
+    // always have z_size 6, and other types have z_size 1).
+    nassertr(_texture_type == Texture::TT_3d_texture ||
+             _texture_type == Texture::TT_2d_texture_array, false);
 
     _z_size = z + 1;
     // Increase the size of the data buffer to make room for the new
@@ -3795,6 +3848,9 @@ do_assign(const Texture &copy) {
   _component_type = copy._component_type;
   _loaded_from_image = copy._loaded_from_image;
   _loaded_from_txo = copy._loaded_from_txo;
+  _has_read_pages = copy._has_read_pages;
+  _has_read_mipmaps = copy._has_read_mipmaps;
+  _num_mipmap_levels_read = copy._num_mipmap_levels_read;
   _wrap_u = copy._wrap_u;
   _wrap_v = copy._wrap_v;
   _wrap_w = copy._wrap_w;
@@ -3845,6 +3901,9 @@ do_setup_texture(Texture::TextureType texture_type, int x_size, int y_size,
   case TT_3d_texture:
     break;
 
+  case TT_2d_texture_array:
+    break;
+  
   case TT_cube_map:
     // Cube maps must always consist of six square images.
     nassertv(x_size == y_size && z_size == 6);
@@ -3896,6 +3955,9 @@ do_set_format(Texture::Format format) {
   case F_color_index:
   case F_depth_stencil:
   case F_depth_component:
+  case F_depth_component16:
+  case F_depth_component24:
+  case F_depth_component32:
   case F_red:
   case F_green:
   case F_blue:
@@ -3951,6 +4013,10 @@ do_set_component_type(Texture::ComponentType component_type) {
   case T_float:
     _component_width = 4;
     break;
+
+  case T_unsigned_int_24_8:
+    //FIXME: I have no idea...
+    break;
   }
 }
 
@@ -3995,9 +4061,9 @@ do_set_y_size(int y_size) {
 void Texture::
 do_set_z_size(int z_size) {
   if (_z_size != z_size) {
-    nassertv(_texture_type == Texture::TT_3d_texture ||
+    nassertv((_texture_type == Texture::TT_3d_texture) ||
              (_texture_type == Texture::TT_cube_map && z_size == 6) ||
-             (z_size == 1));
+             (_texture_type == Texture::TT_2d_texture_array) || (z_size == 1));
     _z_size = z_size;
     ++_image_modified;
     do_clear_ram_image();
@@ -5044,6 +5110,91 @@ read_dds_level_generic_uncompressed(Texture *tex, const DDSHeader &header,
 }
 
 ////////////////////////////////////////////////////////////////////
+//     Function: Texture::read_dds_level_luminance_uncompressed
+//       Access: Private, Static
+//  Description: Called by read_dds for a DDS file in uncompressed
+//               luminance or luminance-alpha format.
+////////////////////////////////////////////////////////////////////
+PTA_uchar Texture::
+read_dds_level_luminance_uncompressed(Texture *tex, const DDSHeader &header,
+                                      int n, istream &in) {
+  int x_size = tex->do_get_expected_mipmap_x_size(n);
+  int y_size = tex->do_get_expected_mipmap_y_size(n);
+
+  int pitch = (x_size * header.pf.rgb_bitcount) / 8;
+
+  // MS says the pitch can be supplied in the header file and must be
+  // DWORD aligned, but this appears to apply to level 0 mipmaps only
+  // (where it almost always will be anyway).  Other mipmap levels
+  // seem to be tightly packed, but there isn't a separate pitch for
+  // each mipmap level.  Weird.
+  if (n == 0) {
+    pitch = ((pitch + 3) / 4) * 4;
+    if (header.dds_flags & DDSD_PITCH) {
+      pitch = header.pitch;
+    }
+  }
+
+  int bpp = header.pf.rgb_bitcount / 8;
+  int skip_bytes = pitch - (bpp * x_size);
+  nassertr(skip_bytes >= 0, PTA_uchar());
+
+  unsigned int r_mask = header.pf.r_mask;
+  unsigned int a_mask = header.pf.a_mask;
+
+  // Determine the number of bits to shift each mask to the right so
+  // that the lowest on bit is at bit 0.
+  int r_shift = get_lowest_on_bit(r_mask);
+  int a_shift = get_lowest_on_bit(a_mask);
+
+  // Then determine the scale factor required to raise the highest
+  // color value to 0xff000000.
+  unsigned int r_scale = 0;
+  if (r_mask != 0) {
+    r_scale = 0xff000000 / (r_mask >> r_shift);
+  }
+  unsigned int a_scale = 0;
+  if (a_mask != 0) {
+    a_scale = 0xff000000 / (a_mask >> a_shift);
+  }
+
+  bool add_alpha = has_alpha(tex->_format);
+
+  size_t size = tex->do_get_expected_ram_mipmap_page_size(n);
+  size_t row_bytes = x_size * tex->_num_components;
+  PTA_uchar image = PTA_uchar::empty_array(size);
+  for (int y = y_size - 1; y >= 0; --y) {
+    unsigned char *p = image.p() + y * row_bytes;
+    for (int x = 0; x < x_size; ++x) {
+
+      // Read a little-endian numeric value of bpp bytes.
+      unsigned int pixel = 0;
+      int shift = 0;
+      for (int bi = 0; bi < bpp; ++bi) {
+        unsigned int ch = (unsigned char)in.get();
+        pixel |= (ch << shift);
+        shift += 8;
+      }
+
+      unsigned int r = (((pixel & r_mask) >> r_shift) * r_scale) >> 24;
+
+      // Store the components in the Texture's image data.
+      store_unscaled_byte(p, r);
+      if (add_alpha) {
+        unsigned int a = (((pixel & a_mask) >> a_shift) * a_scale) >> 24;
+        store_unscaled_byte(p, a);
+      }
+    }
+    nassertr(p <= image.p() + size, PTA_uchar());
+    for (int bi = 0; bi < skip_bytes; ++bi) {
+      in.get();
+    }
+  }
+
+  return image;
+}
+
+////////////////////////////////////////////////////////////////////
 //     Function: Texture::read_dds_level_dxt1
 //       Access: Private, Static
 //  Description: Called by read_dds for DXT1 file format.
@@ -6010,7 +6161,11 @@ make_from_bam(const FactoryParams &params) {
       case TT_3d_texture:
         me = TexturePool::load_3d_texture(filename, false, options);
         break;
-
+      
+      case TT_2d_texture_array:
+        me = TexturePool::load_2d_texture_array(filename, false, options);
+        break;
+      
       case TT_cube_map:
         me = TexturePool::load_cube_map(filename, false, options);
         break;
@@ -6336,6 +6491,8 @@ operator << (ostream &out, Texture::TextureType tt) {
     return out << "2d_texture";
   case Texture::TT_3d_texture:
     return out << "3d_texture";
+  case Texture::TT_2d_texture_array:
+    return out << "2d_texture_array";
   case Texture::TT_cube_map:
     return out << "cube_map";
   }
@@ -6356,6 +6513,8 @@ operator << (ostream &out, Texture::ComponentType ct) {
     return out << "unsigned_short";
   case Texture::T_float:
     return out << "float";
+  case Texture::T_unsigned_int_24_8:
+    return out << "unsigned_int_24_8";
   }
 
   return out << "(**invalid Texture::ComponentType(" << (int)ct << ")**)";
@@ -6372,6 +6531,12 @@ operator << (ostream &out, Texture::Format f) {
     return out << "depth_stencil";
   case Texture::F_depth_component:
     return out << "depth_component";
+  case Texture::F_depth_component16:
+    return out << "depth_component16";
+  case Texture::F_depth_component24:
+    return out << "depth_component24";
+  case Texture::F_depth_component32:
+    return out << "depth_component32";
   case Texture::F_color_index:
     return out << "color_index";
   case Texture::F_red:

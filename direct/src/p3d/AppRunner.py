@@ -74,6 +74,15 @@ class AppRunner(DirectObject):
 
     # Default values for parameters that are absent from the config file:
     maxDiskUsage = 2048 * 1048576  # 2 GB
+
+    # Values for verifyContents, from p3d_plugin.h
+    P3DVCNone = 0
+    P3DVCNormal = 1
+    P3DVCForce = 2
+    P3DVCNever = 3
+
+    # Also from p3d_plugin.h
+    P3D_CONTENTS_DEFAULT_MAX_AGE = 5
     
     def __init__(self):
         DirectObject.__init__(self)
@@ -95,6 +104,8 @@ class AppRunner(DirectObject):
         self.interactiveConsole = False
         self.initialAppImport = False
         self.trueFileIO = False
+
+        self.verifyContents = self.P3DVCNone
 
         self.sessionId = 0
         self.packedAppEnvironmentInitialized = False
@@ -148,6 +159,9 @@ class AppRunner(DirectObject):
         self.altHost = None
         self.altHostMap = {}
 
+        # The URL from which Panda itself should be downloaded.
+        self.pandaHostUrl = PandaSystem.getPackageHostUrl()
+
         # Application code can assign a callable object here; if so,
         # it will be invoked when an uncaught exception propagates to
         # the top of the TaskMgr.run() loop.
@@ -165,7 +179,9 @@ class AppRunner(DirectObject):
 
         # The "main" object will be exposed to the DOM as a property
         # of the plugin object; that is, document.pluginobject.main in
-        # JavaScript will be appRunner.main here.
+        # JavaScript will be appRunner.main here.  This may be
+        # replaced with a direct reference to the JavaScript object
+        # later, in setInstanceInfo().
         self.main = ScriptAttributes()
 
         # By default, we publish a stop() method so the browser can
@@ -272,6 +288,7 @@ class AppRunner(DirectObject):
         parameter, nested, is a list of packages that we are
         recursively calling this from, to avoid recursive loops. """
 
+        package.checkStatus()
         if not package.downloadDescFile(self.http):
             return False
 
@@ -309,7 +326,7 @@ class AppRunner(DirectObject):
         testing. """
 
         if hostUrl is None:
-            hostUrl = PandaSystem.getPackageHostUrl()
+            hostUrl = self.pandaHostUrl
 
         altUrl = self.altHostMap.get(hostUrl, None)
         if altUrl:
@@ -334,7 +351,7 @@ class AppRunner(DirectObject):
         # No shenanigans, just return the requested host.
         return host
         
-    def getHost(self, hostUrl):
+    def getHost(self, hostUrl, hostDir = None):
         """ Returns a new HostInfo object corresponding to the
         indicated host URL.  If we have already seen this URL
         previously, returns the same object.
@@ -344,11 +361,11 @@ class AppRunner(DirectObject):
         from, see getHostWithAlt().  """
 
         if not hostUrl:
-            hostUrl = PandaSystem.getPackageHostUrl()
+            hostUrl = self.pandaHostUrl
 
         host = self.hosts.get(hostUrl, None)
         if not host:
-            host = HostInfo(hostUrl, appRunner = self)
+            host = HostInfo(hostUrl, appRunner = self, hostDir = hostDir)
             self.hosts[hostUrl] = host
         return host
 
@@ -361,9 +378,10 @@ class AppRunner(DirectObject):
         host directory cannot be read or doesn't seem consistent. """
 
         host = HostInfo(None, hostDir = hostDir, appRunner = self)
-        if not host.readContentsFile():
-            # Couldn't read the contents.xml file
-            return None
+        if not host.hasContentsFile:
+            if not host.readContentsFile():
+                # Couldn't read the contents.xml file
+                return None
 
         if not host.hostUrl:
             # The contents.xml file there didn't seem to indicate the
@@ -553,6 +571,11 @@ class AppRunner(DirectObject):
                 totalSize += packageData.totalSize
         self.notify.info("Total Panda3D disk space used: %s MB" % (
             (totalSize + 524288) / 1048576))
+        
+        if self.verifyContents == self.P3DVCNever:
+            # We're not allowed to delete anything anyway.
+            return
+        
         self.notify.info("Configured max usage is: %s MB" % (
             (self.maxDiskUsage + 524288) / 1048576))
         if totalSize <= self.maxDiskUsage:
@@ -754,7 +777,8 @@ class AppRunner(DirectObject):
                                needsResponse = False)
         self.deferredEvals = []
 
-    def setInstanceInfo(self, rootDir, logDirectory, superMirrorUrl):
+    def setInstanceInfo(self, rootDir, logDirectory, superMirrorUrl,
+                        verifyContents, main):
         """ Called by the browser to set some global information about
         the instance. """
 
@@ -772,29 +796,52 @@ class AppRunner(DirectObject):
         # The "super mirror" URL, generally used only by panda3d.exe.
         self.superMirrorUrl = superMirrorUrl
 
+        # How anxious should we be about contacting the server for
+        # the latest code?
+        self.verifyContents = verifyContents
+
+        # The initial "main" object, if specified.
+        if main is not None:
+            self.main = main
+
         # Now that we have rootDir, we can read the config file.
         self.readConfigXml()
         
 
-    def addPackageInfo(self, name, platform, version, hostUrl, hostDir = None):
+    def addPackageInfo(self, name, platform, version, hostUrl, hostDir = None,
+                       recurse = False):
         """ Called by the browser for each one of the "required"
         packages that were preloaded before starting the application.
         If for some reason the package isn't already downloaded, this
         will download it on the spot.  Raises OSError on failure. """
 
-        host = self.getHost(hostUrl)
-        if hostDir and not host.hostDir:
-            host.hostDir = Filename.fromOsSpecific(hostDir)
+        host = self.getHost(hostUrl, hostDir = hostDir)
 
-        if not host.readContentsFile():
-            if not host.downloadContentsFile(self.http):
-                message = "Host %s cannot be downloaded, cannot preload %s." % (hostUrl, name)
-                raise OSError, message
+        if not host.hasContentsFile:
+            # Always pre-read these hosts' contents.xml files, even if
+            # we have P3DVCForce in effect, since presumably we've
+            # already forced them on the plugin side.
+            host.readContentsFile()
+
+        if not host.downloadContentsFile(self.http):
+            message = "Host %s cannot be downloaded, cannot preload %s." % (hostUrl, name)
+            raise OSError, message
+
+        if name == 'panda3d' and not self.pandaHostUrl:
+            # A special case: in case we don't have the PackageHostUrl
+            # compiled in, infer it from the first package we
+            # installed named "panda3d".
+            self.pandaHostUrl = hostUrl
 
         if not platform:
             platform = None
         package = host.getPackage(name, version, platform = platform)
         if not package:
+            if not recurse:
+                # Maybe the contents.xml file isn't current.  Re-fetch it.
+                if host.redownloadContentsFile(self.http):
+                    return self.addPackageInfo(name, platform, version, hostUrl, hostDir = hostDir, recurse = True)
+            
             message = "Couldn't find %s %s on %s" % (name, version, hostUrl)
             raise OSError, message
 

@@ -45,6 +45,9 @@ PUBLISHED:
 
 public:
   NxForceFieldShapeGroupDesc _desc;
+
+private:
+  string _name;
 };
 
 #include "physxForceFieldShapeGroupDesc.I"

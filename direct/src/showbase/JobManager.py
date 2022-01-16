@@ -219,6 +219,9 @@ class JobManager:
                     break
         return task.cont
 
+    def __len__(self):
+        return len(self._jobId2pri)
+
     def __repr__(self):
         s  =   '======================================================='
         s += '\nJobManager: active jobs in descending order of priority'

@@ -13,6 +13,7 @@ import types
 import getpass
 import platform
 from direct.p3d.FileSpec import FileSpec
+from direct.p3d.SeqValue import SeqValue
 from direct.showbase import Loader
 from direct.showbase import AppRunnerGlobal
 from direct.showutil import FreezeTool
@@ -165,7 +166,12 @@ class Packager:
         file. """
         
         def __init__(self):
-            pass
+            # The "seq" value increments automatically with each publish.
+            self.packageSeq = SeqValue()
+
+            # The "set_ver" value is optionally specified in the pdef
+            # file and does not change unless the user says it does.
+            self.packageSetVer = SeqValue()
 
         def getKey(self):
             """ Returns a tuple used for sorting the PackageEntry
@@ -194,6 +200,12 @@ class Packager:
             solo = xpackage.Attribute('solo')
             self.solo = int(solo or '0')
 
+            self.packageSeq = SeqValue()
+            self.packageSeq.loadXml(xpackage, 'seq')
+
+            self.packageSetVer = SeqValue()
+            self.packageSetVer.loadXml(xpackage, 'set_ver')
+
             self.descFile = FileSpec()
             self.descFile.loadXml(xpackage)
 
@@ -215,6 +227,8 @@ class Packager:
             if self.solo:
                 xpackage.SetAttribute('solo', '1')
 
+            self.packageSeq.storeXml(xpackage, 'seq')
+            self.packageSetVer.storeXml(xpackage, 'set_ver')
             self.descFile.storeXml(xpackage)
 
             if self.importDescFile:
@@ -312,6 +326,10 @@ class Packager:
             self.mainModule = None
             self.signParams = []
             self.requires = []
+
+            # This may be set explicitly in the pdef file to a
+            # particular sequence value.
+            self.packageSetVer = SeqValue()
 
             # This is the set of config variables assigned to the
             # package.
@@ -658,6 +676,7 @@ class Packager:
                 os.chmod(self.packageFullpath.toOsSpecific(), 0755)
             else:
                 self.readDescFile()
+                self.packageSeq += 1
                 self.compressMultifile()
                 self.writeDescFile()
                 self.writeImportDescFile()
@@ -672,6 +691,8 @@ class Packager:
                 pe.fromFile(self.packageName, self.platform, self.version,
                             False, self.packager.installDir,
                             self.packageDesc, self.packageImportDesc)
+                pe.packageSeq = self.packageSeq
+                pe.packageSetVer = self.packageSetVer
                 
                 self.packager.contents[pe.getKey()] = pe
                 self.packager.contentsChanged = True
@@ -733,6 +754,13 @@ class Packager:
             pe.fromFile(self.packageName, self.platform, self.version,
                         True, self.packager.installDir,
                         Filename(packageDir, file.newName), None)
+            peOrig = self.packager.contents.get(pe.getKey(), None)
+            if peOrig:
+                pe.packageSeq = peOrig.packageSeq + 1
+                pe.packageSetVer = peOrig.packageSetVer
+            if self.packageSetVer:
+                pe.packageSetVer = self.packageSetVer
+
             self.packager.contents[pe.getKey()] = pe
             self.packager.contentsChanged = True
 
@@ -1204,6 +1232,8 @@ class Packager:
                 if package.version:
                     xrequires.SetAttribute('version', package.version)
                 xrequires.SetAttribute('host', package.host)
+                package.packageSeq.storeXml(xrequires, 'seq')
+                package.packageSetVer.storeXml(xrequires, 'set_ver')
                 requireHosts[package.host] = True
                 xpackage.InsertEndChild(xrequires)
 
@@ -1249,6 +1279,8 @@ class Packager:
             it.  We need this to preserve the list of patches, and
             similar historic data, between sessions. """
 
+            self.packageSeq = SeqValue()
+            self.packageSetVer = SeqValue()
             self.patchVersion = None
             self.patches = []
 
@@ -1262,6 +1294,9 @@ class Packager:
             xpackage = doc.FirstChildElement('package')
             if not xpackage:
                 return
+
+            self.packageSeq.loadXml(xpackage, 'seq')
+            self.packageSetVer.loadXml(xpackage, 'set_ver')
 
             xcompressed = xpackage.FirstChildElement('compressed_archive')
             if xcompressed:
@@ -1309,6 +1344,9 @@ class Packager:
             if self.patchVersion:
                 xpackage.SetAttribute('last_patch_version', self.patchVersion)
 
+            self.packageSeq.storeXml(xpackage, 'seq')
+            self.packageSetVer.storeXml(xpackage, 'set_ver')
+
             self.__addConfigs(xpackage)
 
             for package in self.requires:
@@ -1318,6 +1356,8 @@ class Packager:
                     xrequires.SetAttribute('platform', package.platform)
                 if package.version:
                     xrequires.SetAttribute('version', package.version)
+                package.packageSeq.storeXml(xrequires, 'seq')
+                package.packageSetVer.storeXml(xrequires, 'set_ver')
                 xrequires.SetAttribute('host', package.host)
                 xpackage.InsertEndChild(xrequires)
 
@@ -1379,6 +1419,9 @@ class Packager:
                 xpackage.SetAttribute('version', self.version)
             xpackage.SetAttribute('host', self.host)
 
+            self.packageSeq.storeXml(xpackage, 'seq')
+            self.packageSetVer.storeXml(xpackage, 'set_ver')
+
             for package in self.requires:
                 xrequires = TiXmlElement('requires')
                 xrequires.SetAttribute('name', package.packageName)
@@ -1386,6 +1429,8 @@ class Packager:
                     xrequires.SetAttribute('platform', package.platform)
                 if package.version:
                     xrequires.SetAttribute('version', package.version)
+                package.packageSeq.storeXml(xrequires, 'seq')
+                package.packageSetVer.storeXml(xrequires, 'set_ver')
                 xrequires.SetAttribute('host', package.host)
                 xpackage.InsertEndChild(xrequires)
 
@@ -1400,6 +1445,9 @@ class Packager:
             """ Reads the import desc file.  Returns True on success,
             False on failure. """
 
+            self.packageSeq = SeqValue()
+            self.packageSetVer = SeqValue()
+
             doc = TiXmlDocument(filename.toOsSpecific())
             if not doc.LoadFile():
                 return False
@@ -1411,6 +1459,9 @@ class Packager:
             self.platform = xpackage.Attribute('platform')
             self.version = xpackage.Attribute('version')
             self.host = xpackage.Attribute('host')
+
+            self.packageSeq.loadXml(xpackage, 'seq')
+            self.packageSetVer.loadXml(xpackage, 'set_ver')
 
             self.requires = []
             xrequires = xpackage.FirstChildElement('requires')
@@ -1864,6 +1915,29 @@ class Packager:
         self.host = PandaSystem.getPackageHostUrl()
         self.addHost(self.host)
 
+        # The maximum amount of time a client should cache the
+        # contents.xml before re-querying the server, in seconds.
+        self.maxAge = 0
+
+        # The contents seq: a tuple of integers, representing the
+        # current seq value.  The contents seq generally increments
+        # with each modification to the contents.xml file.  There is
+        # also a package seq for each package, which generally
+        # increments with each modification to the package.
+        
+        # The contents seq and package seq are used primarily for
+        # documentation purposes, to note when a new version is
+        # released.  The package seq value can also be used to verify
+        # that the contents.xml, desc.xml, and desc.import.xml files
+        # were all built at the same time.
+
+        # Although the package seqs are used at runtime to verify that
+        # the latest contents.xml file has been downloaded, they are
+        # not otherwise used at runtime, and they are not binding on
+        # the download version.  The md5 hash, not the package seq, is
+        # actually used to differentiate different download versions.
+        self.contentsSeq = SeqValue()
+
         # A search list for previously-built local packages.
 
         # We use a bit of caution to read the Filenames out of the
@@ -1918,10 +1992,10 @@ class Packager:
         # client and is therefore readily available to any hacker.
         # Not only is this feature useless, but using it also
         # increases the size of your patchfiles, since encrypted files
-        # don't patch as tightly as unencrypted files.  But it's here
-        # if you really want it.
-        self.encryptExtensions = ['ptf', 'dna', 'txt', 'dc']
-        self.encryptFiles = []
+        # can't really be patched.  But it's here if you really want
+        # it. ** Note: Actually, this isn't implemented yet.
+        #self.encryptExtensions = []
+        #self.encryptFiles = []
 
         # This is the list of DC import suffixes that should be
         # available to the client.  Other suffixes, like AI and UD,
@@ -1967,6 +2041,14 @@ class Packager:
         else:
             self.executableExtensions = [ 'so' ]
 
+        # Files that represent a Windows "manifest" file.  These files
+        # must be explicitly extracted to disk so the OS can find
+        # them.
+        if self.platform.startswith('win'):
+            self.manifestExtensions = [ 'manifest' ]
+        else:
+            self.manifestExtensions = [ ]
+
         # Extensions that are automatically remapped by convention.
         self.remapExtensions = {}
         if self.platform.startswith('win'):
@@ -1985,7 +2067,7 @@ class Packager:
                 }
 
         # Files that should be extracted to disk.
-        self.extractExtensions = self.executableExtensions[:]
+        self.extractExtensions = self.executableExtensions[:] + self.manifestExtensions[:]
 
         # Files that indicate a platform dependency.
         self.platformSpecificExtensions = self.executableExtensions[:]
@@ -2178,7 +2260,7 @@ class Packager:
             self.allowPackages = False
 
         if not PandaSystem.getPackageVersionString() or not PandaSystem.getPackageHostUrl():
-            raise PackagerError, 'This script must be run using a version of Panda3D that has been built\nfor distribution.  Try using ppackage.p3d or packp3d.p3d instead.'
+            raise PackagerError, 'This script must be run using a version of Panda3D that has been built\nfor distribution.  Try using ppackage.p3d or packp3d.p3d instead.\nIf you are running this script for development purposes, you may also\nset the Config variable panda-package-host-url to the URL you expect\nto download these contents from (for instance, a file:// URL).'
 
         self.readContentsFile()
 
@@ -2220,6 +2302,8 @@ class Packager:
         # Set up the namespace dictionary for exec.
         globals = {}
         globals['__name__'] = packageDef.getBasenameWoExtension()
+        globals['__dir__'] = Filename(packageDef.getDirname()).toOsSpecific()
+        globals['packageDef'] = packageDef
 
         globals['platform'] = self.platform
         globals['packager'] = self
@@ -2658,6 +2742,12 @@ class Packager:
 
         return None
 
+    def do_setVer(self, value):
+        """ Sets an explicit set_ver number for the package, as a tuple
+        of integers, or as a string of dot-separated integers. """
+
+        self.currentPackage.packageSetVer = SeqValue(value)
+
     def do_config(self, **kw):
         """ Called with any number of keyword parameters.  For each
         keyword parameter, sets the corresponding p3d config variable
@@ -2795,7 +2885,7 @@ class Packager:
 
         self.currentPackage.signParams.append((certificate, chain, pkey, password))
 
-    def do_setupPanda3D(self):
+    def do_setupPanda3D(self, p3dpythonName=None, p3dpythonwName=None):
         """ A special convenience command that adds the minimum
         startup modules for a panda3d package, intended for developers
         producing their own custom panda3d for download.  Should be
@@ -2860,9 +2950,20 @@ class Packager:
 
         else:
             # Anywhere else, we just ship the executable file p3dpython.exe.
-            self.do_file('p3dpython.exe')
+            if p3dpythonName is None:
+                p3dpythonName = 'p3dpython'
+            else:
+                self.do_config(p3dpython_name=p3dpythonName)
+            self.do_file('p3dpython.exe', newName=p3dpythonName+'.exe')
+
+            # The "Windows" executable appends a 'w' to whatever name is used
+            # above, unless an override name is explicitly specified.
             if self.platform.startswith('win'):
-                self.do_file('p3dpythonw.exe')
+                if p3dpythonwName is None:
+                    p3dpythonwName = p3dpythonName+'w'
+                else:
+                    self.do_config(p3dpythonw_name=p3dpythonwName)
+                self.do_file('p3dpythonw.exe', newName=p3dpythonwName+'.exe')
                 
         self.do_file('libp3dpython.dll')
 
@@ -3156,6 +3257,8 @@ class Packager:
         # sure that our own host at least is added to the map.
         self.addHost(self.host)
 
+        self.maxAge = 0
+        self.contentsSeq = SeqValue()
         self.contents = {}
         self.contentsChanged = False
 
@@ -3171,6 +3274,12 @@ class Packager:
 
         xcontents = doc.FirstChildElement('contents')
         if xcontents:
+            maxAge = xcontents.Attribute('max_age')
+            if maxAge:
+                self.maxAge = int(maxAge)
+
+            self.contentsSeq.loadXml(xcontents)
+                
             xhost = xcontents.FirstChildElement('host')
             if xhost:
                 he = self.HostEntry()
@@ -3199,6 +3308,12 @@ class Packager:
         doc.InsertEndChild(decl)
 
         xcontents = TiXmlElement('contents')
+        if self.maxAge:
+            xcontents.SetAttribute('max_age', str(self.maxAge))
+
+        self.contentsSeq += 1
+        self.contentsSeq.storeXml(xcontents)
+            
         if self.host:
             he = self.hosts.get(self.host, None)
             if he:

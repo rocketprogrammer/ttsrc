@@ -28,6 +28,7 @@
 #include "bamWriter.h"
 #include "geom.h"
 #include "geomLines.h"
+#include "boundingHexahedron.h"
 #include "geomVertexWriter.h"
 
 TypeHandle CollisionSegment::_type_handle;
@@ -125,20 +126,30 @@ set_from_lens(LensNode *camera, const LPoint2f &point) {
 ////////////////////////////////////////////////////////////////////
 PT(BoundingVolume) CollisionSegment::
 compute_internal_bounds() const {
-  PT(BoundingVolume) bound = CollisionSolid::compute_internal_bounds();
 
-  if (bound->is_of_type(GeometricBoundingVolume::get_class_type())) {
-    GeometricBoundingVolume *gbound;
-    DCAST_INTO_R(gbound, bound, bound);
+  LVector3f pdelta = _b - _a;
 
-    // This makes the assumption that _a and _b are laid out
-    // sequentially in memory.  It works because that's they way
-    // they're defined in the class.
-    nassertr(&_a + 1 == &_b, bound);
-    gbound->around(&_a, &_b + 1);
+  // If p1 and p2 are sufficiently close, just put a sphere around
+  // them.
+  float d2 = pdelta.length_squared();
+  if (d2 < collision_parabola_bounds_threshold * collision_parabola_bounds_threshold) {
+    LPoint3f pmid = (_a + _b) * 0.5f;
+    return new BoundingSphere(pmid, csqrt(d2) * 0.5f);
   }
 
-  return bound;
+  LMatrix4f from_segment;
+  look_at(from_segment, pdelta, LPoint3f(0,0,1), CS_zup_right);
+  from_segment.set_row(3, _a);
+  
+  float max_y =  sqrt(d2) + 0.01;
+  PT(BoundingHexahedron) volume = 
+    new BoundingHexahedron(LPoint3f(-0.01, max_y, -0.01), LPoint3f(0.01, max_y, -0.01),
+                           LPoint3f(0.01, max_y, 0.01), LPoint3f(-0.01, max_y,  0.01),
+                           LPoint3f(-0.01, -0.01, -0.01), LPoint3f(0.01, 0.01, -0.01),
+                           LPoint3f(0.01, -0.01, 0.01), LPoint3f(-0.01, -0.01, 0.01));
+
+  volume->xform(from_segment);
+  return volume.p();
 }
 
 ////////////////////////////////////////////////////////////////////

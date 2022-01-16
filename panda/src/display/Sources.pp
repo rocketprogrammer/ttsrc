@@ -13,6 +13,7 @@
   #define SOURCES  \
     standardMunger.I standardMunger.h \
     config_display.h \
+    $[if $[HAVE_PYTHON], pythonGraphicsWindowProc.h] \
     drawableRegion.I drawableRegion.h \
     displayRegion.I displayRegion.h  \
     displayRegionCullCallbackData.I displayRegionCullCallbackData.h \
@@ -21,6 +22,7 @@
     graphicsEngine.I graphicsEngine.h \
     graphicsOutput.I graphicsOutput.h \
     graphicsBuffer.I graphicsBuffer.h \
+    graphicsDevice.h graphicsDevice.I \
     graphicsPipe.I graphicsPipe.h  \
     graphicsPipeSelection.I graphicsPipeSelection.h \
     graphicsStateGuardian.I \
@@ -29,7 +31,8 @@
     graphicsWindow.I graphicsWindow.h \
     graphicsWindowInputDevice.I  \
     graphicsWindowInputDevice.h \
-    graphicsDevice.h graphicsDevice.I \
+    graphicsWindowProc.h \
+    graphicsWindowProcCallbackData.I graphicsWindowProcCallbackData.h \
     lru.h \
     nativeWindowHandle.I nativeWindowHandle.h \
     parasiteBuffer.I parasiteBuffer.h \
@@ -41,15 +44,20 @@
     displaySearchParameters.h \
     displayInformation.h \
     subprocessWindow.h subprocessWindow.I \
-    $[if $[OSX_PLATFORM], subprocessWindowBuffer.h subprocessWindowBuffer.I]
+    $[if $[OSX_PLATFORM], subprocessWindowBuffer.h subprocessWindowBuffer.I] \
+    touchInfo.h 
+
     
  #define INCLUDED_SOURCES  \
     standardMunger.cxx \
     config_display.cxx \
+    $[if $[HAVE_PYTHON], pythonGraphicsWindowProc.cxx] \
     drawableRegion.cxx \
     displayRegion.cxx \
     displayRegionCullCallbackData.cxx \
     displayRegionDrawCallbackData.cxx \
+    displaySearchParameters.cxx \
+    displayInformation.cxx \
     frameBufferProperties.cxx \
     graphicsEngine.cxx \
     graphicsOutput.cxx \
@@ -59,25 +67,29 @@
     graphicsStateGuardian.cxx  \
     graphicsThreadingModel.cxx \
     graphicsWindow.cxx graphicsWindowInputDevice.cxx  \
+    graphicsWindowProc.cxx \
+    graphicsWindowProcCalbackData.cxx \
     graphicsDevice.cxx \
+    lru.cxx \
     nativeWindowHandle.cxx \
     parasiteBuffer.cxx \
     windowHandle.cxx \
     windowProperties.cxx \
-    lru.cxx \
     stencilRenderStates.cxx \
     stereoDisplayRegion.cxx \
-    displaySearchParameters.cxx \
-    displayInformation.cxx \
-    subprocessWindow.cxx
+    subprocessWindow.cxx \
+    touchInfo.cxx
 
   #define INSTALL_HEADERS \
     standardMunger.I standardMunger.h \
     config_display.h \
+    $[if $[HAVE_PYTHON], pythonGraphicsWindowProc.h] \
     drawableRegion.I drawableRegion.h \
+    displayInformation.h \
     displayRegion.I displayRegion.h \
     displayRegionCullCallbackData.I displayRegionCullCallbackData.h \
     displayRegionDrawCallbackData.I displayRegionDrawCallbackData.h \
+    displaySearchParameters.h \
     frameBufferProperties.I frameBufferProperties.h \
     graphicsEngine.I graphicsEngine.h \
     graphicsOutput.I graphicsOutput.h \
@@ -87,6 +99,8 @@
     graphicsStateGuardian.I \
     graphicsStateGuardian.h \
     graphicsWindow.I graphicsWindow.h \
+    graphicsWindowProc.h \
+    graphicsWindowProcCallbackData.I graphicsWindowProcCallbackData.h \
     graphicsThreadingModel.I graphicsThreadingModel.h \
     graphicsWindowInputDevice.I graphicsWindowInputDevice.h \
     graphicsDevice.I graphicsDevice.h \
@@ -98,10 +112,9 @@
     renderBuffer.h \
     stencilRenderStates.h \
     stereoDisplayRegion.I stereoDisplayRegion.h \
-    displaySearchParameters.h \
-    displayInformation.h \
     subprocessWindow.h subprocessWindow.I \
-    subprocessWindowBuffer.h subprocessWindowBuffer.I
+    subprocessWindowBuffer.h subprocessWindowBuffer.I \
+    touchInfo.h
 
   #define IGATESCAN all
 

@@ -355,6 +355,8 @@ class DistributedObject(DistributedObjectBase):
 
     def sendUpdate(self, fieldName, args = [], sendToId = None):
         if self.cr:
+            if self.cr.wantUpdateCalls:
+                self.notify.warning("fieldName = %s, args = %s" % (fieldName, args))
             dg = self.dclass.clientFormatUpdate(
                 fieldName, sendToId or self.doId, args)
             self.cr.send(dg)

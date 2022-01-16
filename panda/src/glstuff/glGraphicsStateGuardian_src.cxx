@@ -1,5 +1,7 @@
 // Filename: glGraphicsStateGuardian_src.cxx
 // Created by:  drose (02Feb99)
+// Updated by: fperazzi, PandaSE (05May10) (added 
+//   get_supports_cg_profile)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -584,6 +586,9 @@ reset() {
     }
   }
 
+#ifndef OPENGLES
+  _supports_2d_texture_array = has_extension("GL_EXT_texture_array");
+#endif
 #ifdef OPENGLES_2
   _supports_cube_map = true;
 #else
@@ -1306,6 +1311,7 @@ reset() {
 
   GLint max_texture_size = 0;
   GLint max_3d_texture_size = 0;
+  GLint max_2d_texture_array_layers = 0;
   GLint max_cube_map_size = 0;
 
   GLP(GetIntegerv)(GL_MAX_TEXTURE_SIZE, &max_texture_size);
@@ -1319,7 +1325,12 @@ reset() {
   } else {
     _max_3d_texture_dimension = 0;
   }
-
+#ifndef OPENGLES
+  if(_supports_2d_texture_array) {
+    GLP(GetIntegerv)(GL_MAX_ARRAY_TEXTURE_LAYERS_EXT, &max_2d_texture_array_layers);
+    _max_2d_texture_array_layers = max_2d_texture_array_layers;
+  }
+#endif
   if (_supports_cube_map) {
     GLP(GetIntegerv)(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &max_cube_map_size);
     _max_cube_map_dimension = max_cube_map_size;
@@ -1343,6 +1354,7 @@ reset() {
     GLCAT.debug()
       << "max texture dimension = " << _max_texture_dimension
       << ", max 3d texture = " << _max_3d_texture_dimension
+      << ", max 2d texture array = " << max_2d_texture_array_layers
       << ", max cube map = " << _max_cube_map_dimension << "\n";
     GLCAT.debug()
       << "max_elements_vertices = " << max_elements_vertices
@@ -1694,6 +1706,28 @@ reset() {
   add_gsg(this);
 }
 
+
+////////////////////////////////////////////////////////////////////
+//     Function: GLGraphicsStateGuardian::finish
+//       Access: Public, Virtual
+//  Description: Force the graphics card to finish drawing before 
+//               returning.  !!!!!HACK WARNING!!!!
+//               glfinish does not actually wait for the graphics card to finish drawing
+//               only for draw calls to finish.  Thus flip may not happene 
+//               immediately.  Instead we read a single pixel from
+//               the framebuffer.  This forces the graphics card to 
+//               finish drawing the frame before returning.
+////////////////////////////////////////////////////////////////////
+void CLP(GraphicsStateGuardian)::
+finish() {
+  // Rather than call glfinish which returns immediately if 
+  // draw commands have been submitted, we will read a single pixel
+  // from the frame.  That will force the graphics card to finish
+  // drawing before it is called
+  char data[4];
+  GLP(ReadPixels)(0,0,1,1,GL_RGBA,GL_UNSIGNED_BYTE,&data);
+  //GLP(Finish);
+}
 
 ////////////////////////////////////////////////////////////////////
 //     Function: GraphicsStateGuardian::clear
@@ -3203,6 +3237,14 @@ prepare_texture(Texture *tex) {
       return NULL;
     }
     break;
+  
+  case Texture::TT_2d_texture_array:
+    if (!_supports_2d_texture_array) {
+      GLCAT.warning()
+        << "2-D texture arrays are not supported by this OpenGL driver.\n";
+      return NULL;
+    }
+    break;
 
   case Texture::TT_cube_map:
     if (!_supports_cube_map) {
@@ -4305,6 +4347,7 @@ do_issue_shader(bool state_has_changed) {
       context->bind(this);
       _current_shader = shader;
       _current_shader_context = context;
+      context->issue_parameters(this, Shader::SSD_shaderinputs);
     } else {
 #ifdef OPENGLES_2
       context->bind(this, false);
@@ -5110,7 +5153,6 @@ gl_get_error() const {
 bool CLP(GraphicsStateGuardian)::
 report_errors_loop(int line, const char *source_file, GLenum error_code,
                    int &error_count) {
-#ifndef NDEBUG
   while ((CLP(max_errors) < 0 || error_count < CLP(max_errors)) &&
          (error_code != GL_NO_ERROR)) {
     GLCAT.error()
@@ -5121,7 +5163,6 @@ report_errors_loop(int line, const char *source_file, GLenum error_code,
     error_count++;
   }
 
-#endif
   return (error_code == GL_NO_ERROR);
 }
 
@@ -5639,7 +5680,14 @@ get_texture_target(Texture::TextureType texture_type) const {
     } else {
       return GL_NONE;
     }
-
+  case Texture::TT_2d_texture_array:
+    if (_supports_2d_texture_array) {
+#ifndef OPENGLES
+      return GL_TEXTURE_2D_ARRAY_EXT;
+#endif
+    } else {
+      return GL_NONE;
+    }
   case Texture::TT_cube_map:
     if (_supports_cube_map) {
       return GL_TEXTURE_CUBE_MAP;
@@ -5993,7 +6041,8 @@ get_internal_image_format(Texture *tex) const {
     // no compression for render targets
     compression = Texture::CM_off;
   }
-  bool is_3d = (tex->get_texture_type() == Texture::TT_3d_texture);
+  bool is_3d = (tex->get_texture_type() == Texture::TT_3d_texture ||
+                tex->get_texture_type() == Texture::TT_2d_texture_array);
 
 #ifndef OPENGLES
   if (get_supports_compressed_texture_format(compression)) {
@@ -8250,22 +8299,38 @@ upload_texture(CLP(TextureContext) *gtc, bool force) {
   GLenum component_type = get_component_type(tex->get_component_type());
 
   // Ensure that the texture fits within the GL's specified limits.
-  int max_dimension;
+  // Need to split dimensions because of texture arrays
+  int max_dimension_x;
+  int max_dimension_y;
+  int max_dimension_z;
+
   switch (tex->get_texture_type()) {
   case Texture::TT_3d_texture:
-    max_dimension = _max_3d_texture_dimension;
+    max_dimension_x = _max_3d_texture_dimension;
+    max_dimension_y = _max_3d_texture_dimension;
+    max_dimension_z = _max_3d_texture_dimension;
     break;
 
   case Texture::TT_cube_map:
-    max_dimension = _max_cube_map_dimension;
+    max_dimension_x = _max_cube_map_dimension;
+    max_dimension_y = _max_cube_map_dimension;
+    max_dimension_z = 6;
+    break;
+
+  case Texture::TT_2d_texture_array:
+    max_dimension_x = _max_texture_dimension;
+    max_dimension_y = _max_texture_dimension;
+    max_dimension_z = _max_2d_texture_array_layers;
     break;
 
   default:
-    max_dimension = _max_texture_dimension;
+    max_dimension_x = _max_texture_dimension;
+    max_dimension_y = _max_texture_dimension;
+    max_dimension_z = 1;
   }
 
-  if (max_dimension == 0) {
-    // Guess this GL doesn't support cube mapping/3d textures.
+  if (max_dimension_x == 0 || max_dimension_y == 0 || max_dimension_z == 0) {
+    // Guess this GL doesn't support cube mapping/3d textures/2d texture arrays.
     report_my_gl_errors();
     return false;
   }
@@ -8278,10 +8343,11 @@ upload_texture(CLP(TextureContext) *gtc, bool force) {
   // reduce the texture at load time instead; of course, the user
   // doesn't always know ahead of time what the hardware limits are.
 
-  if (max_dimension > 0 && image_compression == Texture::CM_off) {
-    while (tex->get_expected_mipmap_x_size(mipmap_bias) > max_dimension ||
-           tex->get_expected_mipmap_y_size(mipmap_bias) > max_dimension ||
-           tex->get_expected_mipmap_z_size(mipmap_bias) > max_dimension) {
+  if ((max_dimension_x > 0 && max_dimension_y > 0 && max_dimension_z > 0) && 
+      image_compression == Texture::CM_off) {
+    while (tex->get_expected_mipmap_x_size(mipmap_bias) > max_dimension_x ||
+           tex->get_expected_mipmap_y_size(mipmap_bias) > max_dimension_y ||
+           tex->get_expected_mipmap_z_size(mipmap_bias) > max_dimension_z) {
       ++mipmap_bias;
     }
 
@@ -8461,7 +8527,7 @@ upload_texture_image(CLP(TextureContext) *gtc,
                      bool one_page_only, int z,
                      Texture::CompressionMode image_compression) {
   // Make sure the error stack is cleared out before we begin.
-  report_my_gl_errors();
+  clear_my_gl_errors();
 
   if (texture_target == GL_NONE) {
     // Unsupported target (e.g. 3-d texturing on GL 1.1).
@@ -8654,6 +8720,22 @@ upload_texture_image(CLP(TextureContext) *gtc,
         }
         break;
 #endif
+#ifndef OPENGLES
+      case GL_TEXTURE_2D_ARRAY_EXT:
+        if (_supports_2d_texture_array) {
+          if (image_compression == Texture::CM_off) {
+            _glTexSubImage3D(page_target, n - mipmap_bias, 0, 0, 0, width, height, depth,
+                             external_format, component_type, image_ptr);
+          } else {
+            _glCompressedTexSubImage3D(page_target, n - mipmap_bias, 0, 0, 0, width, height, depth,
+                                       external_format, image_size, image_ptr);
+          }
+        } else {
+          report_my_gl_errors();
+          return false;
+        }
+        break;
+#endif
       default:
         if (image_compression == Texture::CM_off) {
           if (n==0) {
@@ -8675,7 +8757,7 @@ upload_texture_image(CLP(TextureContext) *gtc,
 
     // Did that fail?  If it did, we'll immediately try again, this
     // time loading the texture from scratch.
-    GLenum error_code = GLP(GetError)();
+    GLenum error_code = gl_get_error();
     if (error_code != GL_NO_ERROR) {
       if (GLCAT.is_debug()) {
         GLCAT.debug()
@@ -8701,12 +8783,13 @@ upload_texture_image(CLP(TextureContext) *gtc,
 #ifndef OPENGLES_2
       if ((external_format == GL_DEPTH_STENCIL_EXT) && get_supports_depth_stencil()) {
         GLP(TexImage2D)(page_target, 0, GL_DEPTH_STENCIL_EXT,
-                        width, height, 0,
+                        width, height, 0, GL_DEPTH_STENCIL_EXT, 
 #ifdef OPENGLES_1
-                        GL_DEPTH_STENCIL_EXT, GL_UNSIGNED_INT_24_8_OES, NULL);
+                        GL_UNSIGNED_INT_24_8_OES, 
 #else
-                        GL_DEPTH_STENCIL_EXT, GL_UNSIGNED_INT_24_8_EXT, NULL);
+                        GL_UNSIGNED_INT_24_8_EXT, 
 #endif  // OPENGLES_1
+                        NULL);
       } else {
 #endif  // OPENGLES_2
         GLP(TexImage2D)(page_target, 0, internal_format,
@@ -8767,7 +8850,6 @@ upload_texture_image(CLP(TextureContext) *gtc,
         break;
 #endif  // OPENGLES  // OpenGL ES will fall through.
 
-#ifndef OPENGLES_1  // 3-d textures not supported by OpenGL ES 1.  Fall through.
 #ifdef OPENGLES_2
       case GL_TEXTURE_3D_OES:
 #endif
@@ -8791,7 +8873,24 @@ upload_texture_image(CLP(TextureContext) *gtc,
         }
         break;
 #endif
-#endif  // OPENGLES  // OpenGL ES will fall through.
+#ifndef OPENGLES
+      case GL_TEXTURE_2D_ARRAY_EXT:
+        if (_supports_2d_texture_array) {
+          if (image_compression == Texture::CM_off) {
+            _glTexImage3D(page_target, n - mipmap_bias, internal_format,
+                          width, height, depth, 0,
+                          external_format, component_type, image_ptr);
+          } else {
+            _glCompressedTexImage3D(page_target, n - mipmap_bias, external_format, width,
+                                    height, depth,
+                                    0, image_size, image_ptr);
+          }
+        } else {
+          report_my_gl_errors();
+          return false;
+        }
+        break;
+#endif
 
       default:
         if (image_compression == Texture::CM_off) {
@@ -8809,7 +8908,7 @@ upload_texture_image(CLP(TextureContext) *gtc,
 
     // Report the error message explicitly if the GL texture creation
     // failed.
-    GLenum error_code = GLP(GetError)();
+    GLenum error_code = gl_get_error();
     if (error_code != GL_NO_ERROR) {
       GLCAT.error()
         << "GL texture creation failed for " << tex->get_name()
@@ -8948,7 +9047,7 @@ get_texture_memory_size(Texture *tex) {
   GLP(GetTexParameteriv)(target, GL_TEXTURE_MIN_FILTER, &minfilter);
   bool has_mipmaps = is_mipmap_filter(minfilter);
 
-  report_my_gl_errors();
+  clear_my_gl_errors();
 
   GLint internal_format;
   GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
@@ -8959,7 +9058,7 @@ get_texture_memory_size(Texture *tex) {
     GLP(GetTexLevelParameteriv)(page_target, 0,
                                 GL_TEXTURE_COMPRESSED_IMAGE_SIZE, &image_size);
 
-    GLenum error_code = GLP(GetError)();
+    GLenum error_code = gl_get_error();
     if (error_code != GL_NO_ERROR) {
       if (GLCAT.is_debug()) {
         GLCAT.debug()
@@ -8998,11 +9097,11 @@ get_texture_memory_size(Texture *tex) {
   GLint width = 1, height = 1, depth = 1;
   GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_WIDTH, &width);
   GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_HEIGHT, &height);
-  if (_supports_3d_texture) {
+  if (_supports_3d_texture || _supports_2d_texture_array) {
     GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_DEPTH, &depth);
   }
-
-  report_my_gl_errors();
+  
+    report_my_gl_errors();
 
   size_t num_bits = (red_size + green_size + blue_size + alpha_size + luminance_size + intensity_size + depth_size);
   size_t num_bytes = (num_bits + 7) / 8;
@@ -9088,6 +9187,11 @@ do_extract_texture_data(CLP(TextureContext) *gtc) {
     GLP(GetTexParameteriv)(target, GL_TEXTURE_WRAP_R, &wrap_w);
 #endif
   }
+  if (_supports_2d_texture_array) {
+#ifndef OPENGLES
+    GLP(GetTexParameteriv)(target, GL_TEXTURE_WRAP_R, &wrap_w);
+#endif
+  }
   GLP(GetTexParameteriv)(target, GL_TEXTURE_MIN_FILTER, &minfilter);
 
   // Mesa has a bug querying this property.
@@ -9113,12 +9217,17 @@ do_extract_texture_data(CLP(TextureContext) *gtc) {
   
   if (_supports_3d_texture && target == GL_TEXTURE_3D) {
     GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_DEPTH, &depth);
-  } else if (target == GL_TEXTURE_CUBE_MAP) {
+  } 
+#ifndef OPENGLES
+  else if (_supports_2d_texture_array && target == GL_TEXTURE_2D_ARRAY_EXT) {
+    GLP(GetTexLevelParameteriv)(page_target, 0, GL_TEXTURE_DEPTH, &depth);
+  }
+#endif 
+  else if (target == GL_TEXTURE_CUBE_MAP) {
     depth = 6;
   }
 #endif
-  report_my_gl_errors();
-
+  clear_my_gl_errors();
   if (width <= 0 || height <= 0 || depth <= 0) {
     GLCAT.error()
       << "No texture data for " << tex->get_name() << "\n";
@@ -9131,7 +9240,7 @@ do_extract_texture_data(CLP(TextureContext) *gtc) {
 #endif  // OPENGLES
 
   // Make sure we were able to query those parameters properly.
-  GLenum error_code = GLP(GetError)();
+  GLenum error_code = gl_get_error();
   if (error_code != GL_NO_ERROR) {
     GLCAT.error()
       << "Unable to query texture parameters for " << tex->get_name()
@@ -9442,16 +9551,14 @@ extract_texture_image(PTA_uchar &image, size_t &page_size,
   }
 
   // Now see if we were successful.
-  if (_track_errors) {
-    GLenum error_code = GLP(GetError)();
-    if (error_code != GL_NO_ERROR) {
-      GLCAT.error()
-        << "Unable to extract texture for " << *tex
-        << ", mipmap level " << n
-        << " : " << get_error_string(error_code) << "\n";
-      nassertr(false, false);
-      return false;
-    }
+  GLenum error_code = gl_get_error();
+  if (error_code != GL_NO_ERROR) {
+    GLCAT.error()
+      << "Unable to extract texture for " << *tex
+      << ", mipmap level " << n
+      << " : " << get_error_string(error_code) << "\n";
+    nassertr(false, false);
+    return false;
   }
   return true;
 #endif  // OPENGLES
@@ -9497,6 +9604,27 @@ do_point_size() {
   }
 
   report_my_gl_errors();
+#endif
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: GLGraphicsStateGuardian::get_supports_cg_profile
+//       Access: Public, Virtual
+//  Description: Returns true if this particular GSG supports the
+//               specified Cg Shader Profile.
+////////////////////////////////////////////////////////////////////
+bool CLP(GraphicsStateGuardian)::
+get_supports_cg_profile(const string &name) const {
+#ifndef HAVE_CG
+  return false;
+#else
+  CGprofile profile = cgGetProfile(name.c_str());
+
+  if (profile == CG_PROFILE_UNKNOWN) {
+    GLCAT.error() << name <<", unknown Cg-profile\n";
+    return false;
+  }
+  return cgGLIsProfileSupported(profile);
 #endif
 }
 

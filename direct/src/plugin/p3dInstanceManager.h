@@ -52,7 +52,7 @@ private:
 public:
   bool initialize(int api_version, const string &contents_filename,
                   const string &host_url,
-                  bool verify_contents,
+                  P3D_verify_contents verify_contents,
                   const string &platform,
                   const string &log_directory,
                   const string &log_basename,
@@ -62,7 +62,7 @@ public:
 
   inline bool is_initialized() const;
   inline void reconsider_runtime_environment();
-  inline bool get_verify_contents() const;
+  inline P3D_verify_contents get_verify_contents() const;
   inline void reset_verify_contents();
 
   inline int get_api_version() const;
@@ -78,7 +78,8 @@ public:
   void set_plugin_version(int major, int minor, int sequence,
                           bool official, const string &distributor,
                           const string &coreapi_host_url,
-                          time_t coreapi_timestamp);
+                          time_t coreapi_timestamp,
+                          const string &coreapi_set_ver);
   inline int get_plugin_major_version() const;
   inline int get_plugin_minor_version() const;
   inline int get_plugin_sequence_version() const;
@@ -86,6 +87,7 @@ public:
   inline const string &get_plugin_distributor() const;
   inline const string &get_coreapi_host_url() const;
   inline time_t get_coreapi_timestamp() const;
+  inline const string &get_coreapi_set_ver() const;
 
   void set_super_mirror(const string &super_mirror_url);
   inline const string &get_super_mirror() const;
@@ -163,7 +165,7 @@ private:
   string _host_url;
   string _root_dir;
   string _certs_dir;
-  bool _verify_contents;
+  P3D_verify_contents _verify_contents;
   string _platform;
   string _log_directory;
   string _log_basename;
@@ -178,6 +180,7 @@ private:
   string _plugin_distributor;
   string _coreapi_host_url;
   time_t _coreapi_timestamp;
+  string _coreapi_set_ver;
   string _super_mirror_url;
 
   P3D_object *_undefined_object;

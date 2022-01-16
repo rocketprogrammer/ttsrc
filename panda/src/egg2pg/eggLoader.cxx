@@ -91,6 +91,7 @@
 #include "bitArray.h"
 #include "thread.h"
 #include "uvScrollNode.h"
+#include "textureStagePool.h"
 
 #include <ctype.h>
 #include <algorithm>
@@ -1405,7 +1406,8 @@ make_texture_stage(const EggTexture *egg_tex) {
       egg_tex->get_combine_mode(EggTexture::CC_alpha) == EggTexture::CM_unspecified &&
 
       !egg_tex->has_priority() &&
-      egg_tex->get_multitexture_sort() == 0) {
+      egg_tex->get_multitexture_sort() == 0 &&
+      !egg_tex->get_saved_result()) {
     return TextureStage::get_default();
   }
 
@@ -1567,7 +1569,7 @@ make_texture_stage(const EggTexture *egg_tex) {
     stage->set_color(egg_tex->get_color());
   }
 
-  return stage;
+  return TextureStagePool::get_stage(stage);
 }
 
 ////////////////////////////////////////////////////////////////////

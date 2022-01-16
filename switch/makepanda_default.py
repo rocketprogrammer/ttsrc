@@ -111,6 +111,8 @@ def GetIncludes(opts):
             res.append("thirdparty/switch-libs/openssl/include")
         if "openal" in opts:
             res.append("thirdparty/switch-libs/openal/include")
+        if "opus" in opts:
+            res.append("thirdparty/switch-libs/opus/include")
         if "gl" in opts:
             res.append("thirdparty/switch-libs/glad/include")
         if "egl" in opts:

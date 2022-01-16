@@ -556,8 +556,8 @@ Library("libpandanx.a", [
     *glgsg,
 
     # nxaudio
-    Compile('switch/src/nxaudio/nxAudio.cxx', building="PANDANX", opts=[]),
-    Compile('switch/src/nxaudio/nxAudioCursor.cxx', building="PANDANX", opts=[]),
+    Compile('switch/src/nxaudio/nxAudio.cxx', building="PANDANX", opts=["opus"]),
+    Compile('switch/src/nxaudio/nxAudioCursor.cxx', building="PANDANX", opts=["opus"]),
 
     # pandanx
     Compile('switch/metalibs/pandanx/pandanx.cxx', building="PANDANX", opts=['gl', 'egl'])

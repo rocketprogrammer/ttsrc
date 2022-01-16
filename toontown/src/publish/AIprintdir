@@ -1,9 +1,0 @@
-#! /bin/sh
-
-FIND=/usr/bin/find
-
-if [ ! -f $FIND ]; then
-  FIND=find
-fi
-
-$FIND $1 -name \*$2 -print

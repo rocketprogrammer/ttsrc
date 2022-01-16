@@ -722,60 +722,60 @@ Library("libdirect.a", [
 # OTP
 #########################################
 
-CopyHeaders("otp/src/otpbase", INCDIR_OTP)
-CopyHeaders("otp/src/nametag", INCDIR_OTP)
-CopyHeaders("otp/src/navigation", INCDIR_OTP)
-CopyHeaders("otp/src/movement", INCDIR_OTP)
-CopyHeaders("otp/src/configrc", INCDIR_OTP)
-CopyHeaders("otp/src/secure", INCDIR_OTP)
+CopyHeaders("otp/otpbase", INCDIR_OTP)
+CopyHeaders("otp/nametag", INCDIR_OTP)
+CopyHeaders("otp/navigation", INCDIR_OTP)
+CopyHeaders("otp/movement", INCDIR_OTP)
+CopyHeaders("otp/configrc", INCDIR_OTP)
+CopyHeaders("otp/secure", INCDIR_OTP)
 CopyHeaders("otp/metalibs/otp", INCDIR_OTP)
 
 Library("libotp.a", [
-    # otp/src/otpbase
-    Compile("otp/src/otpbase/otpbase.cxx", building="OTP", opts=["otp"]),
+    # otp/otpbase
+    Compile("otp/otpbase/otpbase.cxx", building="OTP", opts=["otp"]),
     
-    # otp/src/nametag
-    Compile("otp/src/nametag/nametag_composite1.cxx", building="OTP", opts=["otp"]),
-    Compile("otp/src/nametag/nametag_composite2.cxx", building="OTP", opts=["otp"]),
+    # otp/nametag
+    Compile("otp/nametag/nametag_composite1.cxx", building="OTP", opts=["otp"]),
+    Compile("otp/nametag/nametag_composite2.cxx", building="OTP", opts=["otp"]),
     Interrogate("libnametag.in",
         module="otp", library="libnametag",
-        srcdir="otp/src/nametag", files=["*.h", "*_composite1.cxx", "*_composite2.cxx"],
+        srcdir="otp/nametag", files=["*.h", "*_composite1.cxx", "*_composite2.cxx"],
         building="OTP", opts=["otp"],
     ),
     
-    # otp/src/navigation
-    Compile("otp/src/navigation/navigation_composite1.cxx", building="OTP", opts=["otp"]),
+    # otp//navigation
+    Compile("otp/navigation/navigation_composite1.cxx", building="OTP", opts=["otp"]),
     Interrogate("libnavigation.in",
         module="otp", library="libnavigation",
-        srcdir="otp/src/navigation", files=["*.h", "*_composite1.cxx"],
+        srcdir="otp/navigation", files=["*.h", "*_composite1.cxx"],
         building="OTP", opts=["otp"],
     ),
     
-    # otp/src/movement
-    Compile("otp/src/movement/config_movement.cxx", building="OTP", opts=["otp"]),
-    Compile("otp/src/movement/cMover.cxx", building="OTP", opts=["otp"]),
-    Compile("otp/src/movement/cImpulse.cxx", building="OTP", opts=["otp"]),
-    Compile("otp/src/movement/cMoverGroup.cxx", building="OTP", opts=["otp"]),
+    # otp/movement
+    Compile("otp/movement/config_movement.cxx", building="OTP", opts=["otp"]),
+    Compile("otp/movement/cMover.cxx", building="OTP", opts=["otp"]),
+    Compile("otp/movement/cImpulse.cxx", building="OTP", opts=["otp"]),
+    Compile("otp/movement/cMoverGroup.cxx", building="OTP", opts=["otp"]),
     Interrogate("libmovement.in",
         module="otp", library="libmovement",
-        srcdir="otp/src/movement", files=["*.h", "*.cxx"],
+        srcdir="otp/movement", files=["*.h", "*.cxx"],
         building="OTP", opts=["otp"],
     ),
     
-    # otp/src/configrc
-    Compile("otp/src/configrc/settingsFile.cxx", building="OTP", opts=["otp"]),
+    # otp/configrc
+    Compile("otp/configrc/settingsFile.cxx", building="OTP", opts=["otp"]),
     Interrogate("libsettings.in",
         module="otp", library="libsettings",
-        srcdir="otp/src/configrc", files=["settingsFile.h"],
+        srcdir="otp/configrc", files=["settingsFile.h"],
         building="OTP", opts=["otp"],
     ),
     
-    # otp/src/secure
-    Compile("otp/src/secure/get_fingerprint.cxx", building="OTP", opts=["otp", "zlib", "openssl"]),
-    Compile("otp/src/secure/loadClientCertificate.cxx", building="OTP", opts=["otp", "zlib", "openssl"]),
+    # otp/secure
+    Compile("otp/secure/get_fingerprint.cxx", building="OTP", opts=["otp", "zlib", "openssl"]),
+    Compile("otp/secure/loadClientCertificate.cxx", building="OTP", opts=["otp", "zlib", "openssl"]),
     Interrogate("libsecure.in",
         module="otp", library="libsecure",
-        srcdir="otp/src/secure", files=["loadClientCertificate.cxx", "loadClientCertificate.h", "get_fingerprint.h", "get_fingerprint.cxx"],
+        srcdir="otp/secure", files=["loadClientCertificate.cxx", "loadClientCertificate.h", "get_fingerprint.h", "get_fingerprint.cxx"],
         building="OTP", opts=["otp", "zlib", "openssl"],
     ),
     
@@ -795,42 +795,42 @@ Library("libotp.a", [
 # Toontown
 #########################################
 
-CopyHeaders("toontown/src/toontownbase", INCDIR_TOONTOWN)
-CopyHeaders("toontown/src/dna", INCDIR_TOONTOWN)
-CopyHeaders("toontown/src/pets", INCDIR_TOONTOWN)
-CopyHeaders("toontown/src/suit", INCDIR_TOONTOWN)
+CopyHeaders("toontown/toontownbase", INCDIR_TOONTOWN)
+CopyHeaders("toontown/dna", INCDIR_TOONTOWN)
+CopyHeaders("toontown/pets", INCDIR_TOONTOWN)
+CopyHeaders("toontown/suit", INCDIR_TOONTOWN)
 
 Library("libtoontown.a", [
-    # toontown/src/toontownbase
-    Compile("toontown/src/toontownbase/toontownbase.cxx", building="TOONTOWN", opts=["toontown"]),
+    # toontown/toontownbase
+    Compile("toontown/toontownbase/toontownbase.cxx", building="TOONTOWN", opts=["toontown"]),
     
-    # toontown/src/dna
-    Compile("toontown/src/dna/dnaLoader_composite1.cxx", building="TOONTOWN", opts=["toontown"]),
-    Compile("toontown/src/dna/dnaLoader_composite2.cxx", building="TOONTOWN", opts=["toontown"]),
-    Compile("toontown/src/dna/parser.yxx", building="TOONTOWN", opts=["toontown"], prefix="dnayy"),
-    Compile("toontown/src/dna/lexer.lxx", building="TOONTOWN", opts=["toontown"], prefix="dnayy", dashi=True),
+    # toontown/dna
+    Compile("toontown/dna/dnaLoader_composite1.cxx", building="TOONTOWN", opts=["toontown"]),
+    Compile("toontown/dna/dnaLoader_composite2.cxx", building="TOONTOWN", opts=["toontown"]),
+    Compile("toontown/dna/parser.yxx", building="TOONTOWN", opts=["toontown"], prefix="dnayy"),
+    Compile("toontown/dna/lexer.lxx", building="TOONTOWN", opts=["toontown"], prefix="dnayy", dashi=True),
     Interrogate("libdna.in",
         module="toontown", library="libdna",
-        srcdir="toontown/src/dna", files=["*.h", "*_composite1.cxx", "*_composite2.cxx"],
+        srcdir="toontown/dna", files=["*.h", "*_composite1.cxx", "*_composite2.cxx"],
         building="TOONTOWN", opts=["toontown"],
     ),
     
-    # toontown/src/pets
-    Compile("toontown/src/pets/config_pets.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
-    Compile("toontown/src/pets/cPetBrain.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
-    Compile("toontown/src/pets/cPetChase.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
-    Compile("toontown/src/pets/cPetFlee.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
+    # toontown/pets
+    Compile("toontown/pets/config_pets.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
+    Compile("toontown/pets/cPetBrain.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
+    Compile("toontown/pets/cPetChase.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
+    Compile("toontown/pets/cPetFlee.cxx", building="TOONTOWN", opts=["toontown", "otp"]),
     Interrogate("libpets.in",
         module="toontown", library="libpets",
-        srcdir="toontown/src/pets", files=["*.h", "*.cxx"],
+        srcdir="toontown/pets", files=["*.h", "*.cxx"],
         building="TOONTOWN", opts=["toontown", "otp"],
     ),
     
-    # toontown/src/suit
-    Compile("toontown/src/suit/suit_composite1.cxx", building="TOONTOWN", opts=["toontown"]),
+    # toontown/suit
+    Compile("toontown/suit/suit_composite1.cxx", building="TOONTOWN", opts=["toontown"]),
     Interrogate("libsuit.in",
         module="toontown", library="libsuit",
-        srcdir="toontown/src/suit", files=["*.h", "*_composite1.cxx"],
+        srcdir="toontown/suit", files=["*.h", "*_composite1.cxx"],
         building="TOONTOWN", opts=["toontown"],
     ),
     

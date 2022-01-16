@@ -4449,6 +4449,11 @@ if __debug__:
     del pc
     del bItem
 
+def isClient():
+    if hasattr(builtins, 'simbase') and not hasattr(builtins, 'base'):
+        return False
+    return True
+
 import __builtin__
 __builtin__.Functor = Functor
 __builtin__.Stack = Stack
@@ -4515,3 +4520,4 @@ __builtin__.bpdb = bpdb
 __builtin__.u2ascii = u2ascii
 __builtin__.unicodeUtf8 = unicodeUtf8
 __builtin__.encodedUtf8 = encodedUtf8
+__builtin__.isClient = isClient

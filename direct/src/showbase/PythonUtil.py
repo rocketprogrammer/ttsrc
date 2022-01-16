@@ -4450,7 +4450,7 @@ if __debug__:
     del bItem
 
 def isClient():
-    if hasattr(builtins, 'simbase') and not hasattr(builtins, 'base'):
+    if hasattr(__builtin__, 'simbase') and not hasattr(__builtin__, 'base'):
         return False
     return True
 

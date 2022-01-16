@@ -27,6 +27,7 @@
 #if $[eq $[USE_COMPILER], GCC]
   #define CC gcc
   #define CXX g++
+  #define AR ar
 
   // gcc might run into template limits on some parts of Panda.
   // I upped this from 25 to build on OS X (GCC 3.3) -- skyler.
@@ -34,10 +35,11 @@
 #else
   #define CC cc
   #define CXX CC
+  #define AR ar
 #endif
 
 // FreeBSD doesn't (yet) have any funny architecture flags.
-#defer ARCH_FLAGS 
+#defer ARCH_FLAGS
 
 // How to compile a C or C++ file into a .o file.  $[target] is the
 // name of the .o file, $[source] is the name of the source file,
@@ -102,8 +104,8 @@
 // How to generate a static C or C++ library.  $[target] is the
 // name of the library to generate, and $[sources] is the list of .o
 // files that will go into the library.
-#defer STATIC_LIB_C ar cru $[target] $[sources]
-#defer STATIC_LIB_C++ ar cru $[target] $[sources]
+#defer STATIC_LIB_C $[AR] cru $[target] $[sources]
+#defer STATIC_LIB_C++ $[AR] cru $[target] $[sources]
 
 // How to run ranlib, if necessary, after generating a static library.
 // $[target] is the name of the library.  Set this to the empty string
@@ -138,7 +140,7 @@
 #defer INSTALL_PROG $[if $[ne $[dir $[local]], ./],cd ./$[dir $[local]] &&] install -m $[INSTALL_UMASK_PROG] $[install_dash_p] $[notdir $[local]] $[dest]/
 
 // What additional flags should we pass to interrogate?
-#if $[eq $[shell uname -m], x86_64] // if FreeBSD is 64bit
+#if $[eq $[shell uname -m], amd64] // if FreeBSD is 64bit
   #define SYSTEM_IGATE_FLAGS -D_LP64 -D__const=const -Dvolatile -Dmutable
 #else
   #define SYSTEM_IGATE_FLAGS -D__i386__ -D__const=const -Dvolatile -Dmutable
@@ -278,6 +280,9 @@
 // Do we have <linux/input.h> ? This enables us to use raw mouse input.
 #define PHAVE_LINUX_INPUT_H
 
+// Do we have <stdint.h>?
+#define PHAVE_STDINT_H 1
+
 // Do we have RTTI (and <typeinfo>)?
 #define HAVE_RTTI 1
 
@@ -293,7 +298,10 @@
 #define STATIC_LIB_EXT .a
 #define BUNDLE_EXT
 
-#if $[eq $[shell uname -n], pcbsd] // if we're running PC-BSD
+#if $[isdir /usr/PCBSD/local] // if we're running PC-BSD
   #define EXTRA_IPATH /usr/PCBSD/local/include/
   #define EXTRA_LPATH /usr/PCBSD/local/lib/
 #endif
+
+#define EXTRA_IPATH /usr/local/include/
+#define EXTRA_LPATH /usr/local/lib/

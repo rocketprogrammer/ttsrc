@@ -100,13 +100,11 @@ start(ThreadPriority priority, bool joinable) {
 
   // Ensure the thread has "system" scope, which should ensure it can
   // run in parallel with other threads.
-#ifndef __SWITCH__
   result = pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
   if (result != 0) {
     thread_cat->warning()
       << "Unable to set system scope.\n";
   }
-#endif
 
   struct sched_param param;
   int current_policy = SCHED_OTHER;

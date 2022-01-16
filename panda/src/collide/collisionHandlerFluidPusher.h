@@ -19,6 +19,8 @@
 
 #include "collisionSolid.h"
 #include "collisionHandlerPusher.h"
+#include "plane.h"
+#include "plist.h"
 
 ////////////////////////////////////////////////////////////////////
 //       Class : CollisionHandlerFluidPusher
@@ -35,6 +37,8 @@ public:
 
 protected:
   virtual bool handle_entries();
+
+  typedef plist< Planef > PlaneList;
 
 public:
   static TypeHandle get_class_type() {

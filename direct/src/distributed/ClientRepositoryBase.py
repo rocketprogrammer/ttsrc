@@ -76,6 +76,9 @@ class ClientRepositoryBase(ConnectionRepository):
         
         self.specialNameNumber = 0
 
+        # Used for debugging sendUpdate calls.
+        self.wantUpdateCalls = False
+
     def setDeferInterval(self, deferInterval):
         """Specifies the minimum amount of time, in seconds, that must
         elapse before generating any two DistributedObjects whose

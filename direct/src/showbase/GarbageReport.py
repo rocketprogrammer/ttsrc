@@ -111,8 +111,7 @@ class GarbageReport(Job):
         if self.numGarbage > 0:
             yield None
 
-        if self._args.verbose:
-            self.notify.info('found %s garbage items' % self.numGarbage)
+        self.notify.info('found %s items in gc.garbage' % self.numGarbage)
 
         """ spammy
         # print the types of the garbage first, in case the repr of an object
@@ -350,14 +349,20 @@ class GarbageReport(Job):
                     s.append('%s:%s' % (ac.next(), self.cyclesBySyntax[i]))
 
             if len(self._id2garbageInfo):
+                format = '%0' + '%s' % digits + 'i:%s'
                 s.append('===== Garbage Custom Info =====')
-                ac = AlphabetCounter()
-                for i in xrange(len(self.cyclesBySyntax)):
+                ids = self._id2garbageInfo.keys()
+                yield None
+                indices = []
+                for _id in ids:
+                    indices.append(self._id2index[_id])
                     yield None
-                    counter = ac.next()
+                indices.sort()
+                yield None
+                for i in indices:
                     _id = id(self.garbage[i])
-                    if _id in self._id2garbageInfo:
-                        s.append('%s:%s' % (counter, self._id2garbageInfo[_id]))
+                    s.append(format % (i, self._id2garbageInfo[_id]))
+                    yield None
 
             if self._args.fullReport:
                 format = '%0' + '%s' % digits + 'i:%s'

@@ -23,6 +23,10 @@
 #include "graphicsBuffer.h"
 #include "graphicsWindow.h"
 #include "graphicsDevice.h"
+#ifdef HAVE_PYTHON
+#include "pythonGraphicsWindowProc.h"
+#endif
+#include "graphicsWindowProcCallbackData.h"
 #include "nativeWindowHandle.h"
 #include "parasiteBuffer.h"
 #include "pandaSystem.h"
@@ -350,6 +354,10 @@ ConfigVariableBool framebuffer_stencil
 ("framebuffer-stencil", false,
  PRC_DESC("True if FM_stencil should be added to the default framebuffer "
           "properties, which requests an stencil buffer if possible."));
+ConfigVariableBool framebuffer_accum
+("framebuffer-accum", false,
+ PRC_DESC("True if FM_accum should be added to the default framebuffer "
+          "properties, which requests an accumulator buffer if possible."));
 ConfigVariableBool framebuffer_stereo
 ("framebuffer-stereo", false,
  PRC_DESC("True if FM_stereo should be added to the default framebuffer "
@@ -368,6 +376,9 @@ ConfigVariableInt alpha_bits
 ConfigVariableInt stencil_bits
 ("stencil-bits", 0,
  PRC_DESC("The minimum number of stencil buffer bits requested."));
+ConfigVariableInt accum_bits
+("accum-bits", 0,
+ PRC_DESC("The minimum number of accumulator buffer bits requested."));
 ConfigVariableInt multisamples
 ("multisamples", 0,
  PRC_DESC("The minimum number of samples requested."));
@@ -428,6 +439,10 @@ init_libdisplay() {
   GraphicsPipe::init_type();
   GraphicsStateGuardian::init_type();
   GraphicsWindow::init_type();
+#ifdef HAVE_PYTHON
+  PythonGraphicsWindowProc::init_type();
+#endif
+  GraphicsWindowProcCallbackData::init_type();
   NativeWindowHandle::init_type();
   ParasiteBuffer::init_type();
   StandardMunger::init_type();

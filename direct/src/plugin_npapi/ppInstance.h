@@ -84,8 +84,8 @@ private:
   void open_p3d_temp_file();
   void send_p3d_temp_file_data();
 
-  bool read_contents_file(const string &contents_filename);
-  void get_core_api(TiXmlElement *xpackage);
+  bool read_contents_file(const string &contents_filename, bool fresh_download);
+  void get_core_api();
   void downloaded_plugin(const string &filename);
   void do_load_plugin();
 
@@ -93,6 +93,10 @@ private:
   void send_window();
   void cleanup_window();
   bool copy_file(const string &from_filename, const string &to_filename);
+
+  string lookup_token(const string &keyword) const;
+  static int compare_seq(const string &seq_a, const string &seq_b);
+  static int compare_seq_int(const char *&num_a, const char *&num_b);
 
   void set_failed();
 
@@ -130,6 +134,7 @@ private:
   Tokens _tokens;
 
   string _root_dir;
+  string _standard_url_prefix;
   string _download_url_prefix;
   typedef vector<string> Mirrors;
   Mirrors _mirrors;
@@ -139,7 +144,9 @@ private:
   typedef vector<string> CoreUrls;
   CoreUrls _core_urls;
 
-  FileSpec _core_api_dll;
+  string _coreapi_set_ver;
+  FileSpec _coreapi_dll;
+  time_t _contents_expiration;
   bool _failed;
   bool _started;
 

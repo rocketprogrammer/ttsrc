@@ -1,5 +1,7 @@
 // Filename: graphicsStateGuardian.h
 // Created by:  drose (02Feb99)
+// Updated by: fperazzi, PandaSE (05May10) (added fetch_ptr_parameter,
+//  _max_2d_texture_array_layers on z axis, get_supports_cg_profile)
 //
 ////////////////////////////////////////////////////////////////////
 //
@@ -113,6 +115,7 @@ PUBLISHED:
   INLINE int get_max_texture_stages() const;
   virtual INLINE int get_max_texture_dimension() const;
   INLINE int get_max_3d_texture_dimension() const;
+  INLINE int get_max_2d_texture_array_layers() const; //z axis
   INLINE int get_max_cube_map_dimension() const;
 
   INLINE bool get_supports_texture_combine() const;
@@ -120,6 +123,7 @@ PUBLISHED:
   INLINE bool get_supports_texture_dot3() const;
 
   INLINE bool get_supports_3d_texture() const;
+  INLINE bool get_supports_2d_texture_array() const;
   INLINE bool get_supports_cube_map() const;
   INLINE bool get_supports_tex_non_pow2() const;
 
@@ -151,6 +155,8 @@ PUBLISHED:
   INLINE void set_shader_model(int shader_model);
 
   virtual int get_supported_geom_rendering() const;
+  virtual bool get_supports_cg_profile(const string &name) const;
+
 
   INLINE bool get_color_scale_via_lighting() const;
   INLINE bool get_alpha_scale_via_texture() const;
@@ -224,7 +230,8 @@ public:
   
   const LMatrix4f *fetch_specified_value(Shader::ShaderMatSpec &spec, int altered);
   const LMatrix4f *fetch_specified_part(Shader::ShaderMatInput input, InternalName *name, LMatrix4f &t);
-  
+  const Shader::ShaderPtrData *fetch_ptr_parameter(const Shader::ShaderPtrSpec& spec);
+
   virtual void prepare_display_region(DisplayRegionPipelineReader *dr,
                                       Lens::StereoChannel stereo_channel);
 
@@ -431,6 +438,7 @@ protected:
   int _max_texture_stages;
   int _max_texture_dimension;
   int _max_3d_texture_dimension;
+  int _max_2d_texture_array_layers; //on the z axis
   int _max_cube_map_dimension;
 
   bool _supports_texture_combine;
@@ -438,6 +446,7 @@ protected:
   bool _supports_texture_dot3;
 
   bool _supports_3d_texture;
+  bool _supports_2d_texture_array;
   bool _supports_cube_map;
   bool _supports_tex_non_pow2;
 

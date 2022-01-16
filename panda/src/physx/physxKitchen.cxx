@@ -20,6 +20,8 @@
 #include "physxFileStream.h"
 #include "physxMemoryReadBuffer.h"
 #include "physxMemoryWriteBuffer.h"
+#include "physxClothMesh.h"
+#include "physxClothMeshDesc.h"
 
 ////////////////////////////////////////////////////////////////////
 //     Function: PhysxKitchen::set_cooking_params
@@ -63,8 +65,8 @@ cook_convex_mesh(const PhysxConvexMeshDesc &meshDesc, const Filename &filename) 
   nassertr_always(filename.touch(), false);
   nassertr_always(meshDesc.is_valid(), false);
 
-  PhysxFileStream stream = PhysxFileStream(filename, false);
-  return _cooking->NxCookConvexMesh(meshDesc.get_desc(), stream);
+  PhysxFileStream fs = PhysxFileStream(filename, false);
+  return _cooking->NxCookConvexMesh(meshDesc.get_desc(), fs);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -79,8 +81,67 @@ cook_triangle_mesh(const PhysxTriangleMeshDesc &meshDesc, const Filename &filena
   nassertr_always(filename.touch(), false);
   nassertr_always(meshDesc.is_valid(), false);
 
-  PhysxFileStream stream = PhysxFileStream(filename, false);
-  return _cooking->NxCookTriangleMesh(meshDesc.get_desc(), stream);
+  PhysxFileStream fs = PhysxFileStream(filename, false);
+  return _cooking->NxCookTriangleMesh(meshDesc.get_desc(), fs);
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PhysxKitchen::cook_cloth_mesh
+//       Access: Published
+//  Description: 
+////////////////////////////////////////////////////////////////////
+bool PhysxKitchen::
+cook_cloth_mesh(const PhysxClothMeshDesc &meshDesc, const Filename &filename) {
+
+  nassertr_always(!filename.empty(), false);
+  nassertr_always(filename.touch(), false);
+  nassertr_always(meshDesc.is_valid(), false);
+
+  PhysxFileStream fs = PhysxFileStream(filename, false);
+  return _cooking->NxCookClothMesh(meshDesc.get_desc(), fs);
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PhysxKitchen::cook_texcoords
+//       Access: Published
+//  Description: 
+////////////////////////////////////////////////////////////////////
+bool PhysxKitchen::
+cook_texcoords(const PhysxClothMeshDesc &meshDesc, const Filename &filename) {
+
+  nassertr_always(!filename.empty(), false);
+  nassertr_always(filename.touch(), false);
+  nassertr_always(meshDesc.is_valid(), false);
+
+  const plist<LPoint2f> texcoords = meshDesc.get_texcoords();  
+
+  // Write texcoords to binary file
+  PhysxFileStream fs = PhysxFileStream(filename.c_str(), false);
+
+  // Header
+  fs.storeByte('N');
+  fs.storeByte('X');
+  fs.storeByte('S');
+  fs.storeByte(1);
+  fs.storeByte('T');
+  fs.storeByte('E');
+  fs.storeByte('X');
+  fs.storeByte('C');
+  fs.storeByte(1);
+
+  // Size
+  fs.storeDword(texcoords.size());
+
+  // Texcoords
+  plist<LPoint2f>::const_iterator it;
+  for(it=texcoords.begin(); it!=texcoords.end(); it++) {
+    LPoint2f v = *it;
+
+    fs.storeFloat(v.get_x());
+    fs.storeFloat(v.get_y());
+  }
+
+  return true;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -132,6 +193,35 @@ cook_triangle_mesh(const PhysxTriangleMeshDesc &meshDesc) {
   nassertr(mesh, NULL);
 
   NxTriangleMesh *meshPtr = sdk->createTriangleMesh(PhysxMemoryReadBuffer(buffer.data));
+  nassertr(meshPtr, NULL);
+
+  mesh->link(meshPtr);
+
+  return mesh;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PhysxKitchen::cook_cloth_mesh
+//       Access: Published
+//  Description: 
+////////////////////////////////////////////////////////////////////
+PhysxClothMesh *PhysxKitchen::
+cook_cloth_mesh(const PhysxClothMeshDesc &meshDesc) {
+
+  nassertr_always(meshDesc.is_valid(), false);
+
+  PhysxMemoryWriteBuffer wbuffer;
+  bool status = _cooking->NxCookClothMesh(meshDesc.get_desc(), wbuffer);
+  nassertr(status, NULL);
+
+  NxPhysicsSDK *sdk = NxGetPhysicsSDK();
+  nassertr(sdk, NULL);
+
+  PhysxClothMesh *mesh = new PhysxClothMesh();
+  nassertr(mesh, NULL);
+
+  PhysxMemoryReadBuffer rbuffer(wbuffer.data);
+  NxClothMesh *meshPtr = sdk->createClothMesh(rbuffer);
   nassertr(meshPtr, NULL);
 
   mesh->link(meshPtr);

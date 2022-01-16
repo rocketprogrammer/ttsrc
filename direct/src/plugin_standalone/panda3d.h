@@ -15,6 +15,11 @@
 #ifndef PANDA3D_H
 #define PANDA3D_H
 
+#ifdef _WIN32
+#include <winsock2.h>
+#endif
+
+
 #include "panda3dBase.h"
 #include "p3d_plugin.h"
 #include "httpChannel.h"
@@ -37,12 +42,12 @@ public:
 protected:
   bool post_arg_processing();
   bool get_plugin();
-  bool read_contents_file(const Filename &contents_filename);
+  bool read_contents_file(const Filename &contents_filename, bool fresh_download);
   void find_host(TiXmlElement *xcontents);
   void read_xhost(TiXmlElement *xhost);
   void add_mirror(string mirror_url);
   void choose_random_mirrors(vector_string &result, int num_mirrors);
-  bool get_core_api(const Filename &contents_filename, TiXmlElement *xplugin);
+  bool get_core_api();
 
   void usage();
 
@@ -54,7 +59,8 @@ protected:
   typedef pvector<string> Mirrors;
   Mirrors _mirrors;
   
-  FileSpec _core_api_dll;
+  string _coreapi_set_ver;
+  FileSpec _coreapi_dll;
 };
 
 #include "panda3d.I"

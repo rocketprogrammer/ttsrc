@@ -54,7 +54,7 @@ INLINE void PhysxForceField::
 ls(ostream &out, int indent_level) const {
 
   indent(out, indent_level) << get_type().get_name()
-                            << " " << get_name()
+                            << " " << _name
                             << " (at 0x" << this << ")\n";
 }
 

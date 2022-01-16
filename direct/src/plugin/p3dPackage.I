@@ -28,17 +28,15 @@ get_info_ready() const {
 ////////////////////////////////////////////////////////////////////
 //     Function: P3DPackage::get_download_size
 //       Access: Public
-//  Description: If get_info_ready() is true but get_ready() is false,
-//               it means the package is ready to be downloaded.  In
-//               this case, this method returns the number of bytes
-//               that need to be downloaded for this package.  This is
+//  Description: Returns the number of bytes that will need to be
+//               downloaded, when this package is downloaded.  This is
 //               intended to be used to estimate the download time for
 //               this package relative to other packages, for instance
 //               to update a progress bar sensibly.
 ////////////////////////////////////////////////////////////////////
 inline size_t P3DPackage::
 get_download_size() const {
-  return _download_size;
+  return _compressed_archive.get_size();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -210,9 +208,10 @@ report_step_progress() {
 ////////////////////////////////////////////////////////////////////
 inline P3DPackage::RequiredPackage::
 RequiredPackage(const string &package_name, const string &package_version,
-                P3DHost *host) :
+                const string &package_seq, P3DHost *host) :
   _package_name(package_name),
   _package_version(package_version),
+  _package_seq(package_seq),
   _host(host)
 {
 }

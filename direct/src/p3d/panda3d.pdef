@@ -54,7 +54,7 @@ class panda3d(package):
            'direct.showutil.*',
            'direct.stdpy.*',
            'direct.task.*')
-    module('panda3d', 'panda3d.*')
+    module('panda3d')
 
     # Pick up the shader files that appear in direct/src/filter.
     import direct
@@ -357,5 +357,6 @@ class pdeploy(p3d):
            hidden = True, platform_specific = False,
            keep_user_env = True)
     require('panda3d')
+    require('morepy')
 
     mainModule('direct.p3d.pdeploy')

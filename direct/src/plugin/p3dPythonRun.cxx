@@ -156,7 +156,9 @@ run_python() {
 
 #ifdef _WIN32
   // Of course it's already resident, so use that version.
-  HMODULE h = GetModuleHandle("libpandaexpress.dll");
+  string basename = Filename::dso_filename("libpandaexpress.so").to_os_specific();
+  HMODULE h = GetModuleHandle(basename.c_str());
+
   if (h == NULL) {
     nout << "Can't find libpandaexpress in memory.\n";
   } else {
@@ -1219,14 +1221,28 @@ set_instance_info(P3DCInstance *inst, TiXmlElement *xinstance) {
     log_directory = "";
   }
 
+  int verify_contents = 0;
+  xinstance->Attribute("verify_contents", &verify_contents);
+
   const char *super_mirror = xinstance->Attribute("super_mirror");
   if (super_mirror == NULL) {
     super_mirror = "";
   }
 
+  // Get the initial "main" object, if specified.
+  PyObject *main;
+  TiXmlElement *xmain = xinstance->FirstChildElement("main");
+  if (xmain != NULL) {
+    main = xml_to_pyobj(xmain);
+  } else {
+    main = Py_None;
+    Py_INCREF(main);
+  }
+
   PyObject *result = PyObject_CallMethod
-    (_runner, (char *)"setInstanceInfo", (char *)"sss", root_dir, 
-     log_directory, super_mirror);
+    (_runner, (char *)"setInstanceInfo", (char *)"sssiO", root_dir, 
+     log_directory, super_mirror, verify_contents, main);
+  Py_DECREF(main);
 
   if (result == NULL) {
     PyErr_Print();

@@ -302,7 +302,8 @@ class DistributedSmoothNode(DistributedNode.DistributedNode,
     def setComponentL(self, l):
         if (l != self.zoneId):
             # only perform set location if location is different
-            self.setLocation(self.parentId,l)
+            #self.setLocation(self.parentId,l)
+            pass
     @report(types = ['args'], dConfigParam = 'smoothnode')
     def setComponentT(self, timestamp):
         # This is a little bit hacky.  If *this* function is called,

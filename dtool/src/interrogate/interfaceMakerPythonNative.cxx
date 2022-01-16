@@ -275,52 +275,61 @@ std::string nonClassNameFromCppName(const std::string &cppName_in)
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
-std::string  methodNameFromCppName(const std::string &cppName, const std::string &className) {
-    std::string methodName;
-    const std::string  badChars("!@#$%^&*()<>,.-=+~{}?");
-    int nextCap = 0;
-    for(std::string::const_iterator  chr = cppName.begin(); chr != cppName.end(); chr++)
+std::string
+methodNameFromCppName(const std::string &cppName, const std::string &className) {
+  std::string origName = cppName;
+
+  if (origName.substr(0, 6) == "__py__") {
+    // By convention, a leading prefix of "__py__" is stripped.  This
+    // indicates a Python-specific variant of a particular method.
+    origName = origName.substr(6);
+  }
+
+  std::string methodName;
+  const std::string  badChars("!@#$%^&*()<>,.-=+~{}?");
+  int nextCap = 0;
+  for(std::string::const_iterator  chr = origName.begin(); chr != origName.end(); chr++)
     {
-        if (badChars.find(*chr) != std::string::npos)
+      if (badChars.find(*chr) != std::string::npos)
         {
         }
-        else if (*chr == '_' || *chr == ' ')
+      else if (*chr == '_' || *chr == ' ')
         {
-            nextCap = 1;
+          nextCap = 1;
         }
-        else if (nextCap)
+      else if (nextCap)
         {
-            methodName += toupper(*chr);
-            nextCap = 0;
+          methodName += toupper(*chr);
+          nextCap = 0;
         }
-        else
+      else
         {
-            methodName += *chr;
+          methodName += *chr;
         }
     }
 
-    for(int x = 0; methodRenameDictionary[x]._from != NULL; x++)
+  for(int x = 0; methodRenameDictionary[x]._from != NULL; x++)
     {
-        if(cppName == methodRenameDictionary[x]._from)
+      if(origName == methodRenameDictionary[x]._from)
         {
+          methodName = methodRenameDictionary[x]._to;
+        }
+    }
+
+  if(className.size() > 0)
+    {
+      string LookUpName = className + '.' + cppName;
+      for(int x = 0; classRenameDictionary[x]._from != NULL; x++)
+        {
+          if(LookUpName == methodRenameDictionary[x]._from)
             methodName = methodRenameDictionary[x]._to;
-        }
-    }
-
-    if(className.size() > 0)
-    {
-        string LookUpName = className + '.' + cppName;
-        for(int x = 0; classRenameDictionary[x]._from != NULL; x++)
-        {
-            if(LookUpName == methodRenameDictionary[x]._from)
-                methodName = methodRenameDictionary[x]._to;
         }
     }
  
 
-//    # Mangle names that happen to be python keywords so they are not anymore
-    methodName = checkKeyword(methodName);
-    return methodName;
+  //    # Mangle names that happen to be python keywords so they are not anymore
+  methodName = checkKeyword(methodName);
+  return methodName;
 }
 
 std::string  methodNameFromCppName(InterfaceMaker::Function *func, const std::string &className)
@@ -1259,9 +1268,13 @@ write_module_class(ostream &out,  Object *obj) {
   
   MakeSeqs::iterator msi;
   for (msi = obj->_make_seqs.begin(); msi != obj->_make_seqs.end(); ++msi) {
+    string flags = "METH_NOARGS";
+    if (obj->is_static_method((*msi)->_element_name)) {
+      flags += "|METH_CLASS";
+    }
     out << "  { \""
         << methodNameFromCppName((*msi)->_seq_name, export_calss_name)
-        << "\",(PyCFunction) &" << (*msi)->_name << ", METH_NOARGS, NULL},\n";
+        << "\",(PyCFunction) &" << (*msi)->_name << ", " << flags << ", NULL},\n";
   }
 
   out << "  { NULL, NULL }\n"
@@ -3261,7 +3274,7 @@ bool InterfaceMakerPythonNative::isCppTypeLegal(CPPType *in_ctype)
     {
         return true;
     }
-    else  if(builder.in_forcetype(in_ctype->get_local_name(&parser)))
+    else  if(builder.in_forcetype(type->get_local_name(&parser)))
     {
         return true;
     }

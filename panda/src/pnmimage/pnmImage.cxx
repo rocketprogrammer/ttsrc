@@ -17,6 +17,8 @@
 #include "pnmWriter.h"
 #include "pnmBrush.h"
 #include "config_pnmimage.h"
+#include "perlinNoise2.h"
+#include "stackedPerlinNoise2.h"
 #include <algorithm>
 
 ////////////////////////////////////////////////////////////////////
@@ -989,7 +991,7 @@ threshold(const PNMImage &select_image, int channel, double threshold,
             }
           }
         }
-        
+
       } else {
         // Don't copy alpha channel.
         for (y = 0; y < get_y_size(); y++) {
@@ -1017,7 +1019,7 @@ threshold(const PNMImage &select_image, int channel, double threshold,
             }
           }
         }
-        
+
       } else {
         // Don't copy alpha channel.
         for (y = 0; y < get_y_size(); y++) {
@@ -1254,6 +1256,47 @@ make_histogram(PNMImage::Histogram &histogram) {
 }
 
 ////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::perlin_noise_fill
+//       Access: Published
+//  Description: Fills the image with a grayscale perlin noise
+//               pattern based on the indicated parameters.
+//               Uses set_xel to set the grayscale values.
+//               The sx and sy parameters are in multiples
+//               of the size of this image.
+//               See also the PerlinNoise2 class in mathutil.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+perlin_noise_fill(double sx, double sy, int table_size, unsigned long seed) {
+  double x, y;
+  double noise;
+  PerlinNoise2 perlin (sx * _x_size, sy * _y_size, table_size, seed);
+  for (x = 0; x < _x_size; ++x) {
+    for (y = 0; y < _y_size; ++y) {
+      noise = perlin.noise(x, y);
+      set_xel(x, y, 0.5 * (noise + 1.0));
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::perlin_noise_fill
+//       Access: Published
+//  Description: Variant of perlin_noise_fill that uses an
+//               existing StackedPerlinNoise2 object.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+perlin_noise_fill(StackedPerlinNoise2 &perlin) {
+  double x, y;
+  double noise;
+  for (x = 0; x < _x_size; ++x) {
+    for (y = 0; y < _y_size; ++y) {
+      noise = perlin.noise(x / (double) _x_size, y / (double) _y_size);
+      set_xel(x, y, 0.5 * (noise + 1.0));
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////
 //     Function: PNMImage::setup_rc
 //       Access: Private
 //  Description: Sets the _default_rc,bc,gc values appropriately
@@ -1273,3 +1316,284 @@ setup_rc() {
     _default_bc = lumin_blu;
   }
 }
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::get_average_xel
+//       Access: Published
+//  Description: Returns the average color of all of the pixels
+//               in the image.
+////////////////////////////////////////////////////////////////////
+RGBColord PNMImage::
+get_average_xel() const {
+  RGBColord color (RGBColord::zero());
+  if (_x_size == 0 || _y_size == 0) {
+    return color;
+  }
+
+  int x, y;
+  for (x = 0; x < _x_size; ++x) {
+    for (y = 0; y < _y_size; ++y) {
+      color += get_xel(x, y);
+    }
+  }
+
+  color *= 1.0 / (_x_size * _y_size);
+  return color;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::get_average_xel_a
+//       Access: Published
+//  Description: Returns the average color of all of the pixels
+//               in the image, including the alpha channel.
+////////////////////////////////////////////////////////////////////
+Colord PNMImage::
+get_average_xel_a() const {
+  Colord color (Colord::zero());
+  if (_x_size == 0 || _y_size == 0) {
+    return color;
+  }
+
+  int x, y;
+  for (x = 0; x < _x_size; ++x) {
+    for (y = 0; y < _y_size; ++y) {
+      color += get_xel_a(x, y);
+    }
+  }
+
+  color *= 1.0 / (_x_size * _y_size);
+  return color;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::get_average_gray
+//       Access: Published
+//  Description: Returns the average grayscale component of all of
+//               the pixels in the image.
+////////////////////////////////////////////////////////////////////
+double PNMImage::
+get_average_gray() const {
+  double color = 0.0;
+  if (_x_size == 0 || _y_size == 0) {
+    return color;
+  }
+
+  int x, y;
+  for (x = 0; x < _x_size; ++x) {
+    for (y = 0; y < _y_size; ++y) {
+      color += get_gray(x, y);
+    }
+  }
+
+  color *= 1.0 / (_x_size * _y_size);
+  return color;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator ~
+//       Access: Published
+//  Description: Returns a new PNMImage that is the
+//               complement of the current PNMImage.
+////////////////////////////////////////////////////////////////////
+PNMImage PNMImage::
+operator ~ () const {
+  PNMImage target (*this);
+  size_t array_size = _x_size * _y_size;
+
+  if (_array != NULL && _alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      target._array[i].r = _maxval - _array[i].r;
+      target._array[i].g = _maxval - _array[i].g;
+      target._array[i].b = _maxval - _array[i].b;
+      target._alpha[i] = _maxval - _alpha[i];
+    }
+  } else if (_array != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      target._array[i].r = _maxval - _array[i].r;
+      target._array[i].g = _maxval - _array[i].g;
+      target._array[i].b = _maxval - _array[i].b;
+    }
+  } else if (_alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      target._alpha[i] = _maxval - _alpha[i];
+    }
+  }
+  return target;
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator +=
+//       Access: Published
+//  Description: Returns a new PNMImage in which each pixel value
+//               is the sum of the corresponding pixel values
+//               in the two given images.
+//               Only valid when both images have the same size.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+operator += (const PNMImage &other) {
+  nassertv(_x_size == other._x_size && _y_size == other._y_size);
+  nassertv(_maxval == other._maxval && _maxval == other._maxval);
+  size_t array_size = _x_size * _y_size;
+
+  if (_array != NULL && _alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r + other._array[i].r);
+      _array[i].g = clamp_val(_array[i].g + other._array[i].g);
+      _array[i].b = clamp_val(_array[i].b + other._array[i].b);
+      _alpha[i] = clamp_val(_alpha[i] + other._alpha[i]);
+    }
+  } else if (_array != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r + other._array[i].r);
+      _array[i].g = clamp_val(_array[i].g + other._array[i].g);
+      _array[i].b = clamp_val(_array[i].b + other._array[i].b);
+    }
+  } else if (_alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _alpha[i] = clamp_val(_alpha[i] + other._alpha[i]);
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator +=
+//       Access: Published
+//  Description: Returns a new PNMImage in which the provided color
+//               is added to each pixel in the provided image.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+operator += (const Colord &other) {
+  size_t array_size = _x_size * _y_size;
+  xel addxel (to_val(other.get_x()), to_val(other.get_y()), to_val(other.get_z()));
+  xelval addalpha = to_val(other.get_w());
+
+  if (_array != NULL && _alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r + addxel.r);
+      _array[i].g = clamp_val(_array[i].g + addxel.g);
+      _array[i].b = clamp_val(_array[i].b + addxel.b);
+      _alpha[i] = clamp_val(_alpha[i] + addalpha);
+    }
+  } else if (_array != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r + addxel.r);
+      _array[i].g = clamp_val(_array[i].g + addxel.g);
+      _array[i].b = clamp_val(_array[i].b + addxel.b);
+    }
+  } else if (_alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _alpha[i] = clamp_val(_alpha[i] + addalpha);
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator -=
+//       Access: Published
+//  Description: Returns a new PNMImage in which each pixel value
+//               from the right image is subtracted from each
+//               pixel value from the left image.
+//               Only valid when both images have the same size.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+operator -= (const PNMImage &other) {
+  nassertv(_x_size == other._x_size && _y_size == other._y_size);
+  nassertv(_maxval == other._maxval && _maxval == other._maxval);
+  size_t array_size = _x_size * _y_size;
+
+  if (_array != NULL && _alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r - other._array[i].r);
+      _array[i].g = clamp_val(_array[i].g - other._array[i].g);
+      _array[i].b = clamp_val(_array[i].b - other._array[i].b);
+      _alpha[i] = clamp_val(_alpha[i] - other._alpha[i]);
+    }
+  } else if (_array != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r - other._array[i].r);
+      _array[i].g = clamp_val(_array[i].g - other._array[i].g);
+      _array[i].b = clamp_val(_array[i].b - other._array[i].b);
+    }
+  } else if (_alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _alpha[i] = clamp_val(_alpha[i] - other._alpha[i]);
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator -=
+//       Access: Published
+//  Description: Returns a new PNMImage in which the provided color
+//               is subtracted from each pixel in the provided image.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+operator -= (const Colord &other) {
+  (*this) += (-other);
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator *=
+//       Access: Published
+//  Description: Returns a new PNMImage in which each pixel value
+//               from the left image is multiplied by each
+//               pixel value from the right image. Note that the
+//               floating-point values in the 0..1 range are
+//               multiplied, not in the 0..maxval range.
+//               Only valid when both images have the same size.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+operator *= (const PNMImage &other) {
+  nassertv(_x_size == other._x_size && _y_size == other._y_size);
+  size_t array_size = _x_size * _y_size;
+
+  if (_array != NULL && _alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = to_val(from_val(_array[i].r) * other.from_val(other._array[i].r));
+      _array[i].g = to_val(from_val(_array[i].g) * other.from_val(other._array[i].g));
+      _array[i].b = to_val(from_val(_array[i].b) * other.from_val(other._array[i].b));
+      _alpha[i] = to_val(from_val(_alpha[i]) * other.from_val(other._alpha[i]));
+    }
+  } else if (_array != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = to_val(from_val(_array[i].r) * other.from_val(other._array[i].r));
+      _array[i].g = to_val(from_val(_array[i].g) * other.from_val(other._array[i].g));
+      _array[i].b = to_val(from_val(_array[i].b) * other.from_val(other._array[i].b));
+    }
+  } else if (_alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _alpha[i] = to_val(from_val(_alpha[i]) * other.from_val(other._alpha[i]));
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: PNMImage::operator *=
+//       Access: Published
+//  Description: Multiplies every pixel value in the image by
+//               a constant floating-point multiplier value.
+////////////////////////////////////////////////////////////////////
+void PNMImage::
+operator *= (double multiplier) {
+  size_t array_size = _x_size * _y_size;
+
+  if (_array != NULL && _alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r * multiplier);
+      _array[i].g = clamp_val(_array[i].g * multiplier);
+      _array[i].b = clamp_val(_array[i].b * multiplier);
+      _alpha[i] = clamp_val(_alpha[i] * multiplier);
+    }
+  } else if (_array != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _array[i].r = clamp_val(_array[i].r * multiplier);
+      _array[i].g = clamp_val(_array[i].g * multiplier);
+      _array[i].b = clamp_val(_array[i].b * multiplier);
+    }
+  } else if (_alpha != NULL) {
+    for (size_t i = 0; i < array_size; ++i) {
+      _alpha[i] = clamp_val(_alpha[i] * multiplier);
+    }
+  }
+}
+

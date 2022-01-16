@@ -109,6 +109,12 @@ mount(Multifile *multifile, const Filename &mount_point, int flags) {
 //               exactly the same full pathname), the most-recently
 //               mounted system wins.
 //
+//               The filename specified as the first parameter must
+//               refer to a real, physical filename on disk; it cannot
+//               be a virtual file already appearing within the vfs
+//               filespace.  However, it is possible to mount such a
+//               file; see mount_loop() for this.
+////
 //               Note that a mounted VirtualFileSystem directory is
 //               fully case-sensitive, unlike the native Windows file
 //               system, so you must refer to files within the virtual
@@ -136,6 +142,55 @@ mount(const Filename &physical_filename, const Filename &mount_point,
     // support read-write on Multifiles.
     flags |= MF_read_only;
     if (!multifile->open_read(physical_filename)) {
+      return false;
+    }
+
+    return mount(multifile, mount_point, flags);
+  }
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: VirtualFileSystem::mount_loop
+//       Access: Published
+//  Description: This is similar to mount(), but it receives the name
+//               of a Multifile that already appears within the
+//               virtual file system.  It can be used to mount a
+//               Multifile that is itself hosted within a
+//               virtually-mounted Multifile.
+//
+//               This interface can also be used to mount physical
+//               files (that appear within the virtual filespace), but
+//               it cannot be used to mount directories.  Use mount()
+//               if you need to mount a directory.
+//
+//               Note that there is additional overhead, in the form
+//               of additional buffer copies of the data, for
+//               recursively mounting a multifile like this.
+////////////////////////////////////////////////////////////////////
+bool VirtualFileSystem::
+mount_loop(const Filename &virtual_filename, const Filename &mount_point, 
+           int flags, const string &password) {
+  PT(VirtualFile) file = get_file(virtual_filename, false);
+  if (file == NULL) {
+    express_cat->warning()
+      << "Attempt to mount " << virtual_filename << ", not found.\n";
+    return false;
+  }
+
+  if (file->is_directory()) {
+    PT(VirtualFileMountSystem) new_mount =
+      new VirtualFileMountSystem(virtual_filename);
+    return mount(new_mount, mount_point, flags);
+
+  } else {
+    // It's not a directory; it must be a Multifile.
+    PT(Multifile) multifile = new Multifile;
+    multifile->set_encryption_password(password);
+
+    // For now these are always opened read only.  Maybe later we'll
+    // support read-write on Multifiles.
+    flags |= MF_read_only;
+    if (!multifile->open_read(virtual_filename)) {
       return false;
     }
 
@@ -710,6 +765,32 @@ get_global_ptr() {
   return _global_ptr;
 }
 
+#ifdef HAVE_PYTHON
+////////////////////////////////////////////////////////////////////
+//     Function: VirtualFileSystem::__py__read_file
+//       Access: Published
+//  Description: Convenience function; returns the entire contents of
+//               the indicated file as a string.
+//
+//               This variant on read_file() is implemented directly
+//               for Python, as a small optimization, to avoid the
+//               double-construction of a string object that would be
+//               otherwise required for the return value.
+////////////////////////////////////////////////////////////////////
+PyObject *VirtualFileSystem::
+__py__read_file(const Filename &filename, bool auto_unwrap) const {
+  pvector<unsigned char> pv;
+  bool okflag = read_file(filename, pv, auto_unwrap);
+  nassertr(okflag, NULL);
+
+  if (pv.empty()) {
+    return PyString_FromStringAndSize("", 0);
+  } else {
+    return PyString_FromStringAndSize((const char *)&pv[0], pv.size());
+  }
+}
+#endif  // HAVE_PYTHON
+
 ////////////////////////////////////////////////////////////////////
 //     Function: VirtualFileSystem::open_read_file
 //       Access: Published
@@ -753,7 +834,7 @@ close_read_file(istream *stream) {
     // the stream pointer does not call the appropriate global delete
     // function; instead apparently calling the system delete
     // function.  So we call the delete function by hand instead.
-#if !defined(WIN32_VC) && !defined(USE_MEMORY_NOWRAPPERS) && defined(REDEFINE_GLOBAL_OPERATOR_NEW)
+#if (!defined(WIN32_VC) && !defined(WIN64_VC)) && !defined(USE_MEMORY_NOWRAPPERS) && defined(REDEFINE_GLOBAL_OPERATOR_NEW)
     stream->~istream();
     (*global_operator_delete)(stream);
 #else

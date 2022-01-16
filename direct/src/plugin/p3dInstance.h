@@ -93,7 +93,8 @@ public:
 
   inline P3D_request_ready_func *get_request_ready_func() const;
 
-  void add_package(const string &name, const string &version, P3DHost *host);
+  void add_package(const string &name, const string &version, 
+                   const string &seq, P3DHost *host);
   void add_package(P3DPackage *package);
   void remove_package(P3DPackage *package);
   bool get_packages_info_ready() const;
@@ -119,8 +120,8 @@ public:
   void auth_finished_sub_thread();
   void auth_finished_main_thread();
 
-  void uninstall_packages();
-  void uninstall_host();
+  bool uninstall_packages();
+  bool uninstall_host();
 
 private:
   class ImageDownload : public P3DFileDownload {
@@ -192,6 +193,7 @@ private:
   void set_background_image(ImageType image_type);
   void set_button_image(ImageType image_type);
   void report_package_info_ready(P3DPackage *package);
+  void consider_start_download();
   void ready_to_install();
   void start_next_download();
   void mark_download_complete();
@@ -228,8 +230,8 @@ private:
 #endif  // __APPLE__
 
   P3D_request_ready_func *_func;
-  P3D_object *_browser_script_object;
-  P3DMainObject *_panda_script_object;
+  P3D_object *_dom_object;
+  P3DMainObject *_main_object;
   string _p3d_basename;
   string _origin_protocol;
   string _origin_hostname;
@@ -347,8 +349,10 @@ private:
   Packages _packages;
   Packages _downloading_packages;
   int _download_package_index;
+  size_t _prev_downloaded;
   size_t _total_download_size;
   size_t _total_downloaded;
+  bool _packages_specified;
   bool _download_started;
   bool _download_complete;
   bool _instance_started;

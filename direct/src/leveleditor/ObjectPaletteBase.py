@@ -8,17 +8,33 @@ class ObjectGen:
 
 class ObjectBase(ObjectGen):
     """ Base class for obj definitions """
-    def __init__(self, name='', createFunction = None, model = None, models= [], anims = [], animNames = [], properties={},
-                 movable = True, actor = False):
+    def __init__(self, name='', createFunction = None, model = None, models= [], anims = [], animNames = [], animDict = {}, properties={},
+                 movable = True, actor = False, named=False, updateModelFunction = None, orderedProperties=[], propertiesMask={}):
         ObjectGen.__init__(self, name)
         self.createFunction = createFunction
         self.model = model
         self.models = models[:]
         self.anims = anims[:]
         self.animNames = animNames[:]
+        self.animDict = copy.deepcopy(animDict)
         self.properties = copy.deepcopy(properties)
         self.movable = movable
         self.actor = actor
+        self.named = named
+        self.updateModelFunction = updateModelFunction
+        # to maintain order of properties in UI
+        self.orderedProperties = orderedProperties[:]
+        # to show/hide properties per editor mode
+        self.propertiesMask = copy.deepcopy(propertiesMask)
+
+class ObjectCurve(ObjectBase):
+    def __init__(self, *args, **kw):
+        ObjectBase.__init__(self, *args, **kw)
+        self.properties['Degree'] =[OG.PROP_UI_COMBO,   # UI type
+                                    OG.PROP_INT,        # data type
+                                    ('base.le.objectMgr.updateCurve', {'val':OG.ARG_VAL, 'obj':OG.ARG_OBJ}),    # update function
+                                    3,                  # default value
+                                    [2, 3, 4]]          # value range
 
 class ObjectPaletteBase:
     """
@@ -33,7 +49,8 @@ class ObjectPaletteBase:
         self.data = {}
         self.dataStruct = {}
         self.dataKeys = []
-        self.populate()
+        self.populateSystemObjs()
+        #self.populate()
 
     def insertItem(self, item, parentName):
         """
@@ -57,6 +74,10 @@ class ObjectPaletteBase:
            self.insertItem(ObjectGen(name = item), parentName)
         else:
            self.insertItem(item, parentName)
+
+    def addHidden(self, item):
+        if hasattr(item, 'name'):
+            self.data[item.name] = item        
 
     def deleteStruct(self, name, deleteItems):
         try:
@@ -90,6 +111,14 @@ class ObjectPaletteBase:
             return None
         return item
 
+    def findChildren(self, name):
+        result = []
+        for key in self.dataKeys:
+            if self.dataStruct[key] == name:
+                result.append(key)
+
+        return result
+
     def rename(self, oldName, newName):
         #import pdb;set_trace()
         if oldName == newName:
@@ -108,6 +137,9 @@ class ObjectPaletteBase:
         except:
             return False
         return True
+
+    def populateSystemObjs(self):
+        self.addHidden(ObjectCurve(name='__Curve__'))
 
     def populate(self):
         # You should implement this in subclass

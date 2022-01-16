@@ -53,8 +53,11 @@ protected:
                   char **args, int num_args, const int &p3d_offset = 0);
   void delete_instance(P3D_instance *instance);
 
-  bool parse_token(char *arg);
-  bool parse_int_pair(char *arg, int &x, int &y);
+  bool parse_token(const char *arg);
+  bool parse_int_pair(const char *arg, int &x, int &y);
+  string lookup_token(const string &keyword) const;
+  static int compare_seq(const string &seq_a, const string &seq_b);
+  static int compare_seq_int(const char *&num_a, const char *&num_b);
   static bool is_url(const string &param);
 
   void report_downloading_package(P3D_instance *instance);
@@ -73,7 +76,9 @@ protected:
   string _log_dirname;
   string _log_basename;
   string _this_platform;
-  bool _verify_contents;
+  P3D_verify_contents _verify_contents;
+  time_t _contents_expiration;
+
   P3D_window_type _window_type;
   P3D_window_handle _parent_window;
   int _win_x, _win_y;

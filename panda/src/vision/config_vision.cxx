@@ -15,6 +15,8 @@
 #include "config_vision.h"
 #include "openCVTexture.h"
 #include "webcamVideo.h"
+#include "webcamVideoCursorV4L.h"
+#include "webcamVideoV4L.h"
 
 #include "pandaSystem.h"
 #include "texturePool.h"
@@ -44,6 +46,10 @@ init_libvision() {
   initialized = true;
 
   WebcamVideo::init_type();
+#ifdef IS_LINUX
+  WebcamVideoCursorV4L::init_type();
+  WebcamVideoV4L::init_type();
+#endif
 
 #ifdef HAVE_OPENCV
   OpenCVTexture::init_type();

@@ -158,53 +158,60 @@ for proj in ctprojs.split():
     packages.append(projName)
 packages.reverse()
 
-for package in packages:
-    packageDir = os.getenv(package)
-    if packageDir:
-        packageDir = deCygwinify(packageDir)
-        etcDir = os.path.join(packageDir, 'etc')
-        try:
-            inFiles = glob.glob(os.path.join(etcDir, 'built', '*.in'))
-        except:
-            inFiles = []
-        if inFiles:
-            DoGenPyCode.etcPath.append(etcDir)
-
-        if package not in ['WINTOOLS', 'DTOOL', 'DIRECT', 'PANDA']:
-	    DoGenPyCode.pythonSourcePath.append(packageDir)
-
-            libDir = os.path.join(packageDir, 'built', 'lib')
+try:
+    from direct.extensions_native.extension_native_helpers import Dtool_PreloadDLL
+except ImportError:
+    print "Unable to import Dtool_PreloadDLL, not trying generic libraries."
+else:
+    for package in packages:
+        packageDir = os.getenv(package)
+        if packageDir:
+            packageDir = deCygwinify(packageDir)
+            etcDir = os.path.join(packageDir, 'etc')
             try:
-                files = os.listdir(libDir)
+                inFiles = glob.glob(os.path.join(etcDir, 'built', '*.in'))
             except:
-                files = []
-            for file in files:
-                if os.path.isfile(os.path.join(libDir, file)):
-                    basename, ext = os.path.splitext(file)
+                inFiles = []
+            if inFiles:
+                DoGenPyCode.etcPath.append(etcDir)
 
-                    # Try to import the library.  If we can import it,
-                    # instrument it.
-                    try:
-                        __import__(basename, globals(), locals())
-                        isModule = 1
-                    except:
-                        isModule = 0
-                        
-                    # 
-                    # RHH.... hack OPT2 .. py debug libraries...
-                    #
-                    if not isModule:
-                        # debug py library magin naming in windows..
-                        basename = basename.replace('_d','')                   
+            if package not in ['WINTOOLS', 'DTOOL', 'DIRECT', 'PANDA']:
+                DoGenPyCode.pythonSourcePath.append(packageDir)
+
+                libDir = os.path.join(packageDir, 'built', 'lib')
+                try:
+                    files = os.listdir(libDir)
+                except:
+                    files = []
+                for file in files:
+                    if os.path.isfile(os.path.join(libDir, file)):
+                        basename, ext = os.path.splitext(file)
+
+                        # Try to import the library.  If we can import it,
+                        # instrument it.
                         try:
-                            __import__(basename, globals(), locals())
+                            Dtool_PreloadDLL(basename)
+                            # __import__(basename, globals(), locals())
                             isModule = 1
                         except:
-                            isModule = 0                        
-                        
-                    if isModule:
-                        if basename not in DoGenPyCode.codeLibs:
-                            DoGenPyCode.codeLibs.append(basename)
+                            isModule = 0
+
+                        # 
+                        # RHH.... hack OPT2 .. py debug libraries...
+                        #
+                        if not isModule:
+                            # debug py library magin naming in windows..
+                            basename = basename.replace('_d','')                   
+                            try:
+                                Dtool_PreloadDLL(basename)
+                                # __import__(basename, globals(), locals())
+                                isModule = 1
+                            except:
+                                isModule = 0                        
+
+                        if isModule:
+                            if basename not in DoGenPyCode.codeLibs:
+                                DoGenPyCode.codeLibs.append(basename)
 #endif  // CTA_GENERIC_GENPYCODE
 #endif  // CTPROJS
 

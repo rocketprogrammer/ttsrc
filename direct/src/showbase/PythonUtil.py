@@ -4454,6 +4454,14 @@ def isClient():
         return False
     return True
 
+def quantize(value, divisor):
+    return float(int(value * int(divisor))) / int(divisor)
+
+def quantizeVec(vec, divisor):
+    vec[0] = quantize(vec[0], divisor)
+    vec[1] = quantize(vec[1], divisor)
+    vec[2] = quantize(vec[2], divisor)
+
 import __builtin__
 __builtin__.Functor = Functor
 __builtin__.Stack = Stack

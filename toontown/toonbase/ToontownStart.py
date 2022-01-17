@@ -103,7 +103,7 @@ del version
 base.loader = base.loader
 __builtin__.loader = base.loader
 autoRun = ConfigVariableBool('toontown-auto-run', 1)
-if autoRun and launcher.isDummy() and (not Thread.isTrueThreads() or __name__ == '__main__'):
+if autoRun and launcher.isDummy() and (not Thread.isTrueThreads() or __name__ in ['__main__', 'toontown.toonbase.ToontownStart']):
     try:
         run()
     except SystemExit:

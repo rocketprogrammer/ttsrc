@@ -40,8 +40,7 @@ class DisplayOptions:
         self.notify.debug('before prc settings full screen mode=%s' % str(mode))
         if mode == None:
             mode = 1
-        if res == None:
-            res = (800, 600)
+        res = (1280, 720)
         if not Settings.doSavedSettingsExist():
             self.notify.info('loadFromSettings: No settings; isDefaultEmbedded=%s' % self.isDefaultEmbedded())
             embed = self.isDefaultEmbedded()

@@ -37,8 +37,7 @@ class ToonBase(OTPBase.OTPBase):
             res = resList[Settings.getResolution()]
             if mode == None:
                 mode = 1
-            if res == None:
-                res = (800, 600)
+            res = (1280, 720)
             loadPrcFileData('toonBase Settings Window Res', 'win-size %s %s' % (res[0], res[1]))
             loadPrcFileData('toonBase Settings Window FullScreen', 'fullscreen %s' % mode)
             loadPrcFileData('toonBase Settings Music Active', 'audio-music-active %s' % music)

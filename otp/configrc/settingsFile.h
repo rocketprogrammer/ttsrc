@@ -36,13 +36,13 @@ PUBLISHED:
   // options to the end, unless you are prepared to remap the old
   // options to the new options based on the useropt file version
   // number.
-  enum DisplayDriver { 
-    GL, 
+  enum DisplayDriver {
+    GL,
     DX7,        // We don't support DX7 any more.  This maps to DX8.
     D_DEFAULT,  // Formerly DX8
-    DX9, 
+    DX9,
     D_NONE,
-    DX8, 
+    DX8,
   };
   enum ServerType { PRODUCTION, DEVELOPMENT, DEBUG, S_NONE };
 

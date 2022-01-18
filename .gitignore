@@ -11,3 +11,5 @@ news/*
 .cvsignore
 .latestissue
 useropt
+app/*
+built-switch/*

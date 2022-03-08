@@ -75,7 +75,7 @@ class HtmlView(DirectObject):
         self.accept('mouse3-up', self.mouseUp, [AwWebView.RIGHTMOUSEBTN])
 
     def getInGameNewsUrl(self):
-        result = base.config.GetString('fallback-news-url', 'http://cdn.toontown.disney.go.com/toontown/en/gamenews/')
+        result = base.config.GetString('fallback-news-url', 'http://download.sunrise.games/toontown/en/gamenews/')
         override = base.config.GetString('in-game-news-url', '')
         if override:
             self.notify.info('got an override url,  using %s for in a game news' % override)

@@ -38,7 +38,6 @@ from toontown.minigame import TrolleyHolidayMgrAI
 from toontown.minigame import TrolleyWeekendMgrAI
 from toontown.ai import RoamingTrialerWeekendMgrAI
 from toontown.ai import CostumeManagerAI
-from toontown.ai import AprilFoolsManagerAI
 from toontown.ai import HydrantZeroHolidayAI
 from toontown.ai import MailboxZeroHolidayAI
 from toontown.ai import TrashcanZeroHolidayAI
@@ -805,13 +804,6 @@ class HolidayManagerAI:
           (Month.NOVEMBER, 1, 22, 0, 1),
           (Month.NOVEMBER, 1, 23, 59, 59),],
         displayOnCalendar = False,
-        ),
-
-        ToontownGlobals.APRIL_FOOLS_COSTUMES: HolidayInfo_Yearly(
-        AprilFoolsManagerAI.AprilFoolsManagerAI,
-        [(Month.MARCH, 31, 0, 0, 1),
-          (Month.APRIL, 7, 23, 59, 59)],
-        displayOnCalendar = True,
         ),
 
         ToontownGlobals.BLACK_CAT_DAY: HolidayInfo_Yearly(

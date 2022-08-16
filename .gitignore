@@ -12,3 +12,5 @@ news/*
 .latestissue
 useropt
 inject.py
+app/*
+built-switch/*

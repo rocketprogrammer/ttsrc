@@ -1957,7 +1957,7 @@ CopyAllHeaders('panda/src/ode')
 CopyAllHeaders('panda/metalibs/pandaode')
 CopyAllHeaders('panda/src/physics')
 CopyAllHeaders('panda/src/particlesystem')
-#CopyAllHeaders('panda/src/dxml')
+CopyAllHeaders('panda/src/dxml')
 CopyAllHeaders('panda/metalibs/panda')
 CopyAllHeaders('panda/src/audiotraits')
 CopyAllHeaders('panda/src/audiotraits')
@@ -2724,7 +2724,6 @@ if (PkgSkip("VRPN")==0 and not RUNTIME):
 #
 # DIRECTORY: panda/src/dxml/
 #
-"""
 DefSymbol("TINYXML", "TIXML_USE_STL", "")
 
 if (RUNTIME or RTDIST):
@@ -2739,7 +2738,7 @@ if (not RUNTIME):
   TargetAdd('libdxml.in', opts=OPTS, input=IGATEFILES)
   TargetAdd('libdxml.in', opts=['IMOD:panda', 'ILIB:libdxml', 'SRCDIR:panda/src/dxml'])
   TargetAdd('libdxml_igate.obj', input='libdxml.in', opts=["DEPENDENCYONLY"])
-"""
+
 #
 # DIRECTORY: panda/metalibs/panda/
 #
@@ -2780,7 +2779,7 @@ if (not RUNTIME):
   TargetAdd('libpanda_module.obj', input='libnet.in')
   TargetAdd('libpanda_module.obj', input='libpgui.in')
   TargetAdd('libpanda_module.obj', input='libmovies.in')
-  #TargetAdd('libpanda_module.obj', input='libdxml.in')
+  TargetAdd('libpanda_module.obj', input='libdxml.in')
 
   TargetAdd('libpanda.dll', input='panda_panda.obj')
   TargetAdd('libpanda.dll', input='libpanda_module.obj')
@@ -2854,8 +2853,8 @@ if (not RUNTIME):
   TargetAdd('libpanda.dll', input='libnativenet_igate.obj')
   TargetAdd('libpanda.dll', input='pandabase_pandabase.obj')
   TargetAdd('libpanda.dll', input='libpandaexpress.dll')
-  #TargetAdd('libpanda.dll', input='dxml_composite1.obj')
-  #TargetAdd('libpanda.dll', input='libdxml_igate.obj')
+  TargetAdd('libpanda.dll', input='dxml_composite1.obj')
+  TargetAdd('libpanda.dll', input='libdxml_igate.obj')
   TargetAdd('libpanda.dll', input='libp3dtoolconfig.dll')
   TargetAdd('libpanda.dll', input='libp3dtool.dll')
 

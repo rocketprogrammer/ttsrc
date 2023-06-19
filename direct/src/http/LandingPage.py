@@ -111,9 +111,12 @@ class LandingPage:
         filteredList = {}
         for uri,handler in uriToHandler.iteritems():
             if type(uri) == types.TupleType:
-                filteredList[uri[0]] = handler
+                key = uri[0]
             else:
-                filteredList[uri] = handler
+                key = uri
+            if '.jpg' in key:
+                continue
+            filteredList[key] = handler
 
         uriList = filteredList.keys()
         uriList.sort()

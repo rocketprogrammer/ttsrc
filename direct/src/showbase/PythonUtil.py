@@ -12,7 +12,7 @@ __all__ = ['enumerate', 'unique', 'indent', 'nonRepeatingRandomList',
 'closestDestAngle2', 'closestDestAngle', 'binaryRepr', 'profileFunc',
 'profiled', 'startProfile', 'printProfile', 'getSetterName',
 'getSetter', 'Functor', 'Stack', 'Queue', 'ParamObj', 
-'POD', 'bound', 'clamp', 'lerp', 'clerp', 'triglerp', 'average', 'addListsByValue',
+'POD', 'bound', 'clamp', 'lerp', 'average', 'addListsByValue',
 'boolEqual', 'lineupPos', 'formatElapsedSeconds', 'solveQuadratic',
 'stackEntryInfo', 'lineInfo', 'callerInfo', 'lineTag',
 'findPythonModule', 'describeException', 'mostDerivedLast',
@@ -1883,21 +1883,6 @@ def lerp(v0, v1, t):
     t == 0 maps to v0, t == 1 maps to v1
     """
     return v0 + ((v1 - v0) * t)
-
-def clerp(v0, v1, t):
-    """
-    cubic lerp
-    """
-    x = t*t
-    return lerp(v0, v1, (3. * x) - (2. * t * x))
-
-def triglerp(v0, v1, t):
-    """
-    lerp using the curve of sin(-pi/2) -> sin(pi/2)
-    """
-    x = lerp(-math.pi/2, math.pi/2, t)
-    v = math.sin(x)
-    return lerp(v0, v1, (v + 1.) / 2.)
 
 def getShortestRotation(start, end):
     """
@@ -4455,9 +4440,11 @@ def isClient():
     return True
 
 def quantize(value, divisor):
+    # returns new value that is multiple of (1. / divisor)
     return float(int(value * int(divisor))) / int(divisor)
 
 def quantizeVec(vec, divisor):
+    # in-place
     vec[0] = quantize(vec[0], divisor)
     vec[1] = quantize(vec[1], divisor)
     vec[2] = quantize(vec[2], divisor)
@@ -4483,8 +4470,6 @@ __builtin__.appendStr = appendStr
 __builtin__.bound = bound
 __builtin__.clamp = clamp
 __builtin__.lerp = lerp
-__builtin__.clerp = clerp
-__builtin__.triglerp = triglerp
 __builtin__.notNone = notNone
 __builtin__.clampScalar = clampScalar
 __builtin__.makeList = makeList

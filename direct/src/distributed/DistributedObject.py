@@ -243,6 +243,7 @@ class DistributedObject(DistributedObjectBase):
     def _deactivateDO(self):
         # after this is called, the object is no longer an active DistributedObject
         # and it may be placed in the cache
+        self.networkDelete()
         if not self.cr:
             # we are going to crash, output the destroyDo stacktrace
             self.notify.warning('self.cr is none in _deactivateDO %d' % self.doId)
@@ -252,6 +253,10 @@ class DistributedObject(DistributedObjectBase):
         self.cr.closeAutoInterests(self)
         self.setLocation(0,0)
         self.cr.deleteObjectLocation(self, self.parentId, self.zoneId)
+
+    def networkDelete(self):
+        # more user-friendly method for overriding and readibility; same purpose as _deactivateDO
+        pass
 
     def _destroyDO(self):
         # after this is called, the object is no longer a DistributedObject

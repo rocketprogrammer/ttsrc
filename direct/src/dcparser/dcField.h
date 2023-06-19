@@ -47,6 +47,8 @@ PUBLISHED:
   INLINE int get_number() const;
   INLINE DCClass *get_class() const;
 
+  static DCField *get_field_from_number(int number);
+
   virtual DCField *as_field();
   virtual const DCField *as_field() const;
   virtual DCAtomicField *as_atomic_field();
@@ -116,6 +118,9 @@ protected:
   bool _default_value_stale;
   bool _has_default_value;
   bool _bogus_field;
+
+  typedef pmap<int, DCField *> FieldsByIndex;
+  static FieldsByIndex all_fields_by_index;
 
 private:
   string _default_value;

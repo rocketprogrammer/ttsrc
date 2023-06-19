@@ -489,6 +489,10 @@ class DistributedObjectAI(DistributedObjectBase):
     def uniqueName(self, idString):
         return ("%s-%s" % (idString, self.doId))
 
+    def logSuspicious(self, avId, msg):
+        self.air.writeServerEvent('suspicious', avId, msg)
+        self.notify.warning('suspicious: avId: %s -- %s' % (avId, msg))
+
     def validate(self, avId, bool, msg):
         if not bool:
             self.air.writeServerEvent('suspicious', avId, msg)

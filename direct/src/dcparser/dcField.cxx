@@ -23,6 +23,8 @@
 #include "pStatTimer.h"
 #endif
 
+DCField::FieldsByIndex DCField::all_fields_by_index;
+
 ////////////////////////////////////////////////////////////////////
 //     Function: DCField::Constructor
 //       Access: Public
@@ -87,6 +89,21 @@ DCField(const string &name, DCClass *dclass) :
 ////////////////////////////////////////////////////////////////////
 DCField::
 ~DCField() {
+}
+
+////////////////////////////////////////////////////////////////////
+//     Function: DCField::get_field_from_number
+//       Access: Static, Published
+//  Description: Returns the DCField that matches the index number
+////////////////////////////////////////////////////////////////////
+DCField *DCField::
+get_field_from_number(int number) {
+  FieldsByIndex::const_iterator ni;
+  ni = all_fields_by_index.find(number);
+  if (ni != all_fields_by_index.end()) {
+    return (*ni).second;
+  }
+  return 0;
 }
 
 ////////////////////////////////////////////////////////////////////

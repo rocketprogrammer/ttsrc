@@ -320,87 +320,92 @@ class BpDb:
         #get main bits
         stack = inspect.stack()
         try:
-            primaryFrame = stack[frameCount][0]
-        except:
-            return ('<stdin>', None, -1)
-
-        #todo: 
-        #frameInfo is inadequate as a unique marker for this code location
-        #caching disabled until suitable replacement is found
-        #
-        #frameInfo = inspect.getframeinfo(primaryFrame)
-        #frameInfo = (frameInfo[0], frameInfo[1])
-        #check cache
-        #codeInfo = self.codeInfoCache.get(frameInfo)
-        #if codeInfo:
-        #    return codeInfo
-        
-        #look for module name
-        moduleName = None
-        callingModule = inspect.getmodule(primaryFrame)
-        if callingModule and callingModule.__name__ != '__main__':
-            moduleName = callingModule.__name__
-
-        #look for class name
-        className = None
-        for i in range(frameCount, len(stack)):
-            callingContexts = stack[i][4]
-            if callingContexts:
-                contextTokens = callingContexts[0].split()
-                if contextTokens[0] in ['class','def'] and len(contextTokens) > 1:
-                    callingContexts[0] = callingContexts[0].replace('(',' ').replace(':',' ')
-                    contextTokens = callingContexts[0].split()
-                    className = contextTokens[1]
-                    break
-        if className is None:
-            #look for self (this functions inappropriately for inherited classes)
-            slf = primaryFrame.f_locals.get('self')
             try:
-                if slf:
-                    className = slf.__class__.__name__
+                primaryFrame = stack[frameCount][0]
             except:
-                #in __init__ 'self' exists but 'if slf' will crash
-                pass
+                return ('<stdin>', None, -1)
 
-        #get line number
-        def byteOffsetToLineno(code, byte):
-            # Returns the source line number corresponding to the given byte
-            # offset into the indicated Python code module.
-            import array
-            lnotab = array.array('B', code.co_lnotab)
-            line   = code.co_firstlineno
-            for i in range(0, len(lnotab), 2):
-                byte -= lnotab[i]
-                if byte <= 0:
-                    return line
-                line += lnotab[i+1]
-            return line
+            #todo: 
+            #frameInfo is inadequate as a unique marker for this code location
+            #caching disabled until suitable replacement is found
+            #
+            #frameInfo = inspect.getframeinfo(primaryFrame)
+            #frameInfo = (frameInfo[0], frameInfo[1])
+            #check cache
+            #codeInfo = self.codeInfoCache.get(frameInfo)
+            #if codeInfo:
+            #    return codeInfo
 
-        lineNumber = byteOffsetToLineno(primaryFrame.f_code, primaryFrame.f_lasti)
-        #frame = inspect.stack()[frameCount][0]
-        #lineno = byteOffsetToLineno(frame.f_code, frame.f_lasti)
+            #look for module name
+            moduleName = None
+            callingModule = inspect.getmodule(primaryFrame)
+            if callingModule and callingModule.__name__ != '__main__':
+                moduleName = callingModule.__name__
 
-        codeInfo = (moduleName, className, lineNumber)
-        #self.codeInfoCache[frameInfo] = codeInfo
-        return codeInfo
+            #look for class name
+            className = None
+            for i in range(frameCount, len(stack)):
+                callingContexts = stack[i][4]
+                if callingContexts:
+                    contextTokens = callingContexts[0].split()
+                    if contextTokens[0] in ['class','def'] and len(contextTokens) > 1:
+                        callingContexts[0] = callingContexts[0].replace('(',' ').replace(':',' ')
+                        contextTokens = callingContexts[0].split()
+                        className = contextTokens[1]
+                        break
+            if className is None:
+                #look for self (this functions inappropriately for inherited classes)
+                slf = primaryFrame.f_locals.get('self')
+                try:
+                    if slf:
+                        className = slf.__class__.__name__
+                except:
+                    #in __init__ 'self' exists but 'if slf' will crash
+                    pass
+
+            #get line number
+            def byteOffsetToLineno(code, byte):
+                # Returns the source line number corresponding to the given byte
+                # offset into the indicated Python code module.
+                import array
+                lnotab = array.array('B', code.co_lnotab)
+                line   = code.co_firstlineno
+                for i in range(0, len(lnotab), 2):
+                    byte -= lnotab[i]
+                    if byte <= 0:
+                        return line
+                    line += lnotab[i+1]
+                return line
+
+            lineNumber = byteOffsetToLineno(primaryFrame.f_code, primaryFrame.f_lasti)
+            #frame = inspect.stack()[frameCount][0]
+            #lineno = byteOffsetToLineno(frame.f_code, frame.f_lasti)
+
+            codeInfo = (moduleName, className, lineNumber)
+            #self.codeInfoCache[frameInfo] = codeInfo
+            return codeInfo
+        finally:
+            del stack
     
     #actually deliver the user a prompt
     def set_trace(self, bp, frameCount=1):
         #find useful frame
-        self.currFrame = sys._getframe()
-        interactFrame = self.currFrame
-        while frameCount > 0:
-            interactFrame = interactFrame.f_back
-            frameCount -= 1
+        interactFrame = sys._getframe()
+        try:
+            while frameCount > 0:
+                interactFrame = interactFrame.f_back
+                frameCount -= 1
 
-        #cache this as the latest bp
-        self.lastBp = bp.getParts()
-        #set up and start debuggger
-        import pdb
-        self.pdb = pdb.Pdb()
-        #self.pdb.do_alias('aa bpdb.addPdbAliases()')        
-        self.addPdbAliases()
-        self.pdb.set_trace(interactFrame);
+            #cache this as the latest bp
+            self.lastBp = bp.getParts()
+            #set up and start debuggger
+            import pdb
+            self.pdb = pdb.Pdb()
+            #self.pdb.do_alias('aa bpdb.addPdbAliases()')        
+            self.addPdbAliases()
+            self.pdb.set_trace(interactFrame);
+        finally:
+            del interactFrame
         
     #bp invoke methods
     def bp(self, id=None, grp=None, cfg=None, iff=True, enabled=True, test=None, frameCount=1):

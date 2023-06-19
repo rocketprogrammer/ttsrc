@@ -4777,75 +4777,75 @@ if (PkgSkip("CONTRIB")==0 and not RUNTIME):
 # 
 # LIBOTP
 #
-CopyAllHeaders('otp/src/otpbase') # might want to add all headers
-CopyAllHeaders('otp/src/movement')
+CopyAllHeaders('otp/otpbase') # might want to add all headers
+CopyAllHeaders('otp/movement')
 
 #
-# DIRECTORY: otp/src/otpbase/
+# DIRECTORY: otp/otpbase/
 #
 if (not RUNTIME):
-  OPTS=['DIR:otp/src/otpbase', 'BUILDING:OTP']
+  OPTS=['DIR:otp/otpbase', 'BUILDING:OTP']
   TargetAdd('otpbase.obj', opts=OPTS, input='otpbase.cxx')
   
 #
-# DIRECTORY: otp/src/nametag/
+# DIRECTORY: otp/nametag/
 #
 if (not RUNTIME):
-  OPTS=['DIR:otp/src/nametag', 'BUILDING:OTP']
+  OPTS=['DIR:otp/nametag', 'BUILDING:OTP']
   TargetAdd('nametag_composite1.obj', opts=OPTS, input='nametag_composite1.cxx')
   TargetAdd('nametag_composite2.obj', opts=OPTS, input='nametag_composite2.cxx')
-  IGATEFILES=GetDirectoryContents('otp/src/nametag', ["*.h", "*_composite1.cxx", "*_composite2.cxx"])
+  IGATEFILES=GetDirectoryContents('otp/nametag', ["*.h", "*_composite1.cxx", "*_composite2.cxx"])
   TargetAdd('libnametag.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libnametag.in', opts=['IMOD:otp', 'ILIB:libnametag', 'SRCDIR:otp/src/nametag'])
+  TargetAdd('libnametag.in', opts=['IMOD:otp', 'ILIB:libnametag', 'SRCDIR:otp/nametag'])
   TargetAdd('libnametag_igate.obj', input='libnametag.in', opts=["DEPENDENCYONLY"])
   
 #
-# DIRECTORY: otp/src/navigation/
+# DIRECTORY: otp/navigation/
 #
 if (not RUNTIME):
-  OPTS=['DIR:otp/src/navigation', 'BUILDING:OTP']
+  OPTS=['DIR:otp/navigation', 'BUILDING:OTP']
   TargetAdd('navigation_composite1.obj', opts=OPTS, input='navigation_composite1.cxx')
-  IGATEFILES=GetDirectoryContents('otp/src/navigation', ["*.h", "*_composite1.cxx"])
+  IGATEFILES=GetDirectoryContents('otp/navigation', ["*.h", "*_composite1.cxx"])
   TargetAdd('libnavigation.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libnavigation.in', opts=['IMOD:otp', 'ILIB:libnavigation', 'SRCDIR:otp/src/navigation'])
+  TargetAdd('libnavigation.in', opts=['IMOD:otp', 'ILIB:libnavigation', 'SRCDIR:otp/navigation'])
   TargetAdd('libnavigation_igate.obj', input='libnavigation.in', opts=["DEPENDENCYONLY"])
   
 #
-# DIRECTORY: otp/src/movement/
+# DIRECTORY: otp/movement/
 #
 if (not RUNTIME):
-  OPTS=['DIR:otp/src/movement', 'BUILDING:OTP']
+  OPTS=['DIR:otp/movement', 'BUILDING:OTP']
   TargetAdd('config_movement.obj', opts=OPTS, input='config_movement.cxx')
   TargetAdd('cMover.obj', opts=OPTS, input='cMover.cxx')
   TargetAdd('cImpulse.obj', opts=OPTS, input='cImpulse.cxx')
   TargetAdd('cMoverGroup.obj', opts=OPTS, input='cMoverGroup.cxx')
-  IGATEFILES=GetDirectoryContents('otp/src/movement', ["*.h", "*.cxx"])
+  IGATEFILES=GetDirectoryContents('otp/movement', ["*.h", "*.cxx"])
   TargetAdd('libmovement.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libmovement.in', opts=['IMOD:otp', 'ILIB:libmovement', 'SRCDIR:otp/src/movement'])
+  TargetAdd('libmovement.in', opts=['IMOD:otp', 'ILIB:libmovement', 'SRCDIR:otp/movement'])
   TargetAdd('libmovement_igate.obj', input='libmovement.in', opts=["DEPENDENCYONLY"])
   
 #
-# DIRECTORY: otp/src/configrc/
+# DIRECTORY: otp/configrc/
 #
 if (not RUNTIME):
-  OPTS=['DIR:otp/src/configrc', 'BUILDING:OTP']
+  OPTS=['DIR:otp/configrc', 'BUILDING:OTP']
   TargetAdd('settingsFile.obj', opts=OPTS, input='settingsFile.cxx')
   IGATEFILES=["settingsFile.h"]
   TargetAdd('libsettings.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libsettings.in', opts=['IMOD:otp', 'ILIB:libsettings', 'SRCDIR:otp/src/configrc'])
+  TargetAdd('libsettings.in', opts=['IMOD:otp', 'ILIB:libsettings', 'SRCDIR:otp/configrc'])
   TargetAdd('libsettings_igate.obj', input='libsettings.in', opts=["DEPENDENCYONLY"])
   
 #
-# DIRECTORY: otp/src/secure/
+# DIRECTORY: otp/secure/
 #
 if (not RUNTIME):
-  OPTS=['DIR:otp/src/secure', 'BUILDING:OTP', 'OPENSSL', 'ZLIB']
+  OPTS=['DIR:otp/secure', 'BUILDING:OTP', 'OPENSSL', 'ZLIB']
   TargetAdd('get_fingerprint.obj', opts=OPTS, input='get_fingerprint.cxx')
   TargetAdd('loadClientCertificate.obj', opts=OPTS, input='loadClientCertificate.cxx')
-  #IGATEFILES=GetDirectoryContents('otp/src/secure', ["*.h", "*_composite.cxx"])
+  #IGATEFILES=GetDirectoryContents('otp/secure', ["*.h", "*_composite.cxx"])
   IGATEFILES=["loadClientCertificate.cxx", "loadClientCertificate.h", "get_fingerprint.h", "get_fingerprint.cxx"]
   TargetAdd('libsecure.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libsecure.in', opts=['IMOD:otp', 'ILIB:libsecure', 'SRCDIR:otp/src/secure'])
+  TargetAdd('libsecure.in', opts=['IMOD:otp', 'ILIB:libsecure', 'SRCDIR:otp/secure'])
   TargetAdd('libsecure_igate.obj', input='libsecure.in', opts=["DEPENDENCYONLY"])
 
 #
@@ -4888,53 +4888,53 @@ if (not RUNTIME):
 # 
 # LIBTOONTOWN
 #
-CopyAllHeaders('toontown/src/toontownbase') # might want to add all headers
-CopyAllHeaders('toontown/src/dna')
-CopyAllHeaders('toontown/src/pets')
+CopyAllHeaders('toontown/toontownbase') # might want to add all headers
+CopyAllHeaders('toontown/dna')
+CopyAllHeaders('toontown/pets')
 
 if (not RUNTIME):
-  OPTS=['DIR:toontown/src/toontownbase', 'BUILDING:TOONTOWN']
+  OPTS=['DIR:toontown/toontownbase', 'BUILDING:TOONTOWN']
   TargetAdd('toontownbase.obj', opts=OPTS, input='toontownbase.cxx')
   
 #
-# DIRECTORY: toontown/src/dna/
+# DIRECTORY: toontown/dna/
 #
 if (not RUNTIME):
-  OPTS=['DIR:toontown/src/dna', 'BUILDING:TOONTOWN', 'BISONPREFIX_dnayy', 'FLEXDASHI']
+  OPTS=['DIR:toontown/dna', 'BUILDING:TOONTOWN', 'BISONPREFIX_dnayy', 'FLEXDASHI']
   CreateFile(GetOutputDir()+"/include/parser.h")
   TargetAdd('dnaLoader_composite1.obj', opts=OPTS, input='dnaLoader_composite1.cxx')
   TargetAdd('dnaLoader_composite2.obj', opts=OPTS, input='dnaLoader_composite2.cxx')
   TargetAdd('dnaLoader_parser.obj', opts=OPTS, input='parser.yxx')
   TargetAdd('parser.h', input='dnaLoader_parser.obj', opts=['DEPENDENCYONLY'])
   TargetAdd('dnaLoader_lexer.obj', opts=OPTS, input='lexer.lxx')
-  IGATEFILES=GetDirectoryContents('toontown/src/dna', ["*.h", "*_composite1.cxx", "*_composite2.cxx"])
+  IGATEFILES=GetDirectoryContents('toontown/dna', ["*.h", "*_composite1.cxx", "*_composite2.cxx"])
   TargetAdd('libdna.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libdna.in', opts=['IMOD:toontown', 'ILIB:libdna', 'SRCDIR:toontown/src/dna'])
+  TargetAdd('libdna.in', opts=['IMOD:toontown', 'ILIB:libdna', 'SRCDIR:toontown/dna'])
   TargetAdd('libdna_igate.obj', input='libdna.in', opts=["DEPENDENCYONLY"])
   
 #
-# DIRECTORY: toontown/src/pets/
+# DIRECTORY: toontown/pets/
 #
 if (not RUNTIME):
-  OPTS=['DIR:toontown/src/pets', 'BUILDING:TOONTOWN']
+  OPTS=['DIR:toontown/pets', 'BUILDING:TOONTOWN']
   TargetAdd('config_pets.obj', opts=OPTS, input='config_pets.cxx')
   TargetAdd('cPetBrain.obj', opts=OPTS, input='cPetBrain.cxx')
   TargetAdd('cPetChase.obj', opts=OPTS, input='cPetChase.cxx')
   TargetAdd('cPetFlee.obj', opts=OPTS, input='cPetFlee.cxx')
-  IGATEFILES=GetDirectoryContents('toontown/src/pets', ["*.h", "*.cxx"])
+  IGATEFILES=GetDirectoryContents('toontown/pets', ["*.h", "*.cxx"])
   TargetAdd('libpets.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libpets.in', opts=['IMOD:toontown', 'ILIB:libpets', 'SRCDIR:toontown/src/pets'])
+  TargetAdd('libpets.in', opts=['IMOD:toontown', 'ILIB:libpets', 'SRCDIR:toontown/pets'])
   TargetAdd('libpets_igate.obj', input='libpets.in', opts=["DEPENDENCYONLY"])
   
 #
-# DIRECTORY: toontown/src/suit/
+# DIRECTORY: toontown/suit/
 #
 if (not RUNTIME):
-  OPTS=['DIR:toontown/src/suit', 'BUILDING:TOONTOWN']
+  OPTS=['DIR:toontown/suit', 'BUILDING:TOONTOWN']
   TargetAdd('suit_composite1.obj', opts=OPTS, input='suit_composite1.cxx')
-  IGATEFILES=GetDirectoryContents('toontown/src/suit', ["*.h", "*_composite1.cxx"])
+  IGATEFILES=GetDirectoryContents('toontown/suit', ["*.h", "*_composite1.cxx"])
   TargetAdd('libsuit.in', opts=OPTS, input=IGATEFILES)
-  TargetAdd('libsuit.in', opts=['IMOD:toontown', 'ILIB:libsuit', 'SRCDIR:toontown/src/suit'])
+  TargetAdd('libsuit.in', opts=['IMOD:toontown', 'ILIB:libsuit', 'SRCDIR:toontown/suit'])
   TargetAdd('libsuit_igate.obj', input='libsuit.in', opts=["DEPENDENCYONLY"])
   
 #
